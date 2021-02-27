@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Start" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/src/main.ts" programParameters="run --allow-net=127.0.0.1 --allow-read --allow-write --unstable" workingDirectory="$PROJECT_DIR$/src">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,19 @@
+$font-base-family: '-apple-system, "Segoe UI", "Roboto", "Oxygen", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif';
+
+@import 'vanilla-framework/scss/vanilla';
+
+// Base
+@include vf-base;
+
+// layout
+@include vf-u-layout();
+@include vf-p-navigation();
+
+// Utilities
+@include vf-u-off-screen();
+
+// Components
+@include vf-p-grid();
+@include vf-p-buttons();
+@include vf-p-forms();
+@include vf-p-links();

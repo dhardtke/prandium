@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Compile" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/src/main.ts" programParameters="compile --unstable --lite --allow-net --allow-read --allow-write">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

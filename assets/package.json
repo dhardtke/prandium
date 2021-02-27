@@ -1,0 +1,9 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "devDependencies": {
+    "vanilla-framework": "^2.24.1"
+  }
+}
