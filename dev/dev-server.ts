@@ -31,12 +31,12 @@ class DevServer {
     async start() {
         const watcher = Deno.watchFs(config.watchPaths);
         this.runActions(config.actions);
-        this.log("Watcher is up and running...");
+        DevServer.log("Watcher is up and running...");
 
         const paths: Set<string> = new Set();
         for await (const event of watcher) {
             for (const path of event.paths) {
-                if (this.shouldIncludePath(path, event)) {
+                if (DevServer.shouldIncludePath(path, event)) {
                     paths.add(path);
                 }
             }
@@ -54,23 +54,23 @@ class DevServer {
             }
             const actions = this.filterMatchingActions(Array.from(paths));
             if (actions.length) {
-                this.log(`Detected change. Restarting ${actions.map(a => a.id).join(", ")}...`);
+                DevServer.log(`Detected change. Restarting ${actions.map(a => a.id).join(", ")}...`);
                 this.runActions(actions);
             }
             paths.clear();
         }, 350);
     }
 
-    private shouldIncludePath(path: string, event: Deno.FsEvent): boolean {
+    private static shouldIncludePath(path: string, event: Deno.FsEvent): boolean {
         // Ignore JetBrains temporary files
         if (path.endsWith("~")) {
             return false;
         }
         // ignore modification of directory's timestamp
-        return !(event.kind === "modify" && this.isDirectory(path));
+        return !(event.kind === "modify" && DevServer.isDirectory(path));
     }
 
-    private isDirectory(path: string): boolean {
+    private static isDirectory(path: string): boolean {
         return Deno.statSync(path).isDirectory;
     }
 
@@ -89,7 +89,7 @@ class DevServer {
         return config.actions.filter(c => Boolean(paths.find(path => slash(path).match(c.match))));
     }
 
-    private log(msg: string): void {
+    private static log(msg: string): void {
         console.log(`[${DevServer.NS}] ${msg}\n`);
     }
 }
