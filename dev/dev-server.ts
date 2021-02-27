@@ -1,4 +1,4 @@
-import {existsSync, path, slash} from "./deps.ts";
+import {Colors, existsSync, path, slash} from "./deps.ts";
 import config from "./dev.config.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
@@ -13,7 +13,14 @@ export interface Action {
 }
 
 export interface DevServerConfig {
+    /**
+     * The actions that should be executed on changes.
+     */
     actions: Action[];
+
+    /**
+     * The paths that should be watched.
+     */
     watchPaths: string[];
 }
 
@@ -95,7 +102,8 @@ class DevServer {
     }
 
     private static log(msg: string): void {
-        console.log(`[${DevServer.NS}] ${msg}\n`);
+        const prefix = Colors.blue(`[${DevServer.NS}]`);
+        console.log(`${prefix} ${msg}`);
     }
 }
 
