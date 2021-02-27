@@ -17,6 +17,8 @@ export interface DevServerConfig {
     watchPaths: string[];
 }
 
+// TODO create dist folder beforehand
+// TODO recover on errors
 class DevServer {
     private static NS: string = "dev-server";
 
