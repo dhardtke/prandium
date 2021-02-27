@@ -6,6 +6,5 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="assets" level="project" />
   </component>
 </module>
