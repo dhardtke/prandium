@@ -1,4 +1,4 @@
-import {path, slash} from "./deps.ts";
+import {existsSync, path, slash} from "./deps.ts";
 import config from "./dev.config.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
@@ -23,7 +23,7 @@ class DevServer {
     private static NS: string = "dev-server";
 
     private config: DevServerConfig;
-    private readonly processes: {[id: string]: Deno.Process} = {};
+    private readonly processes: { [id: string]: Deno.Process } = {};
     private timeout: number | undefined = undefined;
 
     constructor(config: DevServerConfig) {
@@ -66,6 +66,9 @@ class DevServer {
     private static shouldIncludePath(path: string, event: Deno.FsEvent): boolean {
         // Ignore JetBrains temporary files
         if (path.endsWith("~")) {
+            return false;
+        }
+        if (!existsSync(path)) {
             return false;
         }
         // ignore modification of directory's timestamp
