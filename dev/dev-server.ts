@@ -1,18 +1,16 @@
-import {Colors, existsSync, path, slash} from "./deps.ts";
-import config from "./dev.config.ts";
+import {Colors, Cliffy, existsSync, path, slash, fs} from "./deps.ts";
+import {process} from "./util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
 
-export type Command = string[];
-
-export interface Action {
+interface Action {
     id: string;
     match: RegExp;
-    cmd: Command;
+    fn: () => Deno.Process;
 }
 
-export interface DevServerConfig {
+interface DevServerConfig {
     /**
      * The actions that should be executed on changes.
      */
@@ -24,8 +22,6 @@ export interface DevServerConfig {
     watchPaths: string[];
 }
 
-// TODO create dist folder beforehand
-// TODO recover on errors
 class DevServer {
     private static NS: string = "dev-server";
 
@@ -38,8 +34,8 @@ class DevServer {
     }
 
     async start() {
-        const watcher = Deno.watchFs(config.watchPaths);
-        this.runActions(config.actions);
+        const watcher = Deno.watchFs(this.config.watchPaths);
+        this.runActions(this.config.actions);
         DevServer.log("Watcher is up and running...");
 
         const paths: Set<string> = new Set();
@@ -91,14 +87,12 @@ class DevServer {
             if (this.processes[action.id]) {
                 this.processes[action.id].close();
             }
-            this.processes[action.id] = Deno.run({
-                cmd: action.cmd
-            });
+            this.processes[action.id] = action.fn();
         }
     }
 
     private filterMatchingActions(paths: string[]): Action[] {
-        return config.actions.filter(c => Boolean(paths.find(path => slash(path).match(c.match))));
+        return this.config.actions.filter(c => Boolean(paths.find(path => slash(path).match(c.match))));
     }
 
     private static log(msg: string): void {
@@ -108,5 +102,38 @@ class DevServer {
 }
 
 if (import.meta.main) {
+    const {options}: { options: { port: number, host: string } } = await new Cliffy.Command()
+        .option("-p, --port <port>", "the port number.", {default: 8000})
+        .option("-h, --host [hostname]", "the host name.", {default: "127.0.0.1"})
+        .parse(Deno.args);
+
+    // ensure assets/dist exists
+    fs.ensureDirSync("assets/dist");
+
+    const config: DevServerConfig = {
+        watchPaths: [
+            "src",
+            "assets"
+        ],
+        actions: [
+            {
+                id: "Server",
+                match: /\/src\/(.+)\.(ts|html)/,
+                fn: process(undefined, "deno", "run", "--no-check", `--allow-net=${options.host}`, "--allow-read", "--allow-write", "--unstable",
+                    "src/main.ts", `--host=${options.host}`, `--port=${options.port}`)
+            },
+            {
+                id: "JS",
+                match: /\/assets\/(.+)\.(ts)/,
+                fn: process(undefined, "deno", "bundle", "--unstable", "assets/index.ts", "assets/dist/index.js")
+            },
+            {
+                id: "SCSS",
+                match: /\/assets\/(.+)\.(scss)/,
+                fn: process(undefined, "sass", "-I", "assets/node_modules", "assets/index.scss", "assets/dist/index.css")
+            }
+        ]
+    };
+
     await new DevServer(config).start();
 }

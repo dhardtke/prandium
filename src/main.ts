@@ -1,5 +1,5 @@
 import {initDb} from "./data/db.ts";
-import {parse, path} from "./deps.ts";
+import {log, parse, path} from "./deps.ts";
 import {spawnServer} from "./http/webserver.ts";
 
 function parseOptions(): {dev: boolean, host: string, port: number} {
@@ -17,11 +17,30 @@ function parseOptions(): {dev: boolean, host: string, port: number} {
     return {dev: Boolean(dev), host, port};
 }
 
+async function logSetup() {
+    // TODO make logger configurable via args
+    await log.setup({
+        handlers: {
+            console: new log.handlers.ConsoleHandler("DEBUG"),
+
+            file: new log.handlers.FileHandler("WARNING", {
+                filename: "./log.txt",
+                formatter: "{levelName} {msg}",
+            }),
+        },
+
+        loggers: {
+            default: {
+                level: "DEBUG",
+                handlers: ["console", "file"],
+            }
+        },
+    });
+}
+
 async function main(): Promise<void> {
     const options = parseOptions();
-    if (options.dev) {
-        // TODO spawn dev server
-    }
+    await logSetup();
     Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
     initDb();
     await spawnServer(options.dev, options.host, options.port);

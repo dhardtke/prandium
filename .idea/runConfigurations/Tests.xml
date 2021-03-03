@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Tests" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="test --allow-read --unstable --no-check">
+      <module name="dev" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

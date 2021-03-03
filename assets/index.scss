@@ -1,1 +1,10 @@
-@use "scss/vanilla";
+@use "scss/bootstrap";
+// @use "node_modules/bootstrap/scss/bootstrap";
+
+html {
+  overflow-y: scroll;
+}
+
+main {
+  padding-top: 5rem;
+}

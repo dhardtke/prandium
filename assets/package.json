@@ -4,6 +4,6 @@
   "private": true,
   "description": "",
   "devDependencies": {
-    "vanilla-framework": "^2.24.1"
+    "bootstrap": "^5.0.0-beta2"
   }
 }
