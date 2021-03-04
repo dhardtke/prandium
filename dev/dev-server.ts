@@ -1,4 +1,4 @@
-import {Colors, Cliffy, existsSync, path, slash, fs} from "./deps.ts";
+import {Colors, Cliffy, path, slash, fs} from "./deps.ts";
 import {process} from "./util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
@@ -69,9 +69,6 @@ class DevServer {
     private static shouldIncludePath(path: string, event: Deno.FsEvent): boolean {
         // Ignore JetBrains temporary files
         if (path.endsWith("~")) {
-            return false;
-        }
-        if (!existsSync(path)) {
             return false;
         }
         // ignore modification of directory's timestamp
