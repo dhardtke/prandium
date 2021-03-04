@@ -1,7 +1,7 @@
 import {initDb} from "./data/db.ts";
-import {log, path} from "./deps.ts";
+import {log, LogRecord, path} from "./deps.ts";
 import {spawnServer} from "./http/webserver.ts";
-import {Cliffy} from "../dev/deps.ts";
+import {Cliffy, Colors} from "../dev/deps.ts";
 
 interface Options {
     debug?: boolean;
@@ -18,12 +18,27 @@ async function parseOptions(): Promise<Options> {
     return options;
 }
 
+function formatLogRecord(logRecord: LogRecord): string {
+    const colors: { [l in keyof typeof log.LogLevels]: (s: string) => string } = {
+        NOTSET: Colors.red,
+        DEBUG: Colors.gray,
+        INFO: Colors.brightBlue,
+        WARNING: Colors.yellow,
+        ERROR: Colors.red,
+        CRITICAL: Colors.brightRed
+    }
+    const levelEnum: keyof typeof log.LogLevels = log.LogLevels[logRecord.level] as any;
+    const color = colors[levelEnum];
+    return `${color(levelEnum)} ${logRecord.msg}`;
+}
+
 async function setupLogger(debug?: boolean) {
     await log.setup({
         handlers: {
-            console: new log.handlers.ConsoleHandler("DEBUG")
+            console: new log.handlers.ConsoleHandler("DEBUG", {
+                formatter: formatLogRecord
+            })
         },
-
         loggers: {
             default: {
                 level: debug ? "DEBUG" : "INFO",
