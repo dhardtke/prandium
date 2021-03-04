@@ -11,9 +11,9 @@
   }
 }
 
-// remove xxl breakpoint
-$grid-breakpoints: map-remove($grid-breakpoints, xxl);
-$container-max-widths: map-remove($container-max-widths, xxl);
+//// remove xxl breakpoint
+//$grid-breakpoints: map-remove($grid-breakpoints, xxl);
+//$container-max-widths: map-remove($container-max-widths, xxl);
 
 // minor tweaks
 $enable-important-utilities: false;
