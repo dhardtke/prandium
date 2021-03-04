@@ -3,7 +3,7 @@ import {IndexTemplate, RecipeTemplate} from "../tpl/mod.ts";
 
 const COMPILED_ASSETS_DIR = path.resolve(Deno.cwd(), "assets", "dist");
 
-export async function spawnServer(dev: boolean, host: string, port: number) {
+export async function spawnServer(host: string, port: number) {
     const router = new Oak.Router();
     // TODO make syntax easier, see template wrapper
     router

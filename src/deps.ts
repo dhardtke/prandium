@@ -5,8 +5,8 @@ export * as Oak from "https://deno.land/x/oak@v6.5.0/mod.ts";
 
 // utils
 export * as path from "https://deno.land/std@0.89.0/path/mod.ts";
-export {parse} from "https://deno.land/std@0.89.0/flags/mod.ts";
 export * as log from "https://deno.land/std@0.89.0/log/mod.ts";
+export * as Cliffy from "https://deno.land/x/cliffy@v0.17.2/command/mod.ts";
 
 // types
 export type {Recipe} from "https://cdn.skypack.dev/schema-dts@v0.8.2/schema.d.ts";

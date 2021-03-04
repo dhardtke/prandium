@@ -101,10 +101,17 @@ class DevServer {
     }
 }
 
+interface Options {
+    port: number;
+    host: string;
+    debug?: boolean;
+}
+
 if (import.meta.main) {
-    const {options}: { options: { port: number, host: string } } = await new Cliffy.Command()
-        .option("-p, --port <port>", "the port number.", {default: 8000})
+    const {options}: { options: Options } = await new Cliffy.Command()
+        .option("-p, --port [port:number]", "the port number.", {default: 8000})
         .option("-h, --host [hostname]", "the host name.", {default: "127.0.0.1"})
+        .option("-d, --debug [debug:boolean]", "enable debug mode", {default: true})
         .parse(Deno.args);
 
     // ensure assets/dist exists
@@ -120,7 +127,7 @@ if (import.meta.main) {
                 id: "Server",
                 match: /\/src\/(.+)\.(ts|html)/,
                 fn: process(undefined, "deno", "run", "--no-check", `--allow-net=${options.host}`, "--allow-read", "--allow-write", "--unstable",
-                    "src/main.ts", `--host=${options.host}`, `--port=${options.port}`)
+                    "src/main.ts", `--host=${options.host}`, `--port=${options.port}`, `--debug=${options.debug || false}`)
             },
             {
                 id: "JS",

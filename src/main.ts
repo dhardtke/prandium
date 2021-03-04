@@ -1,49 +1,44 @@
 import {initDb} from "./data/db.ts";
-import {log, parse, path} from "./deps.ts";
+import {log, path} from "./deps.ts";
 import {spawnServer} from "./http/webserver.ts";
+import {Cliffy} from "../dev/deps.ts";
 
-function parseOptions(): {dev: boolean, host: string, port: number} {
-    const {
-        dev,
-        host,
-        port
-    } = parse(Deno.args, {
-        default: {
-            dev: false,
-            host: "127.0.0.1",
-            port: 8000
-        }
-    });
-    return {dev: Boolean(dev), host, port};
+interface Options {
+    debug?: boolean;
+    host: string;
+    port: number;
 }
 
-async function logSetup() {
-    // TODO make logger configurable via args
+async function parseOptions(): Promise<Options> {
+    const {options} = await new Cliffy.Command()
+        .option("-p, --port [port:number]", "the port number.", {default: 8000})
+        .option("-h, --host [hostname]", "the host name.", {default: "127.0.0.1"})
+        .option("-d, --debug [debug:boolean]", "enable debug mode")
+        .parse(Deno.args);
+    return options;
+}
+
+async function setupLogger(debug?: boolean) {
     await log.setup({
         handlers: {
-            console: new log.handlers.ConsoleHandler("DEBUG"),
-
-            file: new log.handlers.FileHandler("WARNING", {
-                filename: "./log.txt",
-                formatter: "{levelName} {msg}",
-            }),
+            console: new log.handlers.ConsoleHandler("DEBUG")
         },
 
         loggers: {
             default: {
-                level: "DEBUG",
-                handlers: ["console", "file"],
+                level: debug ? "DEBUG" : "INFO",
+                handlers: ["console"]
             }
-        },
+        }
     });
 }
 
 async function main(): Promise<void> {
-    const options = parseOptions();
-    await logSetup();
+    const options = await parseOptions();
+    await setupLogger(options.debug);
     Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
     initDb();
-    await spawnServer(options.dev, options.host, options.port);
+    await spawnServer(options.host, options.port);
 }
 
 if (import.meta.main) {
