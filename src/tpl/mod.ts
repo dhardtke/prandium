@@ -80,8 +80,7 @@ class Template<Data = void> {
                 const fullPath = path.resolve(TEMPLATE_DIR, this.filename);
                 this.source = await Deno.readTextFile(fullPath);
             } catch (e) {
-                // TODO use log
-                console.error(`Could not load ${this.filename}`);
+                log.error(`Could not load ${this.filename}`);
                 throw e;
             }
         }
@@ -111,13 +110,8 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
 export const oakAdapter = () => {
     return async function (ctx: Oak.Context, next: Function) {
         ctx.render = async function <Data>(template: Template<Data>, data?: Data) {
-            try {
-                ctx.response.body = await template.render(data);
-                ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
-            } catch (e) {
-                ctx.response.status = 404;
-                console.log(e.message);
-            }
+            ctx.response.body = await template.render(data);
+            ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
         };
 
         await next();
