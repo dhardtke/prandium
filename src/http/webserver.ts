@@ -1,32 +1,31 @@
-import {log, Oak, path} from "../deps.ts";
-import {IndexTemplate, RecipeTemplate} from "../tpl/mod.ts";
+import {log, Oak} from "../deps.ts";
+import {IndexRouter} from "./routes/index.routes.ts";
+import {RecipeRouter} from "./routes/recipe.routes.ts";
+import {AssetsRouter} from "./routes/assets.routes.ts";
 
-const COMPILED_ASSETS_DIR = path.resolve(Deno.cwd(), "assets", "dist");
+const Routers = [
+    IndexRouter,
+    AssetsRouter,
+    RecipeRouter
+];
 
 export async function spawnServer(host: string, port: number) {
-    const router = new Oak.Router();
-    // TODO make syntax easier, see template wrapper
-    router
-        .get("/", async (ctx) => {
-            ctx.response.body = await IndexTemplate.render({favoriteCake: "Bla"});
-        })
-        .get("/assets/:name", async (ctx) => {
-            if (ctx.params?.name) {
-                await Oak.send(ctx, ctx.params.name, {
-                    root: COMPILED_ASSETS_DIR
-                });
-            }
-        })
-        .get("/recipe/:id", async (ctx) => {
-            ctx.response.body = await RecipeTemplate.render();
-        });
-
     const app = new Oak.Application();
-    app.use(router.routes());
-    app.use(router.allowedMethods());
+    for (const router of Routers) {
+        app.use(router.routes());
+        app.use(router.allowedMethods());
+    }
+
+    // TODO make syntax easier, see template wrapper
 
     app.addEventListener("error", (evt) => {
         log.error(evt.error);
+    });
+
+    app.addEventListener("listen", ({hostname, port, secure}) => {
+        const protocol = secure ? "https" : "http";
+        const url = `${protocol}://${hostname ?? "localhost"}:${port}`;
+        log.info(`Server started: Listening on ${url}`);
     });
 
     await app.listen({hostname: host, port: port});
