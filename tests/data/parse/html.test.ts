@@ -1,5 +1,5 @@
-import {assertEquals, assertNotEquals, path} from "../../deps.ts";
-import {parse} from "../../../src/data/parse/mod.ts";
+import {assertEquals, assertNotEquals, assertThrows, path} from "../../deps.ts";
+import {findFirstRecipe} from "../../../src/data/parse/html.ts";
 
 Deno.test("hello world #1", () => {
     const x = 1 + 2;
@@ -9,11 +9,11 @@ Deno.test("hello world #1", () => {
 Deno.test("Complex example", () => {
     Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
     const contents = Deno.readTextFileSync("idiotensichere_lasagne.html");
-    const actual = parse(contents);
+    const actual = findFirstRecipe(contents);
     // TODO
     assertNotEquals(actual, null);
 });
 
 Deno.test("An Error should be thrown if the HTML is not parseable", () => {
-    parse("<'><!DOCTYPE xml>");
+    findFirstRecipe("<'><!DOCTYPE xml>");
 });

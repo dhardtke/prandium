@@ -6,7 +6,7 @@ const LD_JSON = "application/ld+json";
 /**
  * Returns the first {@link Recipe} in the given HTML.
  */
-export function parse(html: string): Recipe | null {
+export function findFirstRecipe(html: string): Recipe | null {
     const domParser = new Dom.DOMParser();
     const document = domParser.parseFromString(html, TEXT_HTML);
     if (!document) {
@@ -17,8 +17,11 @@ export function parse(html: string): Recipe | null {
         const json = $script.textContent;
         if (json) {
             const parsed = JSON.parse(json);
-            if ("@type" in parsed && parsed["@type"] === "Recipe") {
-                return parsed;
+            const candidates = Array.isArray(parsed) ? parsed : [parsed];
+            for (const candidate of candidates) {
+                if ("@type" in candidate && candidate["@type"] === "Recipe") {
+                    return candidate;
+                }
             }
         }
     }

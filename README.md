@@ -23,3 +23,6 @@ We recommend using JetBrain's termins
 - [ ] Logging
   * https://github.com/denoland/deno_std/tree/main/log
 - [ ] meta theme-color, etc.
+- [ ] Allow custom ratings
+- [ ] Allow storing "last cooked" date
+- [ ] Allow updating recipes by storing their source URL
