@@ -5,7 +5,6 @@ export * as Oak from "https://deno.land/x/oak@v6.5.0/mod.ts";
 
 // utils
 export * as path from "https://deno.land/std@0.89.0/path/mod.ts";
-export * as fs from "https://deno.land/std@0.89.0/fs/mod.ts";
 export * as log from "https://deno.land/std@0.89.0/log/mod.ts";
 export {LogRecord} from "https://deno.land/std@0.89.0/log/logger.ts";
 export * as Cliffy from "https://deno.land/x/cliffy@v0.17.2/command/mod.ts";

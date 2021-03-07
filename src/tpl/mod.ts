@@ -1,4 +1,4 @@
-import {Eta, log} from "../deps.ts";
+import {Eta, log, Oak} from "../deps.ts";
 import {path} from "../../tests/deps.ts";
 
 const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
@@ -30,7 +30,7 @@ class TranslationHelper implements Helper {
      * @param key a key such as "breadcrumb.title"
      * @param name the name of the translation file, e.g. "index" - if not provided only _globals will be searched
      */
-    public t = (key: string, name?: string,): string | undefined => {
+    public t = (key: string, name?: string): string | undefined => {
         const lang = TranslationHelper.SUPPORTED_LANGUAGES[0]; // TODO support different languages
         try {
             const global = this.getTranslation(lang, TranslationHelper.GLOBAL_FILENAME);
@@ -80,6 +80,7 @@ class Template<Data = void> {
                 const fullPath = path.resolve(TEMPLATE_DIR, this.filename);
                 this.source = await Deno.readTextFile(fullPath);
             } catch (e) {
+                // TODO use log
                 console.error(`Could not load ${this.filename}`);
                 throw e;
             }
@@ -95,6 +96,33 @@ class Template<Data = void> {
         return {...data, ...TranslationHelper.INSTANCE.api};
     }
 }
+
+declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
+    interface Context {
+        render: <Data>(template: Template<Data>, data?: Data) => void;
+    }
+
+    interface RouterContext {
+        render: <Data>(template: Template<Data>, data?: Data) => void;
+    }
+}
+
+// based on https://deno.land/x/view_engine@v1.4.5/lib/adapters/oak.ts
+export const oakAdapter = () => {
+    return async function (ctx: Oak.Context, next: Function) {
+        ctx.render = async function <Data>(template: Template<Data>, data?: Data) {
+            try {
+                ctx.response.body = await template.render(data);
+                ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
+            } catch (e) {
+                ctx.response.status = 404;
+                console.log(e.message);
+            }
+        };
+
+        await next();
+    };
+};
 
 export const IndexTemplate = new Template<{ favoriteCake: string }>("index.eta.html");
 export const RecipeTemplate = new Template("recipe.eta.html");

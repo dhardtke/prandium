@@ -2,6 +2,7 @@ import {log, Oak} from "../deps.ts";
 import {IndexRouter} from "./routes/index.routes.ts";
 import {RecipeRouter} from "./routes/recipe.routes.ts";
 import {AssetsRouter} from "./routes/assets.routes.ts";
+import {oakAdapter} from "../tpl/mod.ts";
 
 const Routers = [
     IndexRouter,
@@ -11,12 +12,11 @@ const Routers = [
 
 export async function spawnServer(host: string, port: number) {
     const app = new Oak.Application();
+    app.use(oakAdapter());
     for (const router of Routers) {
         app.use(router.routes());
         app.use(router.allowedMethods());
     }
-
-    // TODO make syntax easier, see template wrapper
 
     app.addEventListener("error", (evt) => {
         log.error(evt.error);
