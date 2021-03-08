@@ -76,7 +76,11 @@ class DevServer {
     }
 
     private static isDirectory(path: string): boolean {
-        return Deno.statSync(path).isDirectory;
+        try {
+            return Deno.statSync(path).isDirectory;
+        } catch {
+            return false;
+        }
     }
 
     private runActions(actions: Action[]) {

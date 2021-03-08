@@ -1,5 +1,6 @@
 import {Eta, log, Oak} from "../deps.ts";
 import {path} from "../../tests/deps.ts";
+import {Recipe} from "../data/model/recipe.ts";
 
 const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
 const TEMPLATE_DIR = path.resolve(SCRIPT_DIR, "templates");
@@ -119,4 +120,5 @@ export const oakAdapter = () => {
 };
 
 export const IndexTemplate = new Template<{ favoriteCake: string }>("index.eta.html");
-export const RecipeTemplate = new Template("recipe.eta.html");
+export const RecipeListTemplate = new Template<{ recipes: Recipe[] }>("recipes.eta.html");
+export const RecipeDetailTemplate = new Template("recipe.eta.html");

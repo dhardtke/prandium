@@ -26,3 +26,4 @@ We recommend using JetBrain's termins
 - [ ] Allow custom ratings
 - [ ] Allow storing "last cooked" date
 - [ ] Allow updating recipes by storing their source URL
+- [ ] Clarify: How does Oak handle multiple threads? Do we have to use one DB connection per Request to be save w.r.t. last_row_insertid()?

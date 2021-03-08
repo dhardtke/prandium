@@ -1,7 +1,9 @@
-import {initDb} from "./data/db.ts";
+import {Database} from "./data/db.ts";
 import {log, LogRecord, path} from "./deps.ts";
 import {spawnServer} from "./http/webserver.ts";
 import {Cliffy, Colors} from "../dev/deps.ts";
+import {RecipeService} from "./data/service/RecipeService.ts";
+import {Recipe} from "./data/model/recipe.ts";
 
 interface Options {
     debug?: boolean;
@@ -49,11 +51,14 @@ async function setupLogger(debug?: boolean) {
 }
 
 async function main(): Promise<void> {
+    Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
+
     const options = await parseOptions();
     await setupLogger(options.debug);
-    Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
-    initDb();
-    await spawnServer(options.host, options.port);
+    const database = new Database();
+    await database.migrate();
+
+    await spawnServer({host: options.host, port: options.port, db: database});
 }
 
 if (import.meta.main) {
