@@ -19,20 +19,22 @@ export const InitialMigration = new class InitialMigration extends Migration {
              )`,
             `CREATE TABLE recipe
              (
-                 id         INTEGER PRIMARY KEY,
-                 created_at timestamp NOT NULL DEFAULT current_timestamp,
-                 updated_at timestamp NOT NULL DEFAULT current_timestamp,
-                 name       TEXT
-             )`,
-            // some dummy data
-            `INSERT INTO recipe (name)
-             VALUES ('Recipe 1'),
-                    ('Recipe 2'),
-                    ('Recipe 3'),
-                    ('Recipe 4')`
+                 id          INTEGER PRIMARY KEY,
+                 created_at  timestamp NOT NULL DEFAULT current_timestamp,
+                 updated_at  timestamp NOT NULL DEFAULT current_timestamp,
+                 name        TEXT,
+                 description TEXT
+             )`
         ];
         for (const sql of queries) {
             db.exec(sql);
+        }
+
+        // dummy data
+        // TODO find a nice way for DEV mode with initial content?
+        for (let i = 0; i < 50; i++) {
+            db.exec(`INSERT INTO recipe (name, description)
+                     VALUES (?, 'Lorem Ipsum')`, [`Recipe ${i + 1}`]);
         }
     }
 }
