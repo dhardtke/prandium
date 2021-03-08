@@ -8,7 +8,7 @@ Deno.test("hello world #1", () => {
 
 Deno.test("Complex example", () => {
     Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
-    const contents = Deno.readTextFileSync("idiotensichere_lasagne.html");
+    const contents = Deno.readTextFileSync("complex.html");
     const actual = findFirstRecipe(contents);
     // TODO
     assertNotEquals(actual, null);
