@@ -1,6 +1,7 @@
 import {Database} from "../db.ts";
 import {Recipe} from "../model/recipe.ts";
 import {PaginationRequest} from "../pagination.ts";
+import {toArray, toCamelCase} from "../convert.ts";
 
 export class RecipeService {
     private readonly db: Database;
@@ -10,16 +11,13 @@ export class RecipeService {
     }
 
     list(paginationRequest?: PaginationRequest): Recipe[] {
-        const rows = this.db.query("SELECT id, created_at, updated_at, name, description FROM recipe LIMIT ? OFFSET ?", [
-            paginationRequest?.limit || -1,
-            paginationRequest?.offset || 0
-        ]);
-        const recipes: Recipe[] = [];
-        // TODO reduce mapping boilerplate code
-        for (const [id, createdAt, updatedAt, name, description] of rows) {
-            recipes.push(new Recipe({id, createdAt, updatedAt, name, description}));
-        }
-        return recipes;
+        return toArray(
+            this.db.query("SELECT id, created_at, updated_at, name, description FROM recipe LIMIT ? OFFSET ?", [
+                paginationRequest?.limit || -1,
+                paginationRequest?.offset || 0
+            ]),
+            src => new Recipe(toCamelCase(src))
+        );
     }
 
     save(recipe: Recipe) {

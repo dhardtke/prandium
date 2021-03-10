@@ -1,14 +1,15 @@
+import {toDate} from "../convert.ts";
+
 export abstract class Model {
     private _id?: number;
     private _createdAt!: Date;
     private _updatedAt!: Date;
 
-    protected constructor(args: {id?: number, createdAt?: Date, updatedAt?: Date}) {
+    protected constructor(args: {id?: number, createdAt?: Date | string, updatedAt?: Date | string}) {
         this.id = args.id;
-        this.createdAt = args.createdAt || new Date();
-        this.updatedAt = args.updatedAt || new Date();
+        this.createdAt = toDate(args.createdAt);
+        this.updatedAt = toDate(args.updatedAt);
     }
-
 
     get id(): number | undefined {
         return this._id;

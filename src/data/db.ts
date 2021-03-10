@@ -19,8 +19,10 @@ export class Database {
      * @param sql the SQL query to execute
      * @param values the values to bind
      */
-    public* query(sql: string, values?: object): Generator<any[]> {
-        for (const row of this.db.query(sql, values)) {
+    public* query<T>(sql: string, values?: object): Generator<T> {
+        const result = this.db.query(sql, values);
+        const rows = result.asObjects<any>();
+        for (const row of rows) {
             yield row;
         }
     }
