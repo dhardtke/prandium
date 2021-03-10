@@ -8,7 +8,8 @@ const I18N_DIR = path.resolve(SCRIPT_DIR, "..", "..", "i18n");
 
 Eta.configure({
     useWith: true,
-    views: TEMPLATE_DIR
+    views: TEMPLATE_DIR,
+    rmWhitespace: false // TODO turn this on if dev is off
 });
 
 interface Helper {
@@ -67,6 +68,13 @@ class TranslationHelper implements Helper {
     };
 }
 
+type Helpers = typeof TranslationHelper.INSTANCE.api;
+
+interface TemplateData<Data = void> {
+    data?: Data;
+    h: Helpers;
+}
+
 class Template<Data = void> {
     private readonly filename: string;
     private source?: string;
@@ -89,11 +97,23 @@ class Template<Data = void> {
     }
 
     public async render(data?: Data): Promise<string> {
-        return this.updateSource().then((s) => Eta.render(s, this.buildArgs(data || {} as any))) as Promise<string>;
+        return this.updateSource()
+            .then((s) => Eta.render(s, this.buildArgs(data)) as string)
+            .catch(e => {
+                log.error(`Could not render ${this.filename}`);
+                throw e;
+            });
     }
 
-    private buildArgs(data: Data) {
-        return {...data, ...TranslationHelper.INSTANCE.api};
+    private buildArgs(data?: Data): TemplateData {
+        return {
+            ...data || {},
+            ...{
+                h: {
+                    ...TranslationHelper.INSTANCE.api
+                }
+            }
+        };
     }
 }
 
@@ -102,6 +122,7 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
         render: <Data>(template: Template<Data>, data?: Data) => void;
     }
 
+    // noinspection JSUnusedGlobalSymbols
     interface RouterContext {
         render: <Data>(template: Template<Data>, data?: Data) => void;
     }

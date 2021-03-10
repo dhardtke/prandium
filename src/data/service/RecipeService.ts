@@ -1,6 +1,6 @@
 import {Database} from "../db.ts";
 import {Recipe} from "../model/recipe.ts";
-import {PaginationRequest} from "../pagination.ts";
+import {PaginationRequest, PaginationResponse} from "../pagination.ts";
 import {toArray, toCamelCase} from "../convert.ts";
 
 export class RecipeService {
@@ -10,11 +10,21 @@ export class RecipeService {
         this.db = db;
     }
 
+    paginationInfo(paginationRequest?: PaginationRequest): PaginationResponse<any> {
+        // TODO add filters, etc.
+        const [{total}] = toArray(this.db.query("SELECT COUNT(*) AS total FROM recipe"));
+        const pageSize = paginationRequest?.pageSize
+        return {
+            total,
+            items: []
+        };
+    }
+
     list(paginationRequest?: PaginationRequest): Recipe[] {
         return toArray(
             this.db.query("SELECT id, created_at, updated_at, name, description FROM recipe LIMIT ? OFFSET ?", [
-                paginationRequest?.limit || -1,
-                paginationRequest?.offset || 0
+                paginationRequest?.limit,
+                paginationRequest?.offset
             ]),
             src => new Recipe(toCamelCase(src))
         );

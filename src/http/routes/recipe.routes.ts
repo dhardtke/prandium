@@ -11,6 +11,7 @@ router
         const service: RecipeService = ctx.state.services.RecipeService;
         const pagination = paginationRequest(ctx);
         const recipes = service.list(pagination);
+        console.log(service.paginationInfo(pagination));
         await ctx.render(RecipeListTemplate, {recipes});
     })
     .get("/add", async (ctx) => {

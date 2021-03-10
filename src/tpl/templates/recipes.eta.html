@@ -1,4 +1,4 @@
-<% layout('page.eta.html', {title: t('index.title')}) %>
+<% layout("page.eta.html", {title: h.t("index.title")}) %>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes) { %>
@@ -15,18 +15,4 @@
     <% } %>
 </div>
 
-<nav aria-label="...">
-    <ul class="pagination justify-content-center mt-3">
-        <li class="page-item disabled">
-            <span class="page-link">Previous</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item active" aria-current="page">
-            <span class="page-link">2</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
-    </ul>
-</nav>
+<%~ includeFile('partials/pagination.eta.html', {h, users: it.users}) %>
