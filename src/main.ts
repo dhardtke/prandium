@@ -2,8 +2,6 @@ import {Database} from "./data/db.ts";
 import {log, LogRecord, path} from "./deps.ts";
 import {spawnServer} from "./http/webserver.ts";
 import {Cliffy, Colors} from "../dev/deps.ts";
-import {RecipeService} from "./data/service/RecipeService.ts";
-import {Recipe} from "./data/model/recipe.ts";
 
 interface Options {
     debug?: boolean;
@@ -58,7 +56,7 @@ async function main(): Promise<void> {
     const database = new Database();
     await database.migrate();
 
-    await spawnServer({host: options.host, port: options.port, db: database});
+    await spawnServer({host: options.host, port: options.port, debug: options.debug, db: database});
 }
 
 if (import.meta.main) {

@@ -7,8 +7,7 @@ const TEMPLATE_DIR = path.resolve(SCRIPT_DIR, "templates");
 
 Eta.configure({
     useWith: true,
-    views: TEMPLATE_DIR,
-    rmWhitespace: false // TODO turn this on if dev is off
+    views: TEMPLATE_DIR
 });
 
 interface Helper {

@@ -28,11 +28,11 @@ function buildState(db: Database): AppState {
     };
 }
 
-export async function spawnServer(args: { host: string, port: number, db: Database }) {
+export async function spawnServer(args: { host: string, port: number, debug?: boolean, db: Database }) {
     const state: AppState = buildState(args.db);
 
     const app = new Oak.Application<AppState>({state});
-    app.use(queryAdapter(), templateAdapter(), paginationAdapter());
+    app.use(queryAdapter(), templateAdapter(args.debug), paginationAdapter());
 
     for (const router of Routers) {
         app.use(router.routes(), router.allowedMethods());
