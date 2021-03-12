@@ -2,7 +2,9 @@
     <ul class="pagination justify-content-center mt-3">
         <% if (pagination.isFirstPage) { %>
             <li class="page-item disabled" aria-disabled="true" aria-label="<%= h.t('pagination.previous') %>">
-                <span class="page-link" aria-hidden="true">&lsaquo;</span>
+                <span class="page-link" aria-hidden="true">
+                    <%~ h.i('arrow-left-short') %>
+                </span>
             </li>
         <% } else { %>
             <li class="page-item">
@@ -29,7 +31,9 @@
 
         <% } else { %>
             <li class="page-item">
-                <a class="page-link" href="<%= pagination.nextPage?.url %>" rel="next" aria-label="<%= h.t('pagination.next') %>">&rsaquo;</a>
+                <a class="page-link" href="<%= pagination.nextPage?.url %>" rel="next" aria-label="<%= h.t('pagination.next') %>">
+                    <%~ h.i('arrow-right-short') %>
+                </a>
             </li>
         <% } %>
     </ul>

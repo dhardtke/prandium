@@ -1,11 +1,9 @@
-import {Eta, log, Oak} from "../deps.ts";
-import {path} from "../../tests/deps.ts";
+import {Eta, log, path} from "../deps.ts";
 import {Recipe} from "../data/model/recipe.ts";
 import {Pagination} from "../data/pagination.ts";
 
 const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
 const TEMPLATE_DIR = path.resolve(SCRIPT_DIR, "templates");
-const I18N_DIR = path.resolve(SCRIPT_DIR, "..", "..", "i18n");
 
 Eta.configure({
     useWith: true,
@@ -18,6 +16,8 @@ interface Helper {
 }
 
 class TranslationHelper implements Helper {
+    private static I18N_DIR = path.resolve(SCRIPT_DIR, "..", "..", "i18n");
+
     public static INSTANCE: TranslationHelper = new TranslationHelper();
 
     private static SUPPORTED_LANGUAGES: string[] = ["en", "de"];
@@ -57,7 +57,7 @@ class TranslationHelper implements Helper {
     }
 
     private static buildPath(lang: string, name: string): string {
-        return path.resolve(I18N_DIR, lang, `${name}.json`);
+        return path.resolve(TranslationHelper.I18N_DIR, lang, `${name}.json`);
     }
 
     private static get(key: string, obj: any): string {
@@ -69,7 +69,48 @@ class TranslationHelper implements Helper {
     };
 }
 
-type Helpers = typeof TranslationHelper.INSTANCE.api;
+class IconHelper implements Helper {
+    private static ICON_DIR = path.resolve(SCRIPT_DIR, "..", "..", "assets", "node_modules", "bootstrap-icons", "icons");
+
+    public static INSTANCE: IconHelper = new IconHelper();
+
+    private cache: Map<String, any> = new Map();
+
+    private constructor() {
+    }
+
+    /**
+     * Reads the SVG contents for an icon with the given name.
+     * @param name the icon name, e.g. "arrow-right-short"
+     */
+    public i = (name: string): string | undefined => {
+        if (this.cache.has(name)) {
+            return this.cache.get(name);
+        }
+        const _path = IconHelper.buildPath(name);
+        if (path.dirname(_path) !== IconHelper.ICON_DIR) {
+            throw new Error(`Detected attempt to read outside of icon dir: ${_path}`);
+        }
+        try {
+            const svg = Deno.readTextFileSync(_path);
+            this.cache.set(name, svg);
+            return svg;
+        } catch (e) {
+            log.warning(`Icon ${name} not found. Attempted path: ${_path}`);
+            return undefined;
+        }
+    }
+
+    private static buildPath(name: string): string {
+        return path.resolve(IconHelper.ICON_DIR, `${name}.svg`);
+    }
+
+    public api = {
+        i: this.i
+    };
+}
+
+type Helpers = typeof TranslationHelper.INSTANCE.api & typeof IconHelper.INSTANCE.api;
 
 interface TemplateData<Data = void> {
     data?: Data;
@@ -111,7 +152,8 @@ export class Template<Data = void> {
             ...data || {},
             ...{
                 h: {
-                    ...TranslationHelper.INSTANCE.api
+                    ...TranslationHelper.INSTANCE.api,
+                    ...IconHelper.INSTANCE.api
                 }
             }
         };
