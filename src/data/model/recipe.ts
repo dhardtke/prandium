@@ -25,4 +25,8 @@ export class Recipe extends Model {
     set description(value: string | undefined) {
         this._description = value;
     }
+
+    public static get columns(): string[] {
+        return [...super.columns, "name", "description"];
+    }
 }

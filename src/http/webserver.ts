@@ -2,10 +2,12 @@ import {log, Oak} from "../deps.ts";
 import {IndexRouter} from "./routes/index.routes.ts";
 import {RecipeRouter} from "./routes/recipe.routes.ts";
 import {AssetsRouter} from "./routes/assets.routes.ts";
-import {oakAdapter} from "../tpl/mod.ts";
 import {Database} from "../data/db.ts";
 import {Services} from "../data/service/services.ts";
 import {RecipeService} from "../data/service/RecipeService.ts";
+import {templateAdapter} from "./adapters/template_adapter.ts";
+import {paginationAdapter} from "./adapters/pagination_adapter.ts";
+import {queryAdapter} from "./adapters/query_adapter.ts";
 
 const Routers = [
     IndexRouter,
@@ -28,11 +30,12 @@ function buildState(db: Database): AppState {
 
 export async function spawnServer(args: { host: string, port: number, db: Database }) {
     const state: AppState = buildState(args.db);
+
     const app = new Oak.Application<AppState>({state});
-    app.use(oakAdapter());
+    app.use(queryAdapter(), templateAdapter(), paginationAdapter());
+
     for (const router of Routers) {
-        app.use(router.routes());
-        app.use(router.allowedMethods());
+        app.use(router.routes(), router.allowedMethods());
     }
 
     app.addEventListener("error", (evt) => {

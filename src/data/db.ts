@@ -14,17 +14,39 @@ export class Database {
         });
     }
 
+    private safeQuery(sql: string, values?: object) {
+        try {
+            return this.db.query(sql, values);
+        } catch (e) {
+            log.error(() => `Error executing ${sql}`);
+            throw e;
+        }
+    }
+
     /**
      * Query the database using the given SQL query.
      * @param sql the SQL query to execute
      * @param values the values to bind
      */
     public* query<T>(sql: string, values?: object): Generator<T> {
-        const result = this.db.query(sql, values);
-        const rows = result.asObjects<any>();
+        const result = this.safeQuery(sql, values);
+        const rows = result.asObjects<T>();
         for (const row of rows) {
             yield row;
         }
+    }
+
+    /**
+     * Query the database for a single result row.
+     * @param sql the SQL to execute
+     * @param values the values to bind
+     */
+    public single<T>(sql: string, values?: object): T | undefined {
+        const result = this.safeQuery(sql, values);
+        const rows = result.asObjects<T>();
+        const value = rows.next().value;
+        result.return();
+        return value;
     }
 
     /**
@@ -33,7 +55,7 @@ export class Database {
      * @param values the values to bind
      */
     public exec(sql: string, values?: object): void {
-        for (const ignored of this.query(sql, values)) {
+        for (const ignored of this.safeQuery(sql, values)) {
             // nothing to do
         }
     }

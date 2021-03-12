@@ -1,6 +1,7 @@
 import {Eta, log, Oak} from "../deps.ts";
 import {path} from "../../tests/deps.ts";
 import {Recipe} from "../data/model/recipe.ts";
+import {Pagination} from "../data/pagination.ts";
 
 const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
 const TEMPLATE_DIR = path.resolve(SCRIPT_DIR, "templates");
@@ -75,7 +76,7 @@ interface TemplateData<Data = void> {
     h: Helpers;
 }
 
-class Template<Data = void> {
+export class Template<Data = void> {
     private readonly filename: string;
     private source?: string;
 
@@ -117,29 +118,6 @@ class Template<Data = void> {
     }
 }
 
-declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
-    interface Context {
-        render: <Data>(template: Template<Data>, data?: Data) => void;
-    }
-
-    // noinspection JSUnusedGlobalSymbols
-    interface RouterContext {
-        render: <Data>(template: Template<Data>, data?: Data) => void;
-    }
-}
-
-// based on https://deno.land/x/view_engine@v1.4.5/lib/adapters/oak.ts
-export const oakAdapter = () => {
-    return async function (ctx: Oak.Context, next: Function) {
-        ctx.render = async function <Data>(template: Template<Data>, data?: Data) {
-            ctx.response.body = await template.render(data);
-            ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
-        };
-
-        await next();
-    };
-};
-
 export const IndexTemplate = new Template<{ favoriteCake: string }>("index.eta.html");
-export const RecipeListTemplate = new Template<{ recipes: Recipe[] }>("recipes.eta.html");
+export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe> }>("recipes.eta.html");
 export const RecipeDetailTemplate = new Template("recipe.eta.html");

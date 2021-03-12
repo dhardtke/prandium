@@ -1,30 +1,25 @@
 import {Database} from "../db.ts";
 import {Recipe} from "../model/recipe.ts";
-import {PaginationRequest, PaginationResponse} from "../pagination.ts";
 import {toArray, toCamelCase} from "../convert.ts";
+import {OrderBy, Service} from "./Service.ts";
 
-export class RecipeService {
+export class RecipeService implements Service<Recipe> {
     private readonly db: Database;
 
     constructor(db: Database) {
         this.db = db;
     }
 
-    paginationInfo(paginationRequest?: PaginationRequest): PaginationResponse<any> {
-        // TODO add filters, etc.
-        const [{total}] = toArray(this.db.query("SELECT COUNT(*) AS total FROM recipe"));
-        const pageSize = paginationRequest?.pageSize
-        return {
-            total,
-            items: []
-        };
+    // TODO filter arguments
+    count(): number {
+        return this.db.single<{ total: number }>("SELECT COUNT(*) AS total FROM recipe")!.total;
     }
 
-    list(paginationRequest?: PaginationRequest): Recipe[] {
+    list(limit?: number, offset?: number, orderBy: OrderBy = OrderBy.EMPTY): Recipe[] {
         return toArray(
-            this.db.query("SELECT id, created_at, updated_at, name, description FROM recipe LIMIT ? OFFSET ?", [
-                paginationRequest?.limit,
-                paginationRequest?.offset
+            this.db.query(`SELECT id, created_at, updated_at, name, description FROM recipe ${orderBy?.sql(Recipe.columns)} LIMIT ? OFFSET ?`, [
+                limit,
+                offset
             ]),
             src => new Recipe(toCamelCase(src))
         );

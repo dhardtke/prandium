@@ -3,15 +3,13 @@ import {RecipeDetailTemplate, RecipeListTemplate} from "../../tpl/mod.ts";
 import {AppState} from "../webserver.ts";
 import {Recipe} from "../../data/model/recipe.ts";
 import {RecipeService} from "../../data/service/RecipeService.ts";
-import {paginationRequest} from "../util.ts";
+import {OrderBy} from "../../data/service/Service.ts";
 
 const router: Oak.Router = new Oak.Router({prefix: "/recipe"});
 router
     .get("/", async (ctx: Oak.Context<AppState>) => {
         const service: RecipeService = ctx.state.services.RecipeService;
-        const pagination = paginationRequest(ctx);
-        const recipes = service.list(pagination);
-        console.log(service.paginationInfo(pagination));
+        const recipes = ctx.paginate(service.count(), (l, o) => service.list(l, o, new OrderBy(ctx.queryParameter("orderBy"), ctx.queryParameter("order"))));
         await ctx.render(RecipeListTemplate, {recipes});
     })
     .get("/add", async (ctx) => {

@@ -5,7 +5,7 @@ export abstract class Model {
     private _createdAt!: Date;
     private _updatedAt!: Date;
 
-    protected constructor(args: {id?: number, createdAt?: Date | string, updatedAt?: Date | string}) {
+    protected constructor(args: { id?: number, createdAt?: Date | string, updatedAt?: Date | string }) {
         this.id = args.id;
         this.createdAt = toDate(args.createdAt);
         this.updatedAt = toDate(args.updatedAt);
@@ -33,5 +33,9 @@ export abstract class Model {
 
     set updatedAt(value: Date) {
         this._updatedAt = value;
+    }
+
+    static get columns(): string[] {
+        return ["id", "created_at", "updated_at"];
     }
 }

@@ -1,13 +1,36 @@
-<ul class="pagination justify-content-center mt-3">
-    <li class="page-item disabled">
-        <span class="page-link"><%= h.t("pagination.previous") %></span>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item active" aria-current="page">
-        <span class="page-link">2</span>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-        <a class="page-link" href="#"><%= h.t("pagination.next") %></a>
-    </li>
-</ul>
+<nav>
+    <ul class="pagination justify-content-center mt-3">
+        <% if (pagination.isFirstPage) { %>
+            <li class="page-item disabled" aria-disabled="true" aria-label="<%= h.t('pagination.previous') %>">
+                <span class="page-link" aria-hidden="true">&lsaquo;</span>
+            </li>
+        <% } else { %>
+            <li class="page-item">
+                <a class="page-link" href="<%= pagination.previousPage?.url %>" rel="prev" aria-label="<%= h.t('pagination.previous') %>">&lsaquo;</a>
+            </li>
+        <% } %>
+
+        <% pagination.pages.forEach(page => { %>
+            <% if (page.number === pagination.currentPage) { %>
+                <li class="page-item active" aria-current="page">
+                    <span class="page-link"><%= page.number %></span>
+                </li>
+            <% } else { %>
+                <li class="page-item">
+                    <a class="page-link" href="<%= page.url %>"><%= page.number %></a>
+                </li>
+            <% } %>
+        <% }) %>
+
+        <% if (pagination.isLastPage) { %>
+            <li class="page-item disabled" aria-disabled="true" aria-label="<%= h.t('pagination.next') %>">
+                <span class="page-link" aria-hidden="true">&rsaquo;</span>
+            </li>
+
+        <% } else { %>
+            <li class="page-item">
+                <a class="page-link" href="<%= pagination.nextPage?.url %>" rel="next" aria-label="<%= h.t('pagination.next') %>">&rsaquo;</a>
+            </li>
+        <% } %>
+    </ul>
+</nav>
