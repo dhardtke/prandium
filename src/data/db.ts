@@ -1,13 +1,14 @@
-import {log, sqlite} from "../deps.ts";
+import {log, path, sqlite} from "../deps.ts";
 import {classNames} from "../util.ts";
 import {MIGRATIONS} from "./migrations/mod.ts";
 
 export class Database {
     private readonly db: sqlite.DB;
 
-    public constructor() {
-        // TODO parameterized path and name
-        this.db = new sqlite.DB("test.db");
+    public constructor(configDir: string) {
+        const dbPath = path.resolve(configDir, "data.db");
+        log.debug(() => `Using database ${dbPath}`);
+        this.db = new sqlite.DB(dbPath);
 
         window.addEventListener("unload", () => {
             this.close();

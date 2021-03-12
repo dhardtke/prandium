@@ -128,7 +128,7 @@ if (import.meta.main) {
                 id: "Server",
                 match: /\/src\/(.+)\.(ts|html)/,
                 fn: process(undefined, "deno", "run", "--no-check", `--allow-net=${options.host}`, "--allow-read", "--allow-write", "--unstable",
-                    "src/main.ts", `--host=${options.host}`, `--port=${options.port}`, `--debug=${options.debug || false}`)
+                    "--allow-env", "src/main.ts", `--host=${options.host}`, `--port=${options.port}`, `--debug=${options.debug || false}`)
             },
             {
                 id: "JS",
