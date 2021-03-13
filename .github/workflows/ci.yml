@@ -1,31 +1,6 @@
 name: learn-github-actions
 on: [ push ]
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    strategy:
-      fail-fast: false
-
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
-        with:
-          submodules: true
-          persist-credentials: false
-
-      - name: Setup Deno
-        uses: denolib/setup-deno@v2
-        with:
-          deno-version: v1.8.1
-
-      - name: Run tests
-        run: deno test --coverage=./cov --unstable --allow-all
-
-  #            -   name: Generate lcov
-  #                if: matrix.deno == 'canary'
-  #                run: deno coverage --unstable --lcov ./cov > cov.lcov
-
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -45,3 +20,30 @@ jobs:
 
       - name: Lint
         run: deno lint --unstable src tests
+
+    test:
+      runs-on: ubuntu-latest
+      timeout-minutes: 30
+      strategy:
+        fail-fast: false
+
+      steps:
+        - name: Clone repository
+          uses: actions/checkout@v2
+          with:
+            submodules: true
+            persist-credentials: false
+
+        - name: Setup Deno
+          uses: denolib/setup-deno@v2
+          with:
+            deno-version: v1.8.1
+
+        - name: Run tests
+          run: deno test --coverage=./cov --unstable --allow-all
+
+      #            -   name: Generate lcov
+      #                if: matrix.deno == 'canary'
+      #                run: deno coverage --unstable --lcov ./cov > cov.lcov
+
+# TODO bundle jobs
