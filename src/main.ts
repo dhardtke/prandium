@@ -65,8 +65,6 @@ async function setupLogger(debug?: boolean) {
 }
 
 async function main(): Promise<void> {
-    Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
-
     const options = await parseOptions();
     await setupLogger(options.debug);
     const database = new Database(options.configDir);

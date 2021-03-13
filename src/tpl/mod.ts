@@ -2,9 +2,9 @@ import {Eta, log, path} from "../deps.ts";
 import {Recipe} from "../data/model/recipe.ts";
 import {Pagination} from "../data/pagination.ts";
 import {Helpers} from "./helpers/helpers.ts";
+import {root} from "../util.ts";
 
-const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
-const TEMPLATE_DIR = path.resolve(SCRIPT_DIR, "templates");
+const TEMPLATE_DIR = root("src", "tpl", "templates");
 
 Eta.configure({
     useWith: true,

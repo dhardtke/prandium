@@ -1,9 +1,8 @@
 import {log, path} from "../../deps.ts";
-
-const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
+import {root} from "../../util.ts";
 
 export class IconHelper {
-    private static ICON_DIR = path.resolve(SCRIPT_DIR, "..", "..", "..", "assets", "node_modules", "bootstrap-icons", "icons");
+    private static ICON_DIR = root("assets", "node_modules", "bootstrap-icons", "icons");
 
     public static INSTANCE: IconHelper = new IconHelper();
 

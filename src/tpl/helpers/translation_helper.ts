@@ -1,9 +1,8 @@
 import {log, path} from "../../deps.ts";
-
-const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
+import {root} from "../../util.ts";
 
 export class TranslationHelper {
-    private static I18N_DIR = path.resolve(SCRIPT_DIR, "..", "..", "..", "i18n");
+    private static I18N_DIR = root("i18n");
 
     public static INSTANCE: TranslationHelper = new TranslationHelper();
 
