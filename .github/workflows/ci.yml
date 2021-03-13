@@ -1,60 +1,60 @@
 name: learn-github-actions
 on: [ push ]
 jobs:
-    check-bats-version:
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v2
-            -   uses: denolib/setup-deno@v2
-                with:
-                    deno-version: v1.8.1
-            -   run: |
-                    deno --version
-                    deno run https://deno.land/std/examples/welcome.ts
-                    deno install --allow-read -n deno_cat https://deno.land/std/examples/cat.ts
-                    deno_cat ./README.md
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.8.1
+      - run: |
+          deno --version
+          deno run https://deno.land/std/examples/welcome.ts
+          deno install --allow-read -n deno_cat https://deno.land/std/examples/cat.ts
+          deno_cat ./README.md
 
-    test:
-        runs-on: ubuntu-latest
-        timeout-minutes: 30
-        strategy:
-            fail-fast: false
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
 
-        steps:
-            -   name: Clone repository
-                uses: actions/checkout@v2
-                with:
-                    submodules: true
-                    persist-credentials: false
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          persist-credentials: false
 
-            -   name: Setup Deno
-                    uses: denolib/setup-deno@v2
-                    with:
-                        deno-version: v1.8.1
+      - name: Setup Deno
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.8.1
 
-            -   name: Run tests
-                run: deno test --coverage=./cov --unstable --allow-all
+      - name: Run tests
+        run: deno test --coverage=./cov --unstable --allow-all
 
-    #            -   name: Generate lcov
-    #                if: matrix.deno == 'canary'
-    #                run: deno coverage --unstable --lcov ./cov > cov.lcov
+  #            -   name: Generate lcov
+  #                if: matrix.deno == 'canary'
+  #                run: deno coverage --unstable --lcov ./cov > cov.lcov
 
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Clone repository
-                uses: actions/checkout@v2
-                with:
-                    submodules: false
-                    persist-credentials: false
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+        with:
+          submodules: false
+          persist-credentials: false
 
-            -   name: Setup Deno
-                    uses: denolib/setup-deno@v2
-                    with:
-                        deno-version: v1.8.1
+      - name: Setup Deno
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.8.1
 
-            -   name: Format
-                run: deno fmt --check src tests
+      - name: Format
+        run: deno fmt --check src tests
 
-            -   name: Lint
-                run: deno lint --unstable src tests
+      - name: Lint
+        run: deno lint --unstable src tests
