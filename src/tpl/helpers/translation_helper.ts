@@ -1,9 +1,8 @@
 import {log, path} from "../../deps.ts";
-import {Helper} from "./helpers.ts";
 
 const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
 
-export class TranslationHelper implements Helper {
+export class TranslationHelper {
     private static I18N_DIR = path.resolve(SCRIPT_DIR, "..", "..", "..", "i18n");
 
     public static INSTANCE: TranslationHelper = new TranslationHelper();
