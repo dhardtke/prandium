@@ -3,7 +3,7 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
-indent_size = 2
+indent_size = 4
 indent_style = space
 insert_final_newline = true
 max_line_length = 150
@@ -55,6 +55,7 @@ ij_scss_use_double_quotes = true
 ij_scss_value_alignment = 0
 
 [{*.ats, *.ts}]
+indent_size = 2
 ij_typescript_align_imports = false
 ij_typescript_align_multiline_array_initializer_expression = false
 ij_typescript_align_multiline_binary_operation = false
@@ -91,7 +92,7 @@ ij_typescript_class_brace_style = end_of_line
 ij_typescript_comma_on_new_line = false
 ij_typescript_do_while_brace_force = never
 ij_typescript_else_on_new_line = false
-ij_typescript_enforce_trailing_comma = whenmultiline
+ij_typescript_enforce_trailing_comma = keep
 ij_typescript_extends_keyword_wrap = off
 ij_typescript_extends_list_wrap = off
 ij_typescript_field_prefix = _
@@ -130,8 +131,8 @@ ij_typescript_method_parameters_new_line_after_left_paren = true
 ij_typescript_method_parameters_right_paren_on_new_line = true
 ij_typescript_method_parameters_wrap = off
 ij_typescript_object_literal_wrap = on_every_item
-ij_typescript_parentheses_expression_new_line_after_left_paren = true
-ij_typescript_parentheses_expression_right_paren_on_new_line = true
+ij_typescript_parentheses_expression_new_line_after_left_paren = false
+ij_typescript_parentheses_expression_right_paren_on_new_line = false
 ij_typescript_place_assignment_sign_on_next_line = false
 ij_typescript_prefer_as_type_cast = false
 ij_typescript_prefer_explicit_types_function_expression_returns = false
