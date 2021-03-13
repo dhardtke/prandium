@@ -35,17 +35,17 @@ async function parseOptions(): Promise<Options> {
 }
 
 function formatLogRecord(logRecord: LogRecord): string {
-    const colors: { [l in keyof typeof log.LogLevels]: (s: string) => string } = {
-        NOTSET: Colors.red,
-        DEBUG: Colors.gray,
-        INFO: Colors.brightBlue,
-        WARNING: Colors.yellow,
-        ERROR: Colors.red,
-        CRITICAL: Colors.brightRed
+    const colors: Record<number, (str: string) => string> = {
+        [log.LogLevels.NOTSET]: Colors.red,
+        [log.LogLevels.DEBUG]: Colors.gray,
+        [log.LogLevels.INFO]: Colors.brightBlue,
+        [log.LogLevels.WARNING]: Colors.yellow,
+        [log.LogLevels.ERROR]: Colors.red,
+        [log.LogLevels.CRITICAL]: Colors.brightRed
     }
-    const levelEnum: keyof typeof log.LogLevels = log.LogLevels[logRecord.level] as any;
-    const color = colors[levelEnum];
-    return `${color(levelEnum)} ${logRecord.msg}`;
+    const levelName = log.LogLevels[logRecord.level];
+    const color = colors[logRecord.level];
+    return `${color(levelName)} ${logRecord.msg}`;
 }
 
 async function setupLogger(debug?: boolean) {

@@ -15,7 +15,7 @@ router
     .get("/add", async (ctx) => {
         // TODO show form
     })
-    .post("/add", async (ctx) => {
+    .post("/add", (ctx) => {
         const service = ctx.state.services.RecipeService;
         const recipe = new Recipe({name: "Hello"});
         service.save(recipe);

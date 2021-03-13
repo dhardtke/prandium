@@ -37,7 +37,7 @@ export class Template<Data = void> {
         return this.source;
     }
 
-    public async render(data?: Data): Promise<string> {
+    public render(data?: Data): Promise<string> {
         return this.updateSource()
             .then((s) => Eta.render(s, this.buildArgs(data)) as string)
             .catch(e => {

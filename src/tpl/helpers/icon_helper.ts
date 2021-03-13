@@ -6,7 +6,7 @@ export class IconHelper {
 
     public static INSTANCE: IconHelper = new IconHelper();
 
-    private cache: Map<String, any> = new Map();
+    private cache: Map<string, string> = new Map();
 
     private constructor() {
     }

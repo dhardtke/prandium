@@ -35,8 +35,8 @@ export class PaginationBuilder<T> {
             this.endPage = this.totalPages;
         } else {
             // total pages more than max so calculate start and end pages
-            let maxPagesBeforeCurrentPage = Math.floor(maxPages / 2);
-            let maxPagesAfterCurrentPage = Math.ceil(maxPages / 2) - 1;
+            const maxPagesBeforeCurrentPage = Math.floor(maxPages / 2);
+            const maxPagesAfterCurrentPage = Math.ceil(maxPages / 2) - 1;
             if (currentPage <= maxPagesBeforeCurrentPage) {
                 // current page near the start
                 this.startPage = 1;

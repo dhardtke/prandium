@@ -27,13 +27,13 @@ export const InitialMigration = new class InitialMigration extends Migration {
              )`
         ];
         for (const sql of queries) {
-            db.exec(sql);
+            await db.exec(sql);
         }
 
         // dummy data
         // TODO find a nice way for DEV mode with initial content?
         for (let i = 0; i < 50; i++) {
-            db.exec(`INSERT INTO recipe (name, description)
+            await db.exec(`INSERT INTO recipe (name, description)
                      VALUES (?, 'Lorem Ipsum')`, [`Recipe ${i + 1}`]);
         }
     }

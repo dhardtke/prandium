@@ -10,13 +10,13 @@ export function toDate(source?: Date | string, _default = new Date()): Date {
 
 const SNAKE_CASE_PATTERN = /_([a-z])/g;
 
-export function toCamelCase<T>(obj: any): T {
+export function toCamelCase<T, O>(obj: O): T {
     // based on https://stackoverflow.com/a/58257506
     return Object
         .entries(obj)
         .reduce((acc, [key, val]) => {
             const modifiedKey = key.replace(SNAKE_CASE_PATTERN, g => g[1].toUpperCase());
-            const modifiedVal = typeof val === "object" && val !== null ? toCamelCase(val) : val;
+            const modifiedVal = typeof val === "object" && val !== null ? toCamelCase(val as unknown) : val;
             return {
                 ...acc,
                 ...{[modifiedKey]: modifiedVal}
@@ -24,7 +24,7 @@ export function toCamelCase<T>(obj: any): T {
         }, {} as T);
 }
 
-export function toArray<S, T>(data: Generator<S>, mapper: (src: S) => T = (src) => src as any): T[] {
+export function toArray<S, T>(data: Generator<S>, mapper: (src: S) => T = (src) => src as unknown as T): T[] {
     return Array.from(data)
-        .map(src => mapper(src));
+        .map((src: S) => mapper(src));
 }

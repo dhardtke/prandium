@@ -1,5 +1,5 @@
 import {log, path} from "../../deps.ts";
-import {root} from "../../util.ts";
+import {get, root} from "../../util.ts";
 
 export class TranslationHelper {
     private static I18N_DIR = root("i18n");
@@ -9,7 +9,7 @@ export class TranslationHelper {
     private static SUPPORTED_LANGUAGES: string[] = ["en", "de"];
     private static GLOBAL_FILENAME = "_globals";
 
-    private cache: Map<String, any> = new Map();
+    private cache: Map<string, Record<string, unknown>> = new Map();
 
     private constructor() {
     }
@@ -25,16 +25,16 @@ export class TranslationHelper {
             const global = this.getTranslation(lang, TranslationHelper.GLOBAL_FILENAME);
             const translation = {...global, ...(name ? this.getTranslation(lang, name) : {})};
 
-            return TranslationHelper.get(key, translation);
+            return get(key, translation);
         } catch (e) {
             return undefined;
         }
     }
 
-    private getTranslation(lang: string, name: string): any {
+    private getTranslation(lang: string, name: string): Record<string, unknown> {
         const path = TranslationHelper.buildPath(lang, name);
         if (this.cache.has(path)) {
-            return this.cache.get(path);
+            return this.cache.get(path)!;
         }
         log.debug(`${path} not found in cache. Reading from disk...`);
         const parsed = JSON.parse(Deno.readTextFileSync(path));
@@ -44,10 +44,6 @@ export class TranslationHelper {
 
     private static buildPath(lang: string, name: string): string {
         return path.resolve(TranslationHelper.I18N_DIR, lang, `${name}.json`);
-    }
-
-    private static get(key: string, obj: any): string {
-        return key.split(".").reduce((o, i) => o[i], obj);
     }
 
     public api = {

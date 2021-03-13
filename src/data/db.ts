@@ -2,6 +2,18 @@ import {log, path, sqlite} from "../deps.ts";
 import {classNames} from "../util.ts";
 import {MIGRATIONS} from "./migrations/mod.ts";
 
+// see https://deno.land/x/sqlite/src/db.ts
+type QueryParam =
+    | boolean
+    | number
+    | bigint
+    | string
+    | null
+    | undefined
+    | Date
+    | Uint8Array;
+export type Values = Record<string, QueryParam> | QueryParam[];
+
 export class Database {
     private readonly db: sqlite.DB;
 
@@ -15,7 +27,7 @@ export class Database {
         });
     }
 
-    private safeQuery(sql: string, values?: object) {
+    private safeQuery(sql: string, values?: Values) {
         try {
             return this.db.query(sql, values);
         } catch (e) {
@@ -29,7 +41,7 @@ export class Database {
      * @param sql the SQL query to execute
      * @param values the values to bind
      */
-    public* query<T>(sql: string, values?: object): Generator<T> {
+    public* query<T>(sql: string, values?: Values): Generator<T> {
         const result = this.safeQuery(sql, values);
         const rows = result.asObjects<T>();
         for (const row of rows) {
@@ -42,7 +54,7 @@ export class Database {
      * @param sql the SQL to execute
      * @param values the values to bind
      */
-    public single<T>(sql: string, values?: object): T | undefined {
+    public single<T>(sql: string, values?: Values): T | undefined {
         const result = this.safeQuery(sql, values);
         const rows = result.asObjects<T>();
         const value = rows.next().value;
@@ -55,7 +67,7 @@ export class Database {
      * @param sql the SQL to execute
      * @param values the values to bind
      */
-    public exec(sql: string, values?: object): void {
+    public exec(sql: string, values?: Values): void {
         for (const ignored of this.safeQuery(sql, values)) {
             // nothing to do
         }
