@@ -16,11 +16,9 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
 export const paginationAdapter = () => {
     return async function (ctx: Oak.Context, next: Function) {
         function extractParams() {
-            const query = Oak.helpers.getQuery(ctx);
-
             return {
-                page: toInt(query.page, 1),
-                pageSize: toInt(query.pageSize, 25)
+                page: toInt(ctx.queryParameter("page"), 1),
+                pageSize: toInt(ctx.queryParameter("pageSize"), 25)
             }
         }
 
