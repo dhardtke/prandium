@@ -75,7 +75,7 @@ export function parseDuration(iso8601duration: string): Duration {
       }
       sawTime = true;
     } else {
-      const target = sawTime ? char in time : char in date;
+      const target = sawTime ? (char in time && time) : (char in date && date);
       if (target) {
         // @ts-ignore TypeScript can't infer that char is a valid key of either time or date
         target[char] = [...tmp];
