@@ -54,7 +54,7 @@ jobs:
                         deno-version: v1.8.1
 
             -   name: Format
-                run: deno fmt --check
+                run: deno fmt --check src tests
 
             -   name: Lint
-                run: deno lint --unstable src
+                run: deno lint --unstable src tests

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Format (check)" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/src" programParameters="fmt --check">
+  <configuration default="false" name="Format (check)" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/tests" programParameters="fmt --check $PROJECT_DIR$/../cook-guide\src">
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
