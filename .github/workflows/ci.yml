@@ -5,6 +5,7 @@ on:
             - "assets/**"
             - "src/**"
             - "tests/**"
+            - "dev/**"
 env:
     denoVersion: "v1.8.1"
 jobs:
@@ -23,10 +24,10 @@ jobs:
                     deno-version: ${{ env.denoVersion }}
 
             -   name: Format
-                run: deno fmt --check src tests
+                run: deno fmt --check src tests dev
 
             -   name: Lint
-                run: deno lint --unstable src tests
+                run: deno lint --unstable src tests dev
 
     test:
         runs-on: ubuntu-latest
