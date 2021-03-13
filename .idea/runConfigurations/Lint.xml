@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Lint" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/tests" programParameters="--unstable lint C:\Users\nick\IdeaProjects\cook-guide\src">
+  <configuration default="false" name="Lint" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/tests" programParameters="--unstable lint $PROJECT_DIR$/src $PROJECT_DIR$/dev">
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
