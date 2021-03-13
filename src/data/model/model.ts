@@ -1,41 +1,49 @@
-import {toDate} from "../convert.ts";
+import { toDate } from "../convert.ts";
 
 export abstract class Model {
-    private _id?: number;
-    private _createdAt!: Date;
-    private _updatedAt!: Date;
+  protected constructor(
+    args: {
+      id?: number;
+      createdAt?: Date | string;
+      updatedAt?: Date | string;
+    },
+  ) {
+    this.id = args.id;
+    this.createdAt = toDate(args.createdAt);
+    this.updatedAt = toDate(args.updatedAt);
+  }
 
-    protected constructor(args: { id?: number, createdAt?: Date | string, updatedAt?: Date | string }) {
-        this.id = args.id;
-        this.createdAt = toDate(args.createdAt);
-        this.updatedAt = toDate(args.updatedAt);
-    }
+  static get columns(): string[] {
+    return ["id", "created_at", "updated_at"];
+  }
 
-    get id(): number | undefined {
-        return this._id;
-    }
+  private _id?: number;
 
-    set id(value: number | undefined) {
-        this._id = value;
-    }
+  get id(): number | undefined {
+    return this._id;
+  }
 
-    get createdAt(): Date {
-        return this._createdAt;
-    }
+  set id(value: number | undefined) {
+    this._id = value;
+  }
 
-    set createdAt(value: Date) {
-        this._createdAt = value;
-    }
+  private _createdAt!: Date;
 
-    get updatedAt(): Date {
-        return this._updatedAt;
-    }
+  get createdAt(): Date {
+    return this._createdAt;
+  }
 
-    set updatedAt(value: Date) {
-        this._updatedAt = value;
-    }
+  set createdAt(value: Date) {
+    this._createdAt = value;
+  }
 
-    static get columns(): string[] {
-        return ["id", "created_at", "updated_at"];
-    }
+  private _updatedAt!: Date;
+
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
+
+  set updatedAt(value: Date) {
+    this._updatedAt = value;
+  }
 }

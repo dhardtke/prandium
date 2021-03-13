@@ -1,5 +1,5 @@
-import {RecipeService} from "./RecipeService.ts";
+import { RecipeService } from "./RecipeService.ts";
 
 export interface Services {
-    RecipeService: RecipeService
+  RecipeService: RecipeService;
 }

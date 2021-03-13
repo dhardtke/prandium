@@ -59,7 +59,7 @@ class DevServer {
             }
             const actions = this.filterMatchingActions(Array.from(paths));
             if (actions.length) {
-                DevServer.log(`Detected change. Restarting ${actions.map(a => a.id).join(", ")}...`);
+                DevServer.log(`Detected change. Restarting ${actions.map((a) => a.id).join(", ")}...`);
                 this.runActions(actions);
             }
             paths.clear();
