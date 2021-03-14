@@ -1,8 +1,9 @@
+import { extractPrefixed, map, toArray, toCamelCase } from "../convert.ts";
 import { Database } from "../db.ts";
-import { Recipe } from "../model/recipe.ts";
-import { toArray, toCamelCase } from "../convert.ts";
-import { Service } from "./service.ts";
 import { OrderBy } from "../helper/order_by.ts";
+import { Book } from "../model/book.ts";
+import { Recipe } from "../model/recipe.ts";
+import { columns, Service } from "./service.ts";
 
 export class RecipeService implements Service<Recipe> {
   private readonly db: Database;
@@ -67,7 +68,23 @@ export class RecipeService implements Service<Recipe> {
     );
   }
 
-  find(id: number): Recipe | undefined {
-    return undefined;
+  find(id: number, loadBook?: boolean): Recipe | undefined {
+    return map(
+      this.db.single(
+        `SELECT
+                ${columns(Recipe.columns, "r.")}
+                ${loadBook ? `, ${columns(Book.columns, "b.", "_b_")}` : ""}
+         FROM recipe r
+                ${loadBook ? `INNER JOIN book b on r.book_id = b.id` : ""}
+         WHERE r.id = ?`,
+        [
+          id
+        ]
+      ),
+      (src) => new Recipe({
+        ...toCamelCase(src),
+        ...loadBook ? { book: new Book(toCamelCase(extractPrefixed(src, "_b_"))) } : {}
+      })
+    );
   }
 }

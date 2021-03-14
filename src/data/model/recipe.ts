@@ -1,5 +1,5 @@
-import { Model, ModelArgs } from "./model.ts";
 import { Book } from "./book.ts";
+import { Model, ModelArgs } from "./model.ts";
 
 export class Recipe extends Model {
   constructor(

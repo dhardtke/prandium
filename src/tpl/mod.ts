@@ -78,5 +78,5 @@ export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe> }>(
   "recipe/recipes.eta.html",
 );
 export const RecipeDetailTemplate = new Template<{ recipe: Recipe }>(
-  "recipe/recipe.eta.html",
+  "recipe/recipe.detail.eta.html",
 );

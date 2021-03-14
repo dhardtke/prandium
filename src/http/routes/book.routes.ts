@@ -26,7 +26,7 @@ router
         toInt(ctx.parameter("id")),
       );
       if (!book) {
-        next();
+        await next();
       } else {
         const recipeService = ctx.state.services.RecipeService;
         book.recipes = ctx.paginate(
