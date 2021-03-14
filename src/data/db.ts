@@ -91,7 +91,7 @@ export class Database {
       await this.transaction(async () => {
         await migration.migrate(this);
         currentVersion++;
-        //this.db.query(`PRAGMA user_version = ${currentVersion}`);
+        this.db.query(`PRAGMA user_version = ${currentVersion}`);
         return true;
       });
     }

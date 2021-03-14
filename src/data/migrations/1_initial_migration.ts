@@ -8,36 +8,26 @@ export const InitialMigration = new class InitialMigration extends Migration {
 
   async migrate(db: Database) {
     const queries = [
-      `DROP TABLE IF EXISTS book`,
-      `DROP TABLE IF EXISTS recipe`,
       `CREATE TABLE book
        (
-         id         INTEGER PRIMARY KEY,
-         created_at timestamp NOT NULL DEFAULT current_timestamp,
-         updated_at timestamp NOT NULL DEFAULT current_timestamp,
-         name       TEXT
+         id          INTEGER PRIMARY KEY,
+         created_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
+         updated_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
+         name        TEXT,
+         description TEXT
        )`,
       `CREATE TABLE recipe
        (
          id          INTEGER PRIMARY KEY,
-         created_at  timestamp NOT NULL DEFAULT current_timestamp,
-         updated_at  timestamp NOT NULL DEFAULT current_timestamp,
+         created_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
+         updated_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
          name        TEXT,
-         description TEXT
+         description TEXT,
+         book_id     INTEGER   NOT NULL REFERENCES book (id) ON DELETE CASCADE
        )`,
     ];
     for (const sql of queries) {
       await db.exec(sql);
-    }
-
-    // dummy data
-    // TODO find a nice way for DEV mode with initial content?
-    for (let i = 0; i < 50; i++) {
-      await db.exec(
-        `INSERT INTO recipe (name, description)
-         VALUES (?, 'Lorem Ipsum')`,
-        [`Recipe ${i + 1}`],
-      );
     }
   }
 }();

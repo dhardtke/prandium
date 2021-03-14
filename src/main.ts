@@ -1,8 +1,8 @@
 import { Database } from "./data/db.ts";
-import { log, LogRecord, path } from "./deps.ts";
+import { log, LogRecord } from "./deps.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { Cliffy, Colors, fs } from "../dev/deps.ts";
-import { getHome } from "./util.ts";
+import { DEFAULT_CONFIG_DIR, defaultConfigDir } from "./util.ts";
 
 interface Options {
   debug?: boolean;
@@ -10,8 +10,6 @@ interface Options {
   port: number;
   configDir: string;
 }
-
-const DEFAULT_CONFIG_DIR = "~/.cookguide";
 
 async function parseOptions(): Promise<Options> {
   const { options }: { options: Options } = await new Cliffy.Command()
@@ -24,11 +22,7 @@ async function parseOptions(): Promise<Options> {
     .parse(Deno.args);
 
   if (options.configDir === DEFAULT_CONFIG_DIR) {
-    const home = getHome();
-    if (!home) {
-      throw new Error("Could not read home directory.");
-    }
-    options.configDir = path.resolve(home, ".cookguide");
+    options.configDir = defaultConfigDir();
   }
 
   fs.ensureDirSync(options.configDir);

@@ -1,0 +1,18 @@
+<% layout("page.eta.html", {title: h.t("index.title")}) %>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <% for (const recipe of recipes.items) { %>
+        <div class="col">
+            <div class="card">
+                <img src="https://picsum.photos/400" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 class="card-title"><%= recipe.name %></h5>
+                    <p class="card-text"><%= recipe.description %></p>
+                    <a href="/" class="btn btn-primary stretched-link">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</div>
+
+<% ~ includeFile('partials/pagination.eta.html', {h, pagination: recipes}) %>

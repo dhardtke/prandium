@@ -7,12 +7,16 @@ import { Services } from "../data/service/services.ts";
 import { RecipeService } from "../data/service/RecipeService.ts";
 import { templateAdapter } from "./adapters/template_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
-import { queryAdapter } from "./adapters/query_adapter.ts";
+import { orderByAdapter } from "./adapters/order_by_adapter.ts";
+import { BookService } from "../data/service/BookService.ts";
+import { BookRouter } from "./routes/book.routes.ts";
+import { parameterAdapter } from "./adapters/parameter_adapter.ts";
 
 const Routers = [
   IndexRouter,
   AssetsRouter,
   RecipeRouter,
+  BookRouter,
 ];
 
 export interface AppState {
@@ -24,6 +28,7 @@ function buildState(db: Database): AppState {
     services: {
       // TODO move this to generic factory method
       RecipeService: new RecipeService(db),
+      BookService: new BookService(db)
     },
   };
 }
@@ -34,7 +39,12 @@ export async function spawnServer(
   const state: AppState = buildState(args.db);
 
   const app = new Oak.Application<AppState>({ state });
-  app.use(queryAdapter(), templateAdapter(args.debug), paginationAdapter());
+  app.use(
+    parameterAdapter(),
+    orderByAdapter(),
+    templateAdapter(args.debug),
+    paginationAdapter(),
+  );
 
   for (const router of Routers) {
     app.use(router.routes(), router.allowedMethods());

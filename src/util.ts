@@ -19,6 +19,16 @@ export function getHome(): string | undefined {
   return Deno.env.get("HOME");
 }
 
+export const DEFAULT_CONFIG_DIR = "~/.cookguide";
+
+export function defaultConfigDir(): string {
+  const home = getHome();
+  if (!home) {
+    throw new Error("Could not read home directory.");
+  }
+  return path.resolve(home, ".cookguide");
+}
+
 // deno-lint-ignore no-explicit-any
 export function get(key: string, obj: any): string {
   return key.split(".").reduce((o, i) => o[i], obj);

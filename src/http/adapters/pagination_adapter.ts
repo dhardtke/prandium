@@ -23,8 +23,8 @@ export const paginationAdapter = () => {
   return async function (ctx: Oak.Context, next: () => void) {
     function extractParams() {
       return {
-        page: toInt(ctx.queryParameter("page"), 1),
-        pageSize: toInt(ctx.queryParameter("pageSize"), 25),
+        page: toInt(ctx.parameter("page"), 1),
+        pageSize: toInt(ctx.parameter("pageSize"), 25),
       };
     }
 

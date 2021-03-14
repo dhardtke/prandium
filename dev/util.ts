@@ -1,16 +1,23 @@
-import {path} from "./deps.ts";
+import { path } from "./deps.ts";
 
 export function process(cwd?: string, ...cmd: string[]): () => Deno.Process {
-    return () => Deno.run({
-        ...cwd ? {cwd: path.resolve(Deno.cwd(), cwd)} : {},
-        cmd
+  return () =>
+    Deno.run({
+      ...cwd ? { cwd: path.resolve(Deno.cwd(), cwd) } : {},
+      cmd,
     });
 }
 
-export async function map<In, Out>(promise: Promise<In>, mapper: (input: In) => Out): Promise<Out> {
-    return mapper(await promise);
+export async function map<In, Out>(
+  promise: Promise<In>,
+  mapper: (input: In) => Out,
+): Promise<Out> {
+  return mapper(await promise);
 }
 
-export function processAsync(cwd: string, ...cmd: string[]): () => Promise<any> {
-    return () => process(cwd, ...cmd)().status();
+export function processAsync(
+  cwd: string,
+  ...cmd: string[]
+): () => Promise<any> {
+  return () => process(cwd, ...cmd)().status();
 }

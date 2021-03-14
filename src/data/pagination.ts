@@ -114,7 +114,7 @@ export class PaginationBuilder<T> {
   }
 }
 
-export class Pagination<T> {
+export class Pagination<T> implements Iterable<T> {
   public readonly pageSize: number;
   public readonly currentPage: number;
   public readonly totalItems: number;
@@ -162,5 +162,9 @@ export class Pagination<T> {
 
   public get isLastPage(): boolean {
     return this.currentPage === this.lastPage;
+  }
+
+  [Symbol.iterator](): Iterator<T> {
+    return this.items.values();
   }
 }

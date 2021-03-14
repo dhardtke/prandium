@@ -3,12 +3,12 @@ import { Template } from "../../tpl/mod.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {
-    render: <Data>(template: Template<Data>, data?: Data) => void;
+    render: <Data>(template: Template<Data>, data: Data) => void;
   }
 
   // noinspection JSUnusedGlobalSymbols
   interface RouterContext {
-    render: <Data>(template: Template<Data>, data?: Data) => void;
+    render: <Data>(template: Template<Data>, data: Data) => void;
   }
 }
 

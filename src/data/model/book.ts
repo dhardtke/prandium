@@ -1,27 +1,27 @@
 import { Model, ModelArgs } from "./model.ts";
-import { Book } from "./book.ts";
+import { Recipe } from "./recipe.ts";
 
-export class Recipe extends Model {
+export class Book extends Model {
   constructor(
     args: ModelArgs & {
       name: string;
       description?: string;
-      bookId: number;
-      book?: Book;
+      recipes?: Iterable<Recipe>;
     },
   ) {
     super(args);
     this._name = args.name;
     this._description = args.description;
-    this._bookId = args.bookId;
-    this._book = args.book;
+    this._recipes = args.recipes || [];
   }
+
+  private _name!: string;
+  private _description?: string;
+  private _recipes: Iterable<Recipe>;
 
   public static get columns(): string[] {
     return [...super.columns, "name", "description"];
   }
-
-  private _name!: string;
 
   get name(): string {
     return this._name;
@@ -31,8 +31,6 @@ export class Recipe extends Model {
     this._name = value;
   }
 
-  private _description?: string;
-
   get description(): string | undefined {
     return this._description;
   }
@@ -41,26 +39,11 @@ export class Recipe extends Model {
     this._description = value;
   }
 
-  private _bookId!: number;
-
-  get bookId(): number {
-    return this._bookId;
+  get recipes(): Iterable<Recipe> {
+    return this._recipes;
   }
 
-  set bookId(value: number) {
-    this._bookId = value;
-  }
-
-  private _book?: Book;
-
-  get book(): Book | undefined {
-    return this._book;
-  }
-
-  set book(value: Book | undefined) {
-    this._book = value;
-    if (value) {
-      this._bookId = value.id!;
-    }
+  set recipes(value: Iterable<Recipe>) {
+    this._recipes = value;
   }
 }
