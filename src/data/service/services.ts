@@ -1,5 +1,5 @@
-import { RecipeService } from "./RecipeService.ts";
-import { BookService } from "./BookService.ts";
+import { RecipeService } from "./recipe_service.ts";
+import { BookService } from "./book_service.ts";
 
 export interface Services {
   RecipeService: RecipeService;

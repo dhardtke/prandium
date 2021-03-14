@@ -4,11 +4,11 @@ import { RecipeRouter } from "./routes/recipe.routes.ts";
 import { AssetsRouter } from "./routes/assets.routes.ts";
 import { Database } from "../data/db.ts";
 import { Services } from "../data/service/services.ts";
-import { RecipeService } from "../data/service/RecipeService.ts";
+import { RecipeService } from "../data/service/recipe_service.ts";
 import { templateAdapter } from "./adapters/template_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
-import { BookService } from "../data/service/BookService.ts";
+import { BookService } from "../data/service/book_service.ts";
 import { BookRouter } from "./routes/book.routes.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";
 

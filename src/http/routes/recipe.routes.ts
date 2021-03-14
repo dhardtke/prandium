@@ -2,7 +2,7 @@ import { Oak } from "../../deps.ts";
 import { RecipeDetailTemplate, RecipeListTemplate } from "../../tpl/mod.ts";
 import { AppState } from "../webserver.ts";
 import { Recipe } from "../../data/model/recipe.ts";
-import { RecipeService } from "../../data/service/RecipeService.ts";
+import { RecipeService } from "../../data/service/recipe_service.ts";
 
 const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
 router

@@ -1,7 +1,7 @@
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { toArray, toCamelCase } from "../convert.ts";
-import { Service } from "./Service.ts";
+import { Service } from "./service.ts";
 import { Book } from "../model/book.ts";
 import { OrderBy } from "../helper/order_by.ts";
 
