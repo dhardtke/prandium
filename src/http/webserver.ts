@@ -1,17 +1,15 @@
+import { Database } from "../data/db.ts";
+import { Services, servicesFactory } from "../data/service/services.ts";
 import { log, Oak } from "../deps.ts";
+import { orderByAdapter } from "./adapters/order_by_adapter.ts";
+import { paginationAdapter } from "./adapters/pagination_adapter.ts";
+import { parameterAdapter } from "./adapters/parameter_adapter.ts";
+import { templateAdapter } from "./adapters/template_adapter.ts";
+import { handleNotFound, handleServerError } from "./error.ts";
+import { AssetsRouter } from "./routes/assets.routes.ts";
+import { BookRouter } from "./routes/book.routes.ts";
 import { IndexRouter } from "./routes/index.routes.ts";
 import { RecipeRouter } from "./routes/recipe.routes.ts";
-import { AssetsRouter } from "./routes/assets.routes.ts";
-import { Database } from "../data/db.ts";
-import { Services } from "../data/service/services.ts";
-import { RecipeService } from "../data/service/recipe_service.ts";
-import { templateAdapter } from "./adapters/template_adapter.ts";
-import { paginationAdapter } from "./adapters/pagination_adapter.ts";
-import { orderByAdapter } from "./adapters/order_by_adapter.ts";
-import { BookService } from "../data/service/book_service.ts";
-import { BookRouter } from "./routes/book.routes.ts";
-import { parameterAdapter } from "./adapters/parameter_adapter.ts";
-import { handleNotFound, handleServerError } from "./error.ts";
 
 const Routers = [
   IndexRouter,
@@ -26,11 +24,7 @@ export interface AppState {
 
 function buildState(db: Database): AppState {
   return {
-    services: {
-      // TODO move this to generic factory method
-      RecipeService: new RecipeService(db),
-      BookService: new BookService(db),
-    },
+    services: servicesFactory(db),
   };
 }
 
