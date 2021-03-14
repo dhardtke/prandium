@@ -20,12 +20,17 @@ router
     await ctx.render(BookListTemplate, { books });
   })
   .get("/:id", async (ctx: Oak.Context<AppState>, next: () => void) => {
-    const book = ctx.state.services.BookService.find(toInt(ctx.parameter("id")));
+    const book = ctx.state.services.BookService.find(
+      toInt(ctx.parameter("id")),
+    );
     if (!book) {
       next();
     } else {
       const recipeService = ctx.state.services.RecipeService;
-      book.recipes = ctx.paginate(recipeService.count({ bookId: book.id }), (l, o) => recipeService.list(l, o, ctx.orderBy(), { bookId: book.id }));
+      book.recipes = ctx.paginate(
+        recipeService.count({ bookId: book.id }),
+        (l, o) => recipeService.list(l, o, ctx.orderBy(), { bookId: book.id }),
+      );
       await ctx.render(BookDetailTemplate, { book });
     }
   });

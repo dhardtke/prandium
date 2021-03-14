@@ -64,11 +64,11 @@ export const BookListTemplate = new Template<{ books: Pagination<Book> }>(
   "book/book.list.eta.html",
 );
 export const BookDetailTemplate = new Template<{ book: Book }>(
-  "book/book.detail.eta.html"
+  "book/book.detail.eta.html",
 );
 export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe> }>(
   "recipe/recipes.eta.html",
 );
 export const RecipeDetailTemplate = new Template<{ recipe: Recipe }>(
-  "recipe/recipe.eta.html"
+  "recipe/recipe.eta.html",
 );

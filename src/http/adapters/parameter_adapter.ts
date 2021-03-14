@@ -17,7 +17,7 @@ export const parameterAdapter = () => {
   return async function (ctx: Oak.Context, next: () => void) {
     ctx.parameter = function (name: string): string {
       if (!ctx._query) {
-        ctx._query = Oak.helpers.getQuery(ctx, {mergeParams: true});
+        ctx._query = Oak.helpers.getQuery(ctx, { mergeParams: true });
       }
 
       return ctx._query[name];

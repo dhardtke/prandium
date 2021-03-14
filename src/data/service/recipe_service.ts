@@ -12,13 +12,13 @@ export class RecipeService implements Service<Recipe> {
   }
 
   count(filters?: {
-    bookId?: number
+    bookId?: number;
   }): number {
     return this.db.single<{ total: number }>(
       "SELECT COUNT(*) AS total FROM recipe WHERE book_id = ?",
       [
         filters?.bookId,
-      ]
+      ],
     )!.total;
   }
 
@@ -39,7 +39,7 @@ export class RecipeService implements Service<Recipe> {
         [
           filters?.bookId,
           limit || -1,
-          offset || 0
+          offset || 0,
         ],
       ),
       (src) => new Recipe(toCamelCase(src)),

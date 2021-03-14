@@ -29,7 +29,9 @@ router
     // TODO redirect to created recipe
   })
   .get("/:id", async (ctx) => {
-    await ctx.render(RecipeDetailTemplate, { recipe: new Recipe({ name: "Hello", bookId: 42 }) });
+    await ctx.render(RecipeDetailTemplate, {
+      recipe: new Recipe({ name: "Hello", bookId: 42 }),
+    });
   });
 
 export { router as RecipeRouter };

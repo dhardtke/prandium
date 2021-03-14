@@ -28,7 +28,7 @@ function buildState(db: Database): AppState {
     services: {
       // TODO move this to generic factory method
       RecipeService: new RecipeService(db),
-      BookService: new BookService(db)
+      BookService: new BookService(db),
     },
   };
 }
