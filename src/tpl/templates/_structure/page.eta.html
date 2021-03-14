@@ -2,10 +2,11 @@
 <html lang="en">
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<% ~includeFile("_structure/favicons.eta.html", {h}) %>
 
 <title><%= title || h.t("appName") %></title>
-<link rel="stylesheet" href="/assets/index.css">
-<script src="/assets/index.js"></script>
+<link rel="stylesheet" href="/assets/dist/index.css">
+<script src="/assets/dist/index.js"></script>
 
 <% ~includeFile("_structure/navbar.eta.html", {h}) %>
 
