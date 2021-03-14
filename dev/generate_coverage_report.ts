@@ -6,12 +6,12 @@ Deno.chdir("..");
 
 const coverage = Deno.run({
   cmd: ["deno", "coverage", "--unstable", "out/coverage", "--lcov"],
-  stdout: "piped"
+  stdout: "piped",
 });
 const coverageStatus = await coverage.status();
 if (coverageStatus.success && coverageStatus.code === 0) {
   const tmpFile = await Deno.makeTempFile({
-    suffix: ".lcov"
+    suffix: ".lcov",
   });
   await Deno.writeFileSync(tmpFile, await coverage.output());
   const htmlStatus = await Deno.run({
