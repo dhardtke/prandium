@@ -19,7 +19,7 @@ router
     );
     await ctx.render(BookListTemplate, { books });
   })
-  .get("/:id", async (ctx: Oak.Context<AppState>, next: () => void) => {
+  .get("/:id", async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
     const book = ctx.state.services.BookService.find(
       toInt(ctx.parameter("id")),
     );

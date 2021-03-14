@@ -2,9 +2,34 @@
 // @use "node_modules/bootstrap/scss/bootstrap";
 
 html {
-  overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 main {
-  padding-top: 5rem;
+    padding-top: 5rem;
+}
+
+.bi {
+    display: inline-block;
+    line-height: 1;
+    vertical-align: -.125em;
+}
+
+.navbar {
+    .bi {
+        width: 24px;
+        height: 24px;
+    }
+
+    .app-name {
+        transition: .3s;
+        color: inherit;
+        margin-top: -3px;
+    }
+
+    .navbar-brand:hover {
+        .app-name {
+            color: bootstrap.$danger;
+        }
+    }
 }

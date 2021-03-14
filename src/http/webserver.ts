@@ -11,6 +11,7 @@ import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { BookService } from "../data/service/book_service.ts";
 import { BookRouter } from "./routes/book.routes.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";
+import { handleNotFound, handleServerError } from "./error.ts";
 
 const Routers = [
   IndexRouter,
@@ -46,13 +47,12 @@ export async function spawnServer(
     paginationAdapter(),
   );
 
+  app.use(handleServerError);
   for (const router of Routers) {
     app.use(router.routes(), router.allowedMethods());
   }
+  app.use(handleNotFound);
 
-  app.addEventListener("error", (evt) => {
-    log.error(evt.error);
-  });
   app.addEventListener("listen", ({ hostname, port, secure }) => {
     const protocol = secure ? "https" : "http";
     const url = `${protocol}://${hostname ?? "localhost"}:${port}`;

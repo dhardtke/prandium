@@ -2,6 +2,16 @@
     "appName": "CookGuide",
     "book": "Book",
     "books": "Books",
+    "error": {
+        "404": {
+            "title": "Not Found",
+            "description": "The page you are looking for can not be found."
+        },
+        "500": {
+            "title": "Server Error",
+            "description": "A server error occurred."
+        }
+    },
     "home": "Home",
     "recipes": "Recipes"
 }

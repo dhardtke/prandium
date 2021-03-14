@@ -14,7 +14,7 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
 }
 
 export const parameterAdapter = () => {
-  return async function (ctx: Oak.Context, next: () => void) {
+  return async function (ctx: Oak.Context, next: () => Promise<void>) {
     ctx.parameter = function (name: string): string {
       if (!ctx._query) {
         ctx._query = Oak.helpers.getQuery(ctx, { mergeParams: true });

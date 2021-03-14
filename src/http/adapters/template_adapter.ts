@@ -20,7 +20,7 @@ export const templateAdapter = (debug?: boolean) => {
     });
   }
 
-  return async function (ctx: Oak.Context, next: () => void) {
+  return async function (ctx: Oak.Context, next: () => Promise<void>) {
     ctx.render = async function <Data>(template: Template<Data>, data?: Data) {
       ctx.response.body = await template.render(data);
       ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");

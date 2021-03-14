@@ -57,6 +57,14 @@ export class Template<Data = void> {
   }
 }
 
+export const NotFoundTemplate = new Template(
+  "error/404.eta.html",
+);
+
+export const ServerErrorTemplate = new Template(
+  "error/500.eta.html",
+);
+
 export const IndexTemplate = new Template(
   "index.eta.html",
 );
