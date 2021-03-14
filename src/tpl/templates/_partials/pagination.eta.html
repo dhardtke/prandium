@@ -1,40 +1,42 @@
-<nav>
-    <ul class="pagination justify-content-center mt-3">
-        <% if (pagination.isFirstPage) { %>
-            <li class="page-item disabled" aria-disabled="true" aria-label="<%= h.t("pagination.previous") %>">
+<% if (pagination.hasPages) { %>
+    <nav>
+        <ul class="pagination justify-content-center mt-3">
+            <% if (pagination.isFirstPage) { %>
+                <li class="page-item disabled" aria-disabled="true" aria-label="<%= h.t("pagination.previous") %>">
                 <span class="page-link" aria-hidden="true">
                     <% ~h.i("arrow-left-short") %>
                 </span>
-            </li>
-        <% } else { %>
-            <li class="page-item">
-                <a class="page-link" href="<%= pagination.previousPage?.url %>" rel="prev" aria-label="<%= h.t("pagination.previous") %>">&lsaquo;</a>
-            </li>
-        <% } %>
-
-        <% pagination.pages.forEach(page => { %>
-            <% if (page.number === pagination.currentPage) { %>
-                <li class="page-item active" aria-current="page">
-                    <span class="page-link"><%= page.number %></span>
                 </li>
             <% } else { %>
                 <li class="page-item">
-                    <a class="page-link" href="<%= page.url %>"><%= page.number %></a>
+                    <a class="page-link" href="<%= pagination.previousPage?.url %>" rel="prev" aria-label="<%= h.t("pagination.previous") %>">&lsaquo;</a>
                 </li>
             <% } %>
-        <% }) %>
 
-        <% if (pagination.isLastPage) { %>
-            <li class="page-item disabled" aria-disabled="true" aria-label="<%= h.t("pagination.next") %>">
-                <span class="page-link" aria-hidden="true">&rsaquo;</span>
-            </li>
+            <% pagination.pages.forEach(page => { %>
+                <% if (page.number === pagination.currentPage) { %>
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link"><%= page.number %></span>
+                    </li>
+                <% } else { %>
+                    <li class="page-item">
+                        <a class="page-link" href="<%= page.url %>"><%= page.number %></a>
+                    </li>
+                <% } %>
+            <% }) %>
 
-        <% } else { %>
-            <li class="page-item">
-                <a class="page-link" href="<%= pagination.nextPage?.url %>" rel="next" aria-label="<%= h.t("pagination.next") %>">
-                    <% ~h.i("arrow-right-short") %>
-                </a>
-            </li>
-        <% } %>
-    </ul>
-</nav>
+            <% if (pagination.isLastPage) { %>
+                <li class="page-item disabled" aria-disabled="true" aria-label="<%= h.t("pagination.next") %>">
+                    <span class="page-link" aria-hidden="true">&rsaquo;</span>
+                </li>
+
+            <% } else { %>
+                <li class="page-item">
+                    <a class="page-link" href="<%= pagination.nextPage?.url %>" rel="next" aria-label="<%= h.t("pagination.next") %>">
+                        <% ~h.i("arrow-right-short") %>
+                    </a>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
+<% } %>

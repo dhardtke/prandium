@@ -164,6 +164,10 @@ export class Pagination<T> implements Iterable<T> {
     return this.currentPage === this.lastPage;
   }
 
+  public get hasPages(): boolean {
+    return this.totalPages > 0;
+  }
+
   [Symbol.iterator](): Iterator<T> {
     return this.items.values();
   }
