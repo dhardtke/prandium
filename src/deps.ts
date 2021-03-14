@@ -8,6 +8,7 @@ export * as path from "https://deno.land/std@0.90.0/path/mod.ts";
 export * as log from "https://deno.land/std@0.90.0/log/mod.ts";
 export { LogRecord } from "https://deno.land/std@0.90.0/log/logger.ts";
 export * as Cliffy from "https://deno.land/x/cliffy@v0.17.2/command/mod.ts";
+export * as fs from "https://deno.land/std@0.90.0/fs/mod.ts";
 export * as Colors from "https://deno.land/std@0.90.0/fmt/colors.ts";
 
 // types

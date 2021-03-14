@@ -1,7 +1,6 @@
 import { Database } from "./data/db.ts";
-import { log, LogRecord } from "./deps.ts";
+import { Cliffy, log, LogRecord, fs, Colors } from "./deps.ts";
 import { spawnServer } from "./http/webserver.ts";
-import { Cliffy, Colors, fs } from "../dev/deps.ts";
 import { DEFAULT_CONFIG_DIR, defaultConfigDir } from "./util.ts";
 
 interface Options {

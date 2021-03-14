@@ -1,5 +1,5 @@
-import { Cliffy, Colors, fs, path, slash } from "./deps.ts";
-import { process } from "./util.ts";
+import { Cliffy, Colors, fs, path, slash } from "./internal/deps.ts";
+import { process } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
