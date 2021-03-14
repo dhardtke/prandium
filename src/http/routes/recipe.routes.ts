@@ -1,7 +1,7 @@
+import { toInt } from "../../data/convert.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { Oak } from "../../deps.ts";
 import { RecipeDetailTemplate } from "../../tpl/mod.ts";
-import { toInt } from "../../util.ts";
 import { AppState } from "../webserver.ts";
 
 // TODO slugs

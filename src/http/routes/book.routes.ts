@@ -1,7 +1,7 @@
+import { toInt } from "../../data/convert.ts";
 import { Oak } from "../../deps.ts";
 import { BookDetailTemplate, BookListTemplate } from "../../tpl/mod.ts";
 import { BookService } from "../../data/service/book_service.ts";
-import { toInt } from "../../util.ts";
 import { AppState } from "../webserver.ts";
 
 const router: Oak.Router = new Oak.Router({ prefix: "/book" });

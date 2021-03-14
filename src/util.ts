@@ -1,9 +1,5 @@
 import { path } from "./deps.ts";
 
-export function toInt(s: string, _default = 0): number {
-  return parseInt(s, 10) || _default;
-}
-
 export function classNames(
   objects: { constructor: { name: string } }[],
 ): string {
