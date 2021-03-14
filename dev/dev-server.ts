@@ -134,11 +134,12 @@ if (import.meta.main) {
     watchPaths: [
       "src",
       "assets",
+      "i18n",
     ],
     actions: [
       {
         id: "Server",
-        match: /\/src\/(.+)\.(ts|html)/,
+        match: /(\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
         fn: process(
           undefined,
           "deno",
