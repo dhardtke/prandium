@@ -12,7 +12,7 @@ router
   })
   .post("/add", (ctx: Oak.Context<AppState>) => {
     const service = ctx.state.services.RecipeService;
-    const recipe = new Recipe({ name: "Hello", bookId: 42 });
+    const recipe = new Recipe({ title: "Hello", bookId: 42 });
     service.save(recipe);
     // TODO redirect to created recipe
   })

@@ -4,31 +4,31 @@ import { Model, ModelArgs } from "./model.ts";
 export class Recipe extends Model {
   constructor(
     args: ModelArgs & {
-      name: string;
+      title: string;
       description?: string;
       bookId: number;
       book?: Book;
     },
   ) {
     super(args);
-    this._name = args.name;
+    this._title = args.title;
     this._description = args.description;
     this._bookId = args.bookId;
     this._book = args.book;
   }
 
   public static get columns(): string[] {
-    return [...super.columns, "name", "description"];
+    return [...super.columns, "title", "description"];
   }
 
-  private _name!: string;
+  private _title!: string;
 
-  get name(): string {
-    return this._name;
+  get title(): string {
+    return this._title;
   }
 
-  set name(value: string) {
-    this._name = value;
+  set title(value: string) {
+    this._title = value;
   }
 
   private _description?: string;

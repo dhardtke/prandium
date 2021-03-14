@@ -4,32 +4,32 @@ import { Recipe } from "./recipe.ts";
 export class Book extends Model {
   constructor(
     args: ModelArgs & {
-      name: string; // TODO rename to title
+      title: string;
       description?: string;
       recipes?: Iterable<Recipe>;
     },
   ) {
     super(args);
-    this._name = args.name;
+    this._title = args.title;
     this._description = args.description;
     this._recipes = args.recipes || [];
   }
 
-  private _name!: string;
-  private _description?: string;
-  private _recipes: Iterable<Recipe>;
-
   public static get columns(): string[] {
-    return [...super.columns, "name", "description"];
+    return [...super.columns, "title", "description"];
   }
 
-  get name(): string {
-    return this._name;
+  private _title!: string;
+
+  get title(): string {
+    return this._title;
   }
 
-  set name(value: string) {
-    this._name = value;
+  set title(value: string) {
+    this._title = value;
   }
+
+  private _description?: string;
 
   get description(): string | undefined {
     return this._description;
@@ -38,6 +38,8 @@ export class Book extends Model {
   set description(value: string | undefined) {
     this._description = value;
   }
+
+  private _recipes: Iterable<Recipe>;
 
   get recipes(): Iterable<Recipe> {
     return this._recipes;

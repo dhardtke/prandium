@@ -5,13 +5,13 @@
     h,
     breadcrumb: [
         {title: h.t("books"), url: "/book"},
-        {title: recipe.book.name, url: `/book/${recipe.book.id}`},
-        {title: recipe.name}
+        {title: recipe.book.title, url: `/book/${recipe.book.id}`},
+        {title: recipe.title}
     ]
 }) %>
 
 <h1>Recipe</h1>
-<h2><%= recipe.name %></h2>
+<h2><%= recipe.title %></h2>
 <p><%= recipe.description %></p>
 
 <img class="img-thumbnail" src="https://via.placeholder.com/400" alt="">

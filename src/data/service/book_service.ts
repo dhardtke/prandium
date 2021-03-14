@@ -1,9 +1,9 @@
-import { Database } from "../db.ts";
-import { Recipe } from "../model/recipe.ts";
 import { toArray, toCamelCase } from "../convert.ts";
-import { Service } from "./service.ts";
-import { Book } from "../model/book.ts";
+import { Database } from "../db.ts";
 import { OrderBy } from "../helper/order_by.ts";
+import { Book } from "../model/book.ts";
+import { Recipe } from "../model/recipe.ts";
+import { columns, Service } from "./service.ts";
 
 export class BookService implements Service<Book> {
   private readonly db: Database;
@@ -28,7 +28,7 @@ export class BookService implements Service<Book> {
     // TODO support loadRecipes
     return toArray(
       this.db.query(
-        `SELECT id, created_at, updated_at, name, description FROM book ${
+        `SELECT ${columns(Book.columns)} FROM book ${
           orderBy?.sql(Recipe.columns)
         } LIMIT ? OFFSET ?`,
         [
@@ -42,11 +42,11 @@ export class BookService implements Service<Book> {
 
   save(book: Book) {
     this.db.exec(
-      "INSERT INTO book (created_at, updated_at, name, description) VALUES (?, ?, ?, ?)",
+      "INSERT INTO book (created_at, updated_at, title, description) VALUES (?, ?, ?, ?)",
       [
         book.createdAt,
         book.updatedAt,
-        book.name,
+        book.title,
         book.description,
       ],
     );
@@ -56,13 +56,13 @@ export class BookService implements Service<Book> {
   update(book: Book) {
     this.db.exec(
       "UPDATE book SET updated_at = ?, name = ?, description = ? WHERE id = ?",
-      [book.updatedAt, book.name, book.description, book.id],
+      [book.updatedAt, book.title, book.description, book.id],
     );
   }
 
   find(id: number): Book | undefined {
     const result = this.db.single(
-      "SELECT id, created_at, updated_at, name, description FROM book WHERE id = ?",
+      `SELECT ${columns(Book.columns)} FROM book WHERE id = ?`,
       [id],
     );
     return result ? new Book(toCamelCase(result)) : undefined;

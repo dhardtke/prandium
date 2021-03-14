@@ -13,7 +13,7 @@ export const InitialMigration = new class InitialMigration extends Migration {
          id          INTEGER PRIMARY KEY,
          created_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
          updated_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
-         name        TEXT,
+         title       TEXT,
          description TEXT
        )`,
       `CREATE TABLE recipe
@@ -21,7 +21,7 @@ export const InitialMigration = new class InitialMigration extends Migration {
          id          INTEGER PRIMARY KEY,
          created_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
          updated_at  TIMESTAMP NOT NULL DEFAULT current_timestamp,
-         name        TEXT,
+         title       TEXT,
          description TEXT,
          book_id     INTEGER   NOT NULL REFERENCES book (id) ON DELETE CASCADE
        )`,

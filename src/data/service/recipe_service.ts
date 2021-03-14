@@ -34,7 +34,7 @@ export class RecipeService implements Service<Recipe> {
   ): Recipe[] {
     return toArray(
       this.db.query(
-        `SELECT id, created_at, updated_at, name, description, book_id FROM recipe ${
+        `SELECT ${columns(Recipe.columns)} FROM recipe ${
           orderBy.sql(Recipe.columns)
         } WHERE book_id = ? LIMIT ? OFFSET ?`,
         [
@@ -49,11 +49,11 @@ export class RecipeService implements Service<Recipe> {
 
   save(recipe: Recipe) {
     this.db.exec(
-      "INSERT INTO recipe (created_at, updated_at, name, description, book_id) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO recipe (created_at, updated_at, title, description, book_id) VALUES (?, ?, ?, ?, ?)",
       [
         recipe.createdAt,
         recipe.updatedAt,
-        recipe.name,
+        recipe.title,
         recipe.description,
         recipe.bookId,
       ],
@@ -64,7 +64,7 @@ export class RecipeService implements Service<Recipe> {
   update(recipe: Recipe) {
     this.db.exec(
       "UPDATE recipe SET updated_at = ?, name = ?, description = ? WHERE id = ?",
-      [recipe.updatedAt, recipe.name, recipe.description, recipe.id],
+      [recipe.updatedAt, recipe.title, recipe.description, recipe.id],
     );
   }
 
