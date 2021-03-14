@@ -7,6 +7,8 @@ export interface ModelArgs {
 }
 
 export abstract class Model {
+  static readonly columns = ["id", "created_at", "updated_at"];
+
   protected constructor(
     args: ModelArgs,
   ) {
@@ -18,10 +20,6 @@ export abstract class Model {
   private _id?: number;
   private _createdAt!: Date;
   private _updatedAt!: Date;
-
-  static get columns(): string[] {
-    return ["id", "created_at", "updated_at"];
-  }
 
   get id(): number | undefined {
     return this._id;

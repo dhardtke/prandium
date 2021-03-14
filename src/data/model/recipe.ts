@@ -2,6 +2,8 @@ import { Book } from "./book.ts";
 import { Model, ModelArgs } from "./model.ts";
 
 export class Recipe extends Model {
+  static columns = [...Model.columns, "title", "description", "book_id"];
+
   constructor(
     args: ModelArgs & {
       title: string;
@@ -15,10 +17,6 @@ export class Recipe extends Model {
     this._description = args.description;
     this._bookId = args.bookId;
     this._book = args.book;
-  }
-
-  public static get columns(): string[] {
-    return [...super.columns, "title", "description"];
   }
 
   private _title!: string;
