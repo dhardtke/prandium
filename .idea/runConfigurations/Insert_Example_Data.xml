@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Insert Example Data" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/insert_example_data.ts" programParameters="run --unstable --allow-all --no-check" workingDirectory="$PROJECT_DIR$/dev">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
