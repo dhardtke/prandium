@@ -1,5 +1,5 @@
 export class Filter<T extends Record<string, string>> {
-  public static EMPTY: Filter<{}> = new Filter();
+  public static EMPTY: Filter<Record<string, string>> = new Filter();
 
   private readonly parameters?: T;
 

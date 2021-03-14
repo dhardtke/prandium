@@ -18,6 +18,6 @@ export async function map<In, Out>(
 export function processAsync(
   cwd: string,
   ...cmd: string[]
-): () => Promise<any> {
+): () => Promise<unknown> {
   return () => process(cwd, ...cmd)().status();
 }

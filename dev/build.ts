@@ -6,7 +6,7 @@ Deno.chdir("..");
 
 interface Step {
   description: string;
-  fn: () => Promise<any>;
+  fn: () => Promise<unknown>;
 }
 
 // TODO build index.min.css and leave index.css unminified

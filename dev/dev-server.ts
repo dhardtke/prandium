@@ -23,7 +23,7 @@ interface DevServerConfig {
 }
 
 class DevServer {
-  private static NS: string = "dev-server";
+  private static NS = "dev-server";
 
   private config: DevServerConfig;
   private readonly processes: { [id: string]: Deno.Process } = {};
