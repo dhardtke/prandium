@@ -19,20 +19,24 @@ router
     );
     await ctx.render(BookListTemplate, { books });
   })
-  .get("/:id", async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
-    const book = ctx.state.services.BookService.find(
-      toInt(ctx.parameter("id")),
-    );
-    if (!book) {
-      next();
-    } else {
-      const recipeService = ctx.state.services.RecipeService;
-      book.recipes = ctx.paginate(
-        recipeService.count({ bookId: book.id }),
-        (l, o) => recipeService.list(l, o, ctx.orderBy(), { bookId: book.id }),
+  .get(
+    "/:id",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      const book = ctx.state.services.BookService.find(
+        toInt(ctx.parameter("id")),
       );
-      await ctx.render(BookDetailTemplate, { book });
-    }
-  });
+      if (!book) {
+        next();
+      } else {
+        const recipeService = ctx.state.services.RecipeService;
+        book.recipes = ctx.paginate(
+          recipeService.count({ bookId: book.id }),
+          (l, o) =>
+            recipeService.list(l, o, ctx.orderBy(), { bookId: book.id }),
+        );
+        await ctx.render(BookDetailTemplate, { book });
+      }
+    },
+  );
 
 export { router as BookRouter };
