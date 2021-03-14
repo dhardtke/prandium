@@ -19,14 +19,14 @@ export function getHome(): string | undefined {
   return Deno.env.get("HOME");
 }
 
-export const DEFAULT_CONFIG_DIR = "~/.config/.cook-guide";
+export const DEFAULT_CONFIG_DIR = "~/.config/cook-guide";
 
 export function defaultConfigDir(): string {
   const home = getHome();
   if (!home) {
     throw new Error("Could not read home directory.");
   }
-  return path.resolve(home, ".config", ".cook-guide");
+  return path.resolve(home, ".config", "cook-guide");
 }
 
 // deno-lint-ignore no-explicit-any
