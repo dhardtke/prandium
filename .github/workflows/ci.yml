@@ -32,9 +32,6 @@ jobs:
     test:
         runs-on: ubuntu-latest
         timeout-minutes: 30
-        strategy:
-            fail-fast: false
-
         steps:
             -   name: Clone repository
                 uses: actions/checkout@v2
