@@ -86,13 +86,13 @@ export function parseDuration(iso8601duration: string): Duration {
     }
   }
 
+  const nonEmpty = Object.values({ ...date, ...time }).filter((v) => v.length);
   if (
-    tmp.length || !Object.values({ ...date, ...time }).find((v) => v.length)
+    tmp.length || !nonEmpty.length
   ) {
     throw new Error(`Unexpected end of input.`);
   }
 
-  const nonEmpty = Object.values({ ...date, ...time }).filter((v) => v.length);
   const floatIdx = nonEmpty.findIndex((v) =>
     v.includes(".") || v.includes(",")
   );
