@@ -1,4 +1,7 @@
-<% layout("page.eta.html", {title: h.t("index.title")}) %>
+<% layout("_structure/page.eta.html", {
+    title: h.t("index.title"),
+    breadcrumbs: [{"title": h.t("recipes")}],
+}) %>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes.items) { %>
@@ -15,4 +18,4 @@
     <% } %>
 </div>
 
-<% ~ includeFile('partials/pagination.eta.html', {h, pagination: recipes}) %>
+<% ~includeFile("_partials/pagination.eta.html", {h, pagination: recipes}) %>

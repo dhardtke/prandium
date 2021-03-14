@@ -4,7 +4,7 @@ import { Recipe } from "./recipe.ts";
 export class Book extends Model {
   constructor(
     args: ModelArgs & {
-      name: string;
+      name: string; // TODO rename to title
       description?: string;
       recipes?: Iterable<Recipe>;
     },

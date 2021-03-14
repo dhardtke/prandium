@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title><%= h.t("appName") %></title>
+<link rel="stylesheet" href="/assets/index.css">
+<script src="/assets/index.js"></script>
+
+<% ~includeFile("_structure/navbar.eta.html", {h}) %>
+
+<main class="container-xxl">
+    <% ~body %>
+</main>
+</html>

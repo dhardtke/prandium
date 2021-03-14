@@ -1,4 +1,13 @@
-<% layout('page.eta.html', {title: h.t('index.title')}) %>
+<% layout("_structure/page.eta.html", {
+    title: book.name,
+}) %>
+<% ~includeFile("_partials/breadcrumb.eta.html", {
+    h,
+    breadcrumb: [
+        {title: h.t("books"), url: "/book"},
+        {title: book.name}
+    ],
+}) %>
 
 <h1>Book</h1>
 <h2>Cake</h2>
@@ -14,11 +23,11 @@
                 <div class="card-body">
                     <h5 class="card-title"><%= recipe.name %></h5>
                     <p class="card-text"><%= recipe.description %></p>
-                    <a href="/" class="btn btn-primary stretched-link">Go somewhere</a>
+                    <a href="/book/<%= book.id %>/recipe/<%= recipe.id %>" class="btn btn-primary stretched-link">Go somewhere</a>
                 </div>
             </div>
         </div>
     <% } %>
 </div>
 
-<% ~ includeFile('partials/pagination.eta.html', {h, pagination: book.recipes}) %>
+<% ~includeFile("_partials/pagination.eta.html", {h, pagination: book.recipes}) %>

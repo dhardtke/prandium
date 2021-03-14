@@ -1,3 +1,16 @@
-<% layout("page.eta.html", {title: h.t("index.title")}) %>
+<% layout("_structure/page.eta.html", {title: h.t("index.title")}) %>
+<% ~includeFile("_partials/breadcrumb.eta.html", {
+    h,
+}) %>
+
+<div class="card">
+    <h5 class="card-header">
+        Books
+    </h5>
+    <div class="card-body">
+        <p class="card-text">Manage all your books.</p>
+        <a href="/book" class="btn btn-primary stretched-link">Go</a>
+    </div>
+</div>
 
 <!-- TODO add some texts? or redirect to books? -->

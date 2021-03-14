@@ -61,10 +61,10 @@ export const IndexTemplate = new Template(
   "index.eta.html",
 );
 export const BookListTemplate = new Template<{ books: Pagination<Book> }>(
-  "book/books.eta.html",
+  "book/book.list.eta.html",
 );
 export const BookDetailTemplate = new Template<{ book: Book }>(
-  "book/book.eta.html"
+  "book/book.detail.eta.html"
 );
 export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe> }>(
   "recipe/recipes.eta.html",

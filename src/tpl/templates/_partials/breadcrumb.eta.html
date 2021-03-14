@@ -1,0 +1,24 @@
+<% function renderItem(item, active) { %>
+    <% if (active) { %>
+        <li class="breadcrumb-item active" aria-current="page">
+            <%= item.title %>
+        </li>
+    <% } else { %>
+        <li class="breadcrumb-item">
+            <a href="<%= item.url %>">
+                <%= item.title %>
+            </a>
+        </li>
+    <% } %>
+<% } %>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <% renderItem({title: h.t("home"), url: "/"}, typeof breadcrumb === "undefined") %>
+        <% if (typeof breadcrumb !== "undefined") { %>
+            <% breadcrumb.forEach((item, i) => { %>
+                <% renderItem(item, i === breadcrumb.length - 1) %>
+            <% }) %>
+        <% } %>
+    </ol>
+</nav>

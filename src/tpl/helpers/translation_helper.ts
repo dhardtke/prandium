@@ -5,36 +5,24 @@ export class TranslationHelper {
   public static INSTANCE: TranslationHelper = new TranslationHelper();
   private static I18N_DIR = root("i18n");
   private static SUPPORTED_LANGUAGES: string[] = ["en", "de"];
-  private static GLOBAL_FILENAME = "_globals";
 
   private cache: Map<string, Record<string, unknown>> = new Map();
 
   private constructor() {
   }
 
-  private static buildPath(lang: string, name: string): string {
-    return path.resolve(TranslationHelper.I18N_DIR, lang, `${name}.json`);
+  private static buildPath(lang: string): string {
+    return path.resolve(TranslationHelper.I18N_DIR, `${lang}.json`);
   }
 
   /**
    * Returns the value of the JSON object for the current language.
    * @param key a key such as "breadcrumb.title"
-   * @param name the name of the translation file, e.g. "index" - if not provided only _globals will be searched
    */
-  public t = (key: string, name?: string): string | undefined => {
+  public t = (key: string): string | undefined => {
     const lang = TranslationHelper.SUPPORTED_LANGUAGES[0]; // TODO support different languages
     try {
-      const global = this.getTranslation(
-        lang,
-        TranslationHelper.GLOBAL_FILENAME,
-      );
-      const translation = {
-        ...global,
-        ...(
-          name ? this.getTranslation(lang, name) : {}
-        ),
-      };
-
+      const translation = this.getTranslation(lang);
       return get(key, translation);
     } catch (e) {
       return undefined;
@@ -45,8 +33,8 @@ export class TranslationHelper {
     t: this.t,
   };
 
-  private getTranslation(lang: string, name: string): Record<string, unknown> {
-    const path = TranslationHelper.buildPath(lang, name);
+  private getTranslation(lang: string): Record<string, unknown> {
+    const path = TranslationHelper.buildPath(lang);
     if (this.cache.has(path)) {
       return this.cache.get(path)!;
     }
