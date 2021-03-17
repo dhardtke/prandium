@@ -35,3 +35,7 @@ const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
 export function root(...parts: string[]): string {
   return path.resolve(SCRIPT_DIR, "..", ...parts);
 }
+
+export function roundUpToThreeDigits(n: number): number {
+  return Math.round((n + Number.EPSILON) * 1000) / 1000;
+}

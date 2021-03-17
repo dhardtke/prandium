@@ -1,4 +1,5 @@
 import parseIngredient from "https://cdn.skypack.dev/parse-ingredient";
+import { roundUpToThreeDigits } from "../../util.ts";
 
 // copied from https://github.com/jakeboone02/parse-ingredient/blob/master/src/index.ts#L3
 interface ParsedIngredient {
@@ -6,22 +7,31 @@ interface ParsedIngredient {
    * The primary quantity (the lower quantity in a range, if applicable)
    */
   quantity: number | null;
+
   /**
    * The secondary quantity (the upper quantity in a range, or `null` if not applicable)
    */
   quantity2: number | null;
+
   /**
    * The unit of measure
    */
   unitOfMeasure: string | null;
+
   /**
    * The description
    */
   description: string;
+
   /**
    * Whether the "ingredient" is actually a group header, e.g. "For icing:"
    */
   isGroupHeader: boolean;
+
+  /**
+   * Whether quantity and unit should be separated by a space when rendered out.
+   */
+  spaceBetweenQuantityAndUnit?: boolean;
 }
 
 type AmountType = "full" | "unitless" | "empty";
@@ -77,11 +87,29 @@ export class IngredientHelper {
   private constructor() {
   }
 
+  private parse(raw: string): ParsedIngredient | undefined {
+    const candidates: ParsedIngredient[] = parseIngredient(raw, {
+      normalizeUOM: false,
+    });
+    const parsed = candidates.find((c) => !c.isGroupHeader);
+    // manual post-processing
+    if (parsed && !parsed.unitOfMeasure) {
+      if (
+        parsed.description.startsWith("TL") ||
+        parsed.description.startsWith("EL")
+      ) {
+        parsed.unitOfMeasure = parsed.description.substr(0, 2);
+        parsed.description = parsed.description.substr(2);
+        parsed.spaceBetweenQuantityAndUnit = true;
+      }
+    }
+    return parsed;
+  }
+
   /**
    * @param raw the raw ingredient string to parse
    * @param recipeYield the original recipe yield
    * @param portions the desired amount of portions
-   * TODO change multiplier to support division when yield is not base multiplier
    */
   public ingredient = (
     raw: string,
@@ -89,20 +117,16 @@ export class IngredientHelper {
     portions = 1,
   ): Ingredient => {
     if (!this.cache.has(raw)) {
-      const candidates: ParsedIngredient[] = parseIngredient(raw, {
-        normalizeUOM: false,
-      });
-      const parsed = candidates.find((c) => !c.isGroupHeader);
+      const parsed = this.parse(raw);
       this.cache.set(raw, parsed);
     }
     const cached = this.cache.get(raw)!;
-    // TODO rounding
     const computed = {
       quantity: cached.quantity
-        ? cached.quantity * (portions / recipeYield)
+        ? roundUpToThreeDigits(cached.quantity * (portions / recipeYield))
         : null,
       quantity2: cached.quantity2
-        ? cached.quantity2 * (portions / recipeYield)
+        ? roundUpToThreeDigits(cached.quantity2 * (portions / recipeYield))
         : null,
     };
 
@@ -110,6 +134,8 @@ export class IngredientHelper {
       amount: computed.quantity
         ? `${computed.quantity}${
           computed.quantity2 ? `- ${computed.quantity2}` : ""
+        }${
+          cached.spaceBetweenQuantityAndUnit ? " " : ""
         }${cached.unitOfMeasure ?? ""}`
         : undefined,
       description: cached.description.trim(),
