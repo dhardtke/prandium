@@ -31,7 +31,7 @@ router
     // TODO redirect to created recipe
   })
   .get(
-    "/:id",
+    "/:id/:slug",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
       const service = ctx.state.services.RecipeService;
       const recipe = service.find(

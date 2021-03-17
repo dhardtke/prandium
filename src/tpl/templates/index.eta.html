@@ -1,6 +1,6 @@
 <% layout("_structure/page.eta.html", {title: h.t("index.title")}) %>
 <% ~includeFile("_partials/breadcrumb.eta.html", {
-    h,
+    h
 }) %>
 
 <div class="card">
@@ -9,6 +9,6 @@
     </h5>
     <div class="card-body">
         <p class="card-text">Manage all your recipes.</p>
-        <a href="/recipe" class="btn btn-primary stretched-link">Go</a>
+        <a href="<%= h.u.recipeList() %>" class="btn btn-primary stretched-link">Go</a>
     </div>
 </div>

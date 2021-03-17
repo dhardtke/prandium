@@ -4,8 +4,8 @@
 <% ~includeFile("_partials/breadcrumb.eta.html", {
     h,
     breadcrumb: [
-        {title: h.t("recipes"), url: "/recipe"},
-        {title: recipe.title, url: `/recipe/${recipe.id}`}
+        {title: h.t("recipes"), url: h.u.recipeList()},
+        {title: recipe.title, url: h.u.recipe(recipe)}
     ]
 }) %>
 
@@ -22,15 +22,19 @@
     </div>
 <% } %>
 
-<% recipe.history.forEach((date) => {%>
+<% recipe.history.forEach((date) => { %>
     <div><%= h.f(date) %></div>
 <% }) %>
 
+<!-- TODO show metadata like last cooked, etc.? -->
 <!-- TODO link source -->
 <!-- TODO only show domain -->
-<%= recipe.source %>
+<h5>
+    Source <!-- TODO translate -->
+    <a class="text-muted" href="<%= recipe.source %>"><%= new URL(recipe.source).hostname %></a>
+</h5>
 
-<img class="img-thumbnail" src="/thumbnails/<%= recipe.thumbnail %>" alt="">
+<img class="img-thumbnail" src="<%= h.u.thumbnail(recipe.thumbnail) %>" alt="">
 
 <div class="card mt-3">
     <div class="card-header">
