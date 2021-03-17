@@ -1,32 +1,93 @@
 <% layout("_structure/page.eta.html", {
-    title: h.t("index.title") // TODO
+    title: recipe.title
 }) %>
 <% ~includeFile("_partials/breadcrumb.eta.html", {
     h,
     breadcrumb: [
-        {title: h.t("books"), url: "/book"},
-        {title: recipe.book.title, url: `/book/${recipe.book.id}`},
-        {title: recipe.title}
+        {title: h.t("recipes"), url: "/recipe"},
+        {title: recipe.title, url: `/recipe/${recipe.id}`}
     ]
 }) %>
 
-<h1>Recipe</h1>
-<h2><%= recipe.title %></h2>
+<h1><%= recipe.title %></h1>
 <p><%= recipe.description %></p>
 
-<img class="img-thumbnail" src="https://via.placeholder.com/400" alt="">
+<% if (recipe.tags.length) { %>
+    <div class="d-flex flex-wrap">
+        <% recipe.tags.forEach((tag, i) => { %>
+            <a href="" class="badge bg-secondary mb-3<%= i === recipe.tags.length - 1 ? "" : " me-1" %>">
+                <%= tag.title %>
+            </a>
+        <% }) %>
+    </div>
+<% } %>
 
-<ul class="list-group mt-3">
-    <li class="list-group-item d-flex align-items-center">
-        <span class="badge bg-primary rounded-pill me-3">200g</span>
-        A list item
-    </li>
-    <li class="list-group-item d-flex align-items-center">
-        <span class="badge bg-primary rounded-pill me-3">10</span>
-        A second list item
-    </li>
-    <li class="list-group-item d-flex align-items-center">
-        <span class="badge bg-primary rounded-pill me-3">1&frac12;</span>
-        A third list item
-    </li>
-</ul>
+<% recipe.history.forEach((date) => {%>
+    <div><%= h.f(date) %></div>
+<% }) %>
+
+<!-- TODO link source -->
+<!-- TODO only show domain -->
+<%= recipe.source %>
+
+<img class="img-thumbnail" src="/thumbnails/<%= recipe.thumbnail %>" alt="">
+
+<div class="card mt-3">
+    <div class="card-header">
+        <div class="d-flex align-items-center justify-content-between">
+            <h2 class="h5 mb-0">
+                <%= h.t("recipe.ingredients.title") %>
+            </h2>
+            <form class="d-flex" method="get">
+                <div class="input-group input-group-sm w-auto">
+                    <!-- TODO pre-fill and support calculation -->
+                    <input type="number" class="form-control portions" name="portions" value="<%= portions %>" min="1" max="99">
+                    <div class="input-group-text">
+                        <%= h.t("recipe.portions") %>
+                    </div>
+                </div>
+                <button type="submit" class="ms-1 btn btn-secondary btn-sm d-flex align-items-center">
+                    <% ~h.i("arrow-counterclockwise") %>
+                </button>
+            </form>
+        </div>
+    </div>
+    <ul class="list-group list-group-flush">
+        <% h.ingredients(recipe.ingredients, recipe.yield, portions).forEach((ingredient) => { %>
+            <li class="list-group-item">
+                <div class="d-flex align-items-center">
+                    <div class="text-center ingredient-amount">
+                        <% if (ingredient.amount) { %>
+                            <span class="badge bg-dark">
+                                <%= ingredient.amount %>
+                            </span>
+                        <% } %>
+                    </div>
+                    <div>
+                        <%= ingredient.description %>
+                    </div>
+                </div>
+            </li>
+        <% }) %>
+    </ul>
+</div>
+
+<h3 class="mt-3">Instructions</h3>
+
+<div class="accordion">
+    <% recipe.instructions.forEach((instruction, i) => { %>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading-instruction-<%= i %>">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ingredient-<%= i %>"
+                        aria-expanded="true" aria-controls="collapse-ingredient-<%= i %>">
+                    <%= h.t("recipe.ingredients.step", {step: i + 1}) %>
+                </button>
+            </h2>
+            <div id="collapse-ingredient-<%= i %>" class="accordion-collapse collapse show" aria-labelledby="heading-instruction-<%= i %>">
+                <div class="accordion-body">
+                    <%= instruction %>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>

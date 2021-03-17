@@ -1,17 +1,24 @@
 <% layout("_structure/page.eta.html", {
-    title: h.t("index.title"),
-    breadcrumbs: [{"title": h.t("recipes")}],
+    title: h.t("index.title")
+}) %>
+<% ~includeFile("_partials/breadcrumb.eta.html", {
+    h,
+    breadcrumb: [
+        {title: h.t("recipes"), url: "/recipe"}
+    ]
 }) %>
 
+<!-- TODO: build a URL generator -->
+<!-- TODO image lazy-loading -->
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes.items) { %>
         <div class="col">
             <div class="card">
-                <img src="https://picsum.photos/400" class="card-img-top" alt="">
+                <img src="/thumbnails/<%= recipe.thumbnail %>" class="card-img-top" alt="">
                 <div class="card-body">
                     <h5 class="card-title"><%= recipe.title %></h5>
                     <p class="card-text"><%= recipe.description %></p>
-                    <a href="/" class="btn btn-primary stretched-link">Go somewhere</a>
+                    <a href="/recipe/<%= recipe.id %>" class="btn btn-dark stretched-link">Open</a>
                 </div>
             </div>
         </div>

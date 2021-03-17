@@ -39,16 +39,20 @@ export function removePrefix<T, O>(obj: O, prefix: string): T {
     .reduce((acc, [key, val]) => {
       const modifiedKey = key.replaceAll(prefix, "");
       const modifiedVal = typeof val === "object" && val !== null
-      ? removePrefix(val as unknown, prefix)
+        ? removePrefix(val as unknown, prefix)
         : val;
       return {
         ...acc,
-        ...{[modifiedKey]: modifiedVal},
+        ...{ [modifiedKey]: modifiedVal },
       };
     }, {} as T);
 }
 
-export function extractPrefixed<T, O>(obj: O, prefix: string, removePrefix = true): T {
+export function extractPrefixed<T, O>(
+  obj: O,
+  prefix: string,
+  removePrefix = true,
+): T {
   return Object
     .entries(obj)
     .reduce((acc, [key, val]) => {
@@ -61,7 +65,7 @@ export function extractPrefixed<T, O>(obj: O, prefix: string, removePrefix = tru
         : val;
       return {
         ...acc,
-        ...{[modifiedKey]: modifiedVal},
+        ...{ [modifiedKey]: modifiedVal },
       };
     }, {} as T);
 }
@@ -76,7 +80,23 @@ export function toArray<S, T>(
 
 export function map<S, T>(
   maybe: S,
-  mapper: (src: S) => T = (src) => src as unknown as T,
+  mapper: (src: NonNullable<S>) => T = (src) => src as unknown as T,
 ): T | undefined {
-  return maybe ? mapper(maybe) : undefined;
+  return maybe ? mapper(maybe!) : undefined;
+}
+
+export function reduceFirst<S, T, R>(
+  data: Generator<S>,
+  mapper: (src: S) => T = (src) => src as unknown as T,
+  reducer: (first: T, src: S, state: R) => void,
+  state: R = {} as R,
+): T {
+  let first: T | undefined = undefined;
+  for (const row of data) {
+    if (!first) {
+      first = mapper(row);
+    }
+    reducer(first, row, state);
+  }
+  return first!;
 }

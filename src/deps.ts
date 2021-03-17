@@ -3,6 +3,18 @@ export * as Eta from "https://deno.land/x/eta@v1.12.1/mod.ts";
 export * as Dom from "https://deno.land/x/deno_dom@v0.1.6-alpha/deno-dom-wasm.ts";
 export * as Oak from "https://deno.land/x/oak@v6.5.0/mod.ts";
 
+// date-fns
+import { default as locale } from "https://cdn.skypack.dev/date-fns@2.19.0/locale";
+import { format } from "https://cdn.skypack.dev/date-fns@2.19.0";
+
+export const dateFns = {
+  format,
+  locale: {
+    de: locale.de,
+    en: locale.en,
+  },
+};
+
 // utils
 export * as path from "https://deno.land/std@0.90.0/path/mod.ts";
 export * as log from "https://deno.land/std@0.90.0/log/mod.ts";

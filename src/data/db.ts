@@ -19,7 +19,7 @@ export class Database {
 
   public constructor(configDir: string) {
     const dbPath = path.resolve(configDir, "data.db");
-    log.debug(() => `Using database ${dbPath}`);
+    log.debug(() => `[DB] Using database ${dbPath}`);
     this.db = new sqlite.DB(dbPath);
 
     window.addEventListener("unload", () => {
@@ -83,10 +83,10 @@ export class Database {
   public async migrate() {
     const [[currentVersionDb]] = this.db.query("PRAGMA user_version");
     let currentVersion: number = currentVersionDb;
-    log.debug(`Current database version is ${currentVersion}`);
+    log.debug(`[DB] Current database version is ${currentVersion}`);
     const migrations = MIGRATIONS.filter((m) => currentVersion < m.version)
       .sort((a, b) => a.version - b.version);
-    log.debug(() => `Migrations to run: ${classNames(migrations)}`);
+    log.debug(() => `[DB] Migrations to run: ${classNames(migrations)}`);
     for (const migration of migrations) {
       await this.transaction(async () => {
         await migration.migrate(this);
@@ -96,12 +96,15 @@ export class Database {
       });
     }
     log.debug(() =>
-      `Migrations executed. New database version is ${currentVersion}`
+      `[DB] Migrations executed. New database version is ${currentVersion}`
     );
   }
 
   private safeQuery(sql: string, values?: Values) {
     try {
+      log.debug(() =>
+        `[DB] Executing ${sql} with values ${JSON.stringify(values)}`
+      );
       return this.db.query(sql, values);
     } catch (e) {
       log.error(() => `Error executing ${sql}`);

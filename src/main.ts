@@ -1,5 +1,5 @@
 import { Database } from "./data/db.ts";
-import { Cliffy, Colors, fs, log, LogRecord } from "./deps.ts";
+import { Cliffy, Colors, fs, log, LogRecord, path } from "./deps.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { DEFAULT_CONFIG_DIR, defaultConfigDir } from "./util.ts";
 
@@ -24,9 +24,12 @@ async function parseOptions(): Promise<Options> {
     options.configDir = defaultConfigDir();
   }
 
-  fs.ensureDirSync(options.configDir);
-
   return options;
+}
+
+async function prepareConfigDir(options: Options) {
+  await fs.ensureDir(options.configDir);
+  await fs.ensureDir(path.join(options.configDir, "thumbnails"));
 }
 
 function formatLogRecord(logRecord: LogRecord): string {
@@ -61,6 +64,7 @@ async function setupLogger(debug?: boolean) {
 
 async function main(): Promise<void> {
   const options = await parseOptions();
+  await prepareConfigDir(options);
   await setupLogger(options.debug);
   const database = new Database(options.configDir);
   await database.migrate();
@@ -69,6 +73,7 @@ async function main(): Promise<void> {
     host: options.host,
     port: options.port,
     debug: options.debug,
+    configDir: options.configDir,
     db: database,
   });
 }

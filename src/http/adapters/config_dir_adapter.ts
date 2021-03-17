@@ -1,24 +1,20 @@
 import { Oak } from "../../deps.ts";
-import { OrderBy } from "../../data/util/order_by.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {
-    orderBy: () => OrderBy;
+    configDir: () => string;
   }
 
   // noinspection JSUnusedGlobalSymbols
   interface RouterContext {
-    orderBy: () => OrderBy;
+    configDir: () => string;
   }
 }
 
-export const orderByAdapter = () => {
+export const configDirAdapter = (configDir: string) => {
   return async function (ctx: Oak.Context, next: () => Promise<void>) {
-    ctx.orderBy = function (): OrderBy {
-      return new OrderBy(
-        ctx.parameter("orderBy"),
-        ctx.parameter("order"),
-      );
+    ctx.configDir = function (): string {
+      return configDir;
     };
 
     await next();

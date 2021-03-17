@@ -1,8 +1,8 @@
 import { Model, ModelArgs } from "./model.ts";
 import { Recipe } from "./recipe.ts";
 
-export class Book extends Model {
-  static columns = [...Model.columns, "title", "description"];
+export class Tag extends Model {
+  static readonly columns = [...Model.columns, "title", "description"];
 
   constructor(
     args: ModelArgs & {
@@ -18,6 +18,8 @@ export class Book extends Model {
   }
 
   private _title!: string;
+  private _description?: string;
+  private _recipes: Iterable<Recipe>;
 
   get title(): string {
     return this._title;
@@ -27,8 +29,6 @@ export class Book extends Model {
     this._title = value;
   }
 
-  private _description?: string;
-
   get description(): string | undefined {
     return this._description;
   }
@@ -37,13 +37,15 @@ export class Book extends Model {
     this._description = value;
   }
 
-  private _recipes: Iterable<Recipe>;
-
   get recipes(): Iterable<Recipe> {
     return this._recipes;
   }
 
   set recipes(value: Iterable<Recipe>) {
     this._recipes = value;
+  }
+
+  public static createMany(...titles: string[]): Tag[] {
+    return titles.map((title) => new Tag({ title }));
   }
 }

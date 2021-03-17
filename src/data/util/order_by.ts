@@ -19,4 +19,8 @@ export class OrderBy {
 
     return `ORDER BY ${this.column}${this.order || ""}`.trim();
   }
+
+  public combine(other: OrderBy): OrderBy {
+    return new OrderBy(); // TODO
+  }
 }

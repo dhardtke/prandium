@@ -1,10 +1,18 @@
 export interface Service<T> {
   count: () => number;
   find: (id: number) => T | undefined;
+  list: () => T[];
+  create: (model: T) => T;
+  update: (model: T) => T;
 }
 
-export function columns(names: string[], columnPrefix?: string, aliasPrefix?: string): string {
+export function columns(
+  names: string[],
+  columnPrefix?: string,
+  aliasPrefix?: string,
+): string {
   return names.map(
-    (n) => `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`
+    (n) =>
+      `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`,
   ).join(", ");
 }

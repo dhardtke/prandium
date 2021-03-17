@@ -11,11 +11,9 @@ We recommend using JetBrain's termins
 
 
 # TODO
-- [ ] Proper CLI
-  * Maybe use https://github.com/c4spar/deno-cliffy
 - [ ] linting
   * https://github.com/eta-dev/eta/issues/42
-- [ ] Strict compiler
+- [ ] PWA close button, offline support
 - [ ] Dark mode support
 - [ ] Import Maps
 - [ ] Configure code style to follow official style guide: https://deno.land/manual@v1.7.5/contributing/style_guide

@@ -1,7 +1,5 @@
 {
     "appName": "CookGuide",
-    "book": "Book",
-    "books": "Books",
     "error": {
         "404": {
             "title": "Not Found",
@@ -13,5 +11,12 @@
         }
     },
     "home": "Home",
+    "recipe": {
+        "ingredients": {
+            "step": "Step {{step}}",
+            "title": "Ingredients"
+        },
+        "portions": "Portions"
+    },
     "recipes": "Recipes"
 }

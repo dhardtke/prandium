@@ -1,21 +1,22 @@
 import { Database } from "../data/db.ts";
 import { Services, servicesFactory } from "../data/service/services.ts";
 import { log, Oak } from "../deps.ts";
+import { configDirAdapter } from "./adapters/config_dir_adapter.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";
 import { templateAdapter } from "./adapters/template_adapter.ts";
 import { handleNotFound, handleServerError } from "./error.ts";
 import { AssetsRouter } from "./routes/assets.routes.ts";
-import { BookRouter } from "./routes/book.routes.ts";
 import { IndexRouter } from "./routes/index.routes.ts";
 import { RecipeRouter } from "./routes/recipe.routes.ts";
+import { ThumbnailsRouter } from "./routes/thumbnails.routes.ts";
 
 const Routers = [
   IndexRouter,
   AssetsRouter,
+  ThumbnailsRouter,
   RecipeRouter,
-  BookRouter,
 ];
 
 export interface AppState {
@@ -29,12 +30,19 @@ function buildState(db: Database): AppState {
 }
 
 export async function spawnServer(
-  args: { host: string; port: number; debug?: boolean; db: Database },
+  args: {
+    host: string;
+    port: number;
+    debug?: boolean;
+    configDir: string;
+    db: Database;
+  },
 ) {
   const state: AppState = buildState(args.db);
 
   const app = new Oak.Application<AppState>({ state });
   app.use(
+    configDirAdapter(args.configDir),
     parameterAdapter(),
     orderByAdapter(),
     templateAdapter(args.debug),

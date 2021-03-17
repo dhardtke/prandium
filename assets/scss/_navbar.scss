@@ -1,0 +1,22 @@
+@use "_bootstrap";
+
+.navbar {
+    .navbar-brand {
+        .bi {
+            width: 24px;
+            height: 24px;
+        }
+
+        .app-name {
+            transition: .3s;
+            color: inherit;
+            margin-top: -3px;
+        }
+
+        &:hover {
+            .app-name {
+                color: bootstrap.$danger;
+            }
+        }
+    }
+}

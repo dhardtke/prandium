@@ -1,0 +1,14 @@
+@use "_bootstrap";
+
+a.badge {
+    text-decoration: none;
+
+    &.bg-secondary {
+        transition: .3s;
+
+        &:hover {
+            background-color: bootstrap.$dark;
+            color: bootstrap.$white;
+        }
+    }
+}
