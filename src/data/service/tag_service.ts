@@ -2,7 +2,7 @@ import { toArray, toCamelCase } from "../convert.ts";
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
-import { OrderBy } from "../util/order_by.ts";
+import { OrderBy } from "../util/sql.ts";
 import { columns, Service } from "./service.ts";
 
 export class TagService implements Service<Tag> {

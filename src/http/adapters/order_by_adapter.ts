@@ -1,5 +1,5 @@
 import { Oak } from "../../deps.ts";
-import { OrderBy } from "../../data/util/order_by.ts";
+import { OrderBy } from "../../data/util/sql.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {

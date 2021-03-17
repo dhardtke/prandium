@@ -6,9 +6,9 @@ import {
   toDate,
 } from "../convert.ts";
 import { Database } from "../db.ts";
-import { OrderBy } from "../util/order_by.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
+import { OrderBy } from "../util/sql.ts";
 import { columns, Service } from "./service.ts";
 import { TagService } from "./tag_service.ts";
 
@@ -122,19 +122,20 @@ export class RecipeService implements Service<Recipe> {
           loadHistory ? `, ${columns(["timestamp"], "rh.", "_rh_")}` : ""
         }
          FROM recipe r
-                ${
-          loadTags
-            ? `LEFT JOIN recipe_tag rt on rt.recipe_id = r.id LEFT JOIN tag t ON t.id = rt.tag_id`
-            : ""
-        }
+                ${loadTags &&
+          `LEFT JOIN recipe_tag rt on rt.recipe_id = r.id LEFT JOIN tag t ON t.id = rt.tag_id`}
                 ${
           loadHistory
             ? `LEFT JOIN recipe_history rh on rh.recipe_id = r.id`
             : ""
         }
          WHERE r.id = ?
-          ${loadHistory ? `ORDER BY rh.timestamp ASC` : ""}
-          ${loadTags ? `, t.title ASC` : ""}`, // TODO multiple ORDER BY clauses
+         ORDER BY ${
+          OrderBy.combined(
+            loadHistory ? "rh.timestamp" : "",
+            loadTags ? "t.title" : "",
+          )
+        }`,
         [
           id,
         ],
