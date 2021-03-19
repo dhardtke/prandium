@@ -8,6 +8,7 @@
     ]
 }) %>
 <!-- TODO image lazy-loading -->
+<!-- TODO show placeholder image if no thumbnail is present -->
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes.items) { %>
         <div class="col">
@@ -16,7 +17,9 @@
                 <div class="card-body">
                     <h5 class="card-title"><%= recipe.title %></h5>
                     <p class="card-text"><%= recipe.description %></p>
-                    <a href="<%= h.u.recipe(recipe) %>" class="btn btn-dark stretched-link">Open</a>
+                    <a href="<%= h.u.recipe(recipe) %>" class="btn btn-dark stretched-link">
+                        <%= h.t("recipe.open") %>
+                    </a>
                 </div>
             </div>
         </div>
