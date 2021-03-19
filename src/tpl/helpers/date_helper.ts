@@ -13,7 +13,7 @@ export class DateHelper {
    * @param format the format to use
    * @return the formatted date
    */
-  public format = (date: Date, format: string = "Pp"): string => {
+  public format = (date: Date, format = "Pp"): string => {
     return dateFns.format(date, format, {
       locale: dateFns.locale.en,
     });
