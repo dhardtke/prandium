@@ -3,11 +3,11 @@
 a.badge {
     text-decoration: none;
 
-    &.bg-secondary {
+    &.bg-dark {
         transition: .3s;
 
         &:hover {
-            background-color: bootstrap.$dark;
+            background-color: bootstrap.$danger;
             color: bootstrap.$white;
         }
     }

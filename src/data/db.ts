@@ -103,7 +103,9 @@ export class Database {
   private safeQuery(sql: string, values?: Values) {
     try {
       log.debug(() =>
-        `[DB] Executing ${sql} with values ${JSON.stringify(values)}`
+        `[DB] Executing ${sql}${
+          values ? `with values ${JSON.stringify(values)}` : ""
+        }`
       );
       return this.db.query(sql, values);
     } catch (e) {

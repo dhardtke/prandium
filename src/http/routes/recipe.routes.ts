@@ -38,6 +38,7 @@ router
         toInt(ctx.parameter("id")),
         true,
         true,
+        true,
       );
       if (!recipe) {
         await next();

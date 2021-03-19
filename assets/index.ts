@@ -3,6 +3,19 @@
 //@ts-ignore
 /// <reference lib="deno.ns" />
 // TODO do not import everything - probably not possible with bootstrap's current architecture
-import './node_modules/bootstrap/dist/js/bootstrap.js';
+import "./node_modules/bootstrap/dist/js/bootstrap.js";
+import { recipeDetailPage } from "./ts/recipe_detail_page.ts";
 
-console.log(document);
+const routes = [
+  {
+    match: /^\/recipe\/\d+\//,
+    fn: recipeDetailPage
+  }
+];
+
+for (const route of routes) {
+  if (window.location.pathname.match(route.match)) {
+    route.fn();
+    break;
+  }
+}

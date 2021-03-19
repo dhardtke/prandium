@@ -1,3 +1,4 @@
+import { cond } from "../../util.ts";
 import {
   extractPrefixed,
   reduceFirst,
@@ -6,7 +7,7 @@ import {
   toDate,
 } from "../convert.ts";
 import { Database } from "../db.ts";
-import { Recipe } from "../model/recipe.ts";
+import { Recipe, Review } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { OrderBy } from "../util/sql.ts";
 import { columns, Service } from "./service.ts";
@@ -58,9 +59,9 @@ export class RecipeService implements Service<Recipe> {
 
   create(recipe: Recipe): Recipe {
     this.db.exec(
-      `INSERT INTO recipe (created_at, updated_at, title, description, source, thumbnail, yield, prep_time, cook_time, rating, ingredients,
-                           instructions)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO recipe (created_at, updated_at, title, description, source, thumbnail, yield, calories, prep_time, cook_time,
+                           rating, ingredients, instructions)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         recipe.createdAt,
         recipe.updatedAt,
@@ -69,6 +70,7 @@ export class RecipeService implements Service<Recipe> {
         recipe.source,
         recipe.thumbnail,
         recipe.yield,
+        recipe.calories,
         recipe.prepTime,
         recipe.cookTime,
         recipe.rating,
@@ -95,6 +97,20 @@ export class RecipeService implements Service<Recipe> {
       });
     }
 
+    if (recipe.reviews.length) {
+      recipe.reviews.forEach((review) => {
+        this.db.exec(
+          `INSERT INTO recipe_review (recipe_id, date, text)
+           VALUES (?, ?, ?)`,
+          [
+            recipe.id,
+            review.date,
+            review.text,
+          ],
+        );
+      });
+    }
+
     return recipe;
   }
 
@@ -112,22 +128,30 @@ export class RecipeService implements Service<Recipe> {
     id: number,
     loadTags?: boolean,
     loadHistory?: boolean,
+    loadReviews?: boolean,
   ): Recipe | undefined {
     return reduceFirst(
       this.db.query<{ ingredients: string; instructions: string }>(
         `SELECT
-                ${columns(Recipe.columns, "r.")}
-                ${loadTags ? `, ${columns(Tag.columns, "t.", "_t_")}` : ""}
-                ${
-          loadHistory ? `, ${columns(["timestamp"], "rh.", "_rh_")}` : ""
-        }
+            ${columns(Recipe.columns, "r.")}
+            ${loadTags ? `, ${columns(Tag.columns, "t.", "_t_")}` : ""}
+            ${cond(loadHistory, `, ${columns(["timestamp"], "rh.", "_rh_")}`)}
+            ${cond(loadReviews, `, ${columns(Review.columns, "rr.", "_rr_")}`)}
          FROM recipe r
-                ${loadTags &&
-          `LEFT JOIN recipe_tag rt on rt.recipe_id = r.id LEFT JOIN tag t ON t.id = rt.tag_id`}
-                ${
-          loadHistory
-            ? `LEFT JOIN recipe_history rh on rh.recipe_id = r.id`
-            : ""
+            ${
+          cond(
+            loadTags,
+            `LEFT JOIN recipe_tag rt on rt.recipe_id = r.id LEFT JOIN tag t ON t.id = rt.tag_id`,
+          )
+        }
+            ${
+          cond(
+            loadHistory,
+            `LEFT JOIN recipe_history rh on rh.recipe_id = r.id`,
+          )
+        }
+            ${
+          cond(loadReviews, `LEFT JOIN recipe_review rr ON rr.recipe_id = r.id`)
         }
          WHERE r.id = ?
          ORDER BY ${
@@ -166,10 +190,21 @@ export class RecipeService implements Service<Recipe> {
             state.timestamps.add(timestamp);
           }
         }
+        if (loadReviews) {
+          const reviewRow = extractPrefixed<
+            unknown & { id: number },
+            typeof row
+          >(row, "_rr_");
+          if (!state.reviews.has(reviewRow.id)) {
+            recipe.reviews.push(new Review(toCamelCase(reviewRow)));
+            state.reviews.add(reviewRow.id);
+          }
+        }
       },
       {
         tags: new Set<string>(),
         timestamps: new Set<Date>(),
+        reviews: new Set<number>(),
       },
     );
   }

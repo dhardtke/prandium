@@ -10,6 +10,7 @@ export class Recipe extends Model {
     "source",
     "thumbnail",
     "yield",
+    "calories",
     "prep_time",
     "cook_time",
     "rating",
@@ -25,10 +26,12 @@ export class Recipe extends Model {
       source: string;
       thumbnail?: string;
       yield?: number;
+      calories?: number;
       prepTime?: number;
       cookTime?: number;
       rating?: number;
       history?: (Date | string)[];
+      reviews?: Review[];
       ingredients?: string[];
       instructions?: string[];
     },
@@ -40,10 +43,12 @@ export class Recipe extends Model {
     this._source = args.source;
     this._thumbnail = args.thumbnail;
     this._yield = args.yield || 1;
+    this._calories = args.calories;
     this._prepTime = args.prepTime || 0;
     this._cookTime = args.cookTime || 0;
     this._rating = args.rating || 0;
     this._history = args.history ? args.history.map((d) => toDate(d)) : [];
+    this._reviews = args.reviews || [];
     this._ingredients = args.ingredients || [];
     this._instructions = args.instructions || [];
   }
@@ -54,10 +59,12 @@ export class Recipe extends Model {
   private _thumbnail?: string;
   private _source: string;
   private _yield: number;
+  private _calories?: number;
   private _prepTime: number;
   private _cookTime: number;
   private _rating: number;
   private _history: Date[];
+  private _reviews: Review[];
   private _ingredients: string[];
   private _instructions: string[];
 
@@ -109,6 +116,14 @@ export class Recipe extends Model {
     this._yield = value;
   }
 
+  get calories(): number | undefined {
+    return this._calories;
+  }
+
+  set calories(value: number | undefined) {
+    this._calories = value;
+  }
+
   get prepTime(): number {
     return this._prepTime;
   }
@@ -145,6 +160,14 @@ export class Recipe extends Model {
     this._history = value;
   }
 
+  get reviews(): Review[] {
+    return this._reviews;
+  }
+
+  set reviews(value: Review[]) {
+    this._reviews = value;
+  }
+
   get ingredients(): string[] {
     return this._ingredients;
   }
@@ -159,5 +182,49 @@ export class Recipe extends Model {
 
   set instructions(value: string[]) {
     this._instructions = value;
+  }
+}
+
+export class Review {
+  static readonly columns = [
+    "id",
+    "date",
+    "text",
+  ];
+
+  constructor(
+    args: { id?: number; date: Date | string; text: string },
+  ) {
+    this._id = args.id;
+    this._date = toDate(args.date);
+    this._text = args.text;
+  }
+
+  private _id?: number;
+  private _date: Date;
+  private _text: string;
+
+  get id(): number | undefined {
+    return this._id;
+  }
+
+  set id(value: number | undefined) {
+    this._id = value;
+  }
+
+  get date(): Date {
+    return this._date;
+  }
+
+  set date(value: Date) {
+    this._date = value;
+  }
+
+  get text(): string {
+    return this._text;
+  }
+
+  set text(value: string) {
+    this._text = value;
   }
 }

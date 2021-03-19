@@ -1,9 +1,9 @@
 import { Database } from "../src/data/db.ts";
-import { downloadThumbnail } from "../src/data/util/thumbnails.ts";
-import { Recipe } from "../src/data/model/recipe.ts";
+import { Recipe, Review } from "../src/data/model/recipe.ts";
 import { Tag } from "../src/data/model/tag.ts";
 import { RecipeService } from "../src/data/service/recipe_service.ts";
 import { TagService } from "../src/data/service/tag_service.ts";
+import { downloadThumbnail } from "../src/data/util/thumbnails.ts";
 import { defaultConfigDir } from "../src/util.ts";
 
 const configDir = defaultConfigDir();
@@ -40,11 +40,13 @@ for (let i = 0; i < 50; i++) {
   recipeService.create(
     new Recipe({
       title: `Blätterteig mit Gyrosfüllung und Feta-Käse ${i + 1}`,
-      description: "Lorem Ipsum",
+      description:
+        "Bl\u00e4tterteig mit Gyrosf\u00fcllung und Feta-K\u00e4se - eignen sich auch gut f\u00fcr ein Buffet. \u00dcber 105 Bewertungen und f\u00fcr lecker befunden. Mit \u25ba Portionsrechner \u25ba Kochbuch \u25ba Video-Tipps!",
       source:
         "https://www.chefkoch.de/rezepte/2788721431008084/Blaetterteig-mit-Gyrosfuellung-und-Feta-Kaese.html",
       thumbnail: thumbnail,
       yield: 4,
+      calories: 2795,
       rating: 8.0,
       prepTime: 1800,
       cookTime: 1500,
@@ -77,6 +79,31 @@ for (let i = 0; i < 50; i++) {
       ],
       tags,
       history,
+      reviews: [
+        new Review({
+          text: "schnell und lecker! perfekt wenn es mal schnell gehen muss! ",
+          date: "2020-05-12",
+        }),
+        new Review({
+          text:
+            "haben die Taschen auch schon oft gemacht und wir lieben sie! F\u00fcr meine Vegetarier f\u00fcllen wir mit Blattspinat und Feta. ",
+          date: "2020-02-03",
+        }),
+        new Review({
+          text:
+            "Wir machen die Taschen auch total gerne. Wir wandeln es nur etwas ab, den Feta ersetze ich mit Hirtenk\u00e4se und die Zwiebeln brate ich direkt mit dem Fleisch an. Beim Taschen formen, nehme ich kein Ei, das h\u00e4lt bei mir auch ohne. Heute gibt es sie wieder, danke f\u00fcr das tolle Rezept. \n\nMeli",
+          date: "2019-10-03",
+        }),
+        new Review({
+          text: "Meine sind gerade im Backofen. Ich bin sehr gespannt. =)",
+          date: "2019-04-13",
+        }),
+        new Review({
+          text:
+            "Sehr sehr lecker! habe den Bl\u00e4tterteig vorher noch mit Zaziki bestrichen und, weil \u00fcbrig, nach 10 Minuten im Ofen mit K\u00e4se bestreut und \u00fcberbacken \ud83d\ude0a\ud83d\ude09",
+          date: "2019-04-03",
+        }),
+      ],
     }),
   );
 }

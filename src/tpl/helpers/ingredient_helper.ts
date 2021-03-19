@@ -87,7 +87,7 @@ export class IngredientHelper {
   private constructor() {
   }
 
-  private parse(raw: string): ParsedIngredient | undefined {
+  private static parse(raw: string): ParsedIngredient | undefined {
     const candidates: ParsedIngredient[] = parseIngredient(raw, {
       normalizeUOM: false,
     });
@@ -117,7 +117,7 @@ export class IngredientHelper {
     portions = 1,
   ): Ingredient => {
     if (!this.cache.has(raw)) {
-      const parsed = this.parse(raw);
+      const parsed = IngredientHelper.parse(raw);
       this.cache.set(raw, parsed);
     }
     const cached = this.cache.get(raw)!;

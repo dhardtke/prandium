@@ -2,12 +2,12 @@
     "appName": "CookGuide",
     "error": {
         "404": {
-            "title": "Not Found",
-            "description": "The page you are looking for can not be found."
+            "description": "The page you are looking for can not be found.",
+            "title": "Not Found"
         },
         "500": {
-            "title": "Server Error",
-            "description": "A server error occurred."
+            "description": "A server error occurred.",
+            "title": "Server Error"
         }
     },
     "home": "Home",
@@ -16,7 +16,15 @@
             "step": "Step {{step}}",
             "title": "Ingredients"
         },
-        "portions": "Portions"
+        "instructions": "Instructions",
+        "kilocalories": "{{kcals}} kilocalories",
+        "portions": "Portions",
+        "reviews": "Reviews",
+        "time": {
+            "cook": "Cook time",
+            "prep": "Prep time",
+            "total": "Total time"
+        }
     },
     "recipes": "Recipes"
 }

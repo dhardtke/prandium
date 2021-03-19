@@ -26,6 +26,7 @@ export const InitialMigration = new class InitialMigration extends Migration {
          source       TEXT,
          thumbnail    TEXT,
          yield        NUMERIC,
+         calories     NUMERIC,
          prep_time    NUMERIC,
          cook_time    NUMERIC,
          rating       REAL,
@@ -48,6 +49,13 @@ export const InitialMigration = new class InitialMigration extends Migration {
          recipe_id INTEGER   NOT NULL REFERENCES recipe (id) ON DELETE CASCADE,
          timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
          PRIMARY KEY (recipe_id, timestamp)
+       )`,
+      `CREATE TABLE recipe_review
+       (
+         id        INTEGER PRIMARY KEY,
+         recipe_id INTEGER   NOT NULL REFERENCES recipe (id) ON DELETE CASCADE,
+         date      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+         text      TEXT      NOT NULL
        )`,
     ];
     for (const sql of queries) {
