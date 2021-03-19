@@ -7,13 +7,12 @@
         {title: h.t("recipes"), url: h.u.recipeList()}
     ]
 }) %>
-<!-- TODO image lazy-loading -->
 <!-- TODO show placeholder image if no thumbnail is present -->
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes.items) { %>
         <div class="col">
             <div class="card">
-                <img src="<%= h.u.thumbnail(recipe.thumbnail) %>" class="card-img-top" alt="">
+                <img src="<%= h.u.thumbnail(recipe.thumbnail) %>" class="card-img-top" alt="" loading="lazy">
                 <div class="card-body">
                     <h5 class="card-title"><%= recipe.title %></h5>
                     <p class="card-text"><%= recipe.description %></p>
