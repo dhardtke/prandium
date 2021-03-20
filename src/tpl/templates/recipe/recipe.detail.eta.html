@@ -22,45 +22,53 @@
 <% } %>
 
 <div class="d-flex flex-wrap">
-    <span class="badge bg-dark mb-3 me-1">
-        <span class="d-flex align-items-center">
-            <span class="me-1">
-                <% ~h.i("battery-half") %>
+    <% if (recipe.calories) { %>
+        <span class="badge bg-dark mb-3 me-1">
+            <span class="d-flex align-items-center">
+                <span class="me-1">
+                    <% ~h.i("battery-half") %>
+                </span>
+                <%= h.t("recipe.kilocalories", {kcals: recipe.calories}) %>
+                <!-- TODO format number -->
             </span>
-            <%= h.t("recipe.kilocalories", {kcals: recipe.calories}) %>
-            <!-- TODO format number -->
         </span>
-    </span>
+    <% } %>
 
-    <span class="badge bg-dark mb-3 me-1">
-        <span class="d-flex align-items-center">
-            <span class="me-1">
-                <% ~h.i("layout-wtf") %>
+    <% if (recipe.prepTime) { %>
+        <span class="badge bg-dark mb-3 me-1">
+            <span class="d-flex align-items-center">
+                <span class="me-1">
+                    <% ~h.i("layout-wtf") %>
+                </span>
+                <%= h.t("recipe.time.prep") %>
+                <%= h.formatSeconds(recipe.prepTime) %>
             </span>
-            <%= h.t("recipe.time.prep") %>
-            <%= h.formatSeconds(recipe.prepTime) %>
         </span>
-    </span>
+    <% } %>
 
-    <span class="badge bg-dark mb-3 me-1">
-        <span class="d-flex align-items-center">
-            <span class="me-1">
-                <% ~h.i("alarm") %>
+    <% if (recipe.cookTime) { %>
+        <span class="badge bg-dark mb-3 me-1">
+            <span class="d-flex align-items-center">
+                <span class="me-1">
+                    <% ~h.i("alarm") %>
+                </span>
+                <%= h.t("recipe.time.cook") %>
+                <%= h.formatSeconds(recipe.cookTime) %>
             </span>
-            <%= h.t("recipe.time.cook") %>
-            <%= h.formatSeconds(recipe.cookTime) %>
         </span>
-    </span>
+    <% } %>
 
-    <span class="badge bg-dark mb-3 me-1">
-        <span class="d-flex align-items-center">
-            <span class="me-1">
-                <% ~h.i("clock-fill") %>
+    <% if (recipe.prepTime && recipe.cookTime) { %>
+        <span class="badge bg-dark mb-3 me-1">
+            <span class="d-flex align-items-center">
+                <span class="me-1">
+                    <% ~h.i("clock-fill") %>
+                </span>
+                <%= h.t("recipe.time.total") %>
+                <% ~h.formatSeconds(recipe.prepTime + recipe.cookTime) %>
             </span>
-            <%= h.t("recipe.time.total") %>
-            <% ~h.formatSeconds(recipe.prepTime + recipe.cookTime) %>
         </span>
-    </span>
+    <% } %>
 
     <a href="<%= recipe.source %>" target="_blank" class="badge bg-dark mb-3 me-1">
         <div class="d-flex align-items-center">
@@ -72,8 +80,9 @@
     </a>
 </div>
 
-<p class="lead"><%= recipe.description %></p>
-
+<% if (recipe.description) { %>
+    <p class="lead"><%= recipe.description %></p>
+<% } %>
 <% recipe.history.forEach((date) => { %>
     <div><%= h.format(date) %></div>
 <% }) %>
@@ -88,81 +97,85 @@
     </div>
 <% } %>
 
-<div class="card mt-3">
-    <a class="anchor" id="ingredients"></a>
-    <div class="card-header">
-        <div class="d-flex align-items-center justify-content-between">
-            <h2 class="h5 mb-0">
-                <%= h.t("recipe.ingredients.title") %>
-            </h2>
-            <form class="d-flex" method="get" id="ingredients-form" action="#ingredients">
-                <div class="input-group input-group-sm w-auto">
-                    <input type="number" class="form-control portions" name="portions" value="<%= portions %>" min="1" max="99"
-                           title="<%= h.t("recipe.portions") %>">
-                    <div class="input-group-text">
-                        <%= h.t("recipe.portions") %>
+<% if (recipe.ingredients.length) { %>
+    <div class="card mt-3">
+        <a class="anchor" id="ingredients"></a>
+        <div class="card-header">
+            <div class="d-flex align-items-center justify-content-between">
+                <h2 class="h5 mb-0">
+                    <%= h.t("recipe.ingredients.title") %>
+                </h2>
+                <form class="d-flex" method="get" id="ingredients-form" action="#ingredients">
+                    <div class="input-group input-group-sm w-auto">
+                        <input type="number" class="form-control portions" name="portions" value="<%= portions %>" min="1" max="99"
+                               title="<%= h.t("recipe.portions") %>">
+                        <div class="input-group-text">
+                            <%= h.t("recipe.portions") %>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary d-flex align-items-center plus" type="button">
+                            <% ~h.i("plus") %>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary d-flex align-items-center minus" type="button">
+                            <% ~h.i("dash") %>
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-outline-secondary d-flex align-items-center plus" type="button">
-                        <% ~h.i("plus") %>
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary d-flex align-items-center minus" type="button">
-                        <% ~h.i("dash") %>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <ul class="list-group list-group-flush">
-        <% h.ingredients(recipe.ingredients, recipe.yield, portions).forEach((ingredient) => { %>
-            <li class="list-group-item">
-                <div class="d-flex align-items-center">
-                    <div class="text-center ingredient-amount">
-                        <% if (ingredient.amount) { %>
-                            <span class="badge bg-dark">
-                                <%= ingredient.amount %>
-                            </span>
-                        <% } %>
-                    </div>
-                    <div>
-                        <%= ingredient.description %>
-                    </div>
-                </div>
-            </li>
-        <% }) %>
-    </ul>
-</div>
-
-<h3 class="mt-3">
-    <%= h.t("recipe.instructions") %>
-</h3>
-<div class="accordion">
-    <% recipe.instructions.forEach((instruction, i) => { %>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="heading-instruction-<%= i %>">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ingredient-<%= i %>"
-                        aria-expanded="true" aria-controls="collapse-ingredient-<%= i %>">
-                    <%= h.t("recipe.ingredients.step", {step: i + 1}) %>
-                </button>
-            </h2>
-            <div id="collapse-ingredient-<%= i %>" class="accordion-collapse collapse show" aria-labelledby="heading-instruction-<%= i %>">
-                <div class="accordion-body">
-                    <%= instruction %>
-                </div>
+                </form>
             </div>
         </div>
-    <% }) %>
-</div>
+        <ul class="list-group list-group-flush">
+            <% h.ingredients(recipe.ingredients, recipe.yield, portions).forEach((ingredient) => { %>
+                <li class="list-group-item">
+                    <div class="d-flex align-items-center">
+                        <div class="text-center ingredient-amount">
+                            <% if (ingredient.amount) { %>
+                                <span class="badge bg-dark">
+                                <%= ingredient.amount %>
+                            </span>
+                            <% } %>
+                        </div>
+                        <div>
+                            <%= ingredient.description %>
+                        </div>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
+<% } %>
 
-<h3 class="mt-3"><%= h.t("recipe.reviews") %></h3>
-<% recipe.reviews.forEach((review, i) => { %>
-<figure
-        <% ~ i === recipe.reviews.length - 1 ? " class=\"mb-0\"" : "" %>
->
-    <blockquote class="blockquote">
-        <p><%= review.text %></p>
-    </blockquote>
-    <figcaption class="blockquote-footer mb-0">
-        <%= h.format(review.date) %>
-    </figcaption>
-</figure>
-<% }) %>
+<% if (recipe.instructions.length) { %>
+    <h3 class="mt-3">
+        <%= h.t("recipe.instructions") %>
+    </h3>
+    <div class="accordion">
+        <% recipe.instructions.forEach((instruction, i) => { %>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-instruction-<%= i %>">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ingredient-<%= i %>"
+                            aria-expanded="true" aria-controls="collapse-ingredient-<%= i %>">
+                        <%= h.t("recipe.ingredients.step", {step: i + 1}) %>
+                    </button>
+                </h2>
+                <div id="collapse-ingredient-<%= i %>" class="accordion-collapse collapse show" aria-labelledby="heading-instruction-<%= i %>">
+                    <div class="accordion-body">
+                        <%= instruction %>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+<% } %>
+
+<% if (recipe.reviews.length) { %>
+    <h3 class="mt-3"><%= h.t("recipe.reviews") %></h3>
+    <% recipe.reviews.forEach((review, i) => { %>
+        <figure class="<%= i === recipe.reviews.length - 1 ? "mb-0" : "" %>">
+            <blockquote class="blockquote">
+                <p><%= review.text %></p>
+            </blockquote>
+            <figcaption class="blockquote-footer mb-0">
+                <%= h.format(review.date) %>
+            </figcaption>
+        </figure>
+    <% }) %>
+<% } %>

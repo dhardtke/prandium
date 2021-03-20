@@ -1,0 +1,23 @@
+<% layout("_structure/page.eta.html", {
+    title: h.t("recipe.import")
+}) %>
+<% ~includeFile("_partials/breadcrumb.eta.html", {
+    h,
+    breadcrumb: [
+        {title: h.t("recipes"), url: h.u.recipeList()},
+        {title: h.t("recipe.import"), url: h.u.recipeImport()}
+    ]
+}) %>
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="urls" class="form-label">URLs</label><!-- TODO translate -->
+        <textarea rows="10" class="form-control" id="urls" name="urls" required></textarea>
+        <div class="form-text">
+            One URL per line. <!-- TODO translate -->
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">
+        <%= h.t("recipe.import") %>
+    </button>
+</form>

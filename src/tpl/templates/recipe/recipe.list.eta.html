@@ -1,12 +1,19 @@
 <% layout("_structure/page.eta.html", {
-    title: h.t("index.title")
+    title: h.t("recipes")
 }) %>
-<% ~includeFile("_partials/breadcrumb.eta.html", {
-    h,
-    breadcrumb: [
-        {title: h.t("recipes"), url: h.u.recipeList()}
-    ]
-}) %>
+<div class="d-flex justify-content-between mb-2">
+    <% ~includeFile("_partials/breadcrumb.eta.html", {
+        h,
+        breadcrumb: [
+            {title: h.t("recipes"), url: h.u.recipeList()}
+        ],
+        noMargin: true
+    }) %>
+    <a class="btn btn-success" href="<%= h.u.recipeImport() %>" role="button">
+        <%~ h.i("cloud-arrow-down-fill") %> <%= h.t("recipe.import") %>
+    </a>
+</div>
+
 <!-- TODO show placeholder image if no thumbnail is present -->
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes.items) { %>

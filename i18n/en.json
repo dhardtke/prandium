@@ -12,6 +12,7 @@
     },
     "home": "Home",
     "recipe": {
+        "import": "Import",
         "ingredients": {
             "step": "Step {{step}}",
             "title": "Ingredients"

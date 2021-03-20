@@ -10,7 +10,21 @@ export class Recipe extends Model {
     "source",
     "thumbnail",
     "yield",
-    "calories",
+    "nutrition_calories",
+    "nutrition_carbohydrate",
+    "nutrition_cholesterol",
+    "nutrition_fat",
+    "nutrition_fiber",
+    "nutrition_protein",
+    "nutrition_saturated_fat",
+    "nutrition_sodium",
+    "nutrition_sugar",
+    "nutrition_trans_fat",
+    "nutrition_unsaturated_fat",
+    "prep_time",
+    "cook_time",
+    "aggregate_rating_value",
+    "aggregate_rating_count",
     "prep_time",
     "cook_time",
     "rating",
@@ -26,9 +40,21 @@ export class Recipe extends Model {
       source: string;
       thumbnail?: string;
       yield?: number;
-      calories?: number;
+      nutritionCalories?: string;
+      nutritionCarbohydrate?: string;
+      nutritionCholesterol?: string;
+      nutritionFat?: string;
+      nutritionFiber?: string;
+      nutritionProtein?: string;
+      nutritionSaturatedFat?: string;
+      nutritionSodium?: string;
+      nutritionSugar?: string;
+      nutritionTransFat?: string;
+      nutritionUnsaturatedFat?: string;
       prepTime?: number;
       cookTime?: number;
+      aggregateRatingValue?: number;
+      aggregateRatingCount?: number;
       rating?: number;
       history?: (Date | string)[];
       reviews?: Review[];
@@ -37,152 +63,60 @@ export class Recipe extends Model {
     },
   ) {
     super(args);
-    this._title = args.title;
-    this._description = args.description;
-    this._tags = args.tags || [];
-    this._source = args.source;
-    this._thumbnail = args.thumbnail;
-    this._yield = args.yield || 1;
-    this._calories = args.calories;
-    this._prepTime = args.prepTime || 0;
-    this._cookTime = args.cookTime || 0;
-    this._rating = args.rating || 0;
-    this._history = args.history ? args.history.map((d) => toDate(d)) : [];
-    this._reviews = args.reviews || [];
-    this._ingredients = args.ingredients || [];
-    this._instructions = args.instructions || [];
+    this.title = args.title;
+    this.description = args.description;
+    this.tags = args.tags || [];
+    this.source = args.source;
+    this.thumbnail = args.thumbnail;
+    this.yield = args.yield || 1;
+    this.nutritionCalories = args.nutritionCalories;
+    this.nutritionCarbohydrate = args.nutritionCarbohydrate;
+    this.nutritionCholesterol = args.nutritionCholesterol;
+    this.nutritionFat = args.nutritionFat;
+    this.nutritionFiber = args.nutritionFiber;
+    this.nutritionProtein = args.nutritionProtein;
+    this.nutritionSaturatedFat = args.nutritionSaturatedFat;
+    this.nutritionSodium = args.nutritionSodium;
+    this.nutritionSugar = args.nutritionSugar;
+    this.nutritionTransFat = args.nutritionTransFat;
+    this.nutritionUnsaturatedFat = args.nutritionUnsaturatedFat;
+    this.prepTime = args.prepTime || 0;
+    this.cookTime = args.cookTime || 0;
+    this.aggregateRatingValue = args.aggregateRatingValue;
+    this.aggregateRatingCount = args.aggregateRatingCount;
+    this.rating = args.rating || 0;
+    this.history = args.history ? args.history.map((d) => toDate(d)) : [];
+    this.reviews = args.reviews || [];
+    this.ingredients = args.ingredients || [];
+    this.instructions = args.instructions || [];
   }
 
-  private _title!: string;
-  private _description?: string;
-  private _tags: Tag[];
-  private _thumbnail?: string;
-  private _source: string;
-  private _yield: number;
-  private _calories?: number;
-  private _prepTime: number;
-  private _cookTime: number;
-  private _rating: number;
-  private _history: Date[];
-  private _reviews: Review[];
-  private _ingredients: string[];
-  private _instructions: string[];
-
-  get title(): string {
-    return this._title;
-  }
-
-  set title(value: string) {
-    this._title = value;
-  }
-
-  get description(): string | undefined {
-    return this._description;
-  }
-
-  set description(value: string | undefined) {
-    this._description = value;
-  }
-
-  get tags(): Tag[] {
-    return this._tags;
-  }
-
-  set tags(value: Tag[]) {
-    this._tags = value;
-  }
-
-  get thumbnail(): string | undefined {
-    return this._thumbnail;
-  }
-
-  set thumbnail(value: string | undefined) {
-    this._thumbnail = value;
-  }
-
-  get source(): string {
-    return this._source;
-  }
-
-  set source(value: string) {
-    this._source = value;
-  }
-
-  get yield(): number {
-    return this._yield;
-  }
-
-  set yield(value: number) {
-    this._yield = value;
-  }
-
-  get calories(): number | undefined {
-    return this._calories;
-  }
-
-  set calories(value: number | undefined) {
-    this._calories = value;
-  }
-
-  get prepTime(): number {
-    return this._prepTime;
-  }
-
-  set prepTime(value: number) {
-    this._prepTime = value;
-  }
-
-  get cookTime(): number {
-    return this._cookTime;
-  }
-
-  set cookTime(value: number) {
-    this._cookTime = value;
-  }
-
-  get totalTime(): number {
-    return this._prepTime + this._cookTime;
-  }
-
-  get rating(): number {
-    return this._rating;
-  }
-
-  set rating(value: number) {
-    this._rating = value;
-  }
-
-  get history(): Date[] {
-    return this._history;
-  }
-
-  set history(value: Date[]) {
-    this._history = value;
-  }
-
-  get reviews(): Review[] {
-    return this._reviews;
-  }
-
-  set reviews(value: Review[]) {
-    this._reviews = value;
-  }
-
-  get ingredients(): string[] {
-    return this._ingredients;
-  }
-
-  set ingredients(value: string[]) {
-    this._ingredients = value;
-  }
-
-  get instructions(): string[] {
-    return this._instructions;
-  }
-
-  set instructions(value: string[]) {
-    this._instructions = value;
-  }
+  public readonly title!: string;
+  public readonly description?: string;
+  public readonly tags: Tag[];
+  public readonly thumbnail?: string;
+  public readonly source: string;
+  public readonly yield: number;
+  public readonly nutritionCalories?: string;
+  public readonly nutritionCarbohydrate?: string;
+  public readonly nutritionCholesterol?: string;
+  public readonly nutritionFat?: string;
+  public readonly nutritionFiber?: string;
+  public readonly nutritionProtein?: string;
+  public readonly nutritionSaturatedFat?: string;
+  public readonly nutritionSodium?: string;
+  public readonly nutritionSugar?: string;
+  public readonly nutritionTransFat?: string;
+  public readonly nutritionUnsaturatedFat?: string;
+  public readonly prepTime: number;
+  public readonly cookTime: number;
+  public readonly aggregateRatingValue?: number;
+  public readonly aggregateRatingCount?: number;
+  public readonly rating: number;
+  public readonly history: Date[];
+  public readonly reviews: Review[];
+  public readonly ingredients: string[];
+  public readonly instructions: string[];
 }
 
 export class Review {

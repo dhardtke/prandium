@@ -116,3 +116,11 @@ export function parseDuration(iso8601duration: string): Duration {
     seconds: convert(time.S),
   };
 }
+
+export function durationToSeconds(duration: Duration): number {
+  const HOUR = 60 * 60;
+  const DAY = HOUR * 24;
+  return duration.years * 365 * DAY + duration.weeks * 7 * DAY +
+    duration.months * 31 * DAY + duration.days * DAY +
+    duration.hours * HOUR + duration.minutes * 60 + duration.seconds;
+}

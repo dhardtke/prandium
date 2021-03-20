@@ -1,4 +1,4 @@
-import { Recipe } from "../../data/model/recipe.ts";
+import { Recipe } from "../data/model/recipe.ts";
 
 export class UrlHelper {
   private static ACCENTS_PATTERN = /[\u0300-\u036f]/g;
@@ -28,15 +28,15 @@ export class UrlHelper {
     return `/recipe`;
   };
 
+  public recipeImport = (): string => {
+    return `/recipe/import`;
+  };
+
   public recipe = (recipe: Recipe): string => {
     return `/recipe/${recipe.id}/${this.slug(recipe.title)}`;
   };
 
   public thumbnail = (filename: string): string => {
     return `/thumbnails/${filename}`;
-  };
-
-  public api = {
-    u: this,
   };
 }

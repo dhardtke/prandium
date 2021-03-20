@@ -16,11 +16,14 @@ export type Values = Record<string, QueryParam> | QueryParam[];
 
 export class Database {
   private readonly db: sqlite.DB;
+  private inTransaction = false;
 
   public constructor(configDir: string) {
     const dbPath = path.resolve(configDir, "data.db");
     log.debug(() => `[DB] Using database ${dbPath}`);
     this.db = new sqlite.DB(dbPath);
+    // enable FOREIGN KEY support
+    this.exec("PRAGMA foreign_keys = ON;");
 
     window.addEventListener("unload", () => {
       this.close();
@@ -71,16 +74,31 @@ export class Database {
     }
   }
 
-  public async transaction(fn: () => Promise<boolean>) {
-    this.db.query("begin");
-    if (await fn()) {
-      this.db.query("commit");
+  public transaction<ReturnValue = void>(
+    fn: () => [boolean, ReturnValue],
+  ): ReturnValue | undefined {
+    if (this.inTransaction) {
+      const [success, rVal] = fn();
+      if (success) {
+        return rVal;
+      }
     } else {
+      this.inTransaction = true;
+      this.db.query("begin");
+      const [success, rVal] = fn();
+      if (success) {
+        this.inTransaction = false;
+        this.db.query("commit");
+        return rVal;
+      }
+
       this.db.query("rollback");
+      this.inTransaction = false;
     }
+    return undefined;
   }
 
-  public async migrate() {
+  public migrate() {
     const [[currentVersionDb]] = this.db.query("PRAGMA user_version");
     let currentVersion: number = currentVersionDb;
     log.debug(`[DB] Current database version is ${currentVersion}`);
@@ -88,11 +106,11 @@ export class Database {
       .sort((a, b) => a.version - b.version);
     log.debug(() => `[DB] Migrations to run: ${classNames(migrations)}`);
     for (const migration of migrations) {
-      await this.transaction(async () => {
-        await migration.migrate(this);
+      this.transaction(() => {
+        migration.migrate(this);
         currentVersion++;
         this.db.query(`PRAGMA user_version = ${currentVersion}`);
-        return true;
+        return [true, undefined];
       });
     }
     log.debug(() =>
@@ -104,7 +122,7 @@ export class Database {
     try {
       log.debug(() =>
         `[DB] Executing ${sql}${
-          values ? `with values ${JSON.stringify(values)}` : ""
+          values ? ` with values ${JSON.stringify(values)}` : ""
         }`
       );
       return this.db.query(sql, values);

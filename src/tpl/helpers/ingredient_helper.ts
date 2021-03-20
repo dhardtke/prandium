@@ -93,14 +93,22 @@ export class IngredientHelper {
     });
     const parsed = candidates.find((c) => !c.isGroupHeader);
     // manual post-processing
-    if (parsed && !parsed.unitOfMeasure) {
-      if (
-        parsed.description.startsWith("TL") ||
-        parsed.description.startsWith("EL")
-      ) {
-        parsed.unitOfMeasure = parsed.description.substr(0, 2);
+    if (parsed) {
+      // TODO make configurable
+      if (!parsed.unitOfMeasure) {
+        const postprocessing = ["TL", "EL", "dl", "kl.", "gr."];
+        const match = postprocessing.find((prefix) =>
+          parsed.description.startsWith(prefix)
+        );
+        if (match) {
+          parsed.unitOfMeasure = parsed.description.substr(0, match.length);
+          parsed.description = parsed.description.substr(match.length);
+          parsed.spaceBetweenQuantityAndUnit = true;
+        }
+      }
+      // cleanup
+      if (parsed.description.startsWith(", ")) {
         parsed.description = parsed.description.substr(2);
-        parsed.spaceBetweenQuantityAndUnit = true;
       }
     }
     return parsed;

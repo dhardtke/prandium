@@ -1,5 +1,5 @@
 import { assertEquals } from "../../deps.ts";
-import { findFirstRecipe } from "../../../src/data/parse/html.ts";
+import { findFirstRecipe } from "../../../src/data/parse/schema_parser.ts";
 
 Deno.test("hello world #1", () => {
   const x = 1 + 2;

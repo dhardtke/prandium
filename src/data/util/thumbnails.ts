@@ -17,8 +17,11 @@ export function getUniqueFilename(dir: string, origFilename: string): string {
 
 export async function downloadThumbnail(
   configDir: string,
-  url: string,
-): Promise<string> {
+  url?: string,
+): Promise<string | undefined> {
+  if (!url) {
+    return undefined;
+  }
   const thumbnailDir = getThumbnailDir(configDir);
   const filename = getUniqueFilename(
     thumbnailDir,
@@ -64,8 +67,10 @@ export function fetchCustom(
       init ?? {},
       {
         headers: {
+          // TODO make configurable
           "User-Agent":
-            "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+            // "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
         },
       },
     ),

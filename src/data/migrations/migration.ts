@@ -7,5 +7,5 @@ export abstract class Migration {
     this.version = version;
   }
 
-  abstract migrate(db: Database): Promise<void>;
+  abstract migrate(db: Database): void;
 }

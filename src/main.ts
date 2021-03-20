@@ -67,7 +67,7 @@ async function main(): Promise<void> {
   await prepareConfigDir(options);
   await setupLogger(options.debug);
   const database = new Database(options.configDir);
-  await database.migrate();
+  database.migrate();
 
   await spawnServer({
     host: options.host,

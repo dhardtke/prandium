@@ -58,60 +58,75 @@ export class RecipeService implements Service<Recipe> {
   }
 
   create(recipe: Recipe): Recipe {
-    this.db.exec(
-      `INSERT INTO recipe (created_at, updated_at, title, description, source, thumbnail, yield, calories, prep_time, cook_time,
-                           rating, ingredients, instructions)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        recipe.createdAt,
-        recipe.updatedAt,
-        recipe.title,
-        recipe.description,
-        recipe.source,
-        recipe.thumbnail,
-        recipe.yield,
-        recipe.calories,
-        recipe.prepTime,
-        recipe.cookTime,
-        recipe.rating,
-        JSON.stringify(recipe.ingredients),
-        JSON.stringify(recipe.instructions),
-      ],
-    );
-    recipe.id = this.db.lastInsertRowId;
+    return this.db.transaction(() => {
+      this.db.exec(
+        `INSERT INTO recipe (created_at, updated_at, title, description, source, thumbnail, yield, nutrition_calories, nutrition_carbohydrate,
+                             nutrition_cholesterol, nutrition_fat, nutrition_fiber, nutrition_protein, nutrition_saturated_fat, nutrition_sodium,
+                             nutrition_sugar, nutrition_trans_fat, nutrition_unsaturated_fat, prep_time, cook_time, aggregate_rating_value,
+                             aggregate_rating_count, rating, ingredients, instructions)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          recipe.createdAt,
+          recipe.updatedAt,
+          recipe.title,
+          recipe.description,
+          recipe.source,
+          recipe.thumbnail,
+          recipe.yield,
+          recipe.nutritionCalories,
+          recipe.nutritionCarbohydrate,
+          recipe.nutritionCholesterol,
+          recipe.nutritionFat,
+          recipe.nutritionFiber,
+          recipe.nutritionProtein,
+          recipe.nutritionSaturatedFat,
+          recipe.nutritionSodium,
+          recipe.nutritionSugar,
+          recipe.nutritionTransFat,
+          recipe.nutritionUnsaturatedFat,
+          recipe.prepTime,
+          recipe.cookTime,
+          recipe.aggregateRatingValue,
+          recipe.aggregateRatingCount,
+          recipe.rating,
+          JSON.stringify(recipe.ingredients),
+          JSON.stringify(recipe.instructions),
+        ],
+      );
+      recipe.id = this.db.lastInsertRowId;
 
-    if (recipe.tags.length) {
-      this.tagService.synchronize(recipe);
-    }
+      if (recipe.tags.length) {
+        this.tagService.synchronizeRecipes(recipe);
+      }
 
-    if (recipe.history.length) {
-      recipe.history.forEach((timestamp) => {
-        this.db.exec(
-          `INSERT INTO recipe_history (recipe_id, timestamp)
-           VALUES (?, ?)`,
-          [
-            recipe.id,
-            timestamp,
-          ],
-        );
-      });
-    }
+      if (recipe.history.length) {
+        recipe.history.forEach((timestamp) => {
+          this.db.exec(
+            `INSERT INTO recipe_history (recipe_id, timestamp)
+             VALUES (?, ?)`,
+            [
+              recipe.id,
+              timestamp,
+            ],
+          );
+        });
+      }
 
-    if (recipe.reviews.length) {
-      recipe.reviews.forEach((review) => {
-        this.db.exec(
-          `INSERT INTO recipe_review (recipe_id, date, text)
-           VALUES (?, ?, ?)`,
-          [
-            recipe.id,
-            review.date,
-            review.text,
-          ],
-        );
-      });
-    }
-
-    return recipe;
+      if (recipe.reviews.length) {
+        recipe.reviews.forEach((review) => {
+          this.db.exec(
+            `INSERT INTO recipe_review (recipe_id, date, text)
+             VALUES (?, ?, ?)`,
+            [
+              recipe.id,
+              review.date,
+              review.text,
+            ],
+          );
+        });
+      }
+      return [true, recipe];
+    })!;
   }
 
   update(recipe: Recipe): Recipe {
@@ -176,7 +191,7 @@ export class RecipeService implements Service<Recipe> {
             unknown & { title: string },
             typeof row
           >(row, "_t_");
-          if (!state.tags.has(tagRow.title)) {
+          if (tagRow.title && !state.tags.has(tagRow.title)) {
             recipe.tags.push(new Tag(toCamelCase(tagRow)));
             state.tags.add(tagRow.title);
           }
@@ -185,7 +200,7 @@ export class RecipeService implements Service<Recipe> {
           const timestamp =
             extractPrefixed<{ timestamp: Date }, unknown>(row, "_rh_")
               .timestamp;
-          if (!state.timestamps.has(timestamp)) {
+          if (timestamp && !state.timestamps.has(timestamp)) {
             recipe.history.push(toDate(timestamp));
             state.timestamps.add(timestamp);
           }
@@ -195,7 +210,7 @@ export class RecipeService implements Service<Recipe> {
             unknown & { id: number },
             typeof row
           >(row, "_rr_");
-          if (!state.reviews.has(reviewRow.id)) {
+          if (reviewRow.id && !state.reviews.has(reviewRow.id)) {
             recipe.reviews.push(new Review(toCamelCase(reviewRow)));
             state.reviews.add(reviewRow.id);
           }

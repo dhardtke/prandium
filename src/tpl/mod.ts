@@ -70,6 +70,9 @@ export const IndexTemplate = new Template(
 export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe> }>(
   "recipe/recipe.list.eta.html",
 );
+export const RecipeImportTemplate = new Template(
+  "recipe/recipe.import.eta.html",
+);
 export const RecipeDetailTemplate = new Template<
   { recipe: Recipe; portions?: number }
 >(

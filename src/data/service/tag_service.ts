@@ -41,33 +41,72 @@ export class TagService implements Service<Tag> {
   }
 
   create(tag: Tag): Tag {
-    this.db.exec(
-      "INSERT INTO tag (created_at, updated_at, title, description) VALUES (?, ?, ?, ?)",
-      [
-        tag.createdAt,
-        tag.updatedAt,
-        tag.title,
-        tag.description,
-      ],
-    );
-    tag.id = this.db.lastInsertRowId;
-
-    const values: number[] = [];
-    let recipes = 0;
-    for (const recipe of tag.recipes) {
-      values.push(tag.id);
-      values.push(recipe.id!);
-      recipes++;
-    }
-    if (values.length) {
+    return this.db.transaction(() => {
       this.db.exec(
-        `INSERT INTO recipe_tag (tag_id, recipe_id) VALUES ${
-          Array.from(Array(recipes)).map(() => "(?, ?)").join(", ")
-        }`,
-        values,
+        "INSERT INTO tag (created_at, updated_at, title, description) VALUES (?, ?, ?, ?)",
+        [
+          tag.createdAt,
+          tag.updatedAt,
+          tag.title,
+          tag.description,
+        ],
       );
-    }
-    return tag;
+      tag.id = this.db.lastInsertRowId;
+
+      const values: number[] = [];
+      let recipes = 0;
+      for (const recipe of tag.recipes) {
+        values.push(tag.id);
+        values.push(recipe.id!);
+        recipes++;
+      }
+      if (values.length) {
+        this.db.exec(
+          `INSERT INTO recipe_tag (tag_id, recipe_id) VALUES ${
+            Array.from(Array(recipes)).map(() => "(?, ?)").join(", ")
+          }`,
+          values,
+        );
+      }
+      return [true, tag];
+    })!;
+  }
+
+  create2(tags: Tag[]): Tag[] {
+    // TODO rewrite all create methods to accept BULK INSERTs
+    return this.db.transaction(() => {
+      const tag = new Tag({ title: "" });
+      // TODO use RETURNING ID
+      this.db.exec(
+        `INSERT INTO tag (created_at, updated_at, title, description) VALUES ${
+          tags.map(() => "(?, ?, ?, ?)").join(", ")
+        }`,
+        tags.map((tag) => [
+          tag.createdAt,
+          tag.updatedAt,
+          tag.title,
+          tag.description,
+        ]).flat(),
+      );
+      tag.id = this.db.lastInsertRowId;
+
+      const values: number[] = [];
+      let recipes = 0;
+      for (const recipe of tag.recipes) {
+        values.push(tag.id);
+        values.push(recipe.id!);
+        recipes++;
+      }
+      if (values.length) {
+        this.db.exec(
+          `INSERT INTO recipe_tag (tag_id, recipe_id) VALUES ${
+            Array.from(Array(recipes)).map(() => "(?, ?)").join(", ")
+          }`,
+          values,
+        );
+      }
+      return [true, [tag]];
+    })!;
   }
 
   update(tag: Tag): Tag {
@@ -86,17 +125,41 @@ export class TagService implements Service<Tag> {
     return result ? new Tag(toCamelCase(result)) : undefined;
   }
 
-  synchronize(recipe: Recipe) {
-    this.db.exec("DELETE FROM recipe_tag WHERE recipe_id = ?", [recipe.id]);
-    recipe.tags.forEach((tag) => {
+  synchronizeIds(tags: Tag[]): void {
+    const titleToTags: { [title: string]: Tag } = {};
+    for (const tag of tags) {
+      titleToTags[tag.title] = tag;
+    }
+    const titles = Object.keys(titleToTags);
+    for (
+      const row of this.db.query<Tag>(
+        `SELECT id, title FROM tag WHERE title IN (${
+          titles.map(() => "?").join(", ")
+        })`,
+        titles,
+      )
+    ) {
+      titleToTags[row.title].id = row.id;
+    }
+  }
+
+  synchronizeRecipes(recipe: Recipe) {
+    this.db.transaction(() => {
+      this.db.exec("DELETE FROM recipe_tag WHERE recipe_id = ?", [recipe.id]);
+
+      // TODO bulk insert
+      this.synchronizeIds(recipe.tags);
+      recipe.tags.filter((tag) => !tag.id).forEach((tag) => {
+        this.create(tag);
+      });
       this.db.exec(
-        `INSERT INTO recipe_tag (tag_id, recipe_id)
-         VALUES (?, ?)`,
-        [
-          tag.id,
-          recipe.id,
-        ],
+        `INSERT INTO recipe_tag (tag_id, recipe_id) VALUES ${
+          recipe.tags.map(() => "(?, ?)").join(", ")
+        }`,
+        recipe.tags.map((tag) => [tag.id, recipe.id]).flat(),
       );
+
+      return [true, undefined];
     });
   }
 }

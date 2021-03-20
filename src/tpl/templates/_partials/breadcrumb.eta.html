@@ -13,7 +13,7 @@
 <% } %>
 
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb<%= typeof noMargin !== "undefined" && noMargin ? " mb-0" : ""%>">
         <% renderItem({title: h.t("home"), url: "/"}, typeof breadcrumb === "undefined") %>
         <% if (typeof breadcrumb !== "undefined") { %>
             <% breadcrumb.forEach((item, i) => { %>

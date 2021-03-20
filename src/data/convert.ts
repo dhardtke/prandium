@@ -1,5 +1,5 @@
-export function toInt(s: string, _default = 0): number {
-  return parseInt(s, 10) || _default;
+export function toInt(s?: string, _default = 0): number {
+  return parseInt(s || "", 10) || _default;
 }
 
 export function toDate(source?: Date | string, _default = new Date()): Date {

@@ -6,7 +6,7 @@ export const InitialMigration = new class InitialMigration extends Migration {
     super(1);
   }
 
-  async migrate(db: Database) {
+  migrate(db: Database) {
     const queries = [
       `CREATE TABLE tag
        (
@@ -18,20 +18,32 @@ export const InitialMigration = new class InitialMigration extends Migration {
        )`,
       `CREATE TABLE recipe
        (
-         id           INTEGER PRIMARY KEY,
-         created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-         updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-         title        TEXT,
-         description  TEXT,
-         source       TEXT,
-         thumbnail    TEXT,
-         yield        NUMERIC,
-         calories     NUMERIC,
-         prep_time    NUMERIC,
-         cook_time    NUMERIC,
-         rating       REAL,
-         ingredients  TEXT,
-         instructions TEXT
+         id                        INTEGER PRIMARY KEY,
+         created_at                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+         updated_at                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+         title                     TEXT,
+         description               TEXT,
+         source                    TEXT,
+         thumbnail                 TEXT,
+         yield                     NUMERIC,
+         nutrition_calories        TEXT,
+         nutrition_carbohydrate    TEXT,
+         nutrition_cholesterol     TEXT,
+         nutrition_fat             TEXT,
+         nutrition_fiber           TEXT,
+         nutrition_protein         TEXT,
+         nutrition_saturated_fat   TEXT,
+         nutrition_sodium          TEXT,
+         nutrition_sugar           TEXT,
+         nutrition_trans_fat       TEXT,
+         nutrition_unsaturated_fat TEXT,
+         prep_time                 NUMERIC,
+         cook_time                 NUMERIC,
+         aggregate_rating_value    REAL,
+         aggregate_rating_count    NUMERIC,
+         rating                    REAL,
+         ingredients               TEXT,
+         instructions              TEXT
        )`,
       `CREATE TABLE recipe_tag
        (
@@ -59,7 +71,7 @@ export const InitialMigration = new class InitialMigration extends Migration {
        )`,
     ];
     for (const sql of queries) {
-      await db.exec(sql);
+      db.exec(sql);
     }
   }
 }();

@@ -1,8 +1,13 @@
 import { toInt } from "../../data/convert.ts";
-import { Recipe } from "../../data/model/recipe.ts";
+import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe_service.ts";
 import { Oak } from "../../deps.ts";
-import { RecipeDetailTemplate, RecipeListTemplate } from "../../tpl/mod.ts";
+import {
+  RecipeDetailTemplate,
+  RecipeImportTemplate,
+  RecipeListTemplate,
+} from "../../tpl/mod.ts";
+import { UrlHelper } from "../url_helper.ts";
 import { AppState } from "../webserver.ts";
 
 // TODO slugs
@@ -21,15 +26,35 @@ router
     );
     await ctx.render(RecipeListTemplate, { recipes });
   })
-  .get("/add", async (ctx: Oak.Context<AppState>) => {
-    // TODO show form
+  .get("/import", async (ctx: Oak.Context<AppState>) => {
+    await ctx.render(RecipeImportTemplate, undefined);
   })
-  .post("/add", (ctx: Oak.Context<AppState>) => {
-    const service = ctx.state.services.RecipeService;
-    const recipe = new Recipe({ title: "Hello", source: "" });
-    service.create(recipe);
-    // TODO redirect to created recipe
-  })
+  .post(
+    "/import",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      if (!ctx.request.hasBody) {
+        return await next();
+      }
+      const formData = await ctx.request.body({ type: "form" }).value;
+      const urls = formData.get("urls");
+      if (!urls) {
+        return await next();
+      }
+      const importResults = await importRecipes(
+        urls!.split("\n"),
+        ctx.configDir(),
+      );
+      const service = ctx.state.services.RecipeService;
+      for (const result of importResults) {
+        if (result.success) {
+          service.create(result.recipe!);
+        } // TODO error message
+        // TODO bulk insert
+      }
+      // ctx.response.redirect(UrlHelper.INSTANCE.recipe(recipe!));
+      await ctx.render(RecipeImportTemplate, undefined);
+    },
+  )
   .get(
     "/:id/:slug",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {

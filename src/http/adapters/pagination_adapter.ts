@@ -24,7 +24,7 @@ export const paginationAdapter = () => {
     function extractParams() {
       return {
         page: toInt(ctx.parameter("page"), 1),
-        pageSize: toInt(ctx.parameter("pageSize"), 25),
+        pageSize: toInt(ctx.parameter("pageSize"), 24),
       };
     }
 
