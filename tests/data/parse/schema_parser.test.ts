@@ -1,5 +1,5 @@
+import { SchemaParser } from "../../../src/data/parse/schema_parser.ts";
 import { assertEquals } from "../../deps.ts";
-import { findFirstRecipe } from "../../../src/data/parse/schema_parser.ts";
 
 Deno.test("hello world #1", () => {
   const x = 1 + 2;
@@ -15,5 +15,5 @@ Deno.test("hello world #1", () => {
 // });
 
 Deno.test("An Error should be thrown if the HTML is not parseable", () => {
-  findFirstRecipe("<'><!DOCTYPE xml>");
+  new SchemaParser("<'><!DOCTYPE xml>").findFirstRecipe();
 });

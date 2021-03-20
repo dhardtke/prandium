@@ -7,10 +7,11 @@ export class SchemaParser {
   private readonly document: Dom.Document;
 
   constructor(html: string) {
-    this.document = new Dom.DOMParser().parseFromString(html, TEXT_HTML);
-    if (!this.document) {
+    const document = new Dom.DOMParser().parseFromString(html, TEXT_HTML);
+    if (!document) {
       throw new Error("TODO");
     }
+    this.document = document!;
   }
 
   /**
