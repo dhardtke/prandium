@@ -111,5 +111,8 @@ server {
     location /thumbnails {
         alias /home/cook-guide/.config/cook-guide/thumbnails;
     }
+    location /favicon.ico {
+        alias /home/cook-guide/repository/assets/favicons;
+    }
 }
 ```
