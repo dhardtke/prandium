@@ -65,7 +65,6 @@ restorecon -Rv $INSTALL_DIR/assets/dist $INSTALL_DIR/assets/favicons
 # systemd
 */lib/systemd/system/cook-guide.service*
 ```text
-  GNU nano 5.3                                                                                                              /lib/systemd/system/cook-guide.service                                                                                                              Modified  [Unit]
 Description=CookGuide
 After=network.target
 
@@ -73,7 +72,7 @@ After=network.target
 Type=simple
 User=cook-guide
 WorkingDirectory=/home/cook-guide
-ExecStart=/home/cook-guide/.deno/bin/deno run --no-check --allow-all --unstable /home/cook-guide/repository/src/main.ts
+ExecStart=/home/cook-guide/.deno/bin/deno run --no-check --allow-net --allow-env --allow-read=/home/cook-guide/.config/cook-guide,/home/cook-guide/repository --allow-write=/home/cook-guide/.config/cook-guide --unstable /home/cook-guide/repository/src/main.ts
 Restart=on-failure
 RestartSec=5
 
