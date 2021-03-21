@@ -1,5 +1,9 @@
 import { Recipe } from "../data/model/recipe.ts";
 
+function join<T>(parameters?: T[]): string {
+  return parameters ? parameters.join("&") : "";
+}
+
 export class UrlHelper {
   private static ACCENTS_PATTERN = /[\u0300-\u036f]/g;
   private static SUPERFLUOUS_CHARACTERS_PATTERN = /[^a-z0-9 ]/g;
@@ -26,7 +30,7 @@ export class UrlHelper {
 
   public recipeList = (filters?: { tagIds?: number[] }): string => {
     return `/recipe${filters ? "?" : ""}${
-      filters?.tagIds?.map((id) => "tagId=" + id).join("&")
+      join(filters?.tagIds?.map((id) => "tagId=" + id))
     }`;
   };
 
