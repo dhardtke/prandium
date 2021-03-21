@@ -5,8 +5,8 @@
 <% ~includeFile("_structure/favicons.eta.html", {h}) %>
 
 <title><%= title || h.t("appName") %></title>
-<link rel="stylesheet" href="/assets/dist/index.css">
-<script src="/assets/dist/index.js" async defer></script>
+<link rel="stylesheet" href="/assets/dist/<%= h.ifExists("index.min.css", "index.css") %>">
+<script src="/assets/dist/<%= h.ifExists("index.min.js", "index.js") %>" async defer></script>
 
 <% ~includeFile("_structure/navbar.eta.html", {h}) %>
 
