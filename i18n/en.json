@@ -11,8 +11,15 @@
         }
     },
     "home": "Home",
+    "info": "Info",
     "recipe": {
-        "import": "Import",
+        "import": {
+            "alert": "The URLs have been processed. Please find the results below.",
+            "result": "Result",
+            "source_url": "Source URL",
+            "title": "Import",
+            "urls": "URLs"
+        },
         "ingredients": {
             "step": "Step {{step}}",
             "title": "Ingredients"

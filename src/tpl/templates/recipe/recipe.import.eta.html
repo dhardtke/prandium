@@ -1,23 +1,70 @@
 <% layout("_structure/page.eta.html", {
-    title: h.t("recipe.import")
+    title: h.t("recipe.import.title")
 }) %>
 <% ~includeFile("_partials/breadcrumb.eta.html", {
     h,
     breadcrumb: [
         {title: h.t("recipes"), url: h.u.recipeList()},
-        {title: h.t("recipe.import"), url: h.u.recipeImport()}
+        {title: h.t("recipe.import.title"), url: h.u.recipeImport()}
     ]
 }) %>
 
-<form method="POST">
-    <div class="mb-3">
-        <label for="urls" class="form-label">URLs</label><!-- TODO translate -->
-        <textarea rows="10" class="form-control" id="urls" name="urls" required></textarea>
-        <div class="form-text">
-            One URL per line. <!-- TODO translate -->
+<% if (typeof results === "undefined") { %>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="urls" class="form-label">
+                <%= h.t("recipe.import.urls") %>
+            </label>
+            <textarea rows="10" class="form-control" id="urls" name="urls" required></textarea>
+            <div class="form-text">
+                One URL per line. <!-- TODO translate -->
+            </div>
         </div>
+        <button type="submit" class="btn btn-primary">
+            <% ~h.i("cloud-arrow-down-fill") %>
+            <%= h.t("recipe.import.title") %>
+        </button>
+    </form>
+<% } else { %>
+    <div class="alert alert-info">
+        <strong><%= h.t("info") %></strong> <%= h.t("recipe.import.alert") %>
     </div>
-    <button type="submit" class="btn btn-primary">
-        <%= h.t("recipe.import") %>
-    </button>
-</form>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th><%= h.t("recipe.import.source_url") %></th>
+                <th><%= h.t("recipe.import.result") %></th>
+            </tr>
+            </thead>
+            <tbody>
+            <% results.forEach((result, i) => { %>
+                <tr>
+                    <td><%= i + 1 %></td>
+                    <td>
+                        <a href="<%= result.url %>" target="_blank">
+                            <%= result.url %>
+                        </a>
+                    </td>
+                    <td class="d-flex align-items-center">
+                        <% if (result.success) { %>
+                            <span class="text-success me-1">
+                                <% ~h.i("check") %>
+                            </span>
+                            <a class="btn btn-success btn-sm" href="<%= h.u.recipe(result.recipe) %>" target="_blank">
+                                <%= h.t("recipe.open") %>
+                            </a>
+                        <% } else { %>
+                            <span class="text-danger">
+                                <% ~h.i("x") %>
+                                <%= result.error %>
+                            </span>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+    </div>
+<% } %>

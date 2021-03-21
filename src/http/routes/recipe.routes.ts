@@ -40,19 +40,18 @@ router
       if (!urls) {
         return await next();
       }
-      const importResults = await importRecipes(
+      const results = await importRecipes(
         urls!.split("\n"),
         ctx.configDir(),
       );
       const service = ctx.state.services.RecipeService;
-      for (const result of importResults) {
+      for (const result of results) {
         if (result.success) {
           service.create(result.recipe!);
-        } // TODO error message
+        }
         // TODO bulk insert
       }
-      // ctx.response.redirect(UrlHelper.INSTANCE.recipe(recipe!));
-      await ctx.render(RecipeImportTemplate, undefined);
+      await ctx.render(RecipeImportTemplate, {results});
     },
   )
   .get(

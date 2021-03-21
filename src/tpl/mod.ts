@@ -1,3 +1,4 @@
+import { ImportResult } from "../data/parse/import_recipe.ts";
 import { Eta, log, path } from "../deps.ts";
 import { Recipe } from "../data/model/recipe.ts";
 import { Pagination } from "../data/pagination.ts";
@@ -70,7 +71,7 @@ export const IndexTemplate = new Template(
 export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe> }>(
   "recipe/recipe.list.eta.html",
 );
-export const RecipeImportTemplate = new Template(
+export const RecipeImportTemplate = new Template<{results: ImportResult[]}>(
   "recipe/recipe.import.eta.html",
 );
 export const RecipeDetailTemplate = new Template<

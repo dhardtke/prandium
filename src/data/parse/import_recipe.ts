@@ -1,8 +1,4 @@
-import {
-  SchemaAggregateRating,
-  SchemaNutritionInformation,
-  SchemaReview,
-} from "../../deps.ts";
+import { SchemaAggregateRating, SchemaNutritionInformation, SchemaReview, } from "../../deps.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { downloadThumbnail, fetchCustom } from "../util/thumbnails.ts";
@@ -13,6 +9,7 @@ import { ensureArray, extractNumber, first } from "./util.ts";
 export interface ImportResult {
   url: string;
   success: boolean;
+  error?: string;
   recipe?: Recipe;
 }
 
@@ -22,11 +19,13 @@ export async function importRecipes(
 ): Promise<ImportResult[]> {
   const results: ImportResult[] = [];
   for (const url of urls) {
-    const recipe = await importRecipe(url.trim(), configDir);
+    const imported = await importRecipe(url.trim(), configDir);
+    console.log(imported);
     results.push({
       url,
-      success: recipe !== undefined,
-      recipe,
+      success: typeof imported !== "string",
+      recipe: typeof imported === "string" ? undefined : imported,
+      error: typeof imported === "string" ? imported : undefined
     });
   }
   return results;
@@ -35,16 +34,20 @@ export async function importRecipes(
 export async function importRecipe(
   url: string,
   configDir: string,
-): Promise<Recipe | undefined> {
-  const response = await fetchCustom(url);
-  const html = new TextDecoder().decode(
-    new Uint8Array(await response.arrayBuffer()),
-  );
+): Promise<Recipe | string> {
+  let html: string;
+  try {
+    const response = await fetchCustom(url);
+    html = new TextDecoder().decode(
+      new Uint8Array(await response.arrayBuffer()),
+    );
+  } catch (e) {
+    return e.toString();
+  }
   const parser = new SchemaParser(html);
   const schemaRecipe = parser.findFirstRecipe()!;
   if (!schemaRecipe) {
-    // TODO show error message
-    return undefined;
+    return "Recipe metadata not found in HTML.";
   }
   let keywords = ensureArray(
     schemaRecipe.recipeCategory || schemaRecipe.keywords,
