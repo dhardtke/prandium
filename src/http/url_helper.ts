@@ -24,8 +24,10 @@ export class UrlHelper {
     return "/";
   };
 
-  public recipeList = (): string => {
-    return `/recipe`;
+  public recipeList = (filters?: { tagIds?: number[] }): string => {
+    return `/recipe${filters ? "?" : ""}${
+      filters?.tagIds?.map((id) => "tagId=" + id).join("&")
+    }`;
   };
 
   public recipeImport = (): string => {

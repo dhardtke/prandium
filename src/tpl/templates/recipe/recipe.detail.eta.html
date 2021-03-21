@@ -14,7 +14,7 @@
 <% if (recipe.tags.length) { %>
     <div class="d-flex flex-wrap">
         <% recipe.tags.forEach((tag, i) => { %>
-            <a href="" class="badge bg-dark mb-3<%= i === recipe.tags.length - 1 ? "" : " me-1" %>">
+            <a href="<%= h.u.recipeList({tagIds: [tag.id]}) %>" class="badge bg-dark mb-3<%= i === recipe.tags.length - 1 ? "" : " me-1" %>">
                 <%= tag.title %>
             </a>
         <% }) %>
