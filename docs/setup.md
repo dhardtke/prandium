@@ -15,28 +15,21 @@ require {
 
 #============= init_t ==============
 
-#!!!! This avc is allowed in the current policy
 allow init_t http_port_t:tcp_socket name_connect;
-
-#!!!! This avc is allowed in the current policy
 allow init_t httpd_sys_content_t:file create;
 allow init_t httpd_sys_content_t:file { open write };
-
-#!!!! This avc is allowed in the current policy
 allow init_t self:process execmem;
-
-#!!!! This avc is allowed in the current policy
 allow init_t user_home_t:file { execute execute_no_trans map open read };
 ```
 Install by executing
-```
+```shell
 checkmodule -M -m -o cook-guide.mod cook-guide.te
 semodule_package -o cook-guide.pp -m cook-guide.mod
 semodule -i cook-guide.pp
 ```
 
 (This is the result of executing e.g.
-```
+```shell
 audit2allow -M cook-guide << _EOF_
 type=AVC msg=audit(1616334281.833:2075): avc:  denied  { execute } for  pid=11871 comm="(deno)" name="deno" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
 type=AVC msg=audit(1616334850.629:2079): avc:  denied  { read open } for  pid=11926 comm="(deno)" path="/home/cook-guide/.deno/bin/deno" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
@@ -51,7 +44,7 @@ _EOF_
 with the error messages from `/var/log/audit/audit.log`)
 
 ## nginx
-```text
+```shell
 CONFIG_DIR="/home/cook-guide/.config/cook-guide"
 INSTALL_DIR="/home/cook-guide/repository"
 
