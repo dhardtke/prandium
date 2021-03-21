@@ -3,13 +3,13 @@ import { Oak } from "../../deps.ts";
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {
     _query: Record<string, string>;
-    parameter: (name: string) => string;
+    parameter: (name: string) => string | undefined;
   }
 
   // noinspection JSUnusedGlobalSymbols
   interface RouterContext {
     _query: Record<string, string>;
-    parameter: (name: string) => string;
+    parameter: (name: string) => string | undefined;
   }
 }
 

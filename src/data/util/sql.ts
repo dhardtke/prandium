@@ -1,3 +1,5 @@
+import { QueryParam } from "../db.ts";
+
 export class OrderBy {
   public static EMPTY: OrderBy = new OrderBy();
 
@@ -29,23 +31,28 @@ export class OrderBy {
   }
 }
 
-export class Filter<T extends Record<string, string>> {
-  public static EMPTY: Filter<Record<string, string>> = new Filter();
+export interface Filter {
+  active: boolean;
+  sql: () => string;
+  bindings?: QueryParam[];
+}
 
-  private readonly parameters?: T;
+export interface Filters {
+  sql: string;
+  bindings: QueryParam[];
+}
 
-  public constructor(parameters?: T) {
-    this.parameters = parameters;
-  }
-
-  public sql(): string {
-    if (!this.parameters) {
-      return "";
-    }
-    return `()`;
-  }
-
-  public values(): Record<string, string> {
-    return this.parameters!;
+export function buildFilters(...filters: Filter[]): Filters {
+  const activeFilters = filters.filter((f) => f.active);
+  if (activeFilters.length) {
+    return activeFilters.reduce((result: Filters, { sql, bindings }, i) => {
+      result.sql += `${i === 0 ? "" : " AND "}${sql()}`;
+      if (bindings?.length) {
+        result.bindings = [...result.bindings, ...bindings];
+      }
+      return result;
+    }, { sql: "", bindings: [] });
+  } else {
+    return { sql: "TRUE", bindings: [] };
   }
 }

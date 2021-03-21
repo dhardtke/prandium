@@ -1,6 +1,6 @@
 import { Database } from "../db.ts";
-import { RecipeService } from "./recipe_service.ts";
-import { TagService } from "./tag_service.ts";
+import { RecipeService } from "./recipe.service.ts";
+import { TagService } from "./tag.service.ts";
 
 export interface Services {
   RecipeService: RecipeService;

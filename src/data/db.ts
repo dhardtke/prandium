@@ -3,7 +3,7 @@ import { classNames } from "../util.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
 // see https://deno.land/x/sqlite/src/db.ts
-type QueryParam =
+export type QueryParam =
   | boolean
   | number
   | bigint

@@ -9,9 +9,20 @@ import {
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
-import { OrderBy } from "../util/sql.ts";
+import { buildFilters, Filter, OrderBy } from "../util/sql.ts";
 import { columns, Service } from "./service.ts";
-import { TagService } from "./tag_service.ts";
+import { TagService } from "./tag.service.ts";
+
+function tagFilter(tagIds?: number[]): Filter {
+  return {
+    active: Boolean(tagIds?.length),
+    sql: () =>
+      `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id IN (${
+        tagIds!.map(() => "?").join(", ")
+      }) AND recipe_id = recipe.id)`,
+    bindings: tagIds,
+  };
+}
 
 export class RecipeService implements Service<Recipe> {
   private readonly db: Database;
@@ -23,13 +34,13 @@ export class RecipeService implements Service<Recipe> {
   }
 
   count(filters?: {
-    tagId?: number;
+    tagIds?: number[];
   }): number {
+    const filter = buildFilters(tagFilter(filters?.tagIds));
     return this.db.single<{ total: number }>(
-      "SELECT COUNT(*) AS total FROM recipe",
+      `SELECT COUNT(*) AS total FROM recipe WHERE ${filter.sql}`,
       [
-        // TODO support filtering by tagId
-        // filters?.bookId,
+        ...filter.bindings,
       ],
     )!.total;
   }
@@ -38,17 +49,17 @@ export class RecipeService implements Service<Recipe> {
     limit?: number,
     offset?: number,
     orderBy: OrderBy = OrderBy.EMPTY,
-    // TODO use Filter object
     filters?: {
-      bookId?: number;
+      tagIds?: number[];
     },
   ): Recipe[] {
+    const filter = buildFilters(tagFilter(filters?.tagIds));
     return toArray(
       this.db.query(
-        `SELECT ${columns(Recipe.columns)} FROM recipe ${
-          orderBy.sql(Recipe.columns)
-        } LIMIT ? OFFSET ?`,
+        `SELECT ${columns(Recipe.columns)} FROM recipe
+          WHERE ${filter.sql} ${orderBy.sql(Recipe.columns)} LIMIT ? OFFSET ?`,
         [
+          ...filter.bindings,
           limit || -1,
           offset || 0,
         ],

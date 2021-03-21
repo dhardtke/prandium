@@ -1,8 +1,8 @@
 import { Database } from "../src/data/db.ts";
 import { Recipe, Review } from "../src/data/model/recipe.ts";
 import { Tag } from "../src/data/model/tag.ts";
-import { RecipeService } from "../src/data/service/recipe_service.ts";
-import { TagService } from "../src/data/service/tag_service.ts";
+import { RecipeService } from "../src/data/service/recipe.service.ts";
+import { TagService } from "../src/data/service/tag.service.ts";
 import { downloadThumbnail } from "../src/data/util/thumbnails.ts";
 import { defaultConfigDir } from "../src/util.ts";
 

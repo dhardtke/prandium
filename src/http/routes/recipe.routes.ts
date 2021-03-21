@@ -1,27 +1,31 @@
 import { toInt } from "../../data/convert.ts";
 import { importRecipes } from "../../data/parse/import_recipe.ts";
-import { RecipeService } from "../../data/service/recipe_service.ts";
+import { RecipeService } from "../../data/service/recipe.service.ts";
 import { Oak } from "../../deps.ts";
 import {
   RecipeDetailTemplate,
   RecipeImportTemplate,
   RecipeListTemplate,
 } from "../../tpl/mod.ts";
-import { UrlHelper } from "../url_helper.ts";
 import { AppState } from "../webserver.ts";
 
-// TODO slugs
 const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
 router
   .get("/", async (ctx: Oak.Context<AppState>) => {
     const service: RecipeService = ctx.state.services.RecipeService;
+    const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
+      toInt(id, -1)
+    ).filter((i) => i !== -1);
     const recipes = ctx.paginate(
-      service.count(),
+      service.count({ tagIds }),
       (l, o) =>
         service.list(
           l,
           o,
           ctx.orderBy(),
+          {
+            tagIds,
+          },
         ),
     );
     await ctx.render(RecipeListTemplate, { recipes });
