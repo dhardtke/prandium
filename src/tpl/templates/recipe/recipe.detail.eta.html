@@ -22,16 +22,15 @@
 <% } %>
 
 <div class="d-flex flex-wrap">
-    <% if (recipe.calories) { %>
+    <% if (recipe.nutritionCalories) { %>
         <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">
                     <% ~h.i("battery-half") %>
-                </span>
-                <%= h.t("recipe.kilocalories", {kcals: recipe.calories}) %>
-                <!-- TODO format number -->
+                </span><%= recipe.nutritionCalories %>
             </span>
         </span>
+        <% /* TODO print other nutritional info */ %>
     <% } %>
 
     <% if (recipe.prepTime) { %>
@@ -40,8 +39,9 @@
                 <span class="me-1">
                     <% ~h.i("layout-wtf") %>
                 </span>
-                <%= h.t("recipe.time.prep") %>
-                <%= h.formatSeconds(recipe.prepTime) %>
+                <span class="me-1">
+                    <%= h.t("recipe.time.prep") %>
+                </span><%= h.formatSeconds(recipe.prepTime) %>
             </span>
         </span>
     <% } %>
@@ -52,8 +52,9 @@
                 <span class="me-1">
                     <% ~h.i("alarm") %>
                 </span>
-                <%= h.t("recipe.time.cook") %>
-                <%= h.formatSeconds(recipe.cookTime) %>
+                <span class="me-1">
+                    <%= h.t("recipe.time.cook") %>
+                </span><%= h.formatSeconds(recipe.cookTime) %>
             </span>
         </span>
     <% } %>
@@ -64,7 +65,9 @@
                 <span class="me-1">
                     <% ~h.i("clock-fill") %>
                 </span>
-                <%= h.t("recipe.time.total") %>
+                <span class="me-1">
+                    <%= h.t("recipe.time.total") %>
+                </span>
                 <% ~h.formatSeconds(recipe.prepTime + recipe.cookTime) %>
             </span>
         </span>
@@ -72,9 +75,9 @@
 
     <a href="<%= recipe.source %>" target="_blank" class="badge bg-dark mb-3 me-1">
         <div class="d-flex align-items-center">
-        <span class="me-1">
-            <% ~h.i("link-45deg") %>
-        </span>
+            <span class="me-1">
+                <% ~h.i("link-45deg") %>
+            </span>
             <%= new URL(recipe.source).hostname %>
         </div>
     </a>
@@ -89,7 +92,6 @@
 
 <!-- TODO show metadata like last cooked, etc.? -->
 <!-- TODO show rating -->
-<!-- - bewertungen und ggf. schwierigkeitsgrad anzeigen-->
 
 <% if (recipe.thumbnail) { %>
     <div>
