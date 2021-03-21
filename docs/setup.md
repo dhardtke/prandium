@@ -81,7 +81,7 @@ WantedBy=multi-user.target
 ```
 
 # nginx
-```
+```text
 server {
     listen 443 http2 ssl;
     listen [::]:443 http2 ssl;
@@ -111,4 +111,5 @@ server {
     location /thumbnails {
         alias /home/cook-guide/.config/cook-guide/thumbnails;
     }
-}```
+}
+```
