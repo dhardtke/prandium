@@ -1,4 +1,8 @@
-import { SchemaAggregateRating, SchemaNutritionInformation, SchemaReview, } from "../../deps.ts";
+import {
+  SchemaAggregateRating,
+  SchemaNutritionInformation,
+  SchemaReview,
+} from "../../deps.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { downloadThumbnail, fetchCustom } from "../util/thumbnails.ts";
@@ -25,7 +29,7 @@ export async function importRecipes(
       url,
       success: typeof imported !== "string",
       recipe: typeof imported === "string" ? undefined : imported,
-      error: typeof imported === "string" ? imported : undefined
+      error: typeof imported === "string" ? imported : undefined,
     });
   }
   return results;

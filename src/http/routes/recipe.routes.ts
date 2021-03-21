@@ -51,7 +51,7 @@ router
         }
         // TODO bulk insert
       }
-      await ctx.render(RecipeImportTemplate, {results});
+      await ctx.render(RecipeImportTemplate, { results });
     },
   )
   .get(
