@@ -8,7 +8,7 @@
   "orientation": "any",
   "scope": "/",
   "start_url": "/?homescreen=1",
-  "background_color": "#fff",
+  "background_color": "transparent",
   "theme_color": "#dc3545",
   "icons": [
     {

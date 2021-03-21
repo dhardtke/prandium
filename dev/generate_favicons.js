@@ -16,7 +16,7 @@ const configuration = {
     developerURL: null, // Your (or your developer's) URL. `string`
     dir: "auto", // Primary text direction for name, short_name, and description
     lang: "en-US", // Primary language for name and short_name
-    background: "#fff", // Background colour for flattened icons. `string`
+    background: "transparent", // Background colour for flattened icons. `string`
     theme_color: "#dc3545", // Theme color user for example in Android's task switcher. `string`
     appleStatusBarStyle: "black-translucent", // Style for Apple status bar: "black-translucent", "default", "black". `string`
     display: "standalone", // Preferred display mode: "fullscreen", "standalone", "minimal-ui" or "browser". `string`
