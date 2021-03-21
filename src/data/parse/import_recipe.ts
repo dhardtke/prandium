@@ -54,7 +54,7 @@ export async function importRecipe(
     return "Recipe metadata not found in HTML.";
   }
   let keywords = ensureArray(
-    schemaRecipe.recipeCategory || schemaRecipe.keywords,
+    schemaRecipe.keywords || schemaRecipe.recipeCategory,
   );
   if (keywords.length === 1) {
     keywords = (keywords[0] as string).split(", ");
