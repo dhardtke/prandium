@@ -1,11 +1,10 @@
 @use "_bootstrap";
-@use "_variables";
 
 a.badge {
     text-decoration: none;
 
     &.bg-dark {
-        transition: variables.$transition-duration;
+        transition: bootstrap.$transition-base;
 
         &:hover {
             background-color: bootstrap.$danger;

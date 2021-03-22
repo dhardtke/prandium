@@ -1,5 +1,4 @@
 @use "_bootstrap";
-@use "_variables";
 
 .navbar {
     .navbar-brand {
@@ -9,7 +8,7 @@
         }
 
         .app-name {
-            transition: variables.$transition-duration;
+            transition: bootstrap.$transition-base;
             color: inherit;
             margin-top: -3px;
         }
