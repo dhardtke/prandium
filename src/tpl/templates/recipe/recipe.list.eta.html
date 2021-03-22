@@ -18,7 +18,7 @@
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes.items) { %>
         <div class="col">
-            <a class="card card-linked" href="<%= h.u.recipe(recipe) %>">
+            <a class="card card-linked h-100" href="<%= h.u.recipe(recipe) %>">
                 <img src="<%= h.u.thumbnail(recipe.thumbnail) %>" class="card-img-top" alt="" loading="lazy">
                 <div class="card-body">
                     <h5 class="card-title"><%= recipe.title %></h5>
