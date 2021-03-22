@@ -25,6 +25,7 @@
             "title": "Ingredients"
         },
         "instructions": "Instructions",
+        "no_recipes_found": "No recipes have been found for the current filter. Please change the filter options or add some more recipes.",
         "open": "Open",
         "portions": "Portions",
         "reviews": "Reviews",
