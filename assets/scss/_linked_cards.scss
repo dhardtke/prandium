@@ -1,0 +1,12 @@
+@use "_bootstrap";
+@use "_variables";
+
+.card-linked {
+    text-decoration: none;
+    color: inherit;
+    transition: variables.$transition-duration;
+
+    &:hover {
+        border-color: bootstrap.$primary;
+    }
+}

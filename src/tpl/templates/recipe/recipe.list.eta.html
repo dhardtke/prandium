@@ -18,16 +18,13 @@
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <% for (const recipe of recipes.items) { %>
         <div class="col">
-            <div class="card">
+            <a class="card card-linked" href="<%= h.u.recipe(recipe) %>">
                 <img src="<%= h.u.thumbnail(recipe.thumbnail) %>" class="card-img-top" alt="" loading="lazy">
                 <div class="card-body">
                     <h5 class="card-title"><%= recipe.title %></h5>
                     <p class="card-text"><%= recipe.description %></p>
-                    <a href="<%= h.u.recipe(recipe) %>" class="btn btn-dark stretched-link">
-                        <%= h.t("recipe.open") %>
-                    </a>
                 </div>
-            </div>
+            </a>
         </div>
     <% } %>
 </div>

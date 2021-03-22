@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DEV Server" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/dev_server.ts" programParameters="run --unstable --allow-read --allow-run --no-check" workingDirectory="$PROJECT_DIR$/dev">
+  <configuration default="false" name="DEV Server" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/dev_server.ts" programParameters="run --unstable --allow-read --allow-run" workingDirectory="$PROJECT_DIR$/dev">
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

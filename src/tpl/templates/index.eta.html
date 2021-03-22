@@ -3,12 +3,37 @@
     h
 }) %>
 
-<div class="card">
-    <h5 class="card-header">
-        Recipes
-    </h5>
-    <div class="card-body">
-        <p class="card-text">Manage all your recipes.</p>
-        <a href="<%= h.u.recipeList() %>" class="btn btn-primary stretched-link">Go</a>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col">
+        <a class="card card-linked" href="<%= h.u.recipeList() %>">
+            <h5 class="card-header">
+                <%= h.t("recipes") %>
+            </h5>
+            <div class="card-body">
+                <p class="card-text">View all your recipes.</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col">
+        <a class="card card-linked" href="<%= h.u.recipeList() %>">
+            <h5 class="card-header">
+                <%= h.t("recipes") %>
+            </h5>
+            <div class="card-body">
+                <p class="card-text">Manage all your recipes.</p>
+            </div>
+        </a>
+    </div>
+
+    <div class="col">
+        <a class="card card-linked" href="<%= h.u.recipeList() %>">
+            <h5 class="card-header">
+                <%= h.t("recipes") %>
+            </h5>
+            <div class="card-body">
+                <p class="card-text">View statistics.</p>
+            </div>
+        </a>
     </div>
 </div>
