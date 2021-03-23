@@ -24,7 +24,6 @@ export async function importRecipes(
   const results: ImportResult[] = [];
   for (const url of urls) {
     const imported = await importRecipe(url.trim(), configDir);
-    console.log(imported);
     results.push({
       url,
       success: typeof imported !== "string",
