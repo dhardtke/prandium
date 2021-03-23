@@ -24,6 +24,14 @@ function tagFilter(tagIds?: number[]): Filter {
   };
 }
 
+function titleFilter(title?: string): Filter {
+  return {
+    active: Boolean(title),
+    sql: () => `recipe.title LIKE ?`,
+    bindings: [`%${title}%`],
+  };
+}
+
 export class RecipeService implements Service<Recipe> {
   private readonly db: Database;
   private readonly tagService: TagService;
@@ -35,8 +43,12 @@ export class RecipeService implements Service<Recipe> {
 
   count(filters?: {
     tagIds?: number[];
+    title?: string;
   }): number {
-    const filter = buildFilters(tagFilter(filters?.tagIds));
+    const filter = buildFilters(
+      tagFilter(filters?.tagIds),
+      titleFilter(filters?.title),
+    );
     return this.db.single<{ total: number }>(
       `SELECT COUNT(*) AS total FROM recipe WHERE ${filter.sql}`,
       [
@@ -51,9 +63,13 @@ export class RecipeService implements Service<Recipe> {
     orderBy: OrderBy = OrderBy.EMPTY,
     filters?: {
       tagIds?: number[];
+      title?: string;
     },
   ): Recipe[] {
-    const filter = buildFilters(tagFilter(filters?.tagIds));
+    const filter = buildFilters(
+      tagFilter(filters?.tagIds),
+      titleFilter(filters?.title),
+    );
     return toArray(
       this.db.query(
         `SELECT ${columns(Recipe.columns)} FROM recipe

@@ -23,8 +23,8 @@
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                 </li>
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" method="get" action="<%= h.u.recipeList() %>">
+                <input class="form-control me-2" type="search" name="title" placeholder="<%= h.t("search") %>" aria-label="<%= h.t("search") %>">
                 <button class="btn btn-outline-success" type="submit">
                     <% ~h.i("search") %>
                 </button>

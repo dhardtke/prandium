@@ -16,8 +16,9 @@ router
     const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
       toInt(id, -1)
     ).filter((i) => i !== -1);
+    const title = ctx.parameter("title");
     const recipes = ctx.paginate(
-      service.count({ tagIds }),
+      service.count({ tagIds, title }),
       (l, o) =>
         service.list(
           l,
@@ -25,6 +26,7 @@ router
           ctx.orderBy(),
           {
             tagIds,
+            title,
           },
         ),
     );
