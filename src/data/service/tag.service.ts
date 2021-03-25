@@ -32,8 +32,8 @@ export class TagService implements Service<Tag> {
           orderBy?.sql(Tag.columns)
         } LIMIT ? OFFSET ?`,
         [
-          limit,
-          offset,
+          limit || -1,
+          offset || 0,
         ],
       ),
       (src) => new Tag(toCamelCase(src)),

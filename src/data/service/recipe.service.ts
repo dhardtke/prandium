@@ -1,11 +1,5 @@
 import { cond } from "../../util.ts";
-import {
-  extractPrefixed,
-  reduceFirst,
-  toArray,
-  toCamelCase,
-  toDate,
-} from "../convert.ts";
+import { extractPrefixed, reduceFirst, toArray, toCamelCase, toDate, } from "../convert.ts";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
@@ -16,10 +10,7 @@ import { TagService } from "./tag.service.ts";
 function tagFilter(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
-    sql: () =>
-      `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id IN (${
-        tagIds!.map(() => "?").join(", ")
-      }) AND recipe_id = recipe.id)`,
+    sql: () => tagIds!.map(() => `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`).join(" AND "),
     bindings: tagIds,
   };
 }
@@ -214,10 +205,8 @@ export class RecipeService implements Service<Recipe> {
         }),
       (recipe, row, state) => {
         if (loadTags) {
-          const tagRow = extractPrefixed<
-            unknown & { title: string },
-            typeof row
-          >(row, "_t_");
+          const tagRow = extractPrefixed<unknown & { title: string },
+            typeof row>(row, "_t_");
           if (tagRow.title && !state.tags.has(tagRow.title)) {
             recipe.tags.push(new Tag(toCamelCase(tagRow)));
             state.tags.add(tagRow.title);
@@ -233,10 +222,8 @@ export class RecipeService implements Service<Recipe> {
           }
         }
         if (loadReviews) {
-          const reviewRow = extractPrefixed<
-            unknown & { id: number },
-            typeof row
-          >(row, "_rr_");
+          const reviewRow = extractPrefixed<unknown & { id: number },
+            typeof row>(row, "_rr_");
           if (reviewRow.id && !state.reviews.has(reviewRow.id)) {
             recipe.reviews.push(new Review(toCamelCase(reviewRow)));
             state.reviews.add(reviewRow.id);

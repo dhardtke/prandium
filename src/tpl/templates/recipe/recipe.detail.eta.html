@@ -14,7 +14,7 @@
 <% if (recipe.tags.length) { %>
     <div class="d-flex flex-wrap">
         <% recipe.tags.forEach((tag, i) => { %>
-            <a href="<%= h.u.recipeList({tagIds: [tag.id]}) %>" class="badge bg-dark mb-3<%= i === recipe.tags.length - 1 ? "" : " me-1" %>">
+            <a href="<%= h.u.recipeList({tagIds: [tag.id]}) %>" class="badge badge-linked bg-dark mb-3<%= i === recipe.tags.length - 1 ? "" : " me-1" %>">
                 <%= tag.title %>
             </a>
         <% }) %>
@@ -73,7 +73,7 @@
         </span>
     <% } %>
 
-    <a href="<%= recipe.source %>" target="_blank" class="badge bg-dark mb-3 me-1">
+    <a href="<%= recipe.source %>" target="_blank" class="badge badge-linked bg-dark mb-3 me-1">
         <div class="d-flex align-items-center">
             <span class="me-1">
                 <% ~h.i("link-45deg") %>

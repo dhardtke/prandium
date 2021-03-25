@@ -130,10 +130,10 @@ export class IngredientHelper {
     }
     const cached = this.cache.get(raw)!;
     const computed = {
-      quantity: cached.quantity
+      quantity: cached?.quantity
         ? roundUpToThreeDigits(cached.quantity * (portions / recipeYield))
         : null,
-      quantity2: cached.quantity2
+      quantity2: cached?.quantity2
         ? roundUpToThreeDigits(cached.quantity2 * (portions / recipeYield))
         : null,
     };
@@ -146,9 +146,9 @@ export class IngredientHelper {
           cached.spaceBetweenQuantityAndUnit ? " " : ""
         }${cached.unitOfMeasure ?? ""}`
         : undefined,
-      description: cached.description.trim(),
-      amountType: cached.quantity
-        ? (cached.unitOfMeasure ? "full" : "unitless")
+      description: cached?.description.trim(),
+      amountType: cached?.quantity
+        ? (cached?.unitOfMeasure ? "full" : "unitless")
         : "empty",
     };
   };

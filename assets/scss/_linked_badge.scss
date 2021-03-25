@@ -1,14 +1,12 @@
 @use "_bootstrap";
 
-a.badge {
+.badge-linked {
     text-decoration: none;
 
-    &.bg-dark {
-        transition: bootstrap.$transition-base;
+    transition: bootstrap.$transition-base;
 
-        &:hover {
-            background-color: bootstrap.$danger;
-            color: bootstrap.$white;
-        }
+    &:hover {
+        background-color: bootstrap.$primary;
+        color: bootstrap.$white;
     }
 }

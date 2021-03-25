@@ -1,9 +1,10 @@
+import { Recipe } from "../data/model/recipe.ts";
+import { Tag } from "../data/model/tag.ts";
+import { Pagination } from "../data/pagination.ts";
 import { ImportResult } from "../data/parse/import_recipe.ts";
 import { Eta, log, path } from "../deps.ts";
-import { Recipe } from "../data/model/recipe.ts";
-import { Pagination } from "../data/pagination.ts";
-import { Helpers } from "./helpers/helpers.ts";
 import { root } from "../util.ts";
+import { Helpers } from "./helpers/helpers.ts";
 
 const TEMPLATE_DIR = root("src", "tpl", "templates");
 
@@ -68,14 +69,12 @@ export const ServerErrorTemplate = new Template(
 export const IndexTemplate = new Template(
   "index.eta.html",
 );
-export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe> }>(
+export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe>, tags: Tag[], tagIds: number[], requestUrl: string }>(
   "recipe/recipe.list.eta.html",
 );
 export const RecipeImportTemplate = new Template<{ results: ImportResult[] }>(
   "recipe/recipe.import.eta.html",
 );
-export const RecipeDetailTemplate = new Template<
-  { recipe: Recipe; portions?: number }
->(
+export const RecipeDetailTemplate = new Template<{ recipe: Recipe; portions?: number }>(
   "recipe/recipe.detail.eta.html",
 );
