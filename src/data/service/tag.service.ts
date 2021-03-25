@@ -40,81 +40,51 @@ export class TagService implements Service<Tag> {
     );
   }
 
-  create(tag: Tag): Tag {
-    return this.db.transaction(() => {
-      this.db.exec(
-        "INSERT INTO tag (created_at, updated_at, title, description) VALUES (?, ?, ?, ?)",
-        [
-          tag.createdAt,
-          tag.updatedAt,
-          tag.title,
-          tag.description,
-        ],
+  create(tags: Tag[]): void {
+    this.db.transaction(() => {
+      this.db.prepare(
+        `INSERT INTO tag (created_at, updated_at, title, description)
+                       VALUES (?, ?, ?, ?) RETURNING id`,
+        (query) => {
+          for (const tag of tags) {
+            const rows = query([
+              tag.createdAt,
+              tag.updatedAt,
+              tag.title,
+              tag.description || "",
+            ]);
+            tag.id = [...rows.asObjects()][0].id;
+          }
+        },
       );
-      tag.id = this.db.lastInsertRowId;
 
-      const values: number[] = [];
-      let recipes = 0;
-      for (const recipe of tag.recipes) {
-        values.push(tag.id);
-        values.push(recipe.id!);
-        recipes++;
-      }
-      if (values.length) {
-        this.db.exec(
-          `INSERT INTO recipe_tag (tag_id, recipe_id) VALUES ${
-            Array.from(Array(recipes)).map(() => "(?, ?)").join(", ")
-          }`,
-          values,
-        );
-      }
-      return [true, tag];
-    })!;
+      this.db.prepare(
+        `INSERT INTO recipe_tag (tag_id, recipe_id)
+                       VALUES (?, ?)`,
+        (query) => {
+          for (const tag of tags) {
+            for (const recipe of tag.recipes) {
+              query([tag.id!, recipe.id!]);
+            }
+          }
+        },
+      );
+    });
   }
 
-  create2(tags: Tag[]): Tag[] {
-    // TODO rewrite all create methods to accept BULK INSERTs
-    return this.db.transaction(() => {
-      const tag = new Tag({ title: "" });
-      // TODO use RETURNING ID
-      this.db.exec(
-        `INSERT INTO tag (created_at, updated_at, title, description) VALUES ${
-          tags.map(() => "(?, ?, ?, ?)").join(", ")
-        }`,
-        tags.map((tag) => [
-          tag.createdAt,
-          tag.updatedAt,
-          tag.title,
-          tag.description,
-        ]).flat(),
-      );
-      tag.id = this.db.lastInsertRowId;
-
-      const values: number[] = [];
-      let recipes = 0;
-      for (const recipe of tag.recipes) {
-        values.push(tag.id);
-        values.push(recipe.id!);
-        recipes++;
-      }
-      if (values.length) {
-        this.db.exec(
-          `INSERT INTO recipe_tag (tag_id, recipe_id) VALUES ${
-            Array.from(Array(recipes)).map(() => "(?, ?)").join(", ")
-          }`,
-          values,
-        );
-      }
-      return [true, [tag]];
-    })!;
-  }
-
-  update(tag: Tag): Tag {
-    this.db.exec(
+  update(tags: Tag[]): void {
+    this.db.prepare(
       "UPDATE tag SET updated_at = ?, title = ?, description = ? WHERE id = ?",
-      [tag.updatedAt, tag.title, tag.description, tag.id],
+      (query) => {
+        for (const tag of tags) {
+          query([tag.updatedAt, tag.title, tag.description, tag.id]);
+        }
+      },
     );
-    return tag;
+  }
+
+  delete(tags: Tag[]): void {
+    // TODO
   }
 
   find(id: number): Tag | undefined {
@@ -147,19 +117,17 @@ export class TagService implements Service<Tag> {
     this.db.transaction(() => {
       this.db.exec("DELETE FROM recipe_tag WHERE recipe_id = ?", [recipe.id]);
 
-      // TODO bulk insert
       this.synchronizeIds(recipe.tags);
-      recipe.tags.filter((tag) => !tag.id).forEach((tag) => {
-        this.create(tag);
-      });
-      this.db.exec(
-        `INSERT INTO recipe_tag (tag_id, recipe_id) VALUES ${
-          recipe.tags.map(() => "(?, ?)").join(", ")
-        }`,
-        recipe.tags.map((tag) => [tag.id, recipe.id]).flat(),
+      this.create(recipe.tags.filter((tag) => !tag.id));
+      this.db.prepare(
+        `INSERT INTO recipe_tag (tag_id, recipe_id)
+                       VALUES (?, ?)`,
+        (query) => {
+          for (const tag of recipe.tags) {
+            query([tag.id, recipe.id]);
+          }
+        },
       );
-
-      return [true, undefined];
     });
   }
 }

@@ -69,12 +69,21 @@ export const ServerErrorTemplate = new Template(
 export const IndexTemplate = new Template(
   "index.eta.html",
 );
-export const RecipeListTemplate = new Template<{ recipes: Pagination<Recipe>, tags: Tag[], tagIds: number[], requestUrl: string }>(
+export const RecipeListTemplate = new Template<
+  {
+    recipes: Pagination<Recipe>;
+    tags: Tag[];
+    tagIds: number[];
+    requestUrl: string;
+  }
+>(
   "recipe/recipe.list.eta.html",
 );
 export const RecipeImportTemplate = new Template<{ results: ImportResult[] }>(
   "recipe/recipe.import.eta.html",
 );
-export const RecipeDetailTemplate = new Template<{ recipe: Recipe; portions?: number }>(
+export const RecipeDetailTemplate = new Template<
+  { recipe: Recipe; portions?: number }
+>(
   "recipe/recipe.detail.eta.html",
 );

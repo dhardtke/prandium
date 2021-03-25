@@ -13,6 +13,7 @@ const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
 router
   .get("/", async (ctx: Oak.Context<AppState>) => {
     const service: RecipeService = ctx.state.services.RecipeService;
+
     const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
       toInt(id, -1)
     ).filter((i) => i !== -1);
@@ -32,7 +33,12 @@ router
     );
     const tags = ctx.state.services.TagService.list();
     // TODO move url to adapter / template render as global var? or as helper?
-    await ctx.render(RecipeListTemplate, { recipes, tags, tagIds, requestUrl: ctx.request.url.toString() });
+    await ctx.render(RecipeListTemplate, {
+      recipes,
+      tags,
+      tagIds,
+      requestUrl: ctx.request.url.toString(),
+    });
   })
   .get("/import", async (ctx: Oak.Context<AppState>) => {
     await ctx.render(RecipeImportTemplate, undefined);
@@ -53,12 +59,7 @@ router
         ctx.configDir(),
       );
       const service = ctx.state.services.RecipeService;
-      for (const result of results) {
-        if (result.success) {
-          service.create(result.recipe!);
-        }
-        // TODO bulk insert
-      }
+      service.create(results.filter((r) => r.success).map((r) => r.recipe!));
       await ctx.render(RecipeImportTemplate, { results });
     },
   )

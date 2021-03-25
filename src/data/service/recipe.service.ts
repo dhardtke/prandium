@@ -1,5 +1,11 @@
 import { cond } from "../../util.ts";
-import { extractPrefixed, reduceFirst, toArray, toCamelCase, toDate, } from "../convert.ts";
+import {
+  extractPrefixed,
+  reduceFirst,
+  toArray,
+  toCamelCase,
+  toDate,
+} from "../convert.ts";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
@@ -10,7 +16,10 @@ import { TagService } from "./tag.service.ts";
 function tagFilter(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
-    sql: () => tagIds!.map(() => `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`).join(" AND "),
+    sql: () =>
+      tagIds!.map(() =>
+        `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`
+      ).join(" AND "),
     bindings: tagIds,
   };
 }
@@ -75,86 +84,107 @@ export class RecipeService implements Service<Recipe> {
     );
   }
 
-  create(recipe: Recipe): Recipe {
-    return this.db.transaction(() => {
-      this.db.exec(
+  create(recipes: Recipe[]): void {
+    this.db.transaction(() => {
+      this.db.prepare(
         `INSERT INTO recipe (created_at, updated_at, title, description, source, thumbnail, yield, nutrition_calories, nutrition_carbohydrate,
                              nutrition_cholesterol, nutrition_fat, nutrition_fiber, nutrition_protein, nutrition_saturated_fat, nutrition_sodium,
                              nutrition_sugar, nutrition_trans_fat, nutrition_unsaturated_fat, prep_time, cook_time, aggregate_rating_value,
                              aggregate_rating_count, rating, ingredients, instructions)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?))`,
-        [
-          recipe.createdAt,
-          recipe.updatedAt,
-          recipe.title,
-          recipe.description,
-          recipe.source,
-          recipe.thumbnail,
-          recipe.yield,
-          recipe.nutritionCalories,
-          recipe.nutritionCarbohydrate,
-          recipe.nutritionCholesterol,
-          recipe.nutritionFat,
-          recipe.nutritionFiber,
-          recipe.nutritionProtein,
-          recipe.nutritionSaturatedFat,
-          recipe.nutritionSodium,
-          recipe.nutritionSugar,
-          recipe.nutritionTransFat,
-          recipe.nutritionUnsaturatedFat,
-          recipe.prepTime,
-          recipe.cookTime,
-          recipe.aggregateRatingValue,
-          recipe.aggregateRatingCount,
-          recipe.rating,
-          JSON.stringify(recipe.ingredients),
-          JSON.stringify(recipe.instructions),
-        ],
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?)) RETURNING id`,
+        (query) => {
+          for (const recipe of recipes) {
+            const rows = query([
+              recipe.createdAt,
+              recipe.updatedAt,
+              recipe.title,
+              recipe.description,
+              recipe.source,
+              recipe.thumbnail,
+              recipe.yield,
+              recipe.nutritionCalories,
+              recipe.nutritionCarbohydrate,
+              recipe.nutritionCholesterol,
+              recipe.nutritionFat,
+              recipe.nutritionFiber,
+              recipe.nutritionProtein,
+              recipe.nutritionSaturatedFat,
+              recipe.nutritionSodium,
+              recipe.nutritionSugar,
+              recipe.nutritionTransFat,
+              recipe.nutritionUnsaturatedFat,
+              recipe.prepTime,
+              recipe.cookTime,
+              recipe.aggregateRatingValue,
+              recipe.aggregateRatingCount,
+              recipe.rating,
+              JSON.stringify(recipe.ingredients),
+              JSON.stringify(recipe.instructions),
+            ]);
+            recipe.id = [...rows.asObjects()][0].id;
+          }
+        },
       );
-      recipe.id = this.db.lastInsertRowId;
 
-      if (recipe.tags.length) {
-        this.tagService.synchronizeRecipes(recipe);
-      }
+      for (const recipe of recipes) {
+        if (recipe.tags.length) {
+          this.tagService.synchronizeRecipes(recipe);
+        }
 
-      if (recipe.history.length) {
-        recipe.history.forEach((timestamp) => {
-          this.db.exec(
+        if (recipe.history.length) {
+          this.db.prepare(
             `INSERT INTO recipe_history (recipe_id, timestamp)
-             VALUES (?, ?)`,
-            [
-              recipe.id,
-              timestamp,
-            ],
+                           VALUES (?, ?)`,
+            (query) => {
+              for (const timestamp of recipe.history) {
+                query([
+                  recipe.id,
+                  timestamp,
+                ]);
+              }
+            },
           );
-        });
-      }
+        }
 
-      if (recipe.reviews.length) {
-        recipe.reviews.forEach((review) => {
-          this.db.exec(
+        if (recipe.reviews.length) {
+          this.db.prepare(
             `INSERT INTO recipe_review (recipe_id, date, text)
-             VALUES (?, ?, ?)`,
-            [
-              recipe.id,
-              review.date,
-              review.text,
-            ],
+                           VALUES (?, ?, ?)`,
+            (query) => {
+              for (const review of recipe.reviews) {
+                query([
+                  recipe.id,
+                  review.date,
+                  review.text,
+                ]);
+              }
+            },
           );
-        });
+        }
       }
-      return [true, recipe];
-    })!;
+    });
   }
 
-  update(recipe: Recipe): Recipe {
+  update(recipes: Recipe[]): void {
     // TODO update related tables
     // TODO add missing fields
-    this.db.exec(
-      "UPDATE recipe SET updated_at = ?, title = ?, description = ? WHERE id = ?",
-      [recipe.updatedAt, recipe.title, recipe.description, recipe.id],
+    this.db.prepare(
+      `UPDATE recipe
+                     SET updated_at  = ?,
+                         title       = ?,
+                         description = ?
+                     WHERE id = ?`,
+      (query) => {
+        for (const recipe of recipes) {
+          query([
+            recipe.updatedAt,
+            recipe.title,
+            recipe.description,
+            recipe.id,
+          ]);
+        }
+      },
     );
-    return recipe;
   }
 
   find(
@@ -205,8 +235,10 @@ export class RecipeService implements Service<Recipe> {
         }),
       (recipe, row, state) => {
         if (loadTags) {
-          const tagRow = extractPrefixed<unknown & { title: string },
-            typeof row>(row, "_t_");
+          const tagRow = extractPrefixed<
+            unknown & { title: string },
+            typeof row
+          >(row, "_t_");
           if (tagRow.title && !state.tags.has(tagRow.title)) {
             recipe.tags.push(new Tag(toCamelCase(tagRow)));
             state.tags.add(tagRow.title);
@@ -222,8 +254,10 @@ export class RecipeService implements Service<Recipe> {
           }
         }
         if (loadReviews) {
-          const reviewRow = extractPrefixed<unknown & { id: number },
-            typeof row>(row, "_rr_");
+          const reviewRow = extractPrefixed<
+            unknown & { id: number },
+            typeof row
+          >(row, "_rr_");
           if (reviewRow.id && !state.reviews.has(reviewRow.id)) {
             recipe.reviews.push(new Review(toCamelCase(reviewRow)));
             state.reviews.add(reviewRow.id);
@@ -236,5 +270,9 @@ export class RecipeService implements Service<Recipe> {
         reviews: new Set<number>(),
       },
     );
+  }
+
+  delete(recipes: Recipe[]): void {
+    // TODO
   }
 }

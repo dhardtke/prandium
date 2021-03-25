@@ -14,6 +14,13 @@ export type QueryParam =
   | Uint8Array;
 export type Values = Record<string, QueryParam> | QueryParam[];
 
+export interface PreparedQuery {
+  // deno-lint-ignore no-explicit-any
+  (values?: Values): any;
+
+  finalize: () => void;
+}
+
 export class Database {
   private readonly db: sqlite.DB;
   private inTransaction = false;
@@ -42,11 +49,15 @@ export class Database {
    * @param sql the SQL query to execute
    * @param values the values to bind
    */
-  public *query<T>(sql: string, values?: Values): Generator<T> {
+  // deno-lint-ignore no-explicit-any
+  public *query<T extends Record<string, any>>(
+    sql: string,
+    values?: Values,
+  ): Generator<T> {
     const result = this.safeQuery(sql, values);
-    const rows = result.asObjects<T>();
+    const rows = result.asObjects();
     for (const row of rows) {
-      yield row;
+      yield row as T;
     }
   }
 
@@ -57,7 +68,7 @@ export class Database {
    */
   public single<T>(sql: string, values?: Values): T | undefined {
     const result = this.safeQuery(sql, values);
-    const rows = result.asObjects<T>();
+    const rows = result.asObjects();
     const value = rows.next().value;
     result.return();
     return value;
@@ -74,28 +85,59 @@ export class Database {
     }
   }
 
+  public prepare(
+    sql: string,
+    processor: (preparedQuery: PreparedQuery) => void,
+  ): void {
+    const query = this.db.prepareQuery(sql);
+
+    try {
+      log.debug(() => `[DB] Preparing ${sql}`);
+      const wrappedQuery: PreparedQuery = (values) => {
+        log.debug(() =>
+          `Executing prepared query${
+            values ? ` with values ${JSON.stringify(values)}` : ""
+          }`
+        );
+        return query(values);
+      };
+      wrappedQuery.finalize = query.finalize;
+      processor(wrappedQuery);
+    } catch (e) {
+      log.error(() => `Error executing ${sql}`);
+      throw e;
+    } finally {
+      query.finalize();
+    }
+  }
+
   public transaction<ReturnValue = void>(
-    fn: () => [boolean, ReturnValue],
+    fn: () => ReturnValue,
   ): ReturnValue | undefined {
+    let rVal: ReturnValue | undefined = undefined;
     if (this.inTransaction) {
-      const [success, rVal] = fn();
-      if (success) {
-        return rVal;
-      }
+      rVal = fn();
     } else {
       this.inTransaction = true;
       this.db.query("begin");
-      const [success, rVal] = fn();
-      if (success) {
-        this.inTransaction = false;
-        this.db.query("commit");
-        return rVal;
+      let success = true;
+      try {
+        rVal = fn();
+      } catch (e) {
+        success = false;
+        log.error(() => `Error executing transaction`);
+        throw e;
+      } finally {
+        if (success) {
+          this.db.query("commit");
+          this.inTransaction = false;
+        } else {
+          this.db.query("rollback");
+          this.inTransaction = false;
+        }
       }
-
-      this.db.query("rollback");
-      this.inTransaction = false;
     }
-    return undefined;
+    return rVal;
   }
 
   public migrate() {

@@ -2,8 +2,9 @@ export interface Service<T> {
   count: () => number;
   find: (id: number) => T | undefined;
   list: () => T[];
-  create: (model: T) => T;
-  update: (model: T) => T;
+  create: (models: T[]) => void;
+  update: (models: T[]) => void;
+  delete: (models: T[]) => void;
 }
 
 export function columns(
