@@ -1,4 +1,4 @@
-import { log, path, sqlite } from "../deps.ts";
+import { Colors, log, path, sqlite } from "../deps.ts";
 import { classNames } from "../util.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
@@ -27,7 +27,7 @@ export class Database {
 
   public constructor(configDir: string) {
     const dbPath = path.resolve(configDir, "data.db");
-    log.debug(() => `[DB] Using database ${dbPath}`);
+    log.debug(() => `[DB] Using database ${Colors.cyan(dbPath)}`);
     this.db = new sqlite.DB(dbPath);
     // enable FOREIGN KEY support
     this.exec("PRAGMA foreign_keys = ON;");
@@ -50,7 +50,7 @@ export class Database {
    * @param values the values to bind
    */
   // deno-lint-ignore no-explicit-any
-  public *query<T extends Record<string, any>>(
+  public* query<T extends Record<string, any>>(
     sql: string,
     values?: Values,
   ): Generator<T> {
@@ -92,11 +92,11 @@ export class Database {
     const query = this.db.prepareQuery(sql);
 
     try {
-      log.debug(() => `[DB] Preparing ${sql}`);
+      log.debug(() => `[DB] Preparing ${Colors.cyan(sql)}`);
       const wrappedQuery: PreparedQuery = (values) => {
         log.debug(() =>
           `Executing prepared query${
-            values ? ` with values ${JSON.stringify(values)}` : ""
+            values ? ` with values ${Colors.brightCyan(JSON.stringify(values))}` : ""
           }`
         );
         return query(values);
@@ -104,7 +104,7 @@ export class Database {
       wrappedQuery.finalize = query.finalize;
       processor(wrappedQuery);
     } catch (e) {
-      log.error(() => `Error executing ${sql}`);
+      log.error(() => `Error executing ${Colors.cyan(sql)}`);
       throw e;
     } finally {
       query.finalize();
@@ -143,10 +143,10 @@ export class Database {
   public migrate() {
     const [[currentVersionDb]] = this.db.query("PRAGMA user_version");
     let currentVersion: number = currentVersionDb;
-    log.debug(`[DB] Current database version is ${currentVersion}`);
+    log.debug(`[DB] Current database version is ${Colors.cyan("" + currentVersion)}`);
     const migrations = MIGRATIONS.filter((m) => currentVersion < m.version)
       .sort((a, b) => a.version - b.version);
-    log.debug(() => `[DB] Migrations to run: ${classNames(migrations)}`);
+    log.debug(() => `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`);
     for (const migration of migrations) {
       this.transaction(() => {
         migration.migrate(this);
@@ -156,20 +156,20 @@ export class Database {
       });
     }
     log.debug(() =>
-      `[DB] Migrations executed. New database version is ${currentVersion}`
+      `[DB] Migrations executed. New database version is ${Colors.cyan("" + currentVersion)}`
     );
   }
 
   private safeQuery(sql: string, values?: Values) {
     try {
       log.debug(() =>
-        `[DB] Executing ${sql}${
-          values ? ` with values ${JSON.stringify(values)}` : ""
+        `[DB] Executing ${Colors.cyan(sql)}${
+          values ? ` with values ${Colors.brightCyan(JSON.stringify(values))}` : ""
         }`
       );
       return this.db.query(sql, values);
     } catch (e) {
-      log.error(() => `Error executing ${sql}`);
+      log.error(() => `Error executing ${Colors.cyan(sql)}`);
       throw e;
     }
   }
