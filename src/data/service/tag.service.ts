@@ -2,8 +2,16 @@ import { toArray, toCamelCase } from "../convert.ts";
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
-import { OrderBy } from "../util/sql.ts";
+import { buildFilters, Filter, OrderBy } from "../util/sql.ts";
 import { columns, Service } from "./service.ts";
+
+function recipeFilter(recipeId?: number): Filter {
+  return {
+    active: Boolean(recipeId),
+    sql: () => `id IN (SELECT tag_id FROM recipe_tag WHERE recipe_id = ?)`,
+    bindings: [recipeId],
+  };
+}
 
 export class TagService implements Service<Tag> {
   private readonly db: Database;
@@ -24,14 +32,21 @@ export class TagService implements Service<Tag> {
     offset?: number,
     orderBy: OrderBy = OrderBy.EMPTY,
     loadRecipes?: boolean,
+    filters?: {
+      recipeId?: number;
+    },
   ): Tag[] {
     // TODO support loadRecipes
+    const filter = buildFilters(
+      recipeFilter(filters?.recipeId),
+    );
     return toArray(
       this.db.query(
         `SELECT ${columns(Tag.columns)} FROM tag ${
           orderBy?.sql(Tag.columns)
-        } LIMIT ? OFFSET ?`,
+        } WHERE ${filter.sql} LIMIT ? OFFSET ?`,
         [
+          ...filter.bindings,
           limit || -1,
           offset || 0,
         ],
@@ -44,7 +59,7 @@ export class TagService implements Service<Tag> {
     this.db.transaction(() => {
       this.db.prepare(
         `INSERT INTO tag (created_at, updated_at, title, description)
-                       VALUES (?, ?, ?, ?) RETURNING id`,
+         VALUES (?, ?, ?, ?) RETURNING id`,
         (query) => {
           for (const tag of tags) {
             const rows = query([
@@ -60,7 +75,7 @@ export class TagService implements Service<Tag> {
 
       this.db.prepare(
         `INSERT INTO recipe_tag (tag_id, recipe_id)
-                       VALUES (?, ?)`,
+         VALUES (?, ?)`,
         (query) => {
           for (const tag of tags) {
             for (const recipe of tag.recipes) {
@@ -103,12 +118,12 @@ export class TagService implements Service<Tag> {
     const titles = Object.keys(titleToTags);
     for (
       const row of this.db.query<Tag>(
-        `SELECT id, title FROM tag WHERE title IN (${
-          titles.map(() => "?").join(", ")
-        })`,
-        titles,
-      )
-    ) {
+      `SELECT id, title FROM tag WHERE title IN (${
+        titles.map(() => "?").join(", ")
+      })`,
+      titles,
+    )
+      ) {
       titleToTags[row.title].id = row.id;
     }
   }
@@ -121,7 +136,7 @@ export class TagService implements Service<Tag> {
       this.create(recipe.tags.filter((tag) => !tag.id));
       this.db.prepare(
         `INSERT INTO recipe_tag (tag_id, recipe_id)
-                       VALUES (?, ?)`,
+         VALUES (?, ?)`,
         (query) => {
           for (const tag of recipe.tags) {
             query([tag.id, recipe.id]);

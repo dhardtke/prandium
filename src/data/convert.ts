@@ -100,3 +100,7 @@ export function reduceFirst<S, T, R>(
   }
   return first!;
 }
+
+export function pushAll<T>(source: T[], target: T[]): void {
+  source.forEach((el) => target.push(el));
+}

@@ -1,14 +1,6 @@
-import { cond } from "../../util.ts";
-import {
-  extractPrefixed,
-  reduceFirst,
-  toArray,
-  toCamelCase,
-  toDate,
-} from "../convert.ts";
+import { pushAll, toArray, toCamelCase, toDate, } from "../convert.ts";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
-import { Tag } from "../model/tag.ts";
 import { buildFilters, Filter, OrderBy } from "../util/sql.ts";
 import { columns, Service } from "./service.ts";
 import { TagService } from "./tag.service.ts";
@@ -134,7 +126,7 @@ export class RecipeService implements Service<Recipe> {
         if (recipe.history.length) {
           this.db.prepare(
             `INSERT INTO recipe_history (recipe_id, timestamp)
-                           VALUES (?, ?)`,
+             VALUES (?, ?)`,
             (query) => {
               for (const timestamp of recipe.history) {
                 query([
@@ -149,7 +141,7 @@ export class RecipeService implements Service<Recipe> {
         if (recipe.reviews.length) {
           this.db.prepare(
             `INSERT INTO recipe_review (recipe_id, date, text)
-                           VALUES (?, ?, ?)`,
+             VALUES (?, ?, ?)`,
             (query) => {
               for (const review of recipe.reviews) {
                 query([
@@ -170,10 +162,10 @@ export class RecipeService implements Service<Recipe> {
     // TODO add missing fields
     this.db.prepare(
       `UPDATE recipe
-                     SET updated_at  = ?,
-                         title       = ?,
-                         description = ?
-                     WHERE id = ?`,
+       SET updated_at  = ?,
+           title       = ?,
+           description = ?
+       WHERE id = ?`,
       (query) => {
         for (const recipe of recipes) {
           query([
@@ -193,83 +185,44 @@ export class RecipeService implements Service<Recipe> {
     loadHistory?: boolean,
     loadReviews?: boolean,
   ): Recipe | undefined {
-    return reduceFirst(
-      this.db.query<{ ingredients: string; instructions: string }>(
-        `SELECT
-            ${columns(Recipe.columns, "r.")}
-            ${loadTags ? `, ${columns(Tag.columns, "t.", "_t_")}` : ""}
-            ${cond(loadHistory, `, ${columns(["timestamp"], "rh.", "_rh_")}`)}
-            ${cond(loadReviews, `, ${columns(Review.columns, "rr.", "_rr_")}`)}
-         FROM recipe r
-            ${
-          cond(
-            loadTags,
-            `LEFT JOIN recipe_tag rt on rt.recipe_id = r.id LEFT JOIN tag t ON t.id = rt.tag_id`,
-          )
-        }
-            ${
-          cond(
-            loadHistory,
-            `LEFT JOIN recipe_history rh on rh.recipe_id = r.id`,
-          )
-        }
-            ${
-          cond(loadReviews, `LEFT JOIN recipe_review rr ON rr.recipe_id = r.id`)
-        }
-         WHERE r.id = ?
-         ORDER BY ${
-          OrderBy.combined(
-            loadHistory ? "rh.timestamp" : "",
-            loadTags ? "t.title" : "",
-          )
-        }`,
-        [
-          id,
-        ],
-      ),
-      (row) =>
-        new Recipe({
-          ...toCamelCase(row),
-          ...{ ingredients: JSON.parse(row.ingredients) },
-          ...{ instructions: JSON.parse(row.instructions) },
-        }),
-      (recipe, row, state) => {
-        if (loadTags) {
-          const tagRow = extractPrefixed<
-            unknown & { title: string },
-            typeof row
-          >(row, "_t_");
-          if (tagRow.title && !state.tags.has(tagRow.title)) {
-            recipe.tags.push(new Tag(toCamelCase(tagRow)));
-            state.tags.add(tagRow.title);
-          }
-        }
-        if (loadHistory) {
-          const timestamp =
-            extractPrefixed<{ timestamp: Date }, unknown>(row, "_rh_")
-              .timestamp;
-          if (timestamp && !state.timestamps.has(timestamp)) {
-            recipe.history.push(toDate(timestamp));
-            state.timestamps.add(timestamp);
-          }
-        }
-        if (loadReviews) {
-          const reviewRow = extractPrefixed<
-            unknown & { id: number },
-            typeof row
-          >(row, "_rr_");
-          if (reviewRow.id && !state.reviews.has(reviewRow.id)) {
-            recipe.reviews.push(new Review(toCamelCase(reviewRow)));
-            state.reviews.add(reviewRow.id);
-          }
-        }
-      },
-      {
-        tags: new Set<string>(),
-        timestamps: new Set<Date>(),
-        reviews: new Set<number>(),
-      },
+    const result = this.db.single<{ ingredients: string, instructions: string }>(
+      `SELECT ${columns(Recipe.columns, "r.")} FROM recipe r WHERE r.id = ?`,
+      [
+        id,
+      ],
     );
+    if (result) {
+      const recipe = new Recipe({
+        ...toCamelCase(result),
+        ...{ ingredients: JSON.parse(result.ingredients) },
+        ...{ instructions: JSON.parse(result.instructions) },
+      });
+
+      if (loadTags) {
+        pushAll(this.tagService.list(undefined, undefined, undefined, undefined, { recipeId: recipe.id }), recipe.tags);
+      }
+
+      if (loadHistory) {
+        for (const row of this.db.query<{ timestamp: string }>(
+          `SELECT timestamp
+           FROM recipe_history
+           WHERE recipe_id = ?`,
+          [recipe.id]
+        )) {
+          recipe.history.push(toDate(row.timestamp));
+        }
+      }
+
+      if (loadReviews) {
+        for (const row of this.db.query<{ timestamp: string }>(`SELECT ${columns(Review.columns)} FROM recipe_review WHERE recipe_id = ?`, [recipe.id])) {
+          recipe.reviews.push(new Review(toCamelCase(row)));
+        }
+      }
+
+      return recipe;
+    }
+
+    return undefined;
   }
 
   delete(recipes: Recipe[]): void {
