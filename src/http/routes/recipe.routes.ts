@@ -1,6 +1,6 @@
-import { toInt } from "../../data/util/convert.ts";
 import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
+import { toInt } from "../../data/util/convert.ts";
 import { Oak } from "../../deps.ts";
 import {
   RecipeDetailTemplate,
@@ -31,7 +31,14 @@ router
           },
         ),
     );
-    const tags = ctx.state.services.TagService.list();
+    const tags = ctx.state.services.TagService.list(
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      { tagIdsWithSameRecipes: tagIds },
+    );
     // TODO move url to adapter / template render as global var? or as helper?
     await ctx.render(RecipeListTemplate, {
       recipes,

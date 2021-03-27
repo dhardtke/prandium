@@ -34,7 +34,7 @@ export class OrderBy {
 export interface Filter {
   active: boolean;
   sql: () => string;
-  bindings?: QueryParam[];
+  bindings?: () => QueryParam[];
 }
 
 export interface Filters {
@@ -47,8 +47,9 @@ export function buildFilters(...filters: Filter[]): Filters {
   if (activeFilters.length) {
     return activeFilters.reduce((result: Filters, { sql, bindings }, i) => {
       result.sql += `${i === 0 ? "" : " AND "}${sql()}`;
-      if (bindings?.length) {
-        result.bindings = [...result.bindings, ...bindings];
+      const effectiveBindings = bindings ? bindings() : [];
+      if (effectiveBindings.length) {
+        result.bindings = [...result.bindings, ...effectiveBindings];
       }
       return result;
     }, { sql: "", bindings: [] });
@@ -66,4 +67,12 @@ export function columns(
     (n) =>
       `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`,
   ).join(", ");
+}
+
+export function placeholders<T>(count: T[] | number | undefined): string {
+  if (count === undefined) {
+    return "";
+  }
+  const howMany = typeof count === "number" ? count : count.length;
+  return Array.from(Array(howMany)).map(() => "?").join(", ");
 }

@@ -8,11 +8,15 @@ import { TagService } from "./tag.service.ts";
 function tagFilter(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
-    sql: () =>
+    /*sql: () =>
       tagIds!.map(() =>
         `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`
-      ).join(" AND "),
-    bindings: tagIds,
+      ).join(" AND "),*/
+    sql: () =>
+      `id IN (SELECT recipe_id FROM recipe_tag WHERE tag_id IN (${
+        tagIds!.map(() => "?").join(", ")
+      }) GROUP BY recipe_tag.recipe_id HAVING COUNT(*) = ?)`,
+    bindings: () => [...tagIds!, tagIds!.length],
   };
 }
 
@@ -20,7 +24,7 @@ function titleFilter(title?: string): Filter {
   return {
     active: Boolean(title),
     sql: () => `recipe.title LIKE ?`,
-    bindings: [`%${title}%`],
+    bindings: () => [`%${title}%`],
   };
 }
 
@@ -202,9 +206,16 @@ export class RecipeService implements Service<Recipe> {
 
       if (loadTags) {
         pushAll(
-          this.tagService.list(undefined, undefined, undefined, undefined, {
-            recipeId: recipe.id,
-          }),
+          this.tagService.list(
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            {
+              recipeId: recipe.id,
+            },
+          ),
           recipe.tags,
         );
       }

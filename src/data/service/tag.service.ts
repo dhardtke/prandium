@@ -1,15 +1,36 @@
-import { toArray, toCamelCase } from "../util/convert.ts";
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
-import { buildFilters, columns, Filter, OrderBy } from "../util/sql.ts";
+import { toArray, toCamelCase } from "../util/convert.ts";
+import {
+  buildFilters,
+  columns,
+  Filter,
+  OrderBy,
+  placeholders,
+} from "../util/sql.ts";
 import { Service } from "./service.ts";
 
 function recipeFilter(recipeId?: number): Filter {
   return {
     active: Boolean(recipeId),
     sql: () => `id IN (SELECT tag_id FROM recipe_tag WHERE recipe_id = ?)`,
-    bindings: [recipeId],
+    bindings: () => [recipeId],
+  };
+}
+
+function tagsWithSameRecipes(tagIds?: number[]): Filter {
+  return {
+    active: Boolean(tagIds?.length),
+    sql: () =>
+      `id IN (
+      SELECT tag_id FROM recipe_tag WHERE recipe_id IN (
+        SELECT recipe_id FROM recipe_tag WHERE recipe_tag.tag_id IN (${
+        placeholders(tagIds)
+      }) GROUP BY recipe_id HAVING COUNT(*) = ?
+      )
+    )`,
+    bindings: () => [...tagIds!, tagIds!.length],
   };
 }
 
@@ -32,13 +53,16 @@ export class TagService implements Service<Tag> {
     offset?: number,
     orderBy: OrderBy = OrderBy.EMPTY,
     loadRecipes?: boolean,
+    loadRecipeCount?: boolean,
     filters?: {
       recipeId?: number;
+      tagIdsWithSameRecipes?: number[];
     },
   ): Tag[] {
     // TODO support loadRecipes
     const filter = buildFilters(
       recipeFilter(filters?.recipeId),
+      tagsWithSameRecipes(filters?.tagIdsWithSameRecipes),
     );
     return toArray(
       this.db.query(
