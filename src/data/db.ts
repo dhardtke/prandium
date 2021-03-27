@@ -50,7 +50,7 @@ export class Database {
    * @param values the values to bind
    */
   // deno-lint-ignore no-explicit-any
-  public* query<T extends Record<string, any>>(
+  public *query<T extends Record<string, any>>(
     sql: string,
     values?: Values,
   ): Generator<T> {
@@ -96,7 +96,9 @@ export class Database {
       const wrappedQuery: PreparedQuery = (values) => {
         log.debug(() =>
           `Executing prepared query${
-            values ? ` with values ${Colors.brightCyan(JSON.stringify(values))}` : ""
+            values
+              ? ` with values ${Colors.brightCyan(JSON.stringify(values))}`
+              : ""
           }`
         );
         return query(values);
@@ -143,10 +145,14 @@ export class Database {
   public migrate() {
     const [[currentVersionDb]] = this.db.query("PRAGMA user_version");
     let currentVersion: number = currentVersionDb;
-    log.debug(`[DB] Current database version is ${Colors.cyan("" + currentVersion)}`);
+    log.debug(
+      `[DB] Current database version is ${Colors.cyan("" + currentVersion)}`,
+    );
     const migrations = MIGRATIONS.filter((m) => currentVersion < m.version)
       .sort((a, b) => a.version - b.version);
-    log.debug(() => `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`);
+    log.debug(() =>
+      `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`
+    );
     for (const migration of migrations) {
       this.transaction(() => {
         migration.migrate(this);
@@ -156,7 +162,9 @@ export class Database {
       });
     }
     log.debug(() =>
-      `[DB] Migrations executed. New database version is ${Colors.cyan("" + currentVersion)}`
+      `[DB] Migrations executed. New database version is ${
+        Colors.cyan("" + currentVersion)
+      }`
     );
   }
 
@@ -164,7 +172,9 @@ export class Database {
     try {
       log.debug(() =>
         `[DB] Executing ${Colors.cyan(sql)}${
-          values ? ` with values ${Colors.brightCyan(JSON.stringify(values))}` : ""
+          values
+            ? ` with values ${Colors.brightCyan(JSON.stringify(values))}`
+            : ""
         }`
       );
       return this.db.query(sql, values);

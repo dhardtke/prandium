@@ -1,4 +1,4 @@
-import { pushAll, toArray, toCamelCase, toDate, } from "../util/convert.ts";
+import { pushAll, toArray, toCamelCase, toDate } from "../util/convert.ts";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { buildFilters, Filter, OrderBy } from "../util/sql.ts";
@@ -185,7 +185,9 @@ export class RecipeService implements Service<Recipe> {
     loadHistory?: boolean,
     loadReviews?: boolean,
   ): Recipe | undefined {
-    const result = this.db.single<{ ingredients: string, instructions: string }>(
+    const result = this.db.single<
+      { ingredients: string; instructions: string }
+    >(
       `SELECT ${columns(Recipe.columns, "r.")} FROM recipe r WHERE r.id = ?`,
       [
         id,
@@ -199,22 +201,36 @@ export class RecipeService implements Service<Recipe> {
       });
 
       if (loadTags) {
-        pushAll(this.tagService.list(undefined, undefined, undefined, undefined, { recipeId: recipe.id }), recipe.tags);
+        pushAll(
+          this.tagService.list(undefined, undefined, undefined, undefined, {
+            recipeId: recipe.id,
+          }),
+          recipe.tags,
+        );
       }
 
       if (loadHistory) {
-        for (const row of this.db.query<{ timestamp: string }>(
-          `SELECT timestamp
+        for (
+          const row of this.db.query<{ timestamp: string }>(
+            `SELECT timestamp
            FROM recipe_history
            WHERE recipe_id = ?`,
-          [recipe.id]
-        )) {
+            [recipe.id],
+          )
+        ) {
           recipe.history.push(toDate(row.timestamp));
         }
       }
 
       if (loadReviews) {
-        for (const row of this.db.query<{ timestamp: string }>(`SELECT ${columns(Review.columns)} FROM recipe_review WHERE recipe_id = ?`, [recipe.id])) {
+        for (
+          const row of this.db.query<{ timestamp: string }>(
+            `SELECT ${
+              columns(Review.columns)
+            } FROM recipe_review WHERE recipe_id = ?`,
+            [recipe.id],
+          )
+        ) {
           recipe.reviews.push(new Review(toCamelCase(row)));
         }
       }

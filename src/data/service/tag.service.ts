@@ -118,12 +118,12 @@ export class TagService implements Service<Tag> {
     const titles = Object.keys(titleToTags);
     for (
       const row of this.db.query<Tag>(
-      `SELECT id, title FROM tag WHERE title IN (${
-        titles.map(() => "?").join(", ")
-      })`,
-      titles,
-    )
-      ) {
+        `SELECT id, title FROM tag WHERE title IN (${
+          titles.map(() => "?").join(", ")
+        })`,
+        titles,
+      )
+    ) {
       titleToTags[row.title].id = row.id;
     }
   }
