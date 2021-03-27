@@ -1,5 +1,12 @@
 export function toInt(s?: string, _default = 0): number {
-  return parseInt(s || "", 10) || _default;
+  if (s === undefined) {
+    return _default;
+  }
+  const parsed = parseInt(s, 10);
+  if (isNaN(parsed)) {
+    return _default;
+  }
+  return parsed;
 }
 
 export function toDate(source?: Date | string, _default = new Date()): Date {
@@ -9,7 +16,11 @@ export function toDate(source?: Date | string, _default = new Date()): Date {
   if (source instanceof Date) {
     return source;
   }
-  return new Date(source);
+  const parsed = new Date(toInt(source, NaN));
+  if (isNaN(parsed.getTime())) {
+    return _default;
+  }
+  return parsed;
 }
 
 const SNAKE_CASE_PATTERN = /_([a-z])/g;
