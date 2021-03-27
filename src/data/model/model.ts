@@ -1,4 +1,4 @@
-import { toDate } from "../convert.ts";
+import { toDate } from "../util/convert.ts";
 
 export interface ModelArgs {
   id?: number;

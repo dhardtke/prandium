@@ -1,4 +1,4 @@
-import { toInt } from "../../data/convert.ts";
+import { toInt } from "../../data/util/convert.ts";
 import { Oak } from "../../deps.ts";
 import { Pagination, PaginationBuilder } from "../../data/pagination.ts";
 

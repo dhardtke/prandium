@@ -1,4 +1,4 @@
-import { toInt } from "../convert.ts";
+import { toInt } from "../util/convert.ts";
 
 export interface Duration {
   years: number;

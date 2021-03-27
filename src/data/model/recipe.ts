@@ -1,4 +1,4 @@
-import { toDate } from "../convert.ts";
+import { toDate } from "../util/convert.ts";
 import { Model, ModelArgs } from "./model.ts";
 import { Tag } from "./tag.ts";
 

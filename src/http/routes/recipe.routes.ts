@@ -1,4 +1,4 @@
-import { toInt } from "../../data/convert.ts";
+import { toInt } from "../../data/util/convert.ts";
 import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { Oak } from "../../deps.ts";

@@ -78,29 +78,6 @@ export function toArray<S, T>(
     .map((src: S) => mapper(src));
 }
 
-export function map<S, T>(
-  maybe: S,
-  mapper: (src: NonNullable<S>) => T = (src) => src as unknown as T,
-): T | undefined {
-  return maybe ? mapper(maybe!) : undefined;
-}
-
-export function reduceFirst<S, T, R>(
-  data: Generator<S>,
-  mapper: (src: S) => T = (src) => src as unknown as T,
-  reducer: (first: T, src: S, state: R) => void,
-  state: R = {} as R,
-): T {
-  let first: T | undefined = undefined;
-  for (const row of data) {
-    if (!first) {
-      first = mapper(row);
-    }
-    reducer(first, row, state);
-  }
-  return first!;
-}
-
 export function pushAll<T>(source: T[], target: T[]): void {
   source.forEach((el) => target.push(el));
 }

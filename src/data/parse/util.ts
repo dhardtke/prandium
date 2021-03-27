@@ -1,4 +1,4 @@
-import { toInt } from "../convert.ts";
+import { toInt } from "../util/convert.ts";
 
 export function first<T>(
   value?: /*SchemaValue<T>*/ readonly T[] | T,
