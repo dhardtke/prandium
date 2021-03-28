@@ -10,8 +10,9 @@
         noMargin: true
     }) %>
     <a class="btn btn-success" href="<%= h.u.recipeImport() %>" role="button">
-        <% ~h.i("cloud-arrow-down-fill") %>
-        <%= h.t("recipe.import.title") %>
+        <span class="me-2">
+            <% ~h.i("cloud-arrow-down-fill") %>
+        </span><%= h.t("recipe.import.title") %>
     </a>
 </div>
 
