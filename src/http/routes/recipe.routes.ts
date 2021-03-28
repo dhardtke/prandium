@@ -33,16 +33,8 @@ router
           },
         ),
     );
-    // TODO move to object for default args
-    const tags = ctx.state.services.TagService.list({
-      filters: { tagIdsWithSameRecipes: tagIds },
-    });
-    // TODO move url to adapter / template render as global var? or as helper?
     await ctx.render(RecipeListTemplate, {
       recipes,
-      tags,
-      tagIds,
-      requestUrl: ctx.request.url.toString(),
     });
   })
   .get("/import", async (ctx: Oak.Context<AppState>) => {
