@@ -118,12 +118,10 @@ export class NavbarTagFilter {
     $item.querySelector(SELECTORS.TITLE)!.textContent = tag.title;
     $item.querySelector(SELECTORS.RECIPE_COUNT)!.textContent = tag.recipeCount + "";
     $item.href = this.buildTagUrl(tag.id);
-    $input.disabled = true;
-    if (this.activeTagIds.has(tag.id)) {
-      $item.classList.add(CLASSES.ACTIVE);
-      $input.disabled = false;
-    }
-    $item.classList.toggle(CLASSES.DISABLED, tag.recipeCount === 0);
+    const isActive = this.activeTagIds.has(tag.id);
+    $input.disabled = !isActive && tag.recipeCount === 0;
+    $item.classList.toggle(CLASSES.ACTIVE, isActive);
+    $item.classList.toggle(CLASSES.DISABLED, $input.disabled);
     $item.classList.toggle(CLASSES.HIDDEN, this.hiddenTagIds.has(tag.id));
   }
 
