@@ -153,12 +153,11 @@
         <% recipe.instructions.forEach((instruction, i) => { %>
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading-instruction-<%= i %>">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ingredient-<%= i %>"
-                            aria-expanded="true" aria-controls="collapse-ingredient-<%= i %>">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ingredient-<%= i %>">
                         <%= h.t("recipe.ingredients.step", {step: i + 1}) %>
                     </button>
                 </h2>
-                <div id="collapse-ingredient-<%= i %>" class="accordion-collapse collapse show" aria-labelledby="heading-instruction-<%= i %>">
+                <div id="collapse-ingredient-<%= i %>" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <%= instruction %>
                     </div>

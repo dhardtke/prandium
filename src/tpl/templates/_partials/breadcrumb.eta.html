@@ -1,6 +1,6 @@
 <% function renderItem(item, active) { %>
     <% if (active) { %>
-        <li class="breadcrumb-item active" aria-current="page">
+        <li class="breadcrumb-item active">
             <%= item.title %>
         </li>
     <% } else { %>
@@ -12,7 +12,7 @@
     <% } %>
 <% } %>
 
-<nav aria-label="breadcrumb">
+<nav>
     <ol class="breadcrumb<%= typeof noMargin !== "undefined" && noMargin ? " mb-0" : ""%>">
         <% renderItem({title: h.t("home"), url: "/"}, typeof breadcrumb === "undefined") %>
         <% if (typeof breadcrumb !== "undefined") { %>

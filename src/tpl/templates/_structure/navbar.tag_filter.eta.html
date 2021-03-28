@@ -1,7 +1,7 @@
-<button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+<button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
     Tags
 </button>
-<div class="dropdown-menu p-2 dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton2" id="tag-filter">
+<div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
     <div class="input-group mb-2">
         <span class="input-group-text">
             <% ~h.i("funnel") %>
@@ -10,23 +10,7 @@
                placeholder="<%= h.t("navigation.filter_placeholder") %>">
         <button class="btn btn-outline-secondary btn-tag-clear" type="button">Clear</button>
     </div>
-    <div class="overflow-auto list-group list-group-flush pe-2">
-        <% const tags = []; %>
-        <% tags.forEach((tag) => { %>
-            <%
-                const hasTag = tagIds.includes(tag.id);
-                const url = new URL(currentUrl);
-                if (hasTag) {
-                    // TODO move to util method to delete single value
-                    const all = url.searchParams.getAll("tagId");
-                    url.searchParams.delete("tagId");
-                    all.filter((v) => v !== String(tag.id)).forEach((val) => url.searchParams.append("tagId", val));
-                } else {
-                    url.searchParams.append("tagId", tag.id);
-                }
-            %>
-        <% }) %>
-    </div>
+    <div class="overflow-auto list-group list-group-flush pe-2"></div>
     <template>
         <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="">
             <div class="me-auto tag-title"></div>

@@ -10,8 +10,7 @@
                 </div>
             </div>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-nav" aria-controls="navbar-nav"
-                aria-expanded="false" aria-label="<%= h.t("navigation.toggle") %>">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-nav" title="<%= h.t("navigation.toggle") %>">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -20,12 +19,12 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <!-- TODO implement check if user is on home -->
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" href="/">Home</a>
                 </li>
             </ul>
             <form class="d-flex" method="get" action="<%= h.u.recipeList() %>">
                 <div class="input-group">
-                    <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" aria-label="<%= h.t("search") %>">
+                    <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>">
                     <%~ includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
                     <button class="btn btn-outline-success" type="submit">
                         <% ~h.i("search") %>
