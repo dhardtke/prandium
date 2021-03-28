@@ -86,6 +86,7 @@ export const IndexTemplate = new Template(
 );
 export const RecipeListTemplate = new Template<{
   recipes: Pagination<Recipe>;
+  tags: Tag[];
 }>(
   "recipe/recipe.list.eta.html",
 );

@@ -10,6 +10,7 @@ import {
   placeholders,
 } from "../util/sql.ts";
 import { OrderBy, Service } from "./service.ts";
+import { idsFilter } from "./util/generic_filters.ts";
 
 function recipeFilter(recipeId?: number): Filter {
   return {
@@ -94,8 +95,9 @@ export class TagService implements Service<Tag> {
         recipeId?: number;
         tagsWithSameRecipes?: {
           ids: number[];
-          includeOthers: boolean;
+          includeOthers?: boolean;
         };
+        ids?: number[];
       };
       loadRecipes?: boolean;
       loadRecipeCount?: boolean;
@@ -105,6 +107,7 @@ export class TagService implements Service<Tag> {
     const filter = buildFilters(
       recipeFilter(args.filters?.recipeId),
       tagsWithSameRecipes(args.filters?.tagsWithSameRecipes),
+      idsFilter(args.filters?.ids),
     );
     const recipeCount = recipeCountColumn(
       args.loadRecipeCount,

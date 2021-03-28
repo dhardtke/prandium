@@ -33,8 +33,14 @@ router
           },
         ),
     );
+    const tags = tagIds.length
+      ? ctx.state.services.TagService.list({
+        filters: { ids: tagIds },
+      })
+      : [];
     await ctx.render(RecipeListTemplate, {
       recipes,
+      tags,
     });
   })
   .get("/import", async (ctx: Oak.Context<AppState>) => {

@@ -15,6 +15,29 @@
     </a>
 </div>
 
+<% if (tags.length) { %>
+    <div class="d-flex flex-wrap">
+        <% tags.forEach((tag, i) => { %>
+            <%  const url = new URL(currentUrl);
+                // TODO move to util method to delete single value
+                const all = url.searchParams.getAll("tagId");
+                url.searchParams.delete("tagId");
+                all.filter((v) => v !== String(tag.id)).forEach((val) => url.searchParams.append("tagId", val));
+            %>
+            <a href="<%= url.toString() %>" class="badge badge-linked bg-secondary mb-3<%= i === tags.length - 1 ? "" : " me-1" %>">
+                <div class="d-flex align-items-center h-100">
+                    <span class="me-1">
+                        <% ~h.i("x-circle-fill") %>
+                    </span>
+                    <%= tag.title %>
+                </div>
+            </a>
+        <% }) %>
+
+        <!-- TODO clear all button -->
+    </div>
+<% } %>
+
 <!-- TODO show placeholder image if no thumbnail is present -->
 <% if (recipes.totalItems) { %>
     <div class="row row-cols-1 row-cols-md-3 g-4">
