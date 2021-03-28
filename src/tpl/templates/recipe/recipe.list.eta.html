@@ -18,13 +18,7 @@
 <% if (tags.length) { %>
     <div class="d-flex flex-wrap">
         <% tags.forEach((tag, i) => { %>
-            <% const url = new URL(currentUrl);
-                // TODO move to util method to delete single value
-                const all = url.searchParams.getAll("tagId");
-                url.searchParams.delete("tagId");
-                all.filter((v) => v !== String(tag.id)).forEach((val) => url.searchParams.append("tagId", val));
-            %>
-            <a href="<%= url.toString() %>" class="badge badge-linked bg-secondary mb-3<%= i === tags.length - 1 ? "" : " me-1" %>">
+            <a href="<%= h.u.removeParameterValue(currentUrl, "tagId", tag.id) %>" class="badge badge-linked bg-secondary mb-3<%= i === tags.length - 1 ? "" : " me-1" %>">
                 <div class="d-flex align-items-center h-100">
                     <span class="me-1">
                         <% ~h.i("x-circle-fill") %>
@@ -34,12 +28,8 @@
             </a>
         <% }) %>
 
-        <%
-            const cleared = new URL(currentUrl);
-            cleared.searchParams.delete("tagId");
-        if (tags.length > 1) {
-        %>
-            <a href="<%= cleared.toString() %>" class="badge badge-linked bg-danger ms-2 mb-3">
+        <% if (tags.length > 1) { %>
+            <a href="<%= h.u.removeParameter(currentUrl, "tagId") %>" class="badge badge-linked bg-danger ms-2 mb-3">
                 <div class="d-flex align-items-center h-100">
                 <span class="me-1">
                     <% ~h.i("x-circle-fill") %>

@@ -45,4 +45,24 @@ export class UrlHelper {
   public thumbnail = (filename: string): string => {
     return `/thumbnails/${filename}`;
   };
+
+  public removeParameterValue(
+    url: URL,
+    parameterName: string,
+    parameterValue: string | number,
+  ): string {
+    const result = new URL(url.toString());
+    const all = result.searchParams.getAll(parameterName);
+    result.searchParams.delete(parameterName);
+    all.filter((v) => v !== parameterValue + "").forEach((val) =>
+      result.searchParams.append(parameterName, val)
+    );
+    return result.toString();
+  }
+
+  public removeParameter(url: URL, parameterName: string): string {
+    const result = new URL(url.toString());
+    result.searchParams.delete(parameterName);
+    return result.toString();
+  }
 }
