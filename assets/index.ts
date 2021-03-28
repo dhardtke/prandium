@@ -3,9 +3,14 @@
 //@ts-ignore
 /// <reference lib="deno.ns" />
 // TODO do not import everything - probably not possible with bootstrap's current architecture
-import "./node_modules/bootstrap/dist/js/bootstrap.js";
+//import * as bootstrap from "./node_modules/bootstrap/dist/js/bootstrap.js";
+export * as bootstrap from "https://cdn.skypack.dev/bootstrap@5.0.0-beta3?min";
 import { NavbarTagFilter } from "./ts/global/_navbar_tag_filter.ts";
 import { recipeDetailPage } from "./ts/page/recipe_detail_page.ts";
+
+// export const bootstrap = {
+//   Tooltip: null
+// };
 
 const globals = [
   () => new NavbarTagFilter()

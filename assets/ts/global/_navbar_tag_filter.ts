@@ -1,10 +1,11 @@
+import { bootstrap } from "../../index.ts";
 import { jaroWinklerDistance } from "../_util/jaro_winkler.ts";
 import { removeUrlParameterValue } from "../_util/remove_url_parameter_value.ts";
 
 declare type Tag = {
   id: number;
   title: string;
-  description: string; // TODO show as tooltip?
+  description: string;
   recipeCount: number;
 };
 
@@ -122,9 +123,17 @@ export class NavbarTagFilter {
     $item.href = this.buildTagUrl(tag.id);
     const isActive = this.activeTagIds.has(tag.id);
     $input.disabled = !isActive;
+    const isDisabled = $input.disabled && tag.recipeCount === 0;
     $item.classList.toggle(CLASSES.ACTIVE, isActive);
-    $item.classList.toggle(CLASSES.DISABLED, $input.disabled && tag.recipeCount === 0);
+    $item.classList.toggle(CLASSES.DISABLED, isDisabled);
     $item.classList.toggle(CLASSES.HIDDEN, this.hiddenTagIds.has(tag.id));
+    $item.dataset.description = tag.description || "";
+    const tooltip = bootstrap.Tooltip.getInstance($item);
+    if (isDisabled) {
+      tooltip.disable();
+    } else {
+      tooltip.enable();
+    }
   }
 
   private load() {
@@ -136,6 +145,12 @@ export class NavbarTagFilter {
         if (!$item) {
           const $fragment = this.$template.content.cloneNode(true) as DocumentFragment;
           $item = $fragment.querySelector("a") as HTMLAnchorElement;
+          new bootstrap.Tooltip($item, {
+            title: () => $item.dataset.description,
+            placement: "left",
+            fallbackPlacements: ["left"],
+            trigger: "hover"
+          });
           this.addItemClickListener($item);
           this.$results.appendChild($fragment);
         }
