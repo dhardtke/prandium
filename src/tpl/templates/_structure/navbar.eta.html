@@ -24,8 +24,9 @@
             </ul>
             <form class="d-flex" method="get" action="<%= h.u.recipeList() %>">
                 <div class="input-group">
-                    <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>">
-                    <%~ includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
+                    <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>"
+                           value="<%= h.u.parameter(currentUrl, "title") %>">
+                    <% ~includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
                     <button class="btn btn-outline-success" type="submit">
                         <% ~h.i("search") %>
                     </button>

@@ -65,4 +65,8 @@ export class UrlHelper {
     result.searchParams.delete(parameterName);
     return result.toString();
   }
+
+  public parameter(url: URL, parameterName: string, _default = ""): string {
+    return url.searchParams.get(parameterName) || _default;
+  }
 }
