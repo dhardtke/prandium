@@ -15,6 +15,7 @@
     "navigation": {
         "filter_placeholder": "Start typing to filter...",
         "filter_title": "Filter",
+        "tags": "Tags",
         "toggle": "Toggle Navigation"
     },
     "recipe": {
