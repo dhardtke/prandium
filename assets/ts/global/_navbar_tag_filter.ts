@@ -116,7 +116,9 @@ export class NavbarTagFilter {
     $input.value = tag.id + "";
     $item.dataset.tagId = tag.id + "";
     $item.querySelector(SELECTORS.TITLE)!.textContent = tag.title;
-    $item.querySelector(SELECTORS.RECIPE_COUNT)!.textContent = tag.recipeCount + "";
+    const $countBadge = $item.querySelector(SELECTORS.RECIPE_COUNT)!;
+    $countBadge.textContent = tag.recipeCount + "";
+    $countBadge.classList.toggle(CLASSES.HIDDEN, tag.recipeCount === 0);
     $item.href = this.buildTagUrl(tag.id);
     const isActive = this.activeTagIds.has(tag.id);
     $input.disabled = !isActive && tag.recipeCount === 0;
