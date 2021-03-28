@@ -20,25 +20,23 @@ router
     const title = ctx.parameter("title");
     const recipes = ctx.paginate(
       service.count({ tagIds, title }),
-      (l, o) =>
+      (limit, offset) =>
         service.list(
-          l,
-          o,
-          ctx.orderBy(),
           {
-            tagIds,
-            title,
+            limit,
+            offset,
+            orderBy: ctx.orderBy(),
+            filters: {
+              tagIds,
+              title,
+            },
           },
         ),
     );
-    const tags = ctx.state.services.TagService.list(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      { tagIdsWithSameRecipes: tagIds },
-    );
+    // TODO move to object for default args
+    const tags = ctx.state.services.TagService.list({
+      filters: { tagIdsWithSameRecipes: tagIds },
+    });
     // TODO move url to adapter / template render as global var? or as helper?
     await ctx.render(RecipeListTemplate, {
       recipes,

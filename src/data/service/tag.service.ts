@@ -1,15 +1,15 @@
-import { Database } from "../db.ts";
+import { Database, QueryParam } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { toArray, toCamelCase } from "../util/convert.ts";
 import {
   buildFilters,
+  buildOrderBySql,
   columns,
   Filter,
-  OrderBy,
   placeholders,
 } from "../util/sql.ts";
-import { Service } from "./service.ts";
+import { OrderBy, Service } from "./service.ts";
 
 function recipeFilter(recipeId?: number): Filter {
   return {
@@ -19,18 +19,55 @@ function recipeFilter(recipeId?: number): Filter {
   };
 }
 
-function tagsWithSameRecipes(tagIds?: number[]): Filter {
+/**
+ * TODO documentation
+ */
+function _sameRecipeIds(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
     sql: () =>
-      `id IN (
-      SELECT tag_id FROM recipe_tag WHERE recipe_id IN (
-        SELECT recipe_id FROM recipe_tag WHERE recipe_tag.tag_id IN (${
+      `recipe_id IN (
+      SELECT recipe_id FROM recipe_tag WHERE recipe_tag.tag_id IN (${
         placeholders(tagIds)
       }) GROUP BY recipe_id HAVING COUNT(*) = ?
-      )
     )`,
     bindings: () => [...tagIds!, tagIds!.length],
+  };
+}
+
+function tagsWithSameRecipes(
+  tags?: { ids: number[]; includeOthers?: boolean },
+): Filter {
+  const internalFilter = _sameRecipeIds(tags?.ids);
+  return {
+    active: Boolean(tags && !tags.includeOthers),
+    sql: () =>
+      `id IN (SELECT tag_id FROM recipe_tag WHERE ${internalFilter.sql()})`,
+    bindings: internalFilter.bindings,
+  };
+}
+
+function recipeCountColumn(
+  active?: boolean,
+  tagIdsWithSameRecipes?: number[],
+): { column: string; bindings: QueryParam[] } {
+  if (!active) {
+    return {
+      column: "",
+      bindings: [],
+    };
+  }
+  const filter = buildFilters(
+    {
+      active: true,
+      sql: () => "tag_id = tag.id",
+    },
+    _sameRecipeIds(tagIdsWithSameRecipes),
+  );
+  return {
+    column:
+      `(SELECT COUNT(*) FROM recipe_tag WHERE ${filter.sql}) AS recipeCount`,
+    bindings: filter.bindings,
   };
 }
 
@@ -49,30 +86,44 @@ export class TagService implements Service<Tag> {
   }
 
   list(
-    limit?: number,
-    offset?: number,
-    orderBy: OrderBy = OrderBy.EMPTY,
-    loadRecipes?: boolean,
-    loadRecipeCount?: boolean,
-    filters?: {
-      recipeId?: number;
-      tagIdsWithSameRecipes?: number[];
-    },
+    args: {
+      limit?: number;
+      offset?: number;
+      orderBy?: OrderBy;
+      filters?: {
+        recipeId?: number;
+        tagsWithSameRecipes?: {
+          ids: number[];
+          includeOthers: boolean;
+        };
+      };
+      loadRecipes?: boolean;
+      loadRecipeCount?: boolean;
+    } = {},
   ): Tag[] {
     // TODO support loadRecipes
     const filter = buildFilters(
-      recipeFilter(filters?.recipeId),
-      tagsWithSameRecipes(filters?.tagIdsWithSameRecipes),
+      recipeFilter(args.filters?.recipeId),
+      tagsWithSameRecipes(args.filters?.tagsWithSameRecipes),
     );
+    const recipeCount = recipeCountColumn(
+      args.loadRecipeCount,
+      args.filters?.tagsWithSameRecipes?.ids,
+    );
+    const cols = columns([
+      ...Tag.columns,
+      recipeCount.column,
+    ]);
     return toArray(
       this.db.query(
-        `SELECT ${columns(Tag.columns)} FROM tag ${
-          orderBy?.sql(Tag.columns)
-        } WHERE ${filter.sql} LIMIT ? OFFSET ?`,
+        `SELECT ${cols} FROM tag WHERE ${filter.sql} ${
+          buildOrderBySql(args.orderBy, Tag.columns)
+        } LIMIT ? OFFSET ?`,
         [
+          ...recipeCount.bindings,
           ...filter.bindings,
-          limit || -1,
-          offset || 0,
+          args.limit || -1,
+          args.offset || 0,
         ],
       ),
       (src) => new Tag(toCamelCase(src)),

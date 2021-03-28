@@ -1,8 +1,8 @@
-import { pushAll, toArray, toCamelCase, toDate } from "../util/convert.ts";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
-import { buildFilters, columns, Filter, OrderBy } from "../util/sql.ts";
-import { Service } from "./service.ts";
+import { pushAll, toArray, toCamelCase, toDate } from "../util/convert.ts";
+import { buildFilters, buildOrderBySql, columns, Filter } from "../util/sql.ts";
+import { OrderBy, Service } from "./service.ts";
 import { TagService } from "./tag.service.ts";
 
 function tagFilter(tagIds?: number[]): Filter {
@@ -54,26 +54,30 @@ export class RecipeService implements Service<Recipe> {
   }
 
   list(
-    limit?: number,
-    offset?: number,
-    orderBy: OrderBy = OrderBy.EMPTY,
-    filters?: {
-      tagIds?: number[];
-      title?: string;
+    args: {
+      limit?: number;
+      offset?: number;
+      orderBy?: OrderBy;
+      filters?: {
+        tagIds?: number[];
+        title?: string;
+      };
     },
   ): Recipe[] {
     const filter = buildFilters(
-      tagFilter(filters?.tagIds),
-      titleFilter(filters?.title),
+      tagFilter(args.filters?.tagIds),
+      titleFilter(args.filters?.title),
     );
     return toArray(
       this.db.query(
         `SELECT ${columns(Recipe.columns)} FROM recipe
-          WHERE ${filter.sql} ${orderBy.sql(Recipe.columns)} LIMIT ? OFFSET ?`,
+          WHERE ${filter.sql} ${
+          buildOrderBySql(args.orderBy, Recipe.columns)
+        } LIMIT ? OFFSET ?`,
         [
           ...filter.bindings,
-          limit || -1,
-          offset || 0,
+          args.limit || -1,
+          args.offset || 0,
         ],
       ),
       (src) => new Recipe(toCamelCase(src)),
@@ -206,16 +210,11 @@ export class RecipeService implements Service<Recipe> {
 
       if (loadTags) {
         pushAll(
-          this.tagService.list(
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
-            {
+          this.tagService.list({
+            filters: {
               recipeId: recipe.id,
             },
-          ),
+          }),
           recipe.tags,
         );
       }

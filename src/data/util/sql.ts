@@ -1,35 +1,5 @@
 import { QueryParam } from "../db.ts";
-
-export class OrderBy {
-  public static EMPTY: OrderBy = new OrderBy();
-
-  private readonly column?: string;
-  private readonly order?: string;
-
-  public constructor(column?: string, order?: string) {
-    this.column = column;
-    this.order = order;
-  }
-
-  public sql(allowedColumns: string[]): string {
-    if (
-      !this.column || !allowedColumns.includes(this.column) ||
-      !["desc", "asc", undefined].includes(this?.order?.toLowerCase())
-    ) {
-      return "";
-    }
-
-    return `ORDER BY ${this.column}${this.order || ""}`.trim();
-  }
-
-  public combine(other: OrderBy): OrderBy {
-    return new OrderBy(); // TODO
-  }
-
-  public static combined(...values: string[]): string {
-    return values.length ? values.filter((s) => Boolean(s)).join(",") : "1";
-  }
-}
+import { OrderBy } from "../service/service.ts";
 
 export interface Filter {
   active: boolean;
@@ -58,15 +28,33 @@ export function buildFilters(...filters: Filter[]): Filters {
   }
 }
 
+export function buildOrderBySql(
+  orderBy: OrderBy | undefined,
+  allowedColumns: string[],
+): string {
+  const source: Map<string, boolean> = orderBy === undefined
+    ? new Map()
+    : orderBy instanceof Map
+    ? orderBy
+    : new Map(Object.entries(orderBy));
+  const columns = Array.from(source.keys())
+    .filter((col) => allowedColumns.includes(col))
+    .map((col) => `${col}${source.get(col) ? " DESC" : ""}`);
+
+  return `ORDER BY ${columns.length ? columns.join(", ") : "TRUE"}`;
+}
+
 export function columns(
   names: string[],
   columnPrefix?: string,
   aliasPrefix?: string,
 ): string {
-  return names.map(
-    (n) =>
-      `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`,
-  ).join(", ");
+  return names
+    .filter((name) => Boolean(name))
+    .map((n) =>
+      `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`
+    )
+    .join(", ");
 }
 
 export function placeholders<T>(count: T[] | number | undefined): string {

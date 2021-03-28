@@ -3,6 +3,7 @@ import { Tag } from "../data/model/tag.ts";
 import { Pagination } from "../data/pagination.ts";
 import { ImportResult } from "../data/parse/import_recipe.ts";
 import { Eta, log, path } from "../deps.ts";
+import { AppState } from "../http/webserver.ts";
 import { root } from "../util.ts";
 import { Helpers } from "./helpers/helpers.ts";
 
@@ -15,6 +16,8 @@ Eta.configure({
 
 interface TemplateData<Data = void> {
   data?: Data;
+  appState: AppState;
+  currentUrl: URL;
   h: typeof Helpers;
 }
 
@@ -26,9 +29,15 @@ export class Template<Data = void> {
     this.filename = filename;
   }
 
-  public render(data?: Data): Promise<string> {
+  public render(
+    appState: AppState,
+    currentUrl: URL,
+    data?: Data,
+  ): Promise<string> {
     return this.updateSource()
-      .then((s) => Eta.render(s, this.buildArgs(data)) as string)
+      .then((s) =>
+        Eta.render(s, this.buildArgs(appState, currentUrl, data)) as string
+      )
       .catch((e) => {
         log.error(`Could not render ${this.filename}`);
         throw e;
@@ -48,8 +57,14 @@ export class Template<Data = void> {
     return this.source;
   }
 
-  private buildArgs(data?: Data): TemplateData {
+  private buildArgs(
+    appState: AppState,
+    currentUrl: URL,
+    data?: Data,
+  ): TemplateData {
     return {
+      appState,
+      currentUrl,
       ...data || {},
       ...{
         h: Helpers,
@@ -69,14 +84,12 @@ export const ServerErrorTemplate = new Template(
 export const IndexTemplate = new Template(
   "index.eta.html",
 );
-export const RecipeListTemplate = new Template<
-  {
-    recipes: Pagination<Recipe>;
-    tags: Tag[];
-    tagIds: number[];
-    requestUrl: string;
-  }
->(
+export const RecipeListTemplate = new Template<{
+  recipes: Pagination<Recipe>;
+  tags: Tag[];
+  tagIds: number[];
+  requestUrl: string;
+}>(
   "recipe/recipe.list.eta.html",
 );
 export const RecipeImportTemplate = new Template<{ results: ImportResult[] }>(

@@ -1,5 +1,6 @@
 import { Eta, Oak } from "../../deps.ts";
 import { Template } from "../../tpl/mod.ts";
+import { AppState } from "../webserver.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {
@@ -12,7 +13,6 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   }
 }
 
-// based on https://deno.land/x/view_engine@v1.4.5/lib/adapters/oak.ts
 export const templateAdapter = (debug?: boolean) => {
   if (!debug) {
     Eta.configure({
@@ -20,9 +20,16 @@ export const templateAdapter = (debug?: boolean) => {
     });
   }
 
-  return async function (ctx: Oak.Context, next: () => Promise<void>) {
+  return async function (
+    ctx: Oak.Context<AppState>,
+    next: () => Promise<void>,
+  ) {
     ctx.render = async function <Data>(template: Template<Data>, data?: Data) {
-      ctx.response.body = await template.render(data);
+      ctx.response.body = await template.render(
+        ctx.state,
+        ctx.request.url,
+        data,
+      );
       ctx.response.headers.set("Content-Type", "text/html; charset=utf-8");
     };
 

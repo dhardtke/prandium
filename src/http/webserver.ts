@@ -7,17 +7,7 @@ import { paginationAdapter } from "./adapters/pagination_adapter.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";
 import { templateAdapter } from "./adapters/template_adapter.ts";
 import { handleNotFound, handleServerError } from "./error.ts";
-import { AssetsRouter } from "./routes/assets.routes.ts";
-import { IndexRouter } from "./routes/index.routes.ts";
-import { RecipeRouter } from "./routes/recipe.routes.ts";
-import { ThumbnailsRouter } from "./routes/thumbnails.routes.ts";
-
-const Routers = [
-  IndexRouter,
-  AssetsRouter,
-  ThumbnailsRouter,
-  RecipeRouter,
-];
+import { Routers } from "./routes/routers.ts";
 
 export interface AppState {
   services: Services;

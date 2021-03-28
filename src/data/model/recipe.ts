@@ -32,6 +32,33 @@ export class Recipe extends Model {
     "instructions",
   ];
 
+  public readonly title!: string;
+  public readonly description?: string;
+  public readonly tags: Tag[];
+  public readonly thumbnail?: string;
+  public readonly source: string;
+  public readonly yield: number;
+  public readonly nutritionCalories?: string;
+  public readonly nutritionCarbohydrate?: string;
+  public readonly nutritionCholesterol?: string;
+  public readonly nutritionFat?: string;
+  public readonly nutritionFiber?: string;
+  public readonly nutritionProtein?: string;
+  public readonly nutritionSaturatedFat?: string;
+  public readonly nutritionSodium?: string;
+  public readonly nutritionSugar?: string;
+  public readonly nutritionTransFat?: string;
+  public readonly nutritionUnsaturatedFat?: string;
+  public readonly prepTime: number;
+  public readonly cookTime: number;
+  public readonly aggregateRatingValue?: number;
+  public readonly aggregateRatingCount?: number;
+  public readonly rating: number;
+  public readonly history: Date[];
+  public readonly reviews: Review[];
+  public readonly ingredients: string[];
+  public readonly instructions: string[];
+
   constructor(
     args: ModelArgs & {
       title: string;
@@ -90,33 +117,6 @@ export class Recipe extends Model {
     this.ingredients = args.ingredients || [];
     this.instructions = args.instructions || [];
   }
-
-  public readonly title!: string;
-  public readonly description?: string;
-  public readonly tags: Tag[];
-  public readonly thumbnail?: string;
-  public readonly source: string;
-  public readonly yield: number;
-  public readonly nutritionCalories?: string;
-  public readonly nutritionCarbohydrate?: string;
-  public readonly nutritionCholesterol?: string;
-  public readonly nutritionFat?: string;
-  public readonly nutritionFiber?: string;
-  public readonly nutritionProtein?: string;
-  public readonly nutritionSaturatedFat?: string;
-  public readonly nutritionSodium?: string;
-  public readonly nutritionSugar?: string;
-  public readonly nutritionTransFat?: string;
-  public readonly nutritionUnsaturatedFat?: string;
-  public readonly prepTime: number;
-  public readonly cookTime: number;
-  public readonly aggregateRatingValue?: number;
-  public readonly aggregateRatingCount?: number;
-  public readonly rating: number;
-  public readonly history: Date[];
-  public readonly reviews: Review[];
-  public readonly ingredients: string[];
-  public readonly instructions: string[];
 }
 
 export class Review {

@@ -1,5 +1,5 @@
+import { OrderBy } from "../../data/service/service.ts";
 import { Oak } from "../../deps.ts";
-import { OrderBy } from "../../data/util/sql.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {
@@ -15,10 +15,16 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
 export const orderByAdapter = () => {
   return async function (ctx: Oak.Context, next: () => Promise<void>) {
     ctx.orderBy = function (): OrderBy {
-      return new OrderBy(
-        ctx.parameter("orderBy"),
-        ctx.parameter("order"),
-      );
+      const raw = ctx.parameter("orderBy"); // e.g. ?orderBy=title:desc;id:asc
+      const result: OrderBy = new Map();
+      if (raw) {
+        const columns = raw.split(";");
+        for (const column of columns) {
+          const [columnName, order] = column.split(":");
+          result.set(columnName, order === "desc");
+        }
+      }
+      return result;
     };
 
     await next();

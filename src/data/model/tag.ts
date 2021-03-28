@@ -4,45 +4,24 @@ import { Recipe } from "./recipe.ts";
 export class Tag extends Model {
   static readonly columns = [...Model.columns, "title", "description"];
 
+  public readonly title: string;
+  public readonly description?: string;
+  public readonly recipes: Iterable<Recipe>;
+  public readonly recipeCount?: number;
+
   constructor(
     args: ModelArgs & {
       title: string;
       description?: string;
       recipes?: Iterable<Recipe>;
+      recipeCount?: number;
     },
   ) {
     super(args);
-    this._title = args.title;
-    this._description = args.description;
-    this._recipes = args.recipes || [];
-  }
-
-  private _title!: string;
-  private _description?: string;
-  private _recipes: Iterable<Recipe>;
-
-  get title(): string {
-    return this._title;
-  }
-
-  set title(value: string) {
-    this._title = value;
-  }
-
-  get description(): string | undefined {
-    return this._description;
-  }
-
-  set description(value: string | undefined) {
-    this._description = value;
-  }
-
-  get recipes(): Iterable<Recipe> {
-    return this._recipes;
-  }
-
-  set recipes(value: Iterable<Recipe>) {
-    this._recipes = value;
+    this.title = args.title;
+    this.description = args.description;
+    this.recipes = args.recipes || [];
+    this.recipeCount = args.recipeCount;
   }
 
   public static createMany(...titles: string[]): Tag[] {

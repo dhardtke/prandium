@@ -19,4 +19,27 @@
             }
         }
     }
+
+    #tag-filter {
+        width: 100%;
+
+        .list-group {
+            max-height: calc(100vh - 200px);
+
+            &-item.disabled {
+                pointer-events: unset;
+                cursor: unset;
+            }
+        }
+
+        @include bootstrap.media-breakpoint-up("lg") {
+            & {
+                width: 350px;
+            }
+
+            .list-group {
+                height: 400px;
+            }
+        }
+    }
 }

@@ -2,13 +2,13 @@
 <html lang="en">
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<% ~includeFile("_structure/favicons.eta.html", {h}) %>
+<% ~includeFile("_structure/favicons.eta.html", {h, appState, currentUrl}) %>
 
 <title><%= title || h.t("appName") %></title>
 <link rel="stylesheet" href="/assets/dist/<%= h.ifExists("index.min.css", "index.css") %>">
 <script src="/assets/dist/<%= h.ifExists("index.min.js", "index.js") %>" async defer></script>
 
-<% ~includeFile("_structure/navbar.eta.html", {h}) %>
+<% ~includeFile("_structure/navbar.eta.html", {h, appState, currentUrl}) %>
 
 <main class="container-xxl">
     <% ~body %>

@@ -20,6 +20,8 @@ $enable-important-utilities: false;
 
 // style changes
 $accordion-button-active-bg: $gray-100;
+$list-group-active-bg: $secondary;
+$list-group-active-border-color: $secondary;
 
 // Layout & components
 @import "../node_modules/bootstrap/scss/root";
