@@ -26,9 +26,19 @@
         .list-group {
             max-height: calc(100vh - 200px);
 
-            &-item.disabled {
-                pointer-events: unset;
-                cursor: unset;
+            &-item {
+                transition: bootstrap.$transition-base;
+
+                &.active {
+                    // fix weird shift when transitioning
+                    margin-top: 0;
+                    border-top-width: 0;
+                }
+
+                &.disabled {
+                    pointer-events: unset;
+                    cursor: unset;
+                }
             }
         }
 
