@@ -121,9 +121,9 @@ export class NavbarTagFilter {
     $countBadge.classList.toggle(CLASSES.HIDDEN, tag.recipeCount === 0);
     $item.href = this.buildTagUrl(tag.id);
     const isActive = this.activeTagIds.has(tag.id);
-    $input.disabled = !isActive && tag.recipeCount === 0;
+    $input.disabled = !isActive;
     $item.classList.toggle(CLASSES.ACTIVE, isActive);
-    $item.classList.toggle(CLASSES.DISABLED, $input.disabled);
+    $item.classList.toggle(CLASSES.DISABLED, $input.disabled && tag.recipeCount === 0);
     $item.classList.toggle(CLASSES.HIDDEN, this.hiddenTagIds.has(tag.id));
   }
 
