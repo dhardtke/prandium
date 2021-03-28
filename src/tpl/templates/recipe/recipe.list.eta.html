@@ -18,7 +18,7 @@
 <% if (tags.length) { %>
     <div class="d-flex flex-wrap">
         <% tags.forEach((tag, i) => { %>
-            <%  const url = new URL(currentUrl);
+            <% const url = new URL(currentUrl);
                 // TODO move to util method to delete single value
                 const all = url.searchParams.getAll("tagId");
                 url.searchParams.delete("tagId");
@@ -34,7 +34,20 @@
             </a>
         <% }) %>
 
-        <!-- TODO clear all button -->
+        <%
+            const cleared = new URL(currentUrl);
+            cleared.searchParams.delete("tagId");
+        if (tags.length > 1) {
+        %>
+            <a href="<%= cleared.toString() %>" class="badge badge-linked bg-danger ms-2 mb-3">
+                <div class="d-flex align-items-center h-100">
+                <span class="me-1">
+                    <% ~h.i("x-circle-fill") %>
+                </span>
+                    Clear all <!-- TODO translate -->
+                </div>
+            </a>
+        <% } %>
     </div>
 <% } %>
 
