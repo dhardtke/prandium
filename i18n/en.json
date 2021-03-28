@@ -12,12 +12,19 @@
     },
     "home": "Home",
     "info": "Info",
+    "navigation": {
+        "filter_placeholder": "Start typing to filter...",
+        "filter_title": "Filter",
+        "toggle": "Toggle Navigation"
+    },
     "recipe": {
+        "clear_all_tags": "Clear all",
         "import": {
             "alert": "The URLs have been processed. Please find the results below.",
             "result": "Result",
             "source_url": "Source URL",
             "title": "Import",
+            "url_info": "One URL per line.",
             "urls": "URLs"
         },
         "ingredients": {

@@ -31,10 +31,10 @@
         <% if (tags.length > 1) { %>
             <a href="<%= h.u.removeParameter(currentUrl, "tagId") %>" class="badge badge-linked bg-danger ms-2 mb-3">
                 <div class="d-flex align-items-center h-100">
-                <span class="me-1">
-                    <% ~h.i("x-circle-fill") %>
-                </span>
-                    Clear all <!-- TODO translate -->
+                    <span class="me-1">
+                        <% ~h.i("x-circle-fill") %>
+                    </span>
+                    <%= h.t("recipe.clear_all_tags") %>
                 </div>
             </a>
         <% } %>
