@@ -26,6 +26,7 @@ const CLASSES = {
   DISABLED: "disabled",
   HIDDEN: "d-none"
 };
+const IS_MOBILE = () => window.matchMedia(`(max-width: 767.98px)`).matches;
 
 export class NavbarTagFilter {
   private readonly $tagFilter: HTMLDivElement;
@@ -147,9 +148,11 @@ export class NavbarTagFilter {
           $item = $fragment.querySelector("a") as HTMLAnchorElement;
           new bootstrap.Tooltip($item, {
             title: () => $item.dataset.description,
-            placement: "left",
+            placement: () => IS_MOBILE() ? "bottom" : "left",
             fallbackPlacements: ["left"],
-            trigger: "hover"
+            trigger: "hover",
+            container: "body",
+            boundary: document.body
           });
           this.addItemClickListener($item);
           this.$results.appendChild($fragment);
