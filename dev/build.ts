@@ -33,6 +33,7 @@ const steps: Step[] = [
     fn: processAsync(
       "assets",
       "esbuild",
+      "--format=esm",
       "--minify",
       "dist/index.js",
       "--outfile=dist/index.min.js",
