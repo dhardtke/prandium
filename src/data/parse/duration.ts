@@ -1,3 +1,4 @@
+import { NUMBERS } from "../util/constants.ts";
 import { toInt } from "../util/convert.ts";
 
 export interface Duration {
@@ -10,7 +11,6 @@ export interface Duration {
   seconds: number;
 }
 
-const NUMBERS = Array.from(Array(10).keys()).map((i) => i + "");
 const yearPattern = `(?<years>\\d{4})`;
 const monthPattern = `(?<months>\\d{2})`;
 const dayPattern = `(?<days>\\d{2})`;

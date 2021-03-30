@@ -28,4 +28,5 @@ Deno.test("toDate should return fallback value when unsuccessful", () => {
 Deno.test("toDate should return parsed value", () => {
   assertEquals(toDate("0", undefined), new Date(0));
   assertEquals(toDate("1616804763", undefined), new Date(1616804763));
+  assertEquals(toDate("2016-09-12T00:00:00.000Z", undefined), new Date("2016-09-12T00:00:00.000Z"));
 });
