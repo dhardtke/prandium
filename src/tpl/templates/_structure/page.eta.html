@@ -6,7 +6,7 @@
 
 <title><%= title || h.t("appName") %></title>
 <link rel="stylesheet" href="/assets/dist/<%= h.ifExists("index.min.css", "index.css") %>">
-<script src="/assets/dist/<%= h.ifExists("index.min.js", "index.js") %>" async defer type="module"></script>
+<script src="/assets/dist/<%= h.ifExists("index.min.js", "index.js") %>" async type="module"></script>
 
 <% ~includeFile("_structure/navbar.eta.html", {h, appState, currentUrl}) %>
 
