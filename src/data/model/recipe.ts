@@ -126,39 +126,15 @@ export class Review {
     "text",
   ];
 
+  public readonly id?: number;
+  public readonly date: Date;
+  public readonly text: string;
+
   constructor(
     args: { id?: number; date: Date | string; text: string },
   ) {
-    this._id = args.id;
-    this._date = toDate(args.date);
-    this._text = args.text;
-  }
-
-  private _id?: number;
-  private _date: Date;
-  private _text: string;
-
-  get id(): number | undefined {
-    return this._id;
-  }
-
-  set id(value: number | undefined) {
-    this._id = value;
-  }
-
-  get date(): Date {
-    return this._date;
-  }
-
-  set date(value: Date) {
-    this._date = value;
-  }
-
-  get text(): string {
-    return this._text;
-  }
-
-  set text(value: string) {
-    this._text = value;
+    this.id = args.id;
+    this.date = toDate(args.date);
+    this.text = args.text;
   }
 }

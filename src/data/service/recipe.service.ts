@@ -234,7 +234,7 @@ export class RecipeService implements Service<Recipe> {
 
       if (loadReviews) {
         for (
-          const row of this.db.query<{ timestamp: string }>(
+          const row of this.db.query(
             `SELECT ${
               columns(Review.columns)
             } FROM recipe_review WHERE recipe_id = ?`,
