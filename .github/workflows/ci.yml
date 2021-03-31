@@ -7,7 +7,7 @@ on:
             - "tests/**"
             - "dev/**"
 env:
-    denoVersion: "v1.8.1"
+    denoVersion: "v1.8.2"
 jobs:
     lint:
         runs-on: ubuntu-latest
