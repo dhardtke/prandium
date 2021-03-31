@@ -45,7 +45,7 @@ jobs:
                     deno-version: ${{ env.denoVersion }}
 
             -   name: Run tests
-                run: deno test --coverage=./cov --unstable --allow-all
+                run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all
 
         #            -   name: Generate lcov
         #                if: matrix.deno == "canary"
