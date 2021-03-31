@@ -1,4 +1,4 @@
-import { bootstrap } from "../../index.ts";
+import { bootstrap } from "../../deps.ts";
 import { jaroWinklerDistance } from "../_util/jaro_winkler.ts";
 import { removeUrlParameterValue } from "../_util/remove_url_parameter_value.ts";
 
