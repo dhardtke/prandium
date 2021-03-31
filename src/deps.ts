@@ -5,7 +5,11 @@ export * as Oak from "https://deno.land/x/oak@v6.5.0/mod.ts";
 export { default as parseIngredient } from "https://cdn.skypack.dev/parse-ingredient@v0.3.0";
 export * from "https://cdn.skypack.dev/numeric-quantity@v1.0.1";
 
-import { format, formatDuration, intervalToDuration, } from "https://cdn.skypack.dev/date-fns@2.19.0";
+import {
+  format,
+  formatDuration,
+  intervalToDuration,
+} from "https://cdn.skypack.dev/date-fns@2.19.0";
 import { default as locale } from "https://cdn.skypack.dev/date-fns@2.19.0/locale";
 
 export const dateFns = {
