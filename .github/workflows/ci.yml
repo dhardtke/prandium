@@ -6,6 +6,8 @@ on:
             - "src/**"
             - "tests/**"
             - "dev/**"
+            - ".github/workflows/*"
+            - "lock.json"
 env:
     denoVersion: "v1.8.2"
 jobs:
