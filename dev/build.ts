@@ -1,4 +1,4 @@
-import { Colors, path } from "../deps.ts";
+import { Colors, path, fs } from "../deps.ts";
 import { processAsync } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
@@ -11,6 +11,10 @@ interface Step {
 
 // TODO build index.min.css and leave index.css unminified
 const steps: Step[] = [
+  {
+    description: "Clean dist/ folder",
+    fn: () => fs.emptyDir("assets/dist")
+  },
   {
     description: "Compile SCSS to CSS",
     fn: processAsync(
@@ -70,7 +74,6 @@ const steps: Step[] = [
 ];
 
 if (import.meta.main) {
-  // TODO clean output dir
   for (const step of steps) {
     const prefix = Colors.blue(`[${step.description}]`);
     console.log(`${prefix} Start`);
