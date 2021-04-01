@@ -135,11 +135,12 @@ if (import.meta.main) {
       "src",
       "assets",
       "i18n",
+      "deps.ts",
     ],
     actions: [
       {
         id: "Server",
-        match: /(\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
+        match: /(deps\.ts|\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
         fn: process(
           undefined,
           "deno",
