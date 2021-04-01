@@ -1,4 +1,4 @@
-import { Colors, path, fs } from "../deps.ts";
+import { Colors, fs, path } from "../deps.ts";
 import { processAsync } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
@@ -13,7 +13,7 @@ interface Step {
 const steps: Step[] = [
   {
     description: "Clean dist/ folder",
-    fn: () => fs.emptyDir("assets/dist")
+    fn: () => fs.emptyDir("assets/dist"),
   },
   {
     description: "Compile SCSS to CSS",
