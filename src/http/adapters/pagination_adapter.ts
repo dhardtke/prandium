@@ -1,5 +1,5 @@
 import { toInt } from "../../data/util/convert.ts";
-import { Oak } from "../../deps.ts";
+import { Oak } from "../../../deps.ts";
 import { Pagination, PaginationBuilder } from "../../data/pagination.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {

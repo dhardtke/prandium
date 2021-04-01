@@ -1,4 +1,4 @@
-import { Eta, Oak } from "../../deps.ts";
+import { Eta, Oak } from "../../../deps.ts";
 import { Template } from "../../tpl/mod.ts";
 import { AppState } from "../webserver.ts";
 

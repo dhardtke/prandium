@@ -1,5 +1,5 @@
 import { TagService } from "../../data/service/tag.service.ts";
-import { Oak } from "../../deps.ts";
+import { Oak } from "../../../deps.ts";
 import { AppState } from "../webserver.ts";
 
 const router: Oak.Router = new Oak.Router({ prefix: "/tag" });

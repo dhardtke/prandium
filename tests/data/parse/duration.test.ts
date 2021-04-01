@@ -1,5 +1,5 @@
 import { Duration, parseDuration } from "../../../src/data/parse/duration.ts";
-import { assertEquals, assertThrows } from "../../deps.ts";
+import { assertEquals, assertThrows } from "../../../deps.ts";
 
 Deno.test("Parse duration datetime successful", () => {
   const tests = new Map<string, Duration>([

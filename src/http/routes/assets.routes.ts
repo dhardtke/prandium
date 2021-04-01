@@ -1,4 +1,4 @@
-import { log, Oak } from "../../deps.ts";
+import { log, Oak } from "../../../deps.ts";
 import { root } from "../../util.ts";
 
 const COMPILED_ASSETS_DIR = root("assets");

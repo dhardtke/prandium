@@ -1,4 +1,4 @@
-import { path } from "./deps.ts";
+import { path } from "../deps.ts";
 
 export function classNames(
   objects: { constructor: { name: string } }[],

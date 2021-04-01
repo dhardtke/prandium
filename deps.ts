@@ -26,6 +26,7 @@ export { LogRecord } from "https://deno.land/std@0.91.0/log/logger.ts";
 export * as Cliffy from "https://deno.land/x/cliffy@v0.18.1/command/mod.ts";
 export * as fs from "https://deno.land/std@0.91.0/fs/mod.ts";
 export * as Colors from "https://deno.land/std@0.91.0/fmt/colors.ts";
+export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
 
 // types
 export type {
@@ -34,3 +35,10 @@ export type {
   Recipe as SchemaRecipe,
   Review as SchemaReview,
 } from "https://cdn.skypack.dev/schema-dts@v0.8.2/schema.d.ts?min";
+
+// tests
+export {
+  assertEquals,
+  assertNotEquals,
+  assertThrows,
+} from "https://deno.land/std@0.91.0/testing/asserts.ts";

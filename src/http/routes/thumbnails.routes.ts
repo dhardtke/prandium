@@ -1,5 +1,5 @@
 import { getThumbnailDir } from "../../data/util/thumbnails.ts";
-import { Oak } from "../../deps.ts";
+import { Oak } from "../../../deps.ts";
 
 const router: Oak.Router = new Oak.Router();
 router.get("/thumbnails/(.+)", async (ctx, next) => {

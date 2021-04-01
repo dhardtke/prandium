@@ -2,12 +2,9 @@
 /// <reference lib="dom" />
 //@ts-ignore
 /// <reference lib="deno.ns" />
+
 import { NavbarTagFilter } from "./ts/global/_navbar_tag_filter.ts";
 import { recipeDetailPage } from "./ts/page/recipe_detail_page.ts";
-
-// export const bootstrap = {
-//   Tooltip: null
-// };
 
 const globals = [
   () => new NavbarTagFilter()

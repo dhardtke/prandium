@@ -1,4 +1,4 @@
-import { Oak } from "../../deps.ts";
+import { Oak } from "../../../deps.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {

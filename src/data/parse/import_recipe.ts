@@ -2,7 +2,7 @@ import {
   SchemaAggregateRating,
   SchemaNutritionInformation,
   SchemaReview,
-} from "../../deps.ts";
+} from "../../../deps.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { downloadThumbnail, fetchCustom } from "../util/thumbnails.ts";

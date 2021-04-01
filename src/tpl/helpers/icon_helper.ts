@@ -1,4 +1,4 @@
-import { log, path } from "../../deps.ts";
+import { log, path } from "../../../deps.ts";
 import { root } from "../../util.ts";
 
 export class IconHelper {

@@ -1,4 +1,4 @@
-import { Oak } from "../../deps.ts";
+import { Oak } from "../../../deps.ts";
 import { IndexTemplate } from "../../tpl/mod.ts";
 import { AppState } from "../webserver.ts";
 

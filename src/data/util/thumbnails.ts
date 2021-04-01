@@ -1,4 +1,4 @@
-import { fs, log, path } from "../../deps.ts";
+import { fs, log, path } from "../../../deps.ts";
 
 export function getThumbnailDir(configDir: string): string {
   return path.join(configDir, "thumbnails");

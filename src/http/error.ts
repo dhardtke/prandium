@@ -1,4 +1,4 @@
-import { log, Oak } from "../deps.ts";
+import { log, Oak } from "../../deps.ts";
 import { NotFoundTemplate, ServerErrorTemplate } from "../tpl/mod.ts";
 import { AppState } from "./webserver.ts";
 

@@ -1,5 +1,5 @@
+import { assertEquals } from "../../../deps.ts";
 import { SchemaParser } from "../../../src/data/parse/schema_parser.ts";
-import { assertEquals } from "../../deps.ts";
 
 Deno.test("hello world #1", () => {
   const x = 1 + 2;

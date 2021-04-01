@@ -1,4 +1,4 @@
-import { fs, path } from "../../deps.ts";
+import { fs, path } from "../../../deps.ts";
 import { root } from "../../util.ts";
 
 export class AssetsHelper {

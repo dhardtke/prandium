@@ -1,6 +1,6 @@
 import { Database } from "../data/db.ts";
 import { Services, servicesFactory } from "../data/service/services.ts";
-import { log, Oak } from "../deps.ts";
+import { log, Oak } from "../../deps.ts";
 import { configDirAdapter } from "./adapters/config_dir_adapter.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";

@@ -1,5 +1,5 @@
 import { toDate, toInt } from "../../../src/data/util/convert.ts";
-import { assertEquals } from "../../deps.ts";
+import { assertEquals } from "../../../deps.ts";
 
 Deno.test("toInt should return fallback value when unsuccessful", () => {
   assertEquals(toInt("", -1), -1);

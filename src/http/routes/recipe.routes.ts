@@ -1,7 +1,7 @@
 import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { toInt } from "../../data/util/convert.ts";
-import { Oak } from "../../deps.ts";
+import { Oak } from "../../../deps.ts";
 import {
   RecipeDetailTemplate,
   RecipeImportTemplate,

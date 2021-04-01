@@ -1,4 +1,4 @@
-import { Dom, SchemaRecipe } from "../../deps.ts";
+import { Dom, SchemaRecipe } from "../../../deps.ts";
 
 const TEXT_HTML = "text/html";
 const LD_JSON = "application/ld+json";

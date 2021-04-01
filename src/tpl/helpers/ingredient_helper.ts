@@ -1,4 +1,4 @@
-import { parseIngredient } from "../../deps.ts";
+import { parseIngredient } from "../../../deps.ts";
 import { roundUpToThreeDigits } from "../../util.ts";
 
 // copied from https://github.com/jakeboone02/parse-ingredient/blob/master/src/index.ts#L3

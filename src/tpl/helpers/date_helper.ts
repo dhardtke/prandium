@@ -1,4 +1,4 @@
-import { dateFns } from "../../deps.ts";
+import { dateFns } from "../../../deps.ts";
 
 // support different locales
 export class DateHelper {

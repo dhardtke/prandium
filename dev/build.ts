@@ -1,4 +1,4 @@
-import { Colors, path } from "./internal/deps.ts";
+import { Colors, path } from "../deps.ts";
 import { processAsync } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));

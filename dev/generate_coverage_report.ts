@@ -1,5 +1,5 @@
 // deno coverage --unstable cov_profile --lcov > cov_profile.lcov
-import { path } from "./internal/deps.ts";
+import { path } from "../deps.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");

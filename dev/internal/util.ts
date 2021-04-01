@@ -1,4 +1,4 @@
-import { path } from "./deps.ts";
+import { path } from "../../deps.ts";
 
 export function process(cwd?: string, ...cmd: string[]): () => Deno.Process {
   return () =>

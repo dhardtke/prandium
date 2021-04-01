@@ -1,4 +1,4 @@
-import { Colors, log, path, sqlite } from "../deps.ts";
+import { Colors, log, path, sqlite } from "../../deps.ts";
 import { classNames } from "../util.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
