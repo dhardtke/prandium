@@ -1,6 +1,6 @@
 export interface OrderBy {
   column: string;
-  order?: "ASC" | "DESC";
+  order?: "ASC" | "DESC" | "asc" | "desc";
 }
 
 export interface Service<T> {

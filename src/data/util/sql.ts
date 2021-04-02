@@ -12,6 +12,8 @@ export interface Filters {
   bindings: QueryParam[];
 }
 
+export const EMPTY_FILTER = { sql: "TRUE", bindings: [] };
+
 export function buildFilters(...filters: Filter[]): Filters {
   const activeFilters = filters.filter((f) => f.active);
   if (activeFilters.length) {
@@ -24,9 +26,11 @@ export function buildFilters(...filters: Filter[]): Filters {
       return result;
     }, { sql: "", bindings: [] });
   } else {
-    return { sql: "TRUE", bindings: [] };
+    return EMPTY_FILTER;
   }
 }
+
+export const EMPTY_ORDER_BY = "ORDER BY TRUE";
 
 export function buildOrderBySql(
   orderBy: OrderBy | undefined,
@@ -39,11 +43,11 @@ export function buildOrderBySql(
       }`;
     }
   }
-  return `ORDER BY TRUE`;
+  return EMPTY_ORDER_BY;
 }
 
 export function columns(
-  names: string[],
+  names: (string | undefined)[],
   columnPrefix?: string,
   aliasPrefix?: string,
 ): string {
