@@ -4,15 +4,18 @@ import {
   buildOrderBySql,
   columns,
   EMPTY_FILTER,
-  EMPTY_ORDER_BY, placeholders,
+  EMPTY_ORDER_BY,
+  placeholders,
 } from "../../../src/data/util/sql.ts";
 
-Deno.test("buildFilters should return EMPTY_FILTER when no filter is active", () => {
+const TEST_PREFIX = "[data/util/sql]";
+
+Deno.test(`${TEST_PREFIX} buildFilters should return EMPTY_FILTER when no filter is active`, () => {
   assertEquals(buildFilters(), EMPTY_FILTER);
   assertEquals(buildFilters({ active: false, sql: () => "" }), EMPTY_FILTER);
 });
 
-Deno.test("buildFilters complex example", () => {
+Deno.test(`${TEST_PREFIX} buildFilters complex example`, () => {
   const filters = [
     { active: true, sql: () => "? = TRUE", bindings: () => ["TRUE"] },
     { active: false, sql: () => "? = FALSE", bindings: () => ["FALSE"] },
@@ -24,18 +27,18 @@ Deno.test("buildFilters complex example", () => {
   });
 });
 
-Deno.test("buildOrderBySql should return EMPTY_ORDER_BY if arg is undefined", () => {
+Deno.test(`${TEST_PREFIX} buildOrderBySql should return EMPTY_ORDER_BY if arg is undefined`, () => {
   assertEquals(buildOrderBySql(undefined, []), EMPTY_ORDER_BY);
 });
 
-Deno.test("buildOrderBySql should return EMPTY_ORDER_BY if column is not allowed", () => {
+Deno.test(`${TEST_PREFIX} buildOrderBySql should return EMPTY_ORDER_BY if column is not allowed`, () => {
   assertEquals(
     buildOrderBySql({ column: "title" }, ["id", "updated_at"]),
     EMPTY_ORDER_BY,
   );
 });
 
-Deno.test("buildOrderBySql should work with sane inputs", () => {
+Deno.test(`${TEST_PREFIX} buildOrderBySql should work with sane inputs`, () => {
   for (const order of [undefined, "asc", "desc"]) {
     const expected = `ORDER BY title${
       order && order !== "asc" ? ` ${order.toUpperCase()}` : ""
@@ -54,7 +57,7 @@ Deno.test("buildOrderBySql should work with sane inputs", () => {
   }
 });
 
-Deno.test("buildOrderBySql should sanitize invalid order identifiers", () => {
+Deno.test(`${TEST_PREFIX} buildOrderBySql should sanitize invalid order identifiers`, () => {
   assertEquals(
     buildOrderBySql({ column: "title", order: "" as "asc" }, ["title"]),
     "ORDER BY title",
@@ -69,7 +72,7 @@ Deno.test("buildOrderBySql should sanitize invalid order identifiers", () => {
   );
 });
 
-Deno.test("columns", () => {
+Deno.test(`${TEST_PREFIX} columns`, () => {
   assertEquals(columns([]), "");
   assertEquals(
     columns([undefined, undefined, "id", undefined, "title"]),
@@ -86,7 +89,7 @@ Deno.test("columns", () => {
   );
 });
 
-Deno.test("placeholders", () => {
+Deno.test(`${TEST_PREFIX} placeholders`, () => {
   assertEquals(placeholders(undefined), "");
   assertEquals(placeholders(3), "?, ?, ?");
   assertEquals(placeholders([1, 2, 3, 4]), "?, ?, ?, ?");

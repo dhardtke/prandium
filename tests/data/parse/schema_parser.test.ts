@@ -1,10 +1,6 @@
-import { assertEquals } from "../../../deps.ts";
 import { SchemaParser } from "../../../src/data/parse/schema_parser.ts";
 
-Deno.test("hello world #1", () => {
-  const x = 1 + 2;
-  assertEquals(x, 3);
-});
+const TEST_PREFIX = "[data/parse/schema_parser]";
 //
 // Deno.test("Complex example", () => {
 //     Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
@@ -14,6 +10,6 @@ Deno.test("hello world #1", () => {
 //     assertNotEquals(actual, null);
 // });
 
-Deno.test("An Error should be thrown if the HTML is not parseable", () => {
+Deno.test(`${TEST_PREFIX} An Error should be thrown if the HTML is not parseable`, () => {
   new SchemaParser("<'><!DOCTYPE xml>").findFirstRecipe();
 });
