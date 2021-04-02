@@ -29,6 +29,7 @@ export class TranslationHelper {
       const translation = this.getTranslation(lang);
       return TranslationHelper.replaceParams(get(key, translation), params);
     } catch (e) {
+      log.debug(() => `[TranslationHelper] Cannot get translation key ${key}.`);
       return undefined;
     }
   };
@@ -53,7 +54,7 @@ export class TranslationHelper {
     if (this.cache.has(path)) {
       return this.cache.get(path)!;
     }
-    log.debug(`${path} not found in cache. Reading from disk...`);
+    log.debug(() => `[TranslationHelper] ${path} not found in cache. Reading from disk...`);
     const parsed = JSON.parse(Deno.readTextFileSync(path));
     this.cache.set(path, parsed);
     return parsed;
