@@ -10,13 +10,17 @@ import {
   formatDuration,
   intervalToDuration,
 } from "https://cdn.skypack.dev/date-fns@2.19.0?min";
-import { default as locale } from "https://cdn.skypack.dev/date-fns@2.19.0/locale?min";
+import { default as en } from "https://cdn.skypack.dev/date-fns@2.19.0/locale/en-US?min";
+import { default as de } from "https://cdn.skypack.dev/date-fns@2.19.0/locale/de?min";
 
 export const dateFns = {
   format,
   formatDuration,
   intervalToDuration,
-  locale,
+  locale: {
+    en,
+    de,
+  },
 };
 
 // utils
