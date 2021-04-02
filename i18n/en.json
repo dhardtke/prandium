@@ -18,6 +18,10 @@
         "tags": "Tags",
         "toggle": "Toggle Navigation"
     },
+    "pagination": {
+        "next": "Next page",
+        "previous": "Previous page"
+    },
     "recipe": {
         "aggregate_rating": "Foreign rating",
         "clear_all_tags": "Clear all",
