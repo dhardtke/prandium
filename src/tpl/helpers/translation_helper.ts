@@ -16,7 +16,7 @@ export class TranslationHelper {
   }
 
   /**
-   * Returns the value of the JSON object for the current language.
+   * Returns the value of the JSON object for the current language or the key if not found.
    * @param key a key such as "breadcrumb.title"
    * @param params parameters to replace in the translation key, e.g. "{{step}}" would be replaced with "1" when passed as "{step: 1}"
    */
@@ -27,10 +27,10 @@ export class TranslationHelper {
     const lang = TranslationHelper.SUPPORTED_LANGUAGES[0]; // TODO support different languages
     try {
       const translation = this.getTranslation(lang);
-      return TranslationHelper.replaceParams(get(key, translation), params);
+      return TranslationHelper.replaceParams(get(key, translation), params) || key;
     } catch (e) {
       log.debug(() => `[TranslationHelper] Cannot get translation key ${key}.`);
-      return undefined;
+      return key;
     }
   };
 
