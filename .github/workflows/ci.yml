@@ -51,8 +51,8 @@ jobs:
                 env:
                     cache-name: cache-deno
                 with:
-                    # deno cache files are stored in `~/.config/deno` on Linux/macOS
-                    path: ~/.config/deno
+                    # deno cache files are stored in `~/.cache/deno` on Linux/macOS
+                    path: ~/.cache/deno
                     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lock.json') }}
                     restore-keys: |
                         ${{ runner.os }}-build-${{ env.cache-name }}-
