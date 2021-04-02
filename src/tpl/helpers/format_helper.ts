@@ -61,6 +61,7 @@ export class FormatHelper {
      * Formats the given number to a string with the given amount of decimals.
      */
     format: (num: number, decimals = 2): string => {
+      // deno-lint-ignore no-undef See https://github.com/denoland/deno/issues/9896
       const formatter = new Intl.NumberFormat("en-US", {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
