@@ -5,8 +5,10 @@
 <% ~includeFile("_structure/favicons.eta.html", {h, appState, currentUrl}) %>
 
 <title><%= title || h.t("appName") %></title>
-<link rel="stylesheet" href="/assets/dist/<%= h.ifExists("index.min.css", "index.css") %>">
-<script src="/assets/dist/<%= h.ifExists("index.min.js", "index.js") %>" async type="module"></script>
+<% const stylesheet = h.ifExists("index.min.css", "index.css") %>
+<link rel="stylesheet" href="/assets/dist/<%= `${stylesheet}?${h.modificationTimestamp(stylesheet)}` %>">
+<% const javascript = h.ifExists("index.min.js", "index.js") %>
+<script src="/assets/dist/<%= `${javascript}?${h.modificationTimestamp(javascript)}` %>" async type="module"></script>
 
 <% ~includeFile("_structure/navbar.eta.html", {h, appState, currentUrl}) %>
 
