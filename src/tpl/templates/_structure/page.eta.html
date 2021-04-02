@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <% ~includeFile("_structure/favicons.eta.html", {h, appState, currentUrl}) %>
 
-<title><%= title || h.t("appName") %></title>
+<title><%= typeof title !== "undefined" ? title : h.t("appName") %></title>
 <% const stylesheet = h.ifExists("index.min.css", "index.css") %>
 <link rel="stylesheet" href="/assets/dist/<%= `${stylesheet}?${h.modificationTimestamp(stylesheet)}` %>">
 <% const javascript = h.ifExists("index.min.js", "index.js") %>
