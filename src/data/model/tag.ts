@@ -7,6 +7,8 @@ export class Tag extends Model {
   public readonly title: string;
   public readonly description?: string;
   public readonly recipes: Iterable<Recipe>;
+
+  // synthetic columns
   public readonly recipeCount?: number;
 
   constructor(

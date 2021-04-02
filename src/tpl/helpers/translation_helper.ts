@@ -27,7 +27,8 @@ export class TranslationHelper {
     const lang = TranslationHelper.SUPPORTED_LANGUAGES[0]; // TODO support different languages
     try {
       const translation = this.getTranslation(lang);
-      return TranslationHelper.replaceParams(get(key, translation), params) || key;
+      return TranslationHelper.replaceParams(get(key, translation), params) ||
+        key;
     } catch (e) {
       log.debug(() => `[TranslationHelper] Cannot get translation key ${key}.`);
       return key;
@@ -54,7 +55,9 @@ export class TranslationHelper {
     if (this.cache.has(path)) {
       return this.cache.get(path)!;
     }
-    log.debug(() => `[TranslationHelper] ${path} not found in cache. Reading from disk...`);
+    log.debug(() =>
+      `[TranslationHelper] ${path} not found in cache. Reading from disk...`
+    );
     const parsed = JSON.parse(Deno.readTextFileSync(path));
     this.cache.set(path, parsed);
     return parsed;

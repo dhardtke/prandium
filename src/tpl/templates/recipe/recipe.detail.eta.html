@@ -41,7 +41,7 @@
                 </span>
                 <span class="me-1">
                     <%= h.t("recipe.time.prep") %>
-                </span><%= h.formatSeconds(recipe.prepTime) %>
+                </span><%= h.date.formatSeconds(recipe.prepTime) %>
             </span>
         </span>
     <% } %>
@@ -54,7 +54,7 @@
                 </span>
                 <span class="me-1">
                     <%= h.t("recipe.time.cook") %>
-                </span><%= h.formatSeconds(recipe.cookTime) %>
+                </span><%= h.date.formatSeconds(recipe.cookTime) %>
             </span>
         </span>
     <% } %>
@@ -68,7 +68,7 @@
                 <span class="me-1">
                     <%= h.t("recipe.time.total") %>
                 </span>
-                <% ~h.formatSeconds(recipe.prepTime + recipe.cookTime) %>
+                <% ~h.date.formatSeconds(recipe.prepTime + recipe.cookTime) %>
             </span>
         </span>
     <% } %>
@@ -87,7 +87,7 @@
     <p class="lead"><%= recipe.description %></p>
 <% } %>
 <% recipe.history.forEach((date) => { %>
-    <div><%= h.format(date) %></div>
+    <div><%= h.date.format(date) %></div>
 <% }) %>
 
 <!-- TODO show metadata like last cooked, etc.? -->
@@ -175,7 +175,7 @@
                 <p><%= review.text %></p>
             </blockquote>
             <figcaption class="blockquote-footer mb-0">
-                <%= h.format(review.date) %>
+                <%= h.date.format(review.date) %>
             </figcaption>
         </figure>
     <% }) %>

@@ -32,16 +32,14 @@ export function buildOrderBySql(
   orderBy: OrderBy | undefined,
   allowedColumns: string[],
 ): string {
-  const source: Map<string, boolean> = orderBy === undefined
-    ? new Map()
-    : orderBy instanceof Map
-    ? orderBy
-    : new Map(Object.entries(orderBy));
-  const columns = Array.from(source.keys())
-    .filter((col) => allowedColumns.includes(col))
-    .map((col) => `${col}${source.get(col) ? " DESC" : ""}`);
-
-  return `ORDER BY ${columns.length ? columns.join(", ") : "TRUE"}`;
+  if (orderBy) {
+    if (allowedColumns.includes(orderBy.column)) {
+      return `ORDER BY ${orderBy.column}${
+        orderBy.order?.toUpperCase() === "DESC" ? " DESC" : ""
+      }`;
+    }
+  }
+  return `ORDER BY TRUE`;
 }
 
 export function columns(

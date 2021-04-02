@@ -1,4 +1,3 @@
-import { bootstrap } from "../../deps.ts";
 import { jaroWinklerDistance } from "../_util/jaro_winkler.ts";
 import { removeUrlParameterValue } from "../_util/remove_url_parameter_value.ts";
 
@@ -26,7 +25,6 @@ const CLASSES = {
   DISABLED: "disabled",
   HIDDEN: "d-none"
 };
-const IS_MOBILE = () => window.matchMedia(`(max-width: 767.98px)`).matches;
 
 export class NavbarTagFilter {
   private readonly $tagFilter: HTMLDivElement;
@@ -128,13 +126,7 @@ export class NavbarTagFilter {
     $item.classList.toggle(CLASSES.ACTIVE, isActive);
     $item.classList.toggle(CLASSES.DISABLED, isDisabled);
     $item.classList.toggle(CLASSES.HIDDEN, this.hiddenTagIds.has(tag.id));
-    $item.dataset.description = tag.description || "";
-    const tooltip = bootstrap.Tooltip.getInstance($item);
-    if (isDisabled) {
-      tooltip.disable();
-    } else {
-      tooltip.enable();
-    }
+    $item.title = !isDisabled && tag.description || "";
   }
 
   private load() {
@@ -146,14 +138,6 @@ export class NavbarTagFilter {
         if (!$item) {
           const $fragment = this.$template.content.cloneNode(true) as DocumentFragment;
           $item = $fragment.querySelector("a") as HTMLAnchorElement;
-          new bootstrap.Tooltip($item, {
-            title: () => $item.dataset.description,
-            placement: () => IS_MOBILE() ? "bottom" : "left",
-            fallbackPlacements: ["left"],
-            trigger: "hover",
-            container: "body",
-            boundary: document.body
-          });
           this.addItemClickListener($item);
           this.$results.appendChild($fragment);
         }

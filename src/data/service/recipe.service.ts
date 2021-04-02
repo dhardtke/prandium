@@ -68,11 +68,24 @@ export class RecipeService implements Service<Recipe> {
       tagFilter(args.filters?.tagIds),
       titleFilter(args.filters?.title),
     );
+    const orderByColumns = [
+      ...Recipe.columns,
+      "last_cooked_at",
+      "cooked_count",
+      "total_time",
+    ];
+    const totalTime = "(prep_time + cook_time) AS total_time";
+    const lastCookedAt =
+      "(SELECT MAX(timestamp) FROM recipe_history WHERE recipe_id = recipe.id) AS last_cooked_at";
+    const cookedCount =
+      "(SELECT COUNT(*) FROM recipe_history WHERE recipe_id = recipe.id) AS cooked_count";
     return toArray(
       this.db.query(
-        `SELECT ${columns(Recipe.columns)} FROM recipe
+        `SELECT ${
+          columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])
+        } FROM recipe
           WHERE ${filter.sql} ${
-          buildOrderBySql(args.orderBy, Recipe.columns)
+          buildOrderBySql(args.orderBy, orderByColumns)
         } LIMIT ? OFFSET ?`,
         [
           ...filter.bindings,

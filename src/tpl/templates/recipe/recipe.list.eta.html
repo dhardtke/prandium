@@ -9,11 +9,32 @@
         ],
         noMargin: true
     }) %>
-    <a class="btn btn-success" href="<%= h.u.recipeImport() %>" role="button">
-        <span class="me-2">
-            <% ~h.i("cloud-arrow-down-fill") %>
-        </span><%= h.t("recipe.import.title") %>
-    </a>
+    <form method="GET" id="orderBy">
+        <div class="input-group input-group-sm">
+            <select class="form-select" title="<%= h.t("recipe.order_by.title") %>" autocomplete="off" name="orderBy">
+                <% const orderBy = h.u.parameter(currentUrl, "orderBy", "title"); %>
+                <% for (const option of ["id", "created_at", "updated_at", "title", "last_cooked_at", "cooked_count",
+                    "aggregate_rating", "rating", "prep_time", "cook_time", "total_time"]) { %>
+                    <option value="<%= option %>"<%= orderBy === option ? " selected" : "" %>>
+                        <%= h.t(`recipe.order_by.options.${option}`) %>
+                    </option>
+                <% } %>
+            </select>
+            <% const order = h.u.parameter(currentUrl, "order", "ASC")?.toUpperCase(); %>
+            <button class="btn btn-outline-secondary" type="submit" name="order" value="<%= order === "ASC" ? "DESC" : "ASC" %>">
+                <% if (order === "ASC") { %>
+                    <% ~h.i("arrow-down") %>
+                <% } else { %>
+                    <% ~h.i("arrow-up") %>
+                <% } %>
+            </button>
+            <% for (const [name, value] of currentUrl.searchParams.entries()) { %>
+                <% if (!["orderBy", "order"].includes(name)) { %>
+                    <input type="hidden" name="<%= name %>" value="<%= value %>">
+                <% } %>
+            <% } %>
+        </div>
+    </form>
 </div>
 
 <% if (tags.length) { %>
@@ -52,6 +73,41 @@
                     <div class="card-body">
                         <h5 class="card-title"><%= recipe.title %></h5>
                         <p class="card-text"><%= recipe.description %></p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <% if (recipe.lastCookedAt) { %>
+                                    <%= h.t("recipe.last_cooked", {distance: h.date.formatDistanceToNow(recipe.lastCookedAt)}) %>
+                                <% } else { %>
+                                    <%= h.t("recipe.not_cooked_yet") %>
+                                <% } %>
+                            </small>
+                        </p>
+                    </div>
+                    <div class="card-footer text-muted d-flex justify-content-between">
+                        <div>
+                            <span title="<%= h.t("recipe.cooked_count") %>" class="me-2">
+                                <span class="me-1">
+                                    <% ~h.i("bar-chart") %>
+                                </span><%= recipe.cookedCount %>
+                            </span>
+                            <span title="<%= h.t("recipe.rating") %>" class="me-2">
+                                <span class="me-1">
+                                    <% ~h.i("star") %>
+                                </span><%= h.number.format(recipe.rating) %>
+                            </span>
+                            <span title="<%= h.t("recipe.aggregate_rating") %>">
+                                <span class="me-1">
+                                    <% ~h.i("people") %>
+                                </span><%= h.number.format(recipe.aggregateRatingValue) %>
+                            </span>
+                        </div>
+
+                        <span class="d-flex align-items-center" title="<%= h.t("recipe.time.total") %>">
+                            <span class="me-1">
+                                <% ~h.i("clock-fill") %>
+                            </span>
+                            <% ~h.date.formatSeconds(recipe.totalTime) %>
+                        </span>
                     </div>
                 </a>
             </div>
@@ -63,3 +119,9 @@
     </div>
 <% } %>
 <% ~includeFile("_partials/pagination.eta.html", {h, pagination: recipes}) %>
+
+<a class="btn btn-success" href="<%= h.u.recipeImport() %>" role="button">
+    <span class="me-2">
+        <% ~h.i("cloud-arrow-down-fill") %>
+    </span><%= h.t("recipe.import.title") %>
+</a>

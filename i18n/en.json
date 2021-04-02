@@ -19,7 +19,9 @@
         "toggle": "Toggle Navigation"
     },
     "recipe": {
+        "aggregate_rating": "Foreign rating",
         "clear_all_tags": "Clear all",
+        "cooked_count": "Cooked count",
         "import": {
             "alert": "The URLs have been processed. Please find the results below.",
             "result": "Result",
@@ -33,9 +35,28 @@
             "title": "Ingredients"
         },
         "instructions": "Instructions",
+        "last_cooked": "Last cooked {{distance}}.",
         "no_recipes_found": "No recipes have been found for the current filter. Please change the filter options or add some more recipes.",
+        "not_cooked_yet": "Not cooked yet.",
         "open": "Open",
+        "order_by": {
+            "options": {
+                "aggregate_rating": "Foreign rating",
+                "cook_time": "Cook time",
+                "cooked_count": "Cooked count",
+                "created_at": "Created",
+                "id": "ID",
+                "last_cooked_at": "Last cooked at",
+                "prep_time": "Prep time",
+                "rating": "Your rating",
+                "title": "Title",
+                "total_time": "Total time",
+                "updated_at": "Updated"
+            },
+            "title": "Order by"
+        },
         "portions": "Portions",
+        "rating": "Rating",
         "reviews": "Reviews",
         "time": {
             "cook": "Cook time",

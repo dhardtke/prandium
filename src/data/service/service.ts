@@ -1,5 +1,7 @@
-// columnName => descending?
-export type OrderBy = Map<string, boolean> | { [columnName: string]: boolean };
+export interface OrderBy {
+  column: string;
+  order?: "ASC" | "DESC";
+}
 
 export interface Service<T> {
   count: () => number;

@@ -1,7 +1,7 @@
+import { Oak } from "../../../deps.ts";
 import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { toInt } from "../../data/util/convert.ts";
-import { Oak } from "../../../deps.ts";
 import {
   RecipeDetailTemplate,
   RecipeImportTemplate,
@@ -25,7 +25,7 @@ router
           {
             limit,
             offset,
-            orderBy: ctx.orderBy(),
+            orderBy: ctx.orderBy({ column: "title" }),
             filters: {
               tagIds,
               title,

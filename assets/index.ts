@@ -5,6 +5,9 @@
 
 import { NavbarTagFilter } from "./ts/global/_navbar_tag_filter.ts";
 import { recipeDetailPage } from "./ts/page/recipe_detail_page.ts";
+import { recipeListPage } from "./ts/page/recipe_list_page.ts";
+
+import "./deps.ts";
 
 const globals = [
   () => new NavbarTagFilter()
@@ -14,6 +17,10 @@ for (const global of globals) {
 }
 
 const routes = [
+  {
+    match: /^\/recipe\/*$/,
+    fn: recipeListPage
+  },
   {
     match: /^\/recipe\/\d+\//,
     fn: recipeDetailPage

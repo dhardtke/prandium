@@ -9,6 +9,7 @@ import {
   format,
   formatDuration,
   intervalToDuration,
+  formatDistanceToNow
 } from "https://cdn.skypack.dev/date-fns@v2.19.0?min";
 import { default as en } from "https://cdn.skypack.dev/date-fns@v2.19.0/locale/en-US?min";
 import { default as de } from "https://cdn.skypack.dev/date-fns@v2.19.0/locale/de?min";
@@ -17,6 +18,7 @@ export const dateFns = {
   format,
   formatDuration,
   intervalToDuration,
+  formatDistanceToNow,
   locale: {
     en,
     de,

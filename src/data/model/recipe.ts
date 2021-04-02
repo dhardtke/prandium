@@ -59,6 +59,11 @@ export class Recipe extends Model {
   public readonly ingredients: string[];
   public readonly instructions: string[];
 
+  // synthetic columns
+  public readonly totalTime?: number;
+  public readonly lastCookedAt?: Date;
+  public readonly cookedCount?: number;
+
   constructor(
     args: ModelArgs & {
       title: string;
@@ -87,6 +92,10 @@ export class Recipe extends Model {
       reviews?: Review[];
       ingredients?: string[];
       instructions?: string[];
+
+      totalTime: number;
+      lastCookedAt: Date | string;
+      cookedCount: number;
     },
   ) {
     super(args);
@@ -116,6 +125,12 @@ export class Recipe extends Model {
     this.reviews = args.reviews || [];
     this.ingredients = args.ingredients || [];
     this.instructions = args.instructions || [];
+
+    this.totalTime = args.totalTime;
+    this.lastCookedAt = args.lastCookedAt
+      ? toDate(args.lastCookedAt)
+      : undefined;
+    this.cookedCount = args.cookedCount;
   }
 }
 
