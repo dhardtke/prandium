@@ -51,8 +51,8 @@ INSTALL_DIR="/home/cook-guide/repository"
 semanage fcontext -a -t httpd_sys_content_t "$CONFIG_DIR/thumbnails(/.*)?"
 restorecon -Rv $CONFIG_DIR/thumbnails
 
-semanage fcontext -a -t httpd_sys_content_t "$INSTALL_DIR/assets/(dist|favicons)(/.*)?"
-restorecon -Rv $INSTALL_DIR/assets/dist $INSTALL_DIR/assets/favicons
+semanage fcontext -a -t httpd_sys_content_t "$INSTALL_DIR/assets/(dist|favicons|icons\.svg)(/.*)?"
+restorecon -Rv $INSTALL_DIR/assets/dist $INSTALL_DIR/assets/favicons $INSTALL_DIR/assets/icons.svg
 ```
 
 # systemd
