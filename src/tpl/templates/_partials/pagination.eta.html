@@ -9,7 +9,9 @@
                 </li>
             <% } else { %>
                 <li class="page-item">
-                    <a class="page-link" href="<%= pagination.previousPage?.url %>" rel="prev" title="<%= h.t("pagination.previous") %>">&lsaquo;</a>
+                    <a class="page-link" href="<%= pagination.previousPage?.url %>" rel="prev" title="<%= h.t("pagination.previous") %>">
+                        <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-left-short"}) %>
+                    </a>
                 </li>
             <% } %>
 
@@ -27,9 +29,10 @@
 
             <% if (pagination.isLastPage) { %>
                 <li class="page-item disabled">
-                    <span class="page-link">&rsaquo;</span>
+                    <span class="page-link">
+                        <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-right-short"}) %>
+                    </span>
                 </li>
-
             <% } else { %>
                 <li class="page-item">
                     <a class="page-link" href="<%= pagination.nextPage?.url %>" rel="next" title="<%= h.t("pagination.next") %>">
