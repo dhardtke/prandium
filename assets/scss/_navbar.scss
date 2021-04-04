@@ -1,6 +1,12 @@
 @use "_bootstrap";
 
 .navbar {
+    background: bootstrap.$dark;
+
+    .container-xxl {
+        align-items: stretch;
+    }
+
     .navbar-brand {
         .bi {
             width: 24px;
@@ -17,6 +23,22 @@
             .app-name {
                 color: bootstrap.$danger;
             }
+        }
+    }
+
+    @include bootstrap.media-breakpoint-up('sm') {
+        .navbar-options {
+            order: 1;
+        }
+    }
+
+    #dark-mode-switcher {
+        @include bootstrap.media-breakpoint-up('sm') {
+            margin-left: 1rem;
+        }
+
+        @include bootstrap.media-breakpoint-down('sm') {
+            margin-right: 1rem;
         }
     }
 

@@ -18,10 +18,6 @@ $utilities: map-remove($utilities, align, float, shadow, top, bottom, start, end
   line-height, text-decoration, text-transform, white-space, gradient, user-select, pointer-events, rounded, rounded-top, rounded-end,
   rounded-bottom, rounded-start, visibility);
 
-//// remove xxl breakpoint
-//$grid-breakpoints: map-remove($grid-breakpoints, xxl);
-//$container-max-widths: map-remove($container-max-widths, xxl);
-
 // minor tweaks
 $enable-important-utilities: false;
 

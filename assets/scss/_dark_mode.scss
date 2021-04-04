@@ -1,0 +1,92 @@
+@use "_bootstrap";
+
+.dark {
+    body {
+        background: bootstrap.$dark;
+    }
+
+    .dropdown-menu {
+        background: bootstrap.$dark;
+        border-color: bootstrap.$secondary;
+    }
+
+    .text-muted {
+        color: #9b9b9b;
+    }
+
+    .navbar {
+        background: bootstrap.$cyan-900;
+    }
+
+    a,
+    h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1,
+    p,
+    .breadcrumb-item.active {
+        color: #fff;
+    }
+
+    .bg-dark {
+        background: #fff;
+        color: #000;
+    }
+
+    .form-select {
+        background: transparent;
+        color: #fff;
+        border-color: bootstrap.$secondary;
+    }
+
+    .page-item {
+        &.active {
+            .page-link {
+                background: bootstrap.$secondary;
+                border-color: transparent;
+            }
+        }
+
+        &.disabled {
+            .page-link {
+                background: transparent;
+            }
+        }
+
+        .page-link {
+            background: transparent;
+            border-color: bootstrap.$secondary;
+        }
+
+        &:not(.active):not(.disabled) {
+            .page-link {
+                &:hover {
+                    color: bootstrap.$secondary;
+                }
+            }
+        }
+    }
+
+    .card {
+        background: transparent;
+        border-color: bootstrap.$secondary;
+
+        .card-header {
+            border-color: bootstrap.$secondary;
+        }
+    }
+
+    .list-group-item, .accordion-item,
+    .accordion-button {
+        color: #fff;
+        background: transparent;
+        border-color: bootstrap.$secondary;
+    }
+
+    .list-group-item {
+        &.active {
+            background: bootstrap.$secondary;
+        }
+    }
+
+    .accordion-button::after {
+        filter: brightness(1) sepia(0) hue-rotate(180deg) saturate(5);
+    }
+}

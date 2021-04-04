@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top">
     <div class="container-xxl">
         <a class="navbar-brand" href="/">
             <div class="d-flex align-items-center">
@@ -10,11 +10,25 @@
                 </div>
             </div>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-nav" title="<%= h.t("navigation.toggle") %>">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbar-nav">
+        <div class="d-flex navbar-options">
+            <div class="ms-auto h-100">
+                <button id="dark-mode-switcher" type="button" class="btn btn-sm btn-outline-light h-100">
+                    <span class="active">
+                        <% ~h.i("moon-fill") %>
+                    </span>
+                    <span class="inactive">
+                        <% ~h.i("moon") %>
+                    </span>
+                </button>
+            </div>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-nav" title="<%= h.t("navigation.toggle") %>">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse align-items-stretch" id="navbar-nav">
             <!--  mb-2 mb-md-0 -->
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
@@ -22,16 +36,18 @@
                     <a class="nav-link active" href="/">Home</a>
                 </li>
             </ul>
-            <form class="d-flex" method="get" action="<%= h.u.recipeList() %>">
-                <div class="input-group">
-                    <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>"
-                           value="<%= h.u.parameter(currentUrl, "title") %>">
-                    <% ~includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
-                    <button class="btn btn-outline-success" type="submit">
-                        <% ~h.i("search") %>
-                    </button>
-                </div>
-            </form>
+            <div class="d-flex">
+                <form class="d-flex w-100" method="get" action="<%= h.u.recipeList() %>">
+                    <div class="input-group">
+                        <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>"
+                               value="<%= h.u.parameter(currentUrl, "title") %>">
+                        <% ~includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
+                        <button class="btn btn-outline-success" type="submit">
+                            <% ~h.i("search") %>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
