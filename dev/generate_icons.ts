@@ -23,7 +23,7 @@ const icons = new Set([
   "x-circle-fill",
   "bar-chart",
   "star",
-  "people"
+  "people",
 ]);
 const source = root("assets/node_modules/bootstrap-icons/bootstrap-icons.svg");
 const target = root("assets/icons.svg");
@@ -31,7 +31,10 @@ const target = root("assets/icons.svg");
 const glyphs: string[] = [];
 
 let contents = await Deno.readTextFile(source);
-contents = contents.substring(contents.indexOf("<symbol"), contents.lastIndexOf("</symbol>"));
+contents = contents.substring(
+  contents.indexOf("<symbol"),
+  contents.lastIndexOf("</symbol>"),
+);
 const allGlyphs: { [iconName: string]: string } = {};
 const ID_PATTERN = /id=["'](.*?)["']/;
 
@@ -53,4 +56,7 @@ for (const icon of icons) {
   glyphs.push(glyph);
 }
 
-await Deno.writeTextFile(target, `<svg xmlns="http://www.w3.org/2000/svg">${glyphs.join("")}</svg>`);
+await Deno.writeTextFile(
+  target,
+  `<svg xmlns="http://www.w3.org/2000/svg">${glyphs.join("")}</svg>`,
+);
