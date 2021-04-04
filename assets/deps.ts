@@ -1,3 +1,4 @@
-// TODO do not import everything - probably not possible with bootstrap's current architecture
-//import * as bootstrap from "./node_modules/bootstrap/dist/js/bootstrap.js";
-export * as bootstrap from "https://cdn.skypack.dev/bootstrap@5.0.0-beta3?min";
+import * as Dropdown from "https://cdn.skypack.dev/bootstrap@5.0.0-beta3/js/dist/dropdown.js?min";
+import * as Collapse from "https://cdn.skypack.dev/bootstrap@5.0.0-beta3/js/dist/collapse.js?min";
+console.assert(Boolean(Dropdown));
+console.assert(Boolean(Collapse));
