@@ -114,6 +114,29 @@ interface Options {
   debug?: boolean;
 }
 
+function removeAndThen(
+  dir: string,
+  glob: string,
+  fn: () => Deno.Process,
+): () => Deno.Process {
+  return () => {
+    const pattern = path.globToRegExp(glob, {
+      extended: true,
+      globstar: true,
+    });
+    for (const f of fs.walkSync(dir)) {
+      if (f.name.match(pattern)) {
+        try {
+          Deno.removeSync(f.path);
+        } catch {
+          // ignore
+        }
+      }
+    }
+    return fn();
+  };
+}
+
 if (import.meta.main) {
   const { options }: { options: Options } = await new Cliffy.Command()
     .option("-p, --port [port:number]", "the port number.", {
@@ -158,26 +181,34 @@ if (import.meta.main) {
       {
         id: "JS",
         match: /\/assets\/(.+)\.(ts)/,
-        fn: process(
-          undefined,
-          "deno",
-          "bundle",
-          "--lock=lock.json",
-          "--unstable",
-          "assets/index.ts",
-          "assets/dist/index.js",
+        fn: removeAndThen(
+          "assets/dist",
+          "index*js*",
+          process(
+            undefined,
+            "deno",
+            "bundle",
+            "--lock=lock.json",
+            "--unstable",
+            "assets/index.ts",
+            "assets/dist/index.js",
+          ),
         ),
       },
       {
         id: "SCSS",
         match: /\/assets\/(.+)\.(scss)/,
-        fn: process(
-          undefined,
-          "sass",
-          "-I",
-          "assets/node_modules",
-          "assets/index.scss",
-          "assets/dist/index.css",
+        fn: removeAndThen(
+          "assets/dist",
+          "index*css*",
+          process(
+            undefined,
+            "sass",
+            "-I",
+            "assets/node_modules",
+            "assets/index.scss",
+            "assets/dist/index.css",
+          ),
         ),
       },
     ],
