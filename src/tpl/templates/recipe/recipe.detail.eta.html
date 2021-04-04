@@ -26,7 +26,7 @@
         <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">
-                    <% ~h.i("battery-half") %>
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "battery-half"}) %>
                 </span><%= recipe.nutritionCalories %>
             </span>
         </span>
@@ -37,7 +37,7 @@
         <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">
-                    <% ~h.i("layout-wtf") %>
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "layout-wtf"}) %>
                 </span>
                 <span class="me-1">
                     <%= h.t("recipe.time.prep") %>
@@ -50,7 +50,7 @@
         <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">
-                    <% ~h.i("alarm") %>
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "alarm"}) %>
                 </span>
                 <span class="me-1">
                     <%= h.t("recipe.time.cook") %>
@@ -63,7 +63,7 @@
         <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">
-                    <% ~h.i("clock-fill") %>
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "clock-fill"}) %>
                 </span>
                 <span class="me-1">
                     <%= h.t("recipe.time.total") %>
@@ -76,7 +76,7 @@
     <a href="<%= recipe.source %>" target="_blank" class="badge badge-linked bg-dark mb-3 me-1">
         <div class="d-flex align-items-center">
             <span class="me-1">
-                <% ~h.i("link-45deg") %>
+                <% ~includeFile("_partials/icon.eta.html", {h, name: "link-45deg"}) %>
             </span>
             <%= new URL(recipe.source).hostname %>
         </div>
@@ -115,10 +115,10 @@
                             <%= h.t("recipe.portions") %>
                         </div>
                         <button class="btn btn-sm btn-outline-secondary d-flex align-items-center plus" type="button">
-                            <% ~h.i("plus") %>
+                            <% ~includeFile("_partials/icon.eta.html", {h, name: "plus"}) %>
                         </button>
                         <button class="btn btn-sm btn-outline-secondary d-flex align-items-center minus" type="button">
-                            <% ~h.i("dash") %>
+                            <% ~includeFile("_partials/icon.eta.html", {h, name: "dash"}) %>
                         </button>
                     </div>
                 </form>

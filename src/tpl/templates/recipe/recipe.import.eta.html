@@ -22,7 +22,7 @@
         </div>
         <button type="submit" class="btn btn-primary">
             <span class="me-2">
-                <% ~h.i("cloud-arrow-down-fill") %>
+                <% ~includeFile("_partials/icon.eta.html", {h, name: "cloud-arrow-down-fill"}) %>
             </span><%= h.t("recipe.import.title") %>
         </button>
     </form>
@@ -51,14 +51,14 @@
                     <td class="d-flex align-items-center">
                         <% if (result.success) { %>
                             <span class="text-success me-1">
-                                <% ~h.i("check") %>
+                                <% ~includeFile("_partials/icon.eta.html", {h, name: "check"}) %>
                             </span>
                             <a class="btn btn-success btn-sm" href="<%= h.u.recipe(result.recipe) %>" target="_blank">
                                 <%= h.t("recipe.open") %>
                             </a>
                         <% } else { %>
                             <span class="text-danger">
-                                <% ~h.i("x") %>
+                                <% ~includeFile("_partials/icon.eta.html", {h, name: "x"}) %>
                                 <%= result.error %>
                             </span>
                         <% } %>

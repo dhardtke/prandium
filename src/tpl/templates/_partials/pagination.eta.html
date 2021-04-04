@@ -4,7 +4,7 @@
             <% if (pagination.isFirstPage) { %>
                 <li class="page-item disabled">
                     <span class="page-link">
-                        <% ~h.i("arrow-left-short") %>
+                        <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-left-short"}) %>
                     </span>
                 </li>
             <% } else { %>
@@ -33,7 +33,7 @@
             <% } else { %>
                 <li class="page-item">
                     <a class="page-link" href="<%= pagination.nextPage?.url %>" rel="next" title="<%= h.t("pagination.next") %>">
-                        <% ~h.i("arrow-right-short") %>
+                        <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-right-short"}) %>
                     </a>
                 </li>
             <% } %>

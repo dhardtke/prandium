@@ -2,7 +2,7 @@
 <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
     <div class="input-group mb-2">
         <span class="input-group-text">
-            <% ~h.i("funnel") %>
+            <% ~includeFile("_partials/icon.eta.html", {h, name: "funnel"}) %>
         </span>
         <input type="search" class="form-control input-filter" autocomplete="off" title="<%= h.t("navigation.filter_title") %>"
                placeholder="<%= h.t("navigation.filter_placeholder") %>">

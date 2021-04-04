@@ -23,9 +23,9 @@
             <% const order = h.u.parameter(currentUrl, "order", "ASC")?.toUpperCase(); %>
             <button class="btn btn-outline-secondary" type="submit" name="order" value="<%= order === "ASC" ? "DESC" : "ASC" %>">
                 <% if (order === "ASC") { %>
-                    <% ~h.i("arrow-down") %>
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-down"}) %>
                 <% } else { %>
-                    <% ~h.i("arrow-up") %>
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-up"}) %>
                 <% } %>
             </button>
             <% for (const [name, value] of currentUrl.searchParams.entries()) { %>
@@ -43,7 +43,7 @@
             <a href="<%= h.u.removeParameterValue(currentUrl, "tagId", tag.id) %>" class="badge badge-linked bg-secondary mb-3<%= i === tags.length - 1 ? "" : " me-1" %>">
                 <div class="d-flex align-items-center h-100">
                     <span class="me-1">
-                        <% ~h.i("x-circle-fill") %>
+                        <% ~includeFile("_partials/icon.eta.html", {h, name: "x-circle-fill"}) %>
                     </span>
                     <%= tag.title %>
                 </div>
@@ -54,7 +54,7 @@
             <a href="<%= h.u.removeParameter(currentUrl, "tagId") %>" class="badge badge-linked bg-danger ms-2 mb-3">
                 <div class="d-flex align-items-center h-100">
                     <span class="me-1">
-                        <% ~h.i("x-circle-fill") %>
+                        <% ~includeFile("_partials/icon.eta.html", {h, name: "x-circle-fill"}) %>
                     </span>
                     <%= h.t("recipe.clear_all_tags") %>
                 </div>
@@ -87,24 +87,24 @@
                         <div>
                             <span title="<%= h.t("recipe.cooked_count") %>" class="me-2">
                                 <span class="me-1">
-                                    <% ~h.i("bar-chart") %>
+                                    <% ~includeFile("_partials/icon.eta.html", {h, name: "bar-chart"}) %>
                                 </span><%= recipe.cookedCount %>
                             </span>
                             <span title="<%= h.t("recipe.rating") %>" class="me-2">
                                 <span class="me-1">
-                                    <% ~h.i("star") %>
+                                    <% ~includeFile("_partials/icon.eta.html", {h, name: "star"}) %>
                                 </span><%= h.number.format(recipe.rating) %>
                             </span>
                             <span title="<%= h.t("recipe.aggregate_rating") %>">
                                 <span class="me-1">
-                                    <% ~h.i("people") %>
+                                    <% ~includeFile("_partials/icon.eta.html", {h, name: "people"}) %>
                                 </span><%= h.number.format(recipe.aggregateRatingValue) %>
                             </span>
                         </div>
 
                         <span class="d-flex align-items-center" title="<%= h.t("recipe.time.total") %>">
                             <span class="me-1">
-                                <% ~h.i("clock-fill") %>
+                                <% ~includeFile("_partials/icon.eta.html", {h, name: "clock-fill"}) %>
                             </span>
                             <% ~h.date.formatSeconds(recipe.totalTime) %>
                         </span>
@@ -122,6 +122,6 @@
 
 <a class="btn btn-success" href="<%= h.u.recipeImport() %>" role="button">
     <span class="me-2">
-        <% ~h.i("cloud-arrow-down-fill") %>
+        <% ~includeFile("_partials/icon.eta.html", {h, name: "cloud-arrow-down-fill"}) %>
     </span><%= h.t("recipe.import.title") %>
 </a>
