@@ -28,7 +28,7 @@ const tags = Tag.createMany(
   "Lactose",
   "Low Carb",
 );
-tags.forEach((tag) => tagService.create(tag));
+tagService.create(tags);
 for (let i = 0; i < 50; i++) {
   const history = Array.from(Array(5).keys())
     .map((i) => {
@@ -37,7 +37,7 @@ for (let i = 0; i < 50; i++) {
       return d;
     });
 
-  recipeService.create(
+  recipeService.create([
     new Recipe({
       title: `Blätterteig mit Gyrosfüllung und Feta-Käse ${i + 1}`,
       description:
@@ -46,7 +46,7 @@ for (let i = 0; i < 50; i++) {
         "https://www.chefkoch.de/rezepte/2788721431008084/Blaetterteig-mit-Gyrosfuellung-und-Feta-Kaese.html",
       thumbnail: thumbnail,
       yield: 4,
-      calories: 2795,
+      nutritionCalories: "2795 kcal",
       rating: 8.0,
       prepTime: 1800,
       cookTime: 1500,
@@ -105,5 +105,5 @@ for (let i = 0; i < 50; i++) {
         }),
       ],
     }),
-  );
+  ]);
 }

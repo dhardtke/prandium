@@ -93,9 +93,9 @@ export class Recipe extends Model {
       ingredients?: string[];
       instructions?: string[];
 
-      totalTime: number;
-      lastCookedAt: Date | string;
-      cookedCount: number;
+      totalTime?: number;
+      lastCookedAt?: Date | string;
+      cookedCount?: number;
     },
   ) {
     super(args);
