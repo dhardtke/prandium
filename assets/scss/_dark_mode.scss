@@ -15,7 +15,45 @@
     }
 
     .navbar {
-        background: bootstrap.$cyan-900;
+        background: bootstrap.$primary;
+
+        .form-control {
+            border-color: bootstrap.$gray-800;
+            background: transparent;
+
+            &, &::placeholder {
+                color: #fff;
+            }
+        }
+
+        .btn {
+            color: #fff;
+            border-color: bootstrap.$gray-800;
+
+            &:hover {
+                color: bootstrap.$dark;
+                background: #fff;
+            }
+
+            &.dropdown-toggle {
+                &.show {
+                    color: bootstrap.$dark;
+                    background: #fff;
+                }
+            }
+        }
+    }
+
+    @include bootstrap.media-breakpoint-down('sm') {
+        #dark-mode-switcher {
+            color: rgba(255, 255, 255, 0.55);
+            border-color: rgba(255, 255, 255, 0.1);
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.55);
+                background: transparent;
+            }
+        }
     }
 
     a,
@@ -83,6 +121,13 @@
     .list-group-item {
         &.active {
             background: bootstrap.$secondary;
+        }
+
+        &-action {
+            &:hover {
+                background: bootstrap.$secondary;
+                color: bootstrap.$gray-300;
+            }
         }
     }
 

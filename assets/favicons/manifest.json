@@ -9,7 +9,7 @@
   "scope": "/",
   "start_url": "/?homescreen=1",
   "background_color": "transparent",
-  "theme_color": "#dc3545",
+  "theme_color": "#0dcaf0",
   "icons": [
     {
       "src": "/assets/favicons/android-chrome-36x36.png",

@@ -17,7 +17,7 @@ const configuration = {
     dir: "auto", // Primary text direction for name, short_name, and description
     lang: "en-US", // Primary language for name and short_name
     background: "transparent", // Background colour for flattened icons. `string`
-    theme_color: "#dc3545", // Theme color user for example in Android's task switcher. `string`
+    theme_color: "#0dcaf0", // Theme color user for example in Android's task switcher. `string`
     appleStatusBarStyle: "black-translucent", // Style for Apple status bar: "black-translucent", "default", "black". `string`
     display: "standalone", // Preferred display mode: "fullscreen", "standalone", "minimal-ui" or "browser". `string`
     orientation: "natural", // Default orientation: "any", "natural", "portrait" or "landscape". `string`

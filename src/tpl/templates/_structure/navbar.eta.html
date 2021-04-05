@@ -2,7 +2,7 @@
     <div class="container-xxl">
         <a class="navbar-brand" href="/">
             <div class="d-flex align-items-center">
-                <div class="text-danger me-2">
+                <div class="text-info me-2">
                     <% ~includeFile("_partials/icon.eta.html", {h, name: "journal-richtext"}) %>
                 </div>
                 <div class="app-name">
@@ -42,7 +42,7 @@
                         <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>"
                                value="<%= h.u.parameter(currentUrl, "title") %>">
                         <% ~includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
-                        <button class="btn btn-outline-success" type="submit">
+                        <button class="btn btn-outline-info" type="submit">
                             <% ~includeFile("_partials/icon.eta.html", {h, name: "search"}) %>
                         </button>
                     </div>
