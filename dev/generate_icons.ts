@@ -16,14 +16,18 @@ const icons = new Set([
   "plus",
   "dash",
   "cloud-arrow-down-fill",
-  "check",
+  "check-square-fill",
   "x",
   "arrow-down",
   "arrow-up",
+  "arrow-left",
   "x-circle-fill",
   "bar-chart",
   "star",
   "people",
+  "pencil",
+  "three-dots",
+  "trash",
 ]);
 const source = root("assets/node_modules/bootstrap-icons/bootstrap-icons.svg");
 const target = root("assets/icons.svg");

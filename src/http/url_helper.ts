@@ -42,6 +42,14 @@ export class UrlHelper {
     return `/recipe/${recipe.id}/${this.slug(recipe.title)}`;
   };
 
+  public recipeEdit = (recipe: Recipe): string => {
+    return `/recipe/${recipe.id}/${this.slug(recipe.title)}/edit`;
+  };
+
+  public recipeDelete = (recipe: Recipe): string => {
+    return `/recipe/${recipe.id}/${this.slug(recipe.title)}/delete`;
+  };
+
   public thumbnail = (filename: string): string => {
     return `/thumbnails/${filename}`;
   };

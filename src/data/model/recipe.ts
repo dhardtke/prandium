@@ -3,7 +3,7 @@ import { Model, ModelArgs } from "./model.ts";
 import { Tag } from "./tag.ts";
 
 export class Recipe extends Model {
-  static readonly columns = [
+  static columns = [
     ...Model.columns,
     "title",
     "description",
@@ -32,37 +32,37 @@ export class Recipe extends Model {
     "instructions",
   ];
 
-  public readonly title!: string;
-  public readonly description?: string;
-  public readonly tags: Tag[];
-  public readonly thumbnail?: string;
-  public readonly source: string;
-  public readonly yield: number;
-  public readonly nutritionCalories?: string;
-  public readonly nutritionCarbohydrate?: string;
-  public readonly nutritionCholesterol?: string;
-  public readonly nutritionFat?: string;
-  public readonly nutritionFiber?: string;
-  public readonly nutritionProtein?: string;
-  public readonly nutritionSaturatedFat?: string;
-  public readonly nutritionSodium?: string;
-  public readonly nutritionSugar?: string;
-  public readonly nutritionTransFat?: string;
-  public readonly nutritionUnsaturatedFat?: string;
-  public readonly prepTime: number;
-  public readonly cookTime: number;
-  public readonly aggregateRatingValue?: number;
-  public readonly aggregateRatingCount?: number;
-  public readonly rating: number;
-  public readonly history: Date[];
-  public readonly reviews: Review[];
-  public readonly ingredients: string[];
-  public readonly instructions: string[];
+  public title!: string;
+  public description?: string;
+  public tags: Tag[];
+  public thumbnail?: string;
+  public source: string;
+  public yield: number;
+  public nutritionCalories?: string;
+  public nutritionCarbohydrate?: string;
+  public nutritionCholesterol?: string;
+  public nutritionFat?: string;
+  public nutritionFiber?: string;
+  public nutritionProtein?: string;
+  public nutritionSaturatedFat?: string;
+  public nutritionSodium?: string;
+  public nutritionSugar?: string;
+  public nutritionTransFat?: string;
+  public nutritionUnsaturatedFat?: string;
+  public prepTime: number;
+  public cookTime: number;
+  public aggregateRatingValue?: number;
+  public aggregateRatingCount?: number;
+  public rating: number;
+  public history: Date[];
+  public reviews: Review[];
+  public ingredients: string[];
+  public instructions: string[];
 
   // synthetic columns
-  public readonly totalTime?: number;
-  public readonly lastCookedAt?: Date;
-  public readonly cookedCount?: number;
+  public totalTime?: number;
+  public lastCookedAt?: Date;
+  public cookedCount?: number;
 
   constructor(
     args: ModelArgs & {
@@ -135,15 +135,15 @@ export class Recipe extends Model {
 }
 
 export class Review {
-  static readonly columns = [
+  static columns = [
     "id",
     "date",
     "text",
   ];
 
-  public readonly id?: number;
-  public readonly date: Date;
-  public readonly text: string;
+  public id?: number;
+  public date: Date;
+  public text: string;
 
   constructor(
     args: { id?: number; date: Date | string; text: string },

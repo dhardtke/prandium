@@ -98,3 +98,13 @@ export const RecipeDetailTemplate = new Template<
 >(
   "recipe/recipe.detail.eta.html",
 );
+export const RecipeEditTemplate = new Template<
+  { recipe: Recipe }
+>(
+  "recipe/recipe.edit.eta.html",
+);
+export const RecipeDeleteTemplate = new Template<
+  { recipe: Recipe }
+>(
+  "recipe/recipe.delete.eta.html",
+);

@@ -1,5 +1,5 @@
-import { TagService } from "../../data/service/tag.service.ts";
 import { Oak } from "../../../deps.ts";
+import { TagService } from "../../data/service/tag.service.ts";
 import { AppState } from "../webserver.ts";
 
 const router: Oak.Router = new Oak.Router({ prefix: "/tag" });
@@ -11,7 +11,7 @@ router
       parseInt(id, 10)
     );
     const tags = service.list({
-      orderBy: { title: false },
+      orderBy: { column: "title" },
       loadRecipeCount: true,
       filters: {
         tagsWithSameRecipes: {

@@ -265,6 +265,10 @@ export class RecipeService implements Service<Recipe> {
   }
 
   delete(recipes: Recipe[]): void {
-    // TODO
+    this.db.prepare("DELETE FROM recipe WHERE id = ?", (query) => {
+      for (const recipe of recipes) {
+        query([recipe.id]);
+      }
+    });
   }
 }

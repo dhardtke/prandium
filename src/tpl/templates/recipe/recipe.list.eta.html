@@ -29,7 +29,7 @@
                 <% } %>
             </button>
             <% for (const [name, value] of currentUrl.searchParams.entries()) { %>
-                <% if (!["orderBy", "order"].includes(name)) { %>
+                <% if (!["orderBy", "order", "flash"].includes(name)) { %>
                     <input type="hidden" name="<%= name %>" value="<%= value %>">
                 <% } %>
             <% } %>
@@ -63,53 +63,85 @@
     </div>
 <% } %>
 
+<% if (currentUrl.searchParams.get("flash") === "deleteSuccessful") { %>
+    <div class="alert alert-success" role="alert">
+        <strong class="alert-heading"><%= h.t("info") %></strong> <%= h.t("recipe.delete_successful") %>
+    </div>
+<% } %>
+
 <!-- TODO show placeholder image if no thumbnail is present -->
 <% if (recipes.totalItems) { %>
     <div class="row row-cols-1 row-cols-md-3 g-4">
         <% for (const recipe of recipes.items) { %>
             <div class="col">
-                <a class="card card-linked h-100" href="<%= h.u.recipe(recipe) %>">
-                    <img src="<%= h.u.thumbnail(recipe.thumbnail) %>" class="card-img-top" alt="" loading="lazy">
-                    <div class="card-body">
-                        <h5 class="card-title"><%= recipe.title %></h5>
-                        <p class="card-text"><%= recipe.description %></p>
-                        <p class="card-text">
-                            <small class="text-muted">
-                                <% if (recipe.lastCookedAt) { %>
-                                    <%= h.t("recipe.last_cooked", {distance: h.date.formatDistanceToNow(recipe.lastCookedAt)}) %>
-                                <% } else { %>
-                                    <%= h.t("recipe.not_cooked_yet") %>
-                                <% } %>
-                            </small>
-                        </p>
+                <div class="recipe h-100">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown">
+                            <% ~includeFile("_partials/icon.eta.html", {h, name: "three-dots"}) %>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item text-primary" href="<%= h.u.recipeEdit(recipe) %>">
+                                    <span class="me-1">
+                                        <% ~includeFile("_partials/icon.eta.html", {h, name: "pencil"}) %>
+                                    </span><%= h.t("edit") %>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="<%= h.u.recipeDelete(recipe) %>">
+                                    <span class="me-1">
+                                        <% ~includeFile("_partials/icon.eta.html", {h, name: "trash"}) %>
+                                    </span><%= h.t("delete") %>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="card-footer text-muted d-flex justify-content-between">
-                        <div>
-                            <span title="<%= h.t("recipe.cooked_count") %>" class="me-2">
+                    <a class="card card-linked h-100" href="<%= h.u.recipe(recipe) %>">
+                        <img src="<%= h.u.thumbnail(recipe.thumbnail) %>" class="card-img-top" alt="" loading="lazy">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= recipe.title %></h5>
+                            <p class="card-text"><%= recipe.description %></p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <% if (recipe.lastCookedAt) { %>
+                                        <%= h.t("recipe.last_cooked", {distance: h.date.formatDistanceToNow(recipe.lastCookedAt)}) %>
+                                    <% } else { %>
+                                        <%= h.t("recipe.not_cooked_yet") %>
+                                    <% } %>
+                                </small>
+                            </p>
+                        </div>
+                        <div class="card-footer text-muted d-flex justify-content-between">
+                            <div>
+                                <span title="<%= h.t("recipe.cooked_count") %>" class="me-2">
+                                    <span class="me-1">
+                                        <% ~includeFile("_partials/icon.eta.html", {h, name: "bar-chart"}) %>
+                                    </span><%= recipe.cookedCount %>
+                                </span>
+                                <span title="<%= h.t("recipe.rating") %>" class="me-2">
+                                    <span class="me-1">
+                                        <% ~includeFile("_partials/icon.eta.html", {h, name: "star"}) %>
+                                    </span><%= h.number.format(recipe.rating) %>
+                                </span>
+                                <span title="<%= h.t("recipe.aggregate_rating") %>">
+                                    <span class="me-1">
+                                        <% ~includeFile("_partials/icon.eta.html", {h, name: "people"}) %>
+                                    </span><%= h.number.format(recipe.aggregateRatingValue) %>
+                                </span>
+                            </div>
+
+                            <span class="d-flex align-items-center" title="<%= h.t("recipe.time.total") %>">
                                 <span class="me-1">
-                                    <% ~includeFile("_partials/icon.eta.html", {h, name: "bar-chart"}) %>
-                                </span><%= recipe.cookedCount %>
-                            </span>
-                            <span title="<%= h.t("recipe.rating") %>" class="me-2">
-                                <span class="me-1">
-                                    <% ~includeFile("_partials/icon.eta.html", {h, name: "star"}) %>
-                                </span><%= h.number.format(recipe.rating) %>
-                            </span>
-                            <span title="<%= h.t("recipe.aggregate_rating") %>">
-                                <span class="me-1">
-                                    <% ~includeFile("_partials/icon.eta.html", {h, name: "people"}) %>
-                                </span><%= h.number.format(recipe.aggregateRatingValue) %>
+                                    <% ~includeFile("_partials/icon.eta.html", {h, name: "clock-fill"}) %>
+                                </span>
+                                <% ~h.date.formatSeconds(recipe.totalTime) %>
                             </span>
                         </div>
-
-                        <span class="d-flex align-items-center" title="<%= h.t("recipe.time.total") %>">
-                            <span class="me-1">
-                                <% ~includeFile("_partials/icon.eta.html", {h, name: "clock-fill"}) %>
-                            </span>
-                            <% ~h.date.formatSeconds(recipe.totalTime) %>
-                        </span>
-                    </div>
-                </a>
+                    </a>
+                </div>
             </div>
         <% } %>
     </div>

@@ -9,7 +9,21 @@
     ]
 }) %>
 
-<h1><%= recipe.title %></h1>
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+    <h1><%= recipe.title %></h1>
+    <div class="d-flex">
+        <a href="<%= h.u.recipeEdit(recipe) %>" class="btn btn-secondary btn-sm me-2">
+            <span class="me-1">
+                <% ~includeFile("_partials/icon.eta.html", {h, name: "pencil"}) %>
+            </span><%= h.t("edit") %>
+        </a>
+        <a href="<%= h.u.recipeDelete(recipe) %>" class="btn btn-danger btn-sm">
+            <span class="me-1">
+                <% ~includeFile("_partials/icon.eta.html", {h, name: "trash"}) %>
+            </span><%= h.t("delete") %>
+        </a>
+    </div>
+</div>
 
 <% if (recipe.tags.length) { %>
     <div class="d-flex flex-wrap">

@@ -34,8 +34,11 @@ export const paginationAdapter = () => {
     ): Pagination<T> {
       const { page, pageSize } = extractParams();
 
+      const currentUrl = new URL(ctx.request.url.toString());
+      currentUrl.searchParams.delete("flash");
+
       return new PaginationBuilder<T>(total, page, pageSize)
-        .build(listSupplier, ctx.request.url);
+        .build(listSupplier, currentUrl);
     };
 
     await next();

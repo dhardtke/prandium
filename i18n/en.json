@@ -1,5 +1,9 @@
 {
     "appName": "CookGuide",
+    "cancel": "Cancel",
+    "confirmation": "Confirmation",
+    "delete": "Delete",
+    "edit": "Edit",
     "error": {
         "404": {
             "description": "The page you are looking for can not be found.",
@@ -18,6 +22,7 @@
         "tags": "Tags",
         "toggle": "Toggle Navigation"
     },
+    "no": "No",
     "pagination": {
         "next": "Next page",
         "previous": "Previous page"
@@ -26,6 +31,8 @@
         "aggregate_rating": "Foreign rating",
         "clear_all_tags": "Clear all",
         "cooked_count": "Cooked count",
+        "delete_confirmation": "Are you sure you want to delete this Recipe?",
+        "delete_successful": "The Recipe has been deleted successfully.",
         "import": {
             "alert": "The URLs have been processed. Please find the results below.",
             "result": "Result",
@@ -69,5 +76,8 @@
         }
     },
     "recipes": "Recipes",
-    "search": "Search"
+    "save": "Save",
+    "search": "Search",
+    "title": "Title",
+    "yes": "Yes"
 }

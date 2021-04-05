@@ -3,10 +3,14 @@ import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { toInt } from "../../data/util/convert.ts";
 import {
+  RecipeDeleteTemplate,
   RecipeDetailTemplate,
+  RecipeEditTemplate,
   RecipeImportTemplate,
   RecipeListTemplate,
 } from "../../tpl/mod.ts";
+import { UrlHelper } from "../url_helper.ts";
+import { urlWithParams } from "../util.ts";
 import { AppState } from "../webserver.ts";
 
 const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
@@ -64,6 +68,83 @@ router
       const service = ctx.state.services.RecipeService;
       service.create(results.filter((r) => r.success).map((r) => r.recipe!));
       await ctx.render(RecipeImportTemplate, { results });
+    },
+  )
+  .get(
+    "/:id/:slug/edit",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      const service = ctx.state.services.RecipeService;
+      const recipe = service.find(
+        toInt(ctx.parameter("id")),
+        true,
+        true,
+        true,
+      );
+      if (!recipe) {
+        await next();
+      } else {
+        await ctx.render(RecipeEditTemplate, {
+          recipe,
+        });
+      }
+    },
+  )
+  .post(
+    "/:id/:slug/edit",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      const service = ctx.state.services.RecipeService;
+      const recipe = service.find(
+        toInt(ctx.parameter("id")),
+        true,
+        true,
+        true,
+      );
+      if (!recipe) {
+        await next();
+      } else {
+        const formData = await ctx.request.body({ type: "form" }).value;
+        const get = (name: string) => {
+          return formData.get(name) ?? undefined;
+        };
+        recipe.title = get("title")!;
+        console.log(recipe.title);
+        ctx.response.redirect(UrlHelper.INSTANCE.recipe(recipe));
+      }
+    },
+  )
+  .get(
+    "/:id/:slug/delete",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      const service = ctx.state.services.RecipeService;
+      const recipe = service.find(
+        toInt(ctx.parameter("id")),
+      );
+      if (!recipe) {
+        await next();
+      } else {
+        await ctx.render(RecipeDeleteTemplate, {
+          recipe,
+        });
+      }
+    },
+  )
+  .post(
+    "/:id/:slug/delete",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      const service = ctx.state.services.RecipeService;
+      const recipe = service.find(
+        toInt(ctx.parameter("id")),
+      );
+      if (!recipe) {
+        await next();
+      } else {
+        service.delete([recipe]);
+        ctx.response.redirect(
+          urlWithParams(UrlHelper.INSTANCE.recipeList(), {
+            "flash": "deleteSuccessful",
+          }, ctx.request.url),
+        );
+      }
     },
   )
   .get(
