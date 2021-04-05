@@ -10,7 +10,7 @@ const source = "../assets/favicon.svg"; // Source image(s). `string`, `buffer` o
 const configuration = {
     path: "/assets/favicons", // Path for overriding default icons path. `string`
     appName: "CookGuide", // Your application's name. `string`
-    appShortName: "CG", // Your application's short_name. `string`. Optional. If not set, appName will be used
+    appShortName: "CookGuide", // Your application's short_name. `string`. Optional. If not set, appName will be used
     appDescription: null, // Your application's description. `string`
     developerName: null, // Your (or your developer's) name. `string`
     developerURL: null, // Your (or your developer's) URL. `string`
