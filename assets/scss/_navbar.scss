@@ -39,6 +39,14 @@
 
         @include bootstrap.media-breakpoint-down('sm') {
             margin-right: 1rem;
+
+            color: rgba(255, 255, 255, 0.55);
+            border-color: rgba(255, 255, 255, 0.1);
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.55);
+                background: transparent;
+            }
         }
     }
 
