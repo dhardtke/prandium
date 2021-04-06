@@ -14,7 +14,7 @@
     <h1><%= h.t("confirmation") %></h1>
     <p><%= h.t("recipe.delete_confirmation") %></p>
 
-    <a class="btn btn-primary" href="<%= h.u.recipe(recipe) %>">
+    <a class="btn btn-primary me-2" href="<%= h.u.recipe(recipe) %>">
         <span class="me-2">
             <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-left"}) %>
         </span><%= h.t("no") %>

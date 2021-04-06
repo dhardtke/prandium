@@ -9,9 +9,9 @@
     ]
 }) %>
 
-<div class="d-flex justify-content-between align-items-center flex-wrap">
-    <h1><%= recipe.title %></h1>
-    <div class="d-flex">
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+    <h1 class="mb-0"><%= recipe.title %></h1>
+    <div class="d-flex pt-2">
         <a href="<%= h.u.recipeEdit(recipe) %>" class="btn btn-secondary btn-sm me-2">
             <span class="me-1">
                 <% ~includeFile("_partials/icon.eta.html", {h, name: "pencil"}) %>

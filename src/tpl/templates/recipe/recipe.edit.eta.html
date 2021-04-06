@@ -17,7 +17,7 @@
         </label>
         <input class="form-control" id="title" name="title" required value="<%= recipe.title %>">
     </div>
-    <a class="btn btn-danger" href="<%= h.u.recipe(recipe) %>">
+    <a class="btn btn-danger me-2" href="<%= h.u.recipe(recipe) %>">
         <span class="me-2">
             <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-left"}) %>
         </span><%= h.t("cancel") %>
