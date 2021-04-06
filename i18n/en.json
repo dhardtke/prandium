@@ -52,7 +52,7 @@
         "open": "Open",
         "order_by": {
             "options": {
-                "aggregate_rating": "Foreign rating",
+                "aggregate_rating_value": "Foreign rating",
                 "cook_time": "Cook time",
                 "cooked_count": "Cooked count",
                 "created_at": "Created",

@@ -14,7 +14,7 @@
             <select class="form-select" title="<%= h.t("recipe.order_by.title") %>" autocomplete="off" name="orderBy">
                 <% const orderBy = h.u.parameter(currentUrl, "orderBy", "title"); %>
                 <% for (const option of ["id", "created_at", "updated_at", "title", "last_cooked_at", "cooked_count",
-                    "aggregate_rating", "rating", "prep_time", "cook_time", "total_time"]) { %>
+                    "aggregate_rating_value", "rating", "prep_time", "cook_time", "total_time"]) { %>
                     <option value="<%= option %>"<%= orderBy === option ? " selected" : "" %>>
                         <%= h.t(`recipe.order_by.options.${option}`) %>
                     </option>
