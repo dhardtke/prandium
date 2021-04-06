@@ -40,7 +40,8 @@
 <% if (tags.length) { %>
     <div class="d-flex flex-wrap">
         <% tags.forEach((tag, i) => { %>
-            <a href="<%= h.u.removeParameterValue(currentUrl, "tagId", tag.id) %>" class="badge badge-linked bg-secondary mb-3<%= i === tags.length - 1 ? "" : " me-1" %>">
+            <a title="<%= tag.description %>" href="<%= h.u.removeParameterValue(currentUrl, "tagId", tag.id) %>"
+               class="badge badge-linked bg-secondary mb-3<%= i === tags.length - 1 ? "" : " me-1" %>">
                 <div class="d-flex align-items-center h-100">
                     <span class="me-1">
                         <% ~includeFile("_partials/icon.eta.html", {h, name: "x-circle-fill"}) %>
