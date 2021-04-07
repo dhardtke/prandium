@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Generate Coverage Diff" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/out/coverage" programParameters="coverage --unstable" workingDirectory="$PROJECT_DIR$/dev">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
