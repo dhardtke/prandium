@@ -60,7 +60,7 @@ jobs:
                         ${{ runner.os }}-
 
             -   name: Run tests
-                run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all
+                run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all --fail-fast
 
         #            -   name: Generate lcov
         #                if: matrix.deno == "canary"
