@@ -10,6 +10,7 @@ import { Helpers } from "./helpers/helpers.ts";
 const TEMPLATE_DIR = root("src", "tpl", "templates");
 
 Eta.configure({
+  cache: true,
   useWith: true,
   views: TEMPLATE_DIR,
 });
