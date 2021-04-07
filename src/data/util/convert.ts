@@ -47,43 +47,6 @@ export function toCamelCase<T, O>(obj: O): T {
     }, {} as T);
 }
 
-export function removePrefix<T, O>(obj: O, prefix: string): T {
-  return Object
-    .entries(obj)
-    .reduce((acc, [key, val]) => {
-      const modifiedKey = key.replaceAll(prefix, "");
-      const modifiedVal = typeof val === "object" && val !== null
-        ? removePrefix(val as unknown, prefix)
-        : val;
-      return {
-        ...acc,
-        ...{ [modifiedKey]: modifiedVal },
-      };
-    }, {} as T);
-}
-
-export function extractPrefixed<T, O>(
-  obj: O,
-  prefix: string,
-  removePrefix = true,
-): T {
-  return Object
-    .entries(obj)
-    .reduce((acc, [key, val]) => {
-      if (!key.startsWith(prefix)) {
-        return acc;
-      }
-      const modifiedKey = removePrefix ? key.replaceAll(prefix, "") : key;
-      const modifiedVal = typeof val === "object" && val !== null
-        ? extractPrefixed(val as unknown, prefix, removePrefix)
-        : val;
-      return {
-        ...acc,
-        ...{ [modifiedKey]: modifiedVal },
-      };
-    }, {} as T);
-}
-
 export function toArray<S, T>(
   data: Generator<S>,
   mapper: (src: S) => T = (src) => src as unknown as T,

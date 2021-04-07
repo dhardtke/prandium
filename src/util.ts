@@ -39,7 +39,3 @@ export function root(...parts: string[]): string {
 export function roundUpToThreeDigits(n: number): number {
   return Math.round((n + Number.EPSILON) * 1000) / 1000;
 }
-
-export function cond(condition: boolean | undefined, value: string): string {
-  return condition ? value : "";
-}
