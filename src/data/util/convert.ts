@@ -92,6 +92,7 @@ export function toArray<S, T>(
     .map((src: S) => mapper(src));
 }
 
-export function pushAll<T>(source: T[], target: T[]): void {
+export function pushAll<T>(source: T[], target: T[]): T[] {
   source.forEach((el) => target.push(el));
+  return target;
 }

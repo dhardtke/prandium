@@ -1,5 +1,5 @@
-import { toDate, toInt } from "../../../src/data/util/convert.ts";
 import { assertEquals } from "../../../deps.ts";
+import { pushAll, toCamelCase, toDate, toInt } from "../../../src/data/util/convert.ts";
 
 const TEST_PREFIX = "[data/util/convert]";
 
@@ -34,4 +34,33 @@ Deno.test(`${TEST_PREFIX} toDate should return parsed value`, () => {
     toDate("2016-09-12T00:00:00.000Z", undefined),
     new Date("2016-09-12T00:00:00.000Z"),
   );
+});
+
+Deno.test(`${TEST_PREFIX} toCamelCase`, () => {
+  assertEquals(toCamelCase({}), {});
+  assertEquals(toCamelCase({ hello_world: true }), { helloWorld: true });
+  assertEquals(toCamelCase({ bla: null }), { bla: null });
+  assertEquals(toCamelCase({
+    id: 42, created_at: "yesterday", updated_at: null, nested_obj: {
+      created_at: "today",
+      deep_object: {
+        deep: true,
+        arr: [42, 43]
+      }
+    },
+  }), {
+    id: 42, createdAt: "yesterday", updatedAt: null, nestedObj: {
+      createdAt: "today",
+      deepObject: {
+        deep: true,
+        arr: [42, 43]
+      }
+    }
+  });
+});
+
+Deno.test(`${TEST_PREFIX} pushAll`, () => {
+  // assertEquals(pushAll([1, 2, 3], []), [1, 2, 3]);
+  // assertEquals(pushAll([], [4, 5, 6]), [4, 5, 6]);
+  assertEquals(pushAll([4, 5, 6], [1, 2, 3]), [1, 2, 3, 4, 5, 6]);
 });
