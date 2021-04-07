@@ -6,6 +6,7 @@
 <img align="left" src="assets/favicon.svg" width="64" alt="Logo" />
 
 CookGuide is a server-side tool for managing cooking recipes.
+<br clear="left"/>
 
 ## Features
 
