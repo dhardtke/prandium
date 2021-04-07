@@ -2,7 +2,7 @@
 
 # CookGuide
 
-![Logo](assets/favicon.svg | width=100px)
+<img src="assets/favicon.svg" width="100" alt="Logo" />
 
 CookGuide is a server-side tool for managing cooking recipes.
 
