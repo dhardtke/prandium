@@ -1,0 +1,16 @@
+# TODO
+- [ ] Allow custom ratings
+- [ ] Allow storing "last cooked" date
+- [ ] Allow updating recipes by storing their source URL
+- [ ] CI: Build and Release via GitHub Actions
+- [ ] CI: Visualize Coverage
+- [ ] Visualize more meta information on recipe detail page (nutritional info, etc.)
+- [ ] Allow creating Tags
+- [ ] Implement edit / create Recipes
+- [ ] Statistics (possibly using Chart.js)
+- [ ] Maintenance page for e.g. deleting unused thumbnails or vacuuming the DB
+- [ ] Check margins and paddings of all elements, especially on mobile
+- [ ] Infinite Scrolling, allow controlling the amount of Recipes per page
+- [ ] Maybe move Recipe search above the Recipe list?
+- [ ] Extend search: Cook time, Calories, cooked count, excluding tags?
+- [ ] Allow compressing thumbnails: mozjpeg, etc.
