@@ -1,12 +1,17 @@
+<% const edit = typeof recipe !== "undefined"; %>
 <% layout("_structure/page.eta.html", {
-    title: recipe.title
+    title: edit ? recipe.title : h.t("create")
 }) %>
 <% ~includeFile("_partials/breadcrumb.eta.html", {
     h,
     breadcrumb: [
         {title: h.t("recipes"), url: h.u.recipeList()},
-        {title: recipe.title, url: h.u.recipe(recipe)},
-        {title: h.t("edit"), url: h.u.recipeEdit(recipe)}
+        ...edit ? [
+            {title: recipe.title, url: h.u.recipe(recipe)},
+            {title: h.t("edit"), url: h.u.recipeEdit(recipe)}
+        ] : [
+            {title: h.t("create"), url: h.u.recipeCreate()}
+        ]
     ]
 }) %>
 
@@ -15,9 +20,9 @@
         <label for="title" class="form-label">
             <%= h.t("title") %>
         </label>
-        <input class="form-control" id="title" name="title" required value="<%= recipe.title %>">
+        <input class="form-control" id="title" name="title" required value="<%= edit ? recipe.title : '' %>">
     </div>
-    <a class="btn btn-danger me-2" href="<%= h.u.recipe(recipe) %>">
+    <a class="btn btn-danger me-2" href="<%= edit ? h.u.recipe(recipe) : h.u.recipeList() %>">
         <span class="me-2">
             <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-left"}) %>
         </span><%= h.t("cancel") %>

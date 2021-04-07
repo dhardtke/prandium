@@ -88,14 +88,16 @@
         </span>
     <% } %>
 
-    <a href="<%= recipe.source %>" target="_blank" class="badge badge-linked bg-dark mb-3 me-1">
-        <div class="d-flex align-items-center">
-            <span class="me-1">
-                <% ~includeFile("_partials/icon.eta.html", {h, name: "link-45deg"}) %>
-            </span>
-            <%= new URL(recipe.source).hostname %>
-        </div>
-    </a>
+    <% if (recipe.source) { %>
+        <a href="<%= recipe.source %>" target="_blank" class="badge badge-linked bg-dark mb-3 me-1">
+            <div class="d-flex align-items-center">
+                <span class="me-1">
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "link-45deg"}) %>
+                </span>
+                <%= new URL(recipe.source).hostname %>
+            </div>
+        </a>
+    <% } %>
 </div>
 
 <% if (recipe.description) { %>

@@ -1,8 +1,10 @@
 import { Oak } from "../../../deps.ts";
+import { Recipe } from "../../data/model/recipe.ts";
 import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { toInt } from "../../data/util/convert.ts";
 import {
+  RecipeCreateTemplate,
   RecipeDeleteTemplate,
   RecipeDetailTemplate,
   RecipeEditTemplate,
@@ -110,6 +112,26 @@ router
         console.log(recipe.title);
         ctx.response.redirect(UrlHelper.INSTANCE.recipe(recipe));
       }
+    },
+  )
+  .get(
+    "/create",
+    async (ctx: Oak.Context<AppState>) => {
+      await ctx.render(RecipeEditTemplate, undefined);
+    },
+  )
+  .post(
+    "/create",
+    async (ctx: Oak.Context<AppState>) => {
+      const service = ctx.state.services.RecipeService;
+      const formData = await ctx.request.body({ type: "form" }).value;
+      const get = (name: string) => {
+        return formData.get(name) ?? undefined;
+      };
+      const recipe = new Recipe({ title: get("title")! });
+      recipe.title = get("title")!;
+      service.create([recipe]);
+      ctx.response.redirect(UrlHelper.INSTANCE.recipe(recipe));
     },
   )
   .get(

@@ -28,6 +28,7 @@ const icons = new Set([
   "pencil",
   "three-dots",
   "trash",
+  "plus-square",
 ]);
 const source = root("assets/node_modules/bootstrap-icons/bootstrap-icons.svg");
 const target = root("assets/icons.svg");

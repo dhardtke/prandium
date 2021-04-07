@@ -21,7 +21,7 @@ export const InitialMigration = new class InitialMigration extends Migration {
          id                        INTEGER PRIMARY KEY,
          created_at                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
          updated_at                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-         title                     TEXT,
+         title                     TEXT      NOT NULL,
          description               TEXT,
          source                    TEXT,
          thumbnail                 TEXT,

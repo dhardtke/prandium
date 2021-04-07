@@ -36,7 +36,7 @@ export class Recipe extends Model {
   public description?: string;
   public tags: Tag[];
   public thumbnail?: string;
-  public source: string;
+  public source?: string;
   public yield: number;
   public nutritionCalories?: string;
   public nutritionCarbohydrate?: string;
@@ -69,7 +69,7 @@ export class Recipe extends Model {
       title: string;
       description?: string;
       tags?: Tag[];
-      source: string;
+      source?: string;
       thumbnail?: string;
       yield?: number;
       nutritionCalories?: string;

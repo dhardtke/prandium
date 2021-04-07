@@ -42,6 +42,10 @@ export class UrlHelper {
     return `/recipe/${recipe.id}/${this.slug(recipe.title)}`;
   };
 
+  public recipeCreate = (): string => {
+    return `/recipe/create`;
+  };
+
   public recipeEdit = (recipe: Recipe): string => {
     return `/recipe/${recipe.id}/${this.slug(recipe.title)}/edit`;
   };

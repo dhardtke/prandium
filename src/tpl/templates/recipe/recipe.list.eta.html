@@ -153,6 +153,13 @@
 <% } %>
 <% ~includeFile("_partials/pagination.eta.html", {h, pagination: recipes}) %>
 
+
+<a class="btn btn-primary me-2" href="<%= h.u.recipeCreate() %>" role="button">
+    <span class="me-2">
+        <% ~includeFile("_partials/icon.eta.html", {h, name: "plus-square"}) %>
+    </span><%= h.t("create") %>
+</a>
+
 <a class="btn btn-success" href="<%= h.u.recipeImport() %>" role="button">
     <span class="me-2">
         <% ~includeFile("_partials/icon.eta.html", {h, name: "cloud-arrow-down-fill"}) %>
