@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="test --lock=lock.json --coverage=out/coverage --allow-read --unstable --no-check --allow-net">
+  <configuration default="false" name="Test" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="test --lock=lock.json --coverage=out/coverage --allow-read --unstable --allow-net">
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
