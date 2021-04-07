@@ -13,8 +13,6 @@ const icons = new Set([
   "alarm",
   "clock-fill",
   "link-45deg",
-  "plus",
-  "dash",
   "cloud-arrow-down-fill",
   "check-square-fill",
   "x",
