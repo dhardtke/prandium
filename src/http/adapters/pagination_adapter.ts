@@ -1,6 +1,6 @@
 import { toInt } from "../../data/util/convert.ts";
-import { Oak } from "../../../deps.ts";
 import { Pagination, PaginationBuilder } from "../../data/pagination.ts";
+import type { Context } from "https://deno.land/x/oak@v6.5.0/mod.ts";
 
 declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
   interface Context {
@@ -20,7 +20,7 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
 }
 
 export const paginationAdapter = () => {
-  return async function (ctx: Oak.Context, next: () => Promise<void>) {
+  return async function (ctx: Context, next: () => Promise<void>) {
     function extractParams() {
       return {
         page: toInt(ctx.parameter("page"), 1),
