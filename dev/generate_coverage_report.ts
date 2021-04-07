@@ -4,22 +4,33 @@ import { path } from "../deps.ts";
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
 
+const SOURCE_DIR = path.join("out", "coverage");
+const OUTPUT_DIR = path.join("out", "coverage_html");
+
+// remove output dir
+try {
+  await Deno.remove(OUTPUT_DIR, { recursive: true });
+} catch {
+  // ignore
+}
+
 const coverage = Deno.run({
-  cmd: ["deno", "coverage", "--unstable", "out/coverage", "--lcov"],
+  cmd: ["deno", "coverage", "--unstable", SOURCE_DIR, "--lcov"],
   stdout: "piped",
 });
+const output = await coverage.output();
 const coverageStatus = await coverage.status();
 if (coverageStatus.success && coverageStatus.code === 0) {
   const tmpFile = await Deno.makeTempFile({
     suffix: ".lcov",
   });
-  await Deno.writeFileSync(tmpFile, await coverage.output());
+  await Deno.writeFileSync(tmpFile, output);
   const htmlStatus = await Deno.run({
-    cmd: ["genhtml", "-o", "out/coverage_html", tmpFile],
+    cmd: ["genhtml", "-o", OUTPUT_DIR, tmpFile],
   }).status();
-  await Deno.remove(tmpFile);
   if (htmlStatus.success && htmlStatus.code === 0) {
-    console.log(`Generated out/coverage_html`);
+    await Deno.remove(tmpFile);
+    console.log(`Generated ${OUTPUT_DIR}`);
     Deno.exit(0);
   }
 }
