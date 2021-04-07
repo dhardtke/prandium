@@ -1,8 +1,8 @@
-[https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml](![Workflow badge](https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml/badge.svg))
+[![Workflow badge](https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml)
 
 # CookGuide
 
-![Logo](assets/favicon.svg | width=100)
+![Logo](assets/favicon.svg | width=100px)
 
 CookGuide is a server-side tool for managing cooking recipes.
 
