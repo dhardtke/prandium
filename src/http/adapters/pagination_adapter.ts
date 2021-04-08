@@ -1,4 +1,4 @@
-import { toInt } from "../../data/util/convert.ts";
+import { toNumber } from "../../data/util/convert.ts";
 import { Pagination, PaginationBuilder } from "../../data/pagination.ts";
 import type { Context } from "https://deno.land/x/oak@v6.5.0/mod.ts";
 
@@ -23,8 +23,8 @@ export const paginationAdapter = () => {
   return async function (ctx: Context, next: () => Promise<void>) {
     function extractParams() {
       return {
-        page: toInt(ctx.parameter("page"), 1),
-        pageSize: toInt(ctx.parameter("pageSize"), 24),
+        page: toNumber(ctx.parameter("page"), 1),
+        pageSize: toNumber(ctx.parameter("pageSize"), 24),
       };
     }
 

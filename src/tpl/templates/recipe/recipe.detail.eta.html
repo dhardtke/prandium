@@ -1,3 +1,4 @@
+<% var portions = portions || undefined; %>
 <% layout("_structure/page.eta.html", {
     title: recipe.title
 }) %>
@@ -24,6 +25,16 @@
         </a>
     </div>
 </div>
+
+<% if (currentUrl.searchParams.get("flash") === "editSuccessful") { %>
+    <div class="alert alert-success" role="alert">
+        <strong class="alert-heading"><%= h.t("info") %></strong> <%= h.t("recipe.edit_successful") %>
+    </div>
+<% } else if (currentUrl.searchParams.get("flash") === "createSuccessful") { %>
+    <div class="alert alert-success" role="alert">
+        <strong class="alert-heading"><%= h.t("info") %></strong> <%= h.t("recipe.create_successful") %>
+    </div>
+<% } %>
 
 <% if (recipe.tags.length) { %>
     <div class="d-flex flex-wrap">
@@ -148,8 +159,8 @@
                         <div class="text-center ingredient-amount">
                             <% if (ingredient.amount) { %>
                                 <span class="badge bg-dark">
-                                <%= ingredient.amount %>
-                            </span>
+                                    <%= ingredient.amount %>
+                                </span>
                             <% } %>
                         </div>
                         <div>
@@ -170,11 +181,11 @@
         <% recipe.instructions.forEach((instruction, i) => { %>
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading-instruction-<%= i %>">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-ingredient-<%= i %>">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-instruction-<%= i %>">
                         <%= h.t("recipe.ingredients.step", {step: i + 1}) %>
                     </button>
                 </h2>
-                <div id="collapse-ingredient-<%= i %>" class="accordion-collapse collapse show">
+                <div id="collapse-instruction-<%= i %>" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <%= instruction %>
                     </div>

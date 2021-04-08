@@ -46,7 +46,9 @@ export class RecipeService implements Service<Recipe> {
       titleFilter(filters?.title),
     );
     return this.db.single<{ total: number }>(
-      `SELECT COUNT(*) AS total FROM recipe WHERE ${filter.sql}`,
+      `SELECT COUNT(*) AS total
+       FROM recipe
+       WHERE ${filter.sql}`,
       [
         ...filter.bindings,
       ],
@@ -83,10 +85,10 @@ export class RecipeService implements Service<Recipe> {
       this.db.query(
         `SELECT ${
           columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])
-        } FROM recipe
-          WHERE ${filter.sql} ${
-          buildOrderBySql(args.orderBy, orderByColumns)
-        } LIMIT ? OFFSET ?`,
+        }
+         FROM recipe
+         WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, orderByColumns)}
+         LIMIT ? OFFSET ?`,
         [
           ...filter.bindings,
           args.limit || -1,
@@ -183,9 +185,30 @@ export class RecipeService implements Service<Recipe> {
     // TODO add missing fields
     this.db.prepare(
       `UPDATE recipe
-       SET updated_at  = ?,
-           title       = ?,
-           description = ?
+       SET updated_at                = ?,
+           title                     = ?,
+           description               = ?,
+           source                    = ?,
+           thumbnail                 = ?,
+           yield                     = ?,
+           nutrition_calories        = ?,
+           nutrition_carbohydrate    = ?,
+           nutrition_cholesterol     = ?,
+           nutrition_fat             = ?,
+           nutrition_fiber           = ?,
+           nutrition_protein         = ?,
+           nutrition_saturated_fat   = ?,
+           nutrition_sodium          = ?,
+           nutrition_sugar           = ?,
+           nutrition_trans_fat       = ?,
+           nutrition_unsaturated_fat = ?,
+           prep_time                 = ?,
+           cook_time                 = ?,
+           aggregate_rating_value    = ?,
+           aggregate_rating_count    = ?,
+           rating                    = ?,
+           ingredients               = json(?),
+           instructions              = json(?)
        WHERE id = ?`,
       (query) => {
         for (const recipe of recipes) {
@@ -193,6 +216,27 @@ export class RecipeService implements Service<Recipe> {
             recipe.updatedAt,
             recipe.title,
             recipe.description,
+            recipe.source,
+            recipe.thumbnail,
+            recipe.yield,
+            recipe.nutritionCalories,
+            recipe.nutritionCarbohydrate,
+            recipe.nutritionCholesterol,
+            recipe.nutritionFat,
+            recipe.nutritionFiber,
+            recipe.nutritionProtein,
+            recipe.nutritionSaturatedFat,
+            recipe.nutritionSodium,
+            recipe.nutritionSugar,
+            recipe.nutritionTransFat,
+            recipe.nutritionUnsaturatedFat,
+            recipe.prepTime,
+            recipe.cookTime,
+            recipe.aggregateRatingValue,
+            recipe.aggregateRatingCount,
+            recipe.rating,
+            JSON.stringify(recipe.ingredients),
+            JSON.stringify(recipe.instructions),
             recipe.id,
           ]);
         }
@@ -209,7 +253,9 @@ export class RecipeService implements Service<Recipe> {
     const result = this.db.single<
       { ingredients: string; instructions: string }
     >(
-      `SELECT ${columns(Recipe.columns, "r.")} FROM recipe r WHERE r.id = ?`,
+      `SELECT ${columns(Recipe.columns, "r.")}
+       FROM recipe r
+       WHERE r.id = ?`,
       [
         id,
       ],
@@ -248,9 +294,9 @@ export class RecipeService implements Service<Recipe> {
       if (loadReviews) {
         for (
           const row of this.db.query(
-            `SELECT ${
-              columns(Review.columns)
-            } FROM recipe_review WHERE recipe_id = ?`,
+            `SELECT ${columns(Review.columns)}
+           FROM recipe_review
+           WHERE recipe_id = ?`,
             [recipe.id],
           )
         ) {

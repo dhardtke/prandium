@@ -3,25 +3,25 @@ import {
   pushAll,
   toCamelCase,
   toDate,
-  toInt,
+  toNumber,
 } from "../../../src/data/util/convert.ts";
 
 const TEST_PREFIX = "[data/util/convert]";
 
-Deno.test(`${TEST_PREFIX} toInt should return fallback value when unsuccessful`, () => {
-  assertEquals(toInt("", -1), -1);
-  assertEquals(toInt(undefined, -1), -1);
-  assertEquals(toInt("undefined", -1), -1);
-  assertEquals(toInt("foo", -1), -1);
-  assertEquals(toInt("bar", -1), -1);
-  assertEquals(toInt("   ", -1), -1);
-  assertEquals(toInt("+", -1), -1);
+Deno.test(`${TEST_PREFIX} toNumber should return fallback value when unsuccessful`, () => {
+  assertEquals(toNumber("", -1), -1);
+  assertEquals(toNumber(undefined, -1), -1);
+  assertEquals(toNumber("undefined", -1), -1);
+  assertEquals(toNumber("foo", -1), -1);
+  assertEquals(toNumber("bar", -1), -1);
+  assertEquals(toNumber("   ", -1), -1);
+  assertEquals(toNumber("+", -1), -1);
 });
 
-Deno.test(`${TEST_PREFIX} toInt should return parsed value`, () => {
-  assertEquals(toInt("42", -1), 42);
-  assertEquals(toInt("0", -1), 0);
-  assertEquals(toInt("102341998323241321", -1), 102341998323241321);
+Deno.test(`${TEST_PREFIX} toNumber should return parsed value`, () => {
+  assertEquals(toNumber("42", -1), 42);
+  assertEquals(toNumber("0", -1), 0);
+  assertEquals(toNumber("102341998323241321", -1), 102341998323241321);
 });
 
 Deno.test(`${TEST_PREFIX} toDate should return fallback value when unsuccessful`, () => {

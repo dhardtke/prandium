@@ -3,7 +3,7 @@ import { Model, ModelArgs } from "./model.ts";
 import { Tag } from "./tag.ts";
 
 export class Recipe extends Model {
-  static columns = [
+  static readonly columns = [
     ...Model.columns,
     "title",
     "description",
@@ -66,7 +66,7 @@ export class Recipe extends Model {
 
   constructor(
     args: ModelArgs & {
-      title: string;
+      title?: string;
       description?: string;
       tags?: Tag[];
       source?: string;
@@ -99,7 +99,7 @@ export class Recipe extends Model {
     },
   ) {
     super(args);
-    this.title = args.title;
+    this.title = args.title || "";
     this.description = args.description;
     this.tags = args.tags || [];
     this.source = args.source;

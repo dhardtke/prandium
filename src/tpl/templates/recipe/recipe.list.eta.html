@@ -1,3 +1,5 @@
+<% var tags = tags || undefined; %>
+<% var recipes = recipes || undefined; %>
 <% layout("_structure/page.eta.html", {
     title: h.t("recipes")
 }) %>
@@ -11,12 +13,15 @@
     }) %>
     <form method="GET" id="orderBy">
         <div class="input-group input-group-sm">
-            <select class="form-select" title="<%= h.t("recipe.order_by.title") %>" autocomplete="off" name="orderBy">
+            <select class="form-select" title="<%= h.t("recipe.order_by") %>" autocomplete="off" name="orderBy">
                 <% const orderBy = h.u.parameter(currentUrl, "orderBy", "title"); %>
-                <% for (const option of ["id", "created_at", "updated_at", "title", "last_cooked_at", "cooked_count",
-                    "aggregate_rating_value", "rating", "prep_time", "cook_time", "total_time"]) { %>
-                    <option value="<%= option %>"<%= orderBy === option ? " selected" : "" %>>
-                        <%= h.t(`recipe.order_by.options.${option}`) %>
+                <% const options = [["id"], ["created_at"], ["updated_at"], ["title"], ["last_cooked_at", "recipe.last_cooked_at"],
+                    ["cooked_count", "recipe.cooked_count"], ["aggregate_rating_value", "recipe.aggregate_rating_value"], ["rating", "recipe.rating"],
+                    ["prep_time", "recipe.prep_time"], ["cook_time", "recipe.cook_time"], ["total_time", "recipe.total_time"]]; %>
+                <% for (const option of options) { %>
+                    <% const [optionValue, optionLabel] = option %>
+                    <option value="<%= optionValue %>"<%= orderBy === optionValue ? " selected" : "" %>>
+                        <%= h.t(optionLabel || optionValue) %>
                     </option>
                 <% } %>
             </select>

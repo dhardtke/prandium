@@ -3,7 +3,10 @@
     "cancel": "Cancel",
     "confirmation": "Confirmation",
     "create": "Create",
+    "created_at": "Created",
     "delete": "Delete",
+    "description": "Description",
+    "down": "Down",
     "edit": "Edit",
     "error": {
         "404": {
@@ -16,6 +19,7 @@
         }
     },
     "home": "Home",
+    "id": "ID",
     "info": "Info",
     "navigation": {
         "filter_placeholder": "Start typing to filter...",
@@ -30,10 +34,26 @@
     },
     "recipe": {
         "aggregate_rating": "Foreign rating",
+        "aggregate_rating_count": "Number of foreign ratings",
+        "aggregate_rating_value": "Foreign rating",
         "clear_all_tags": "Clear all",
+        "cook_time": "Cook time",
         "cooked_count": "Cooked count",
+        "create_successful": "The Recipe has been created successfully.",
         "delete_confirmation": "Are you sure you want to delete this Recipe?",
         "delete_successful": "The Recipe has been deleted successfully.",
+        "edit_successful": "The Recipe has been edited successfully.",
+        "form": {
+            "group": {
+                "basic": "Basic",
+                "nutrition": "Nutrition",
+                "ratings": "Ratings",
+                "times": "Times"
+            },
+            "create_ingredient": "Create Ingredient",
+            "create_instruction": "Create Instruction",
+            "time_hint": "Time in seconds."
+        },
         "import": {
             "alert": "The URLs have been processed. Please find the results below.",
             "result": "Result",
@@ -48,37 +68,42 @@
         },
         "instructions": "Instructions",
         "last_cooked": "Last cooked {{distance}}.",
+        "last_cooked_at": "Last cooked at",
         "no_recipes_found": "No recipes have been found for the current filter. Please change the filter options or add some more recipes.",
         "not_cooked_yet": "Not cooked yet.",
-        "open": "Open",
-        "order_by": {
-            "options": {
-                "aggregate_rating_value": "Foreign rating",
-                "cook_time": "Cook time",
-                "cooked_count": "Cooked count",
-                "created_at": "Created",
-                "id": "ID",
-                "last_cooked_at": "Last cooked at",
-                "prep_time": "Prep time",
-                "rating": "Your rating",
-                "title": "Title",
-                "total_time": "Total time",
-                "updated_at": "Updated"
-            },
-            "title": "Order by"
+        "nutrition": {
+            "calories": "Calories",
+            "carbohydrate": "Carbohydrate",
+            "cholesterol": "Cholesterol",
+            "fat": "Fat",
+            "fiber": "Fiber",
+            "protein": "Protein",
+            "saturated_fat": "Saturated Fat",
+            "sodium": "Sodium",
+            "sugar": "Sugar",
+            "trans_fat": "Trans Fat",
+            "unsaturated_fat": "Unsaturated Fat"
         },
+        "open": "Open",
+        "order_by": "Order by",
         "portions": "Portions",
+        "prep_time": "Prep time",
         "rating": "Rating",
         "reviews": "Reviews",
+        "source": "Source",
         "time": {
             "cook": "Cook time",
             "prep": "Prep time",
             "total": "Total time"
-        }
+        },
+        "total_time": "Total time",
+        "yield": "Yield"
     },
     "recipes": "Recipes",
     "save": "Save",
     "search": "Search",
     "title": "Title",
+    "up": "Up",
+    "updated_at": "Updated",
     "yes": "Yes"
 }
