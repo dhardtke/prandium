@@ -15,36 +15,62 @@
     ]
 }) %>
 
-<form method="POST">
-    <div class="card mb-3">
-        <div class="card-header">
-            <%= h.t("recipe.form.group.basic") %>
+<form method="POST" autocomplete="off" enctype="multipart/form-data" id="edit-form">
+    <div class="row">
+        <div class="col-lg-6 mb-3">
+            <div class="card h-100">
+                <div class="card-header">
+                    <%= h.t("recipe.form.group.basic") %>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">
+                            <%= h.t("title") %> *
+                        </label>
+                        <input class="form-control" id="title" name="title" required value="<%= edit ? recipe.title || "" : "" %>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">
+                            <%= h.t("description") %>
+                        </label>
+                        <textarea class="form-control" id="description" name="description"><%= edit ? recipe.description || "" : "" %></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="source" class="form-label">
+                            <%= h.t("recipe.source") %>
+                        </label>
+                        <input class="form-control" id="source" name="source" value="<%= edit ? recipe.source || "" : "" %>">
+                    </div>
+                    <div>
+                        <label for="yield" class="form-label">
+                            <%= h.t("recipe.yield") %>
+                        </label>
+                        <input type="number" min="1" class="form-control" id="yield" name="yield" value="<%= edit ? recipe.yield || "" : "" %>">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <label for="title" class="form-label">
-                    <%= h.t("title") %> *
-                </label>
-                <input class="form-control" id="title" name="title" required value="<%= edit ? recipe.title || "" : "" %>">
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">
-                    <%= h.t("description") %>
-                </label>
-                <textarea class="form-control" id="description" name="description"><%= edit ? recipe.description || "" : "" %></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="source" class="form-label">
-                    <%= h.t("recipe.source") %>
-                </label>
-                <input class="form-control" id="source" name="source" value="<%= edit ? recipe.source || "" : "" %>">
-            </div>
-            <!-- TODO thumbnail -->
-            <div>
-                <label for="yield" class="form-label">
-                    <%= h.t("recipe.yield") %>
-                </label>
-                <input type="number" min="1" class="form-control" id="yield" name="yield" value="<%= edit ? recipe.yield || "" : "" %>">
+        <div class="col-lg-6 mb-3">
+            <div class="card h-100" id="image-picker">
+                <img class="card-img-top" src="<%= h.u.thumbnail(edit ? recipe.thumbnail : "") %>" alt="" loading="lazy">
+                <div class="card-body d-none">
+                    <input class="d-none" type="file" accept="image/*" name="thumbnail">
+                    <input type="hidden" name="deleteThumbnail" disabled>
+                    <div class="alert alert-danger mb-0 mt-3" role="alert">
+                        <strong><%= h.t("error.title") %></strong>: <%= h.t("recipe.form.image_error") %>
+                    </div>
+                </div>
+                <div class="card-footer mt-auto">
+                    <div class="d-flex justify-content-between flex-wrap align-items-center">
+                        <small class="text-muted">
+                            <%= h.t("recipe.form.thumbnail_hint") %>
+                        </small>
+                        <button type="button"<%= !edit || !recipe.thumbnail ? " disabled" : "" %> class="btn btn-sm btn-danger" title="<%= h.t("recipe.form.delete_thumbnail") %>"
+                                data-hook="delete">
+                            <% ~includeFile("_partials/icon.eta.html", {h, name: "trash"}) %>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -186,7 +212,7 @@
     </div>
 
     <% function arrayField(title, createBtnLabel, name, textarea, array) { %>
-        <div class="card mb-3 array-field" data-array-field="<%= name %>">
+        <div class="card mb-3 array-field">
             <div class="card-header">
                 <%= title %>
             </div>

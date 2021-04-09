@@ -1,5 +1,15 @@
+@use "_bootstrap";
+
 .array-field {
     .list-group {
         border-bottom: 0;
     }
+}
+
+#image-picker {
+    &.dragging {
+        border-color: bootstrap.$primary;
+    }
+
+    cursor: pointer;
 }

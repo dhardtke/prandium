@@ -16,7 +16,8 @@
         "500": {
             "description": "A server error occurred.",
             "title": "Server Error"
-        }
+        },
+        "title": "Error"
     },
     "home": "Home",
     "id": "ID",
@@ -44,14 +45,17 @@
         "delete_successful": "The Recipe has been deleted successfully.",
         "edit_successful": "The Recipe has been edited successfully.",
         "form": {
+            "create_ingredient": "Create Ingredient",
+            "create_instruction": "Create Instruction",
+            "delete_thumbnail": "Delete thumbnail",
             "group": {
                 "basic": "Basic",
                 "nutrition": "Nutrition",
                 "ratings": "Ratings",
                 "times": "Times"
             },
-            "create_ingredient": "Create Ingredient",
-            "create_instruction": "Create Instruction",
+            "image_error": "Please make sure you select an image.",
+            "thumbnail_hint": "You may click or drag and drop an image here.",
             "time_hint": "Time in seconds."
         },
         "import": {

@@ -1,8 +1,12 @@
-import { Oak } from "../../../deps.ts";
+import { fs, Oak, path } from "../../../deps.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { importRecipes } from "../../data/parse/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { toNumber } from "../../data/util/convert.ts";
+import {
+  getThumbnailDir,
+  getUniqueFilename,
+} from "../../data/util/thumbnails.ts";
 import {
   RecipeDeleteTemplate,
   RecipeDetailTemplate,
@@ -11,13 +15,32 @@ import {
   RecipeListTemplate,
 } from "../../tpl/mod.ts";
 import { UrlHelper } from "../url_helper.ts";
-import { urlWithParams } from "../util.ts";
+import { collectFormData, urlWithParams } from "../util.ts";
 import { AppState } from "../webserver.ts";
 
-function assignRecipeFields(formData: URLSearchParams, recipe: Recipe) {
+async function deleteThumbnail(recipe: Recipe, configDir: string) {
+  // delete old thumbnail
+  if (recipe.thumbnail) {
+    const thumbnailDir = getThumbnailDir(configDir);
+    try {
+      await Deno.remove(path.join(thumbnailDir, recipe.thumbnail));
+    } catch {
+      // ignore
+    }
+  }
+}
+
+async function assignRecipeFields(
+  formDataReader: Oak.FormDataReader,
+  recipe: Recipe,
+  configDir: string,
+) {
   type RecipeKey = keyof Recipe;
+  const data = await collectFormData<RecipeKey | "deleteThumbnail">(
+    formDataReader,
+  );
   const get = (name: RecipeKey) => {
-    return formData.get(name) ?? undefined;
+    return (data[name] as string[])[0];
   };
   const stringFields: RecipeKey[] = [
     "title",
@@ -45,8 +68,26 @@ function assignRecipeFields(formData: URLSearchParams, recipe: Recipe) {
   recipe.aggregateRatingValue = toNumber(get("aggregateRatingValue"));
   recipe.aggregateRatingCount = toNumber(get("aggregateRatingCount"));
   recipe.rating = toNumber(get("rating"));
-  recipe.ingredients = formData.getAll("ingredients");
-  recipe.instructions = formData.getAll("instructions");
+  recipe.ingredients = data.ingredients as string[];
+  recipe.instructions = data.instructions as string[];
+  if (data.deleteThumbnail) {
+    await deleteThumbnail(recipe, configDir);
+    recipe.thumbnail = undefined;
+  }
+  if (data.thumbnail) {
+    const [newThumbnail] = data.thumbnail as [Oak.FormDataFile];
+    if (newThumbnail.filename) {
+      // TODO server-side type validation?
+      const thumbnailDir = getThumbnailDir(configDir);
+      const filename = getUniqueFilename(
+        thumbnailDir,
+        newThumbnail.originalName,
+      );
+      await fs.move(newThumbnail.filename, path.join(thumbnailDir, filename));
+      await deleteThumbnail(recipe, configDir);
+      recipe.thumbnail = filename;
+    }
+  }
   recipe.updatedAt = new Date();
 }
 
@@ -139,10 +180,10 @@ router
       if (!recipe) {
         await next();
       } else {
-        const formData: URLSearchParams = await ctx.request.body({
-          type: "form",
+        const formDataReader: Oak.FormDataReader = await ctx.request.body({
+          type: "form-data",
         }).value;
-        assignRecipeFields(formData, recipe);
+        await assignRecipeFields(formDataReader, recipe, ctx.configDir());
         service.update([recipe]);
         ctx.response.redirect(
           urlWithParams(UrlHelper.INSTANCE.recipe(recipe), {
@@ -163,9 +204,10 @@ router
     async (ctx: Oak.Context<AppState>) => {
       const service = ctx.state.services.RecipeService;
       const recipe = new Recipe({});
-      const formData: URLSearchParams = await ctx.request.body({ type: "form" })
-        .value;
-      assignRecipeFields(formData, recipe);
+      const formDataReader: Oak.FormDataReader = await ctx.request.body({
+        type: "form-data",
+      }).value;
+      await assignRecipeFields(formDataReader, recipe, ctx.configDir());
       service.create([recipe]);
       ctx.response.redirect(
         urlWithParams(UrlHelper.INSTANCE.recipe(recipe), {
@@ -200,7 +242,7 @@ router
       if (!recipe) {
         await next();
       } else {
-        // TODO delete thumbnail
+        await deleteThumbnail(recipe, ctx.configDir());
         service.delete([recipe]);
         ctx.response.redirect(
           urlWithParams(UrlHelper.INSTANCE.recipeList(), {

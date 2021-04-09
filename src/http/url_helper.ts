@@ -4,6 +4,8 @@ function join<T>(parameters?: T[]): string {
   return parameters ? parameters.join("&") : "";
 }
 
+const PLACEHOLDER_IMAGE = "/assets/placeholder.svg";
+
 export class UrlHelper {
   private static ACCENTS_PATTERN = /[\u0300-\u036f]/g;
   private static SUPERFLUOUS_CHARACTERS_PATTERN = /[^a-z0-9 ]/g;
@@ -55,7 +57,7 @@ export class UrlHelper {
   };
 
   public thumbnail = (filename: string): string => {
-    return `/thumbnails/${filename}`;
+    return filename ? `/thumbnails/${filename}` : PLACEHOLDER_IMAGE;
   };
 
   public removeParameterValue(

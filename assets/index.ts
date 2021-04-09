@@ -9,7 +9,7 @@ import { NavbarTagFilter } from "./ts/global/_navbar_tag_filter.ts";
 import { removeUrlFlashParameter } from "./ts/global/_remove_url_flash_parameter.ts";
 import { showDocument } from "./ts/global/_show_document.ts";
 import { RecipeDetailPage } from "./ts/page/recipe_detail_page.ts";
-import { RecipeEditPage } from "./ts/page/recipe_edit_page.ts";
+import { RecipeEditPage } from "./ts/page/recipe_edit_page/recipe_edit_page.ts";
 import { RecipeListPage } from "./ts/page/recipe_list_page.ts";
 
 import "./deps.ts";
