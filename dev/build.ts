@@ -20,6 +20,7 @@ const steps: Step[] = [
     fn: processAsync(
       "assets",
       "sass",
+      "--no-source-map",
       "-I",
       "node_modules",
       "--style",
