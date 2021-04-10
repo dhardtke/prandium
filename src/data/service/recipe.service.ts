@@ -8,10 +8,6 @@ import { TagService } from "./tag.service.ts";
 function tagFilter(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
-    /*sql: () =>
-      tagIds!.map(() =>
-        `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`
-      ).join(" AND "),*/
     sql: () =>
       `id IN (SELECT recipe_id FROM recipe_tag WHERE tag_id IN (${
         tagIds!.map(() => "?").join(", ")
