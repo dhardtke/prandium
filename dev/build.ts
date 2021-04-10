@@ -30,6 +30,17 @@ const steps: Step[] = [
     ),
   },
   {
+    description: "Remove leftover comments from CSS",
+    fn: async () => {
+      // some comments aren't removed even when using --style compressed (e.g. "/* rtl: begin */") so we need to remove them manually
+      const p = /\s*\/\*.*?\*\/\s*/g;
+      const compiledCssFile = "assets/dist/index.css";
+      let contents = await Deno.readTextFile(compiledCssFile);
+      contents = contents.replaceAll(p, "");
+      await Deno.writeTextFile(compiledCssFile, contents);
+    },
+  },
+  {
     description: "Compile TS to JS",
     fn: processAsync("assets", "deno", "bundle", "index.ts", "dist/index.js"),
   },
