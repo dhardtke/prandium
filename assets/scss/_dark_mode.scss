@@ -3,6 +3,7 @@
 .dark {
     body {
         background: bootstrap.$dark;
+        color: #fff;
     }
 
     .dropdown-menu {
@@ -14,21 +15,21 @@
         border-top-color: #fff;
     }
 
-    .text-muted {
+    .text-muted, .form-text {
         color: #9b9b9b;
+    }
+
+    .form-control {
+        border-color: bootstrap.$gray-800;
+        background: transparent;
+
+        &, &::placeholder {
+            color: #fff;
+        }
     }
 
     .navbar {
         background: bootstrap.$primary;
-
-        .form-control {
-            border-color: bootstrap.$gray-800;
-            background: transparent;
-
-            &, &::placeholder {
-                color: #fff;
-            }
-        }
 
         .btn {
             color: #fff;
@@ -99,6 +100,10 @@
         border-color: bootstrap.$secondary;
 
         .card-header {
+            border-color: bootstrap.$secondary;
+        }
+
+        .card-footer {
             border-color: bootstrap.$secondary;
         }
     }
