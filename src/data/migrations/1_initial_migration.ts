@@ -50,12 +50,6 @@ export const InitialMigration = new class InitialMigration extends Migration {
          tag_id    INTEGER NOT NULL REFERENCES tag (id) ON DELETE CASCADE,
          recipe_id INTEGER NOT NULL REFERENCES recipe (id) ON DELETE CASCADE
        )`,
-      `CREATE TABLE recipe_keyword
-       (
-         recipe_id INTEGER NOT NULL REFERENCES recipe (id) ON DELETE CASCADE,
-         keyword   TEXT    NOT NULL,
-         PRIMARY KEY (recipe_id, keyword)
-       )`,
       `CREATE TABLE recipe_history
        (
          recipe_id INTEGER   NOT NULL REFERENCES recipe (id) ON DELETE CASCADE,
