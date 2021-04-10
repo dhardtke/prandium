@@ -44,6 +44,8 @@ for category in categories:
     if category["rating"] is not None:
         sql_queries.append(f"UPDATE recipe SET rating = {category['rating']} WHERE source IN ({recipe_urls});")
 
+sql_queries.append("UPDATE recipe SET description = substr(description, 0, instr(description, '.') + 1)")
+
 print("Please import the following URLs:")
 print("\n".join(urls))
 print("")
