@@ -9,10 +9,10 @@ function tagFilter(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
     sql: () =>
-      `id IN (SELECT recipe_id FROM recipe_tag WHERE tag_id IN (${
-        tagIds!.map(() => "?").join(", ")
-      }) GROUP BY recipe_tag.recipe_id HAVING COUNT(*) = ?)`,
-    bindings: () => [...tagIds!, tagIds!.length],
+      tagIds!.map(() =>
+        `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`
+      ).join(" AND "),
+    bindings: () => tagIds!,
   };
 }
 

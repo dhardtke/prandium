@@ -2,13 +2,7 @@ import { Database, QueryParam } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { toArray, toCamelCase } from "../util/convert.ts";
-import {
-  buildFilters,
-  buildOrderBySql,
-  columns,
-  Filter,
-  placeholders,
-} from "../util/sql.ts";
+import { buildFilters, buildOrderBySql, columns, Filter } from "../util/sql.ts";
 import { OrderBy, Service } from "./service.ts";
 import { idsFilter } from "./util/generic_filters.ts";
 
@@ -26,13 +20,13 @@ function recipeFilter(recipeId?: number): Filter {
 function _sameRecipeIds(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
-    sql: () =>
-      `recipe_id IN (
-      SELECT recipe_id FROM recipe_tag WHERE recipe_tag.tag_id IN (${
-        placeholders(tagIds)
-      }) GROUP BY recipe_id HAVING COUNT(*) = ?
-    )`,
-    bindings: () => [...tagIds!, tagIds!.length],
+    sql: () => {
+      const joins = tagIds!.map((_, i) =>
+        `INNER JOIN recipe_tag rt${i} ON rt${i}.tag_id = ? AND rt${i}.recipe_id = rt.recipe_id`
+      ).join("\n");
+      return `recipe_id IN (SELECT rt.recipe_id FROM recipe_tag rt ${joins})`;
+    },
+    bindings: () => tagIds!,
   };
 }
 
@@ -119,9 +113,10 @@ export class TagService implements Service<Tag> {
     ]);
     return toArray(
       this.db.query(
-        `SELECT ${cols} FROM tag WHERE ${filter.sql} ${
-          buildOrderBySql(args.orderBy, Tag.columns)
-        } LIMIT ? OFFSET ?`,
+        `SELECT ${cols}
+         FROM tag
+         WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, Tag.columns)}
+         LIMIT ? OFFSET ?`,
         [
           ...recipeCount.bindings,
           ...filter.bindings,
@@ -182,7 +177,9 @@ export class TagService implements Service<Tag> {
 
   find(id: number): Tag | undefined {
     const result = this.db.single(
-      `SELECT ${columns(Tag.columns)} FROM tag WHERE id = ?`,
+      `SELECT ${columns(Tag.columns)}
+       FROM tag
+       WHERE id = ?`,
       [id],
     );
     return result ? new Tag(toCamelCase(result)) : undefined;
@@ -196,9 +193,9 @@ export class TagService implements Service<Tag> {
     const titles = Object.keys(titleToTags);
     for (
       const row of this.db.query<Tag>(
-        `SELECT id, title FROM tag WHERE title IN (${
-          titles.map(() => "?").join(", ")
-        })`,
+        `SELECT id, title
+       FROM tag
+       WHERE title IN (${titles.map(() => "?").join(", ")})`,
         titles,
       )
     ) {
