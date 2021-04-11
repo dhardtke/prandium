@@ -28,7 +28,11 @@
         "tags": "Tags"
     },
     "no": "No",
-    "order_by": "Order by",
+    "order_by": {
+        "title": "Order by",
+        "asc": "Switch to ascending order",
+        "desc": "Switch to descending order"
+    },
     "pagination": {
         "next": "Next page",
         "previous": "Previous page"

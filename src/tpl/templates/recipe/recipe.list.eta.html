@@ -25,7 +25,7 @@
     <form class="col" id="orderBy">
         <div class="input-group">
             <span class="input-group-text">
-                <%= h.t("order_by") %>
+                <%= h.t("order_by.title") %>
             </span>
             <select class="form-select" title="<%= h.t("recipe.order_by") %>" autocomplete="off" name="orderBy">
                 <% const orderBy = h.u.parameter(currentUrl, "orderBy", "title"); %>
@@ -40,7 +40,8 @@
                 <% } %>
             </select>
             <% const order = h.u.parameter(currentUrl, "order", "ASC")?.toUpperCase(); %>
-            <button class="btn btn-outline-secondary" type="submit" name="order" value="<%= order === "ASC" ? "DESC" : "ASC" %>">
+            <% const otherOrder = order === "ASC" ? "DESC" : "ASC"; %>
+            <button class="btn btn-outline-secondary" type="submit" name="order" value="<%= otherOrder %>" title="<%= h.t(`order_by.${otherOrder.toLowerCase()}`)%>">
                 <% if (order === "ASC") { %>
                     <% ~includeFile("_partials/icon.eta.html", {h, name: "arrow-down"}) %>
                 <% } else { %>
