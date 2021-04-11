@@ -2,5 +2,9 @@
 export function removeUrlFlashParameter() {
   const url = new URL(window.location.href);
   url.searchParams.delete("flash");
-  window.history.replaceState({}, document.title, url.toString());
+  try {
+    window.history.replaceState({}, document.title, url.toString());
+  } catch {
+    // ignore
+  }
 }
