@@ -29,9 +29,9 @@
     },
     "no": "No",
     "order_by": {
-        "title": "Order by",
         "asc": "Switch to ascending order",
-        "desc": "Switch to descending order"
+        "desc": "Switch to descending order",
+        "title": "Order by"
     },
     "pagination": {
         "next": "Next page",
