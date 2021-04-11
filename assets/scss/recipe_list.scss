@@ -21,3 +21,36 @@
         }
     }
 }
+
+#tag-filter {
+    width: 100%;
+
+    .list-group {
+        max-height: calc(100vh - 200px);
+
+        &-item {
+            transition: bootstrap.$transition-base;
+
+            &.active {
+                // fix weird shift when transitioning
+                margin-top: 0;
+                border-top-width: 0;
+            }
+
+            &.disabled {
+                pointer-events: unset;
+                cursor: unset;
+            }
+        }
+    }
+
+    @include bootstrap.media-breakpoint-up("lg") {
+        & {
+            width: 350px;
+        }
+
+        .list-group {
+            height: 500px;
+        }
+    }
+}

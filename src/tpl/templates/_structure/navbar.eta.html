@@ -11,42 +11,15 @@
             </div>
         </a>
 
-        <div class="d-flex navbar-options">
-            <div class="ms-auto h-100">
-                <button id="dark-mode-switcher" type="button" class="btn btn-sm btn-outline-light h-100">
-                    <span class="active d-none">
-                        <% ~includeFile("_partials/icon.eta.html", {h, name: "moon-fill"}) %>
-                    </span>
-                    <span class="inactive">
-                        <% ~includeFile("_partials/icon.eta.html", {h, name: "moon"}) %>
-                    </span>
-                </button>
-            </div>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-nav" title="<%= h.t("navigation.toggle") %>">
-                <span class="navbar-toggler-icon"></span>
+        <div class="d-flex">
+            <button id="dark-mode-switcher" type="button" class="btn btn-sm btn-outline-light h-100">
+                <span class="active d-none">
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "moon-fill"}) %>
+                </span>
+                <span class="inactive">
+                    <% ~includeFile("_partials/icon.eta.html", {h, name: "moon"}) %>
+                </span>
             </button>
-        </div>
-
-        <div class="collapse navbar-collapse align-items-stretch" id="navbar-nav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <!-- TODO implement check if user is on home -->
-                    <a class="nav-link active" href="/">Home</a>
-                </li>
-            </ul>
-            <div class="d-flex">
-                <form class="d-flex w-100" method="get" action="<%= h.u.recipeList() %>">
-                    <div class="input-group">
-                        <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>"
-                               value="<%= h.u.parameter(currentUrl, "title") %>">
-                        <% ~includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
-                        <button class="btn btn-outline-info" type="submit">
-                            <% ~includeFile("_partials/icon.eta.html", {h, name: "search"}) %>
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 </nav>

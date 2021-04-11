@@ -1,5 +1,5 @@
-import { jaroWinklerDistance } from "../_util/jaro_winkler.ts";
-import { removeUrlParameterValue } from "../_util/remove_url_parameter_value.ts";
+import { jaroWinklerDistance } from "../../_util/jaro_winkler.ts";
+import { removeUrlParameterValue } from "../../_util/remove_url_parameter_value.ts";
 
 declare type Tag = {
   id: number;
@@ -26,7 +26,7 @@ const CLASSES = {
   HIDDEN: "d-none"
 };
 
-export class NavbarTagFilter {
+export class TagFilter {
   private readonly $tagFilter: HTMLDivElement;
   private readonly $inputFilter: HTMLInputElement;
   private readonly $results: HTMLDivElement;

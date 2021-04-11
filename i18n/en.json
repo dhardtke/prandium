@@ -25,10 +25,10 @@
     "navigation": {
         "filter_placeholder": "Start typing to filter...",
         "filter_title": "Filter",
-        "tags": "Tags",
-        "toggle": "Toggle Navigation"
+        "tags": "Tags"
     },
     "no": "No",
+    "order_by": "Order by",
     "pagination": {
         "next": "Next page",
         "previous": "Previous page"

@@ -28,59 +28,14 @@
         }
     }
 
-    @include bootstrap.media-breakpoint-up('md') {
-        .navbar-options {
-            order: 1;
-        }
-    }
-
     #dark-mode-switcher {
-        @include bootstrap.media-breakpoint-up('md') {
-            margin-left: 1rem;
-        }
-
         @include bootstrap.media-breakpoint-down('md') {
-            margin-right: 1rem;
-
             color: rgba(255, 255, 255, 0.55);
             border-color: rgba(255, 255, 255, 0.1);
 
             &:hover {
                 color: rgba(255, 255, 255, 0.55);
                 background: transparent;
-            }
-        }
-    }
-
-    #tag-filter {
-        width: 100%;
-
-        .list-group {
-            max-height: calc(100vh - 200px);
-
-            &-item {
-                transition: bootstrap.$transition-base;
-
-                &.active {
-                    // fix weird shift when transitioning
-                    margin-top: 0;
-                    border-top-width: 0;
-                }
-
-                &.disabled {
-                    pointer-events: unset;
-                    cursor: unset;
-                }
-            }
-        }
-
-        @include bootstrap.media-breakpoint-up("lg") {
-            & {
-                width: 350px;
-            }
-
-            .list-group {
-                height: 500px;
             }
         }
     }

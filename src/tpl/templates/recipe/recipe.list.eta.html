@@ -3,16 +3,30 @@
 <% layout("_structure/page.eta.html", {
     title: h.t("recipes")
 }) %>
-<div class="d-flex justify-content-between mb-2">
-    <% ~includeFile("_partials/breadcrumb.eta.html", {
-        h,
-        breadcrumb: [
-            {title: h.t("recipes"), url: h.u.recipeList()}
-        ],
-        noMargin: true
-    }) %>
-    <form method="GET" id="orderBy">
-        <div class="input-group input-group-sm">
+<% ~includeFile("_partials/breadcrumb.eta.html", {
+    h,
+    breadcrumb: [
+        {title: h.t("recipes"), url: h.u.recipeList()}
+    ]
+}) %>
+
+<div class="row g-3 mb-3">
+    <form class="d-flex col-lg-9" method="get" action="<%= h.u.recipeList() %>">
+        <div class="input-group">
+            <input class="form-control" type="search" name="title" placeholder="<%= h.t("search") %>" title="<%= h.t("search") %>"
+                   value="<%= h.u.parameter(currentUrl, "title") %>">
+            <% ~includeFile("_structure/navbar.tag_filter.eta.html", {h, currentUrl, appState}) %>
+            <button class="btn btn-outline-info" type="submit">
+                <% ~includeFile("_partials/icon.eta.html", {h, name: "search"}) %>
+            </button>
+        </div>
+    </form>
+
+    <form class="col" id="orderBy">
+        <div class="input-group">
+            <span class="input-group-text">
+                <%= h.t("order_by") %>
+            </span>
             <select class="form-select" title="<%= h.t("recipe.order_by") %>" autocomplete="off" name="orderBy">
                 <% const orderBy = h.u.parameter(currentUrl, "orderBy", "title"); %>
                 <% const options = [["id"], ["created_at"], ["updated_at"], ["title"], ["last_cooked_at", "recipe.last_cooked_at"],
