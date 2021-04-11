@@ -1,10 +1,13 @@
 import { path } from "../../deps.ts";
 
-export function process(cwd?: string, ...cmd: string[]): () => Deno.Process {
+export function process(
+  cwd?: string,
+  ...cmd: (string | undefined)[]
+): () => Deno.Process {
   return () =>
     Deno.run({
       ...cwd ? { cwd: path.resolve(Deno.cwd(), cwd) } : {},
-      cmd,
+      cmd: cmd.filter((c) => Boolean(c)) as string[],
     });
 }
 

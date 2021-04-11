@@ -112,6 +112,9 @@ interface Options {
   port: number;
   host: string;
   debug?: boolean;
+  secure?: boolean;
+  cert?: string;
+  key?: string;
 }
 
 function removeAndThen(
@@ -148,6 +151,17 @@ if (import.meta.main) {
     .option("-d, --debug [debug:boolean]", "enable debug mode", {
       default: true,
     })
+    .option("-s, --secure [secure:boolean]", "enable HTTPS server", {
+      default: false,
+    })
+    .option(
+      "--cert [cert:string]",
+      "path to a certificate file to use for the HTTPS server",
+    )
+    .option(
+      "--key [key:string]",
+      "path to a key file to use for the HTTPS server",
+    )
     .parse(Deno.args);
 
   // ensure assets/dist exists
@@ -176,6 +190,9 @@ if (import.meta.main) {
           `--host=${options.host}`,
           `--port=${options.port}`,
           `--debug=${options.debug || false}`,
+          `--secure=${options.secure}`,
+          options.key && `--key=${options.key || "-"}`,
+          options.cert && `--cert=${options.cert || "-"}`,
         ),
       },
       {

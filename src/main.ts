@@ -4,10 +4,13 @@ import { spawnServer } from "./http/webserver.ts";
 import { DEFAULT_CONFIG_DIR, defaultConfigDir } from "./util.ts";
 
 interface Options {
-  debug?: boolean;
   host: string;
   port: number;
   configDir: string;
+  debug?: boolean;
+  secure?: boolean;
+  cert?: string;
+  key?: string;
 }
 
 async function parseOptions(): Promise<Options> {
@@ -18,6 +21,17 @@ async function parseOptions(): Promise<Options> {
     .option("-c --configDir [config:string]", "The config directory", {
       default: DEFAULT_CONFIG_DIR,
     })
+    .option("-s, --secure [secure:boolean]", "enable HTTPS server", {
+      default: false,
+    })
+    .option(
+      "--cert [cert:string]",
+      "path to a certificate file to use for the HTTPS server",
+    )
+    .option(
+      "--key [key:string]",
+      "path to a key file to use for the HTTPS server",
+    )
     .parse(Deno.args);
 
   if (options.configDir === DEFAULT_CONFIG_DIR) {
@@ -70,10 +84,7 @@ async function main(): Promise<void> {
   database.migrate();
 
   await spawnServer({
-    host: options.host,
-    port: options.port,
-    debug: options.debug,
-    configDir: options.configDir,
+    ...options,
     db: database,
   });
 }

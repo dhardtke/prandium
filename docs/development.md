@@ -10,3 +10,10 @@ to configure your IDE to work best with Deno.
 We recommend using JetBrain's termins
 
 
+## DEV Server
+### Spawn HTTPs server
+```shell
+# execute beforehand
+# openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 --nodes
+deno run --allow-all --no-check dev/dev_server.ts --secure=true --key=key.pem --cert=cert.pem
+```

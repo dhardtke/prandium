@@ -1,6 +1,6 @@
+import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { Services, servicesFactory } from "../data/service/services.ts";
-import { log, Oak } from "../../deps.ts";
 import { configDirAdapter } from "./adapters/config_dir_adapter.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
@@ -24,6 +24,9 @@ export async function spawnServer(
     host: string;
     port: number;
     debug?: boolean;
+    secure?: boolean;
+    key?: string;
+    cert?: string;
     configDir: string;
     db: Database;
   },
@@ -51,5 +54,11 @@ export async function spawnServer(
     log.info(`Server started: Listening on ${url}`);
   });
 
-  await app.listen({ hostname: args.host, port: args.port });
+  await app.listen({
+    hostname: args.host,
+    port: args.port,
+    secure: args.secure,
+    certFile: args.cert || "",
+    keyFile: args.key || "",
+  });
 }
