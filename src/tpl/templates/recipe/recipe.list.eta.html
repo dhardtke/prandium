@@ -49,7 +49,7 @@
                 <% } %>
             </button>
             <% for (const [name, value] of currentUrl.searchParams.entries()) { %>
-                <% if (!["orderBy", "order", "flash"].includes(name)) { %>
+                <% if (!["orderBy", "order", "flash", "page"].includes(name)) { %>
                     <input type="hidden" name="<%= name %>" value="<%= value %>">
                 <% } %>
             <% } %>
