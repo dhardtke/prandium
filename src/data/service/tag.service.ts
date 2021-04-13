@@ -171,6 +171,7 @@ export class TagService implements Service<Tag> {
     );
   }
 
+  // deno-lint-ignore no-unused-vars
   delete(tags: Tag[]): void {
     // TODO
   }

@@ -29,7 +29,7 @@ export class TranslationHelper {
       const translation = this.getTranslation(lang);
       return TranslationHelper.replaceParams(get(key, translation), params) ||
         key;
-    } catch (e) {
+    } catch {
       log.debug(() => `[TranslationHelper] Cannot get translation key ${key}.`);
       return key;
     }
