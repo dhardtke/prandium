@@ -1,4 +1,5 @@
-import { Eta, Oak } from "../../../deps.ts";
+import type { Context } from "https://deno.land/x/oak@v6.5.1/mod.ts";
+import { Eta } from "../../../deps.ts";
 import { Template } from "../../tpl/mod.ts";
 import { AppState } from "../webserver.ts";
 
@@ -21,7 +22,7 @@ export const templateAdapter = (debug?: boolean) => {
   }
 
   return async function (
-    ctx: Oak.Context<AppState>,
+    ctx: Context<AppState>,
     next: () => Promise<void>,
   ) {
     ctx.render = async function <Data>(template: Template<Data>, data?: Data) {
