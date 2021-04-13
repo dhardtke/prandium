@@ -1,6 +1,6 @@
-import type { Context } from "https://deno.land/x/oak@v6.5.0/mod.ts";
+import { Oak } from "../../../deps.ts";
 
-declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
+declare module "https://deno.land/x/oak@v6.5.1/mod.ts" {
   interface Context {
     configDir: () => string;
   }
@@ -12,7 +12,7 @@ declare module "https://deno.land/x/oak@v6.5.0/mod.ts" {
 }
 
 export const configDirAdapter = (configDir: string) => {
-  return async function (ctx: Context, next: () => Promise<void>) {
+  return async function (ctx: Oak.Context, next: () => Promise<void>) {
     ctx.configDir = function (): string {
       return configDir;
     };
