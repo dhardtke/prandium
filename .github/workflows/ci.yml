@@ -21,9 +21,9 @@ jobs:
                     persist-credentials: false
 
             -   name: Setup Deno
-                uses: denolib/setup-deno@v2
+                uses: denoland/setup-deno@main
                 with:
-                    deno-version: ${{ env.denoVersion }}
+                    deno-version: "${{ env.denoVersion }}"
 
             -   name: Format
                 run: deno fmt --check src tests dev
@@ -42,9 +42,9 @@ jobs:
                     persist-credentials: false
 
             -   name: Setup Deno
-                uses: denolib/setup-deno@v2
+                uses: denoland/setup-deno@main
                 with:
-                    deno-version: ${{ env.denoVersion }}
+                    deno-version: "${{ env.denoVersion }}"
 
             -   name: Cache dependencies
                 uses: actions/cache@v2
