@@ -59,16 +59,14 @@ export async function spawnServer(
     log.info(`Server started: Listening on ${url}`);
   });
 
-  // await app.listen({
-  //   hostname: args.host,
-  //   port: args.port,
-  //   secure: args.secure,
-  //   certFile: args.cert || "",
-  //   keyFile: args.key || "",
-  // });
-
+  const sslOptions = args.secure ? {
+    secure: true,
+    certFile: args.cert || "",
+    keyFile: args.key || "",
+  } : {};
   await app.listen({
-    hostname: "127.0.0.1",
-    port: 8000,
+    hostname: args.host,
+    port: args.port,
+    ...sslOptions,
   });
 }
