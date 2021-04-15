@@ -1,4 +1,4 @@
-import { log, Oak } from "../../deps.ts";
+import { HttpServerStd, log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { Settings } from "../settings.ts";
@@ -39,7 +39,8 @@ export async function spawnServer(
   });
   services.initialize(args.db);
 
-  const app = new Oak.Application<AppState>({ state });
+  // TODO remove explicit HttpServerStd instantiation once https://github.com/denoland/deno/issues/10193 is fixed
+  const app = new Oak.Application<AppState>({ state, serverConstructor: HttpServerStd });
   app.use(
     parameterAdapter(),
     orderByAdapter(),
