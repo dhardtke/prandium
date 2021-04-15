@@ -1,7 +1,7 @@
-import type { Context } from "https://deno.land/x/oak@v6.5.1/mod.ts";
+import type { Context } from "https://deno.land/x/oak@v7.0.0/mod.ts";
 import { Oak } from "../../../deps.ts";
 
-declare module "https://deno.land/x/oak@v6.5.1/mod.ts" {
+declare module "https://deno.land/x/oak@v7.0.0/mod.ts" {
   interface Context {
     _query: Record<string, string>;
     parameter: (name: string) => string | undefined;

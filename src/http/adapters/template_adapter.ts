@@ -1,9 +1,9 @@
-import type { Context } from "https://deno.land/x/oak@v6.5.1/mod.ts";
+import type { Context } from "https://deno.land/x/oak@v7.0.0/mod.ts";
 import { Eta } from "../../../deps.ts";
 import { Template } from "../../tpl/mod.ts";
 import { AppState } from "../webserver.ts";
 
-declare module "https://deno.land/x/oak@v6.5.1/mod.ts" {
+declare module "https://deno.land/x/oak@v7.0.0/mod.ts" {
   interface Context {
     render: <Data>(template: Template<Data>, data: Data) => void;
   }
