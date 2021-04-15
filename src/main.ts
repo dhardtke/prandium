@@ -1,6 +1,7 @@
-import { Database } from "./data/db.ts";
 import { Cliffy, Colors, fs, log, LogRecord, path } from "../deps.ts";
+import { Database } from "./data/db.ts";
 import { spawnServer } from "./http/webserver.ts";
+import { readFromDisk, Settings } from "./settings.ts";
 import { DEFAULT_CONFIG_DIR, defaultConfigDir } from "./util.ts";
 
 interface Options {
@@ -76,17 +77,27 @@ async function setupLogger(debug?: boolean) {
   });
 }
 
-async function main(): Promise<void> {
+async function main(): Promise<number> {
   const options = await parseOptions();
   await prepareConfigDir(options);
   await setupLogger(options.debug);
+  let settings: Settings;
+  try {
+    settings = await readFromDisk(options.configDir);
+  } catch (e) {
+    log.error(e);
+    return 1;
+  }
   const database = new Database(options.configDir);
   database.migrate();
 
   await spawnServer({
     ...options,
     db: database,
+    settings,
   });
+
+  return 0;
 }
 
 if (import.meta.main) {

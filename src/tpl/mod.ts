@@ -1,7 +1,7 @@
 import { Recipe } from "../data/model/recipe.ts";
 import { Tag } from "../data/model/tag.ts";
 import { Pagination } from "../data/pagination.ts";
-import { ImportResult } from "../data/parse/import_recipe.ts";
+import { ImportResult } from "../data/parse/import/import_recipe.ts";
 import { Eta, log, path } from "../../deps.ts";
 import { AppState } from "../http/webserver.ts";
 import { root } from "../util.ts";

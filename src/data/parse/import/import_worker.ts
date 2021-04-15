@@ -2,37 +2,27 @@ import {
   SchemaAggregateRating,
   SchemaNutritionInformation,
   SchemaReview,
-} from "../../../deps.ts";
-import { Recipe, Review } from "../model/recipe.ts";
-import { Tag } from "../model/tag.ts";
-import { downloadThumbnail, fetchCustom } from "../util/thumbnails.ts";
-import { durationToSeconds, parseDuration } from "./duration.ts";
-import { SchemaParser } from "./schema_parser.ts";
-import { ensureArray, extractNumber, first } from "./util.ts";
+} from "../../../../deps.ts";
+import { Recipe, Review } from "../../model/recipe.ts";
+import { Tag } from "../../model/tag.ts";
+import { downloadThumbnail, fetchCustom } from "../../util/thumbnails.ts";
+import { durationToSeconds, parseDuration } from "../duration.ts";
+import { SchemaParser } from "../schema_parser.ts";
+import { ensureArray, extractNumber, first } from "../util.ts";
+import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
-export interface ImportResult {
-  url: string;
-  success: boolean;
-  error?: string;
-  recipe?: Recipe;
-}
-
-export async function importRecipes(
-  urls: string[],
-  configDir: string,
-): Promise<ImportResult[]> {
-  const results: ImportResult[] = [];
-  for (const url of urls) {
-    const imported = await importRecipe(url.trim(), configDir);
-    results.push({
-      url,
-      success: typeof imported !== "string",
-      recipe: typeof imported === "string" ? undefined : imported,
-      error: typeof imported === "string" ? imported : undefined,
-    });
-  }
-  return results;
-}
+self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
+  importRecipe(e.data.url, e.data.configDir).then((result) => {
+    const response: ImportRecipeResponse = {
+      url: e.data.url,
+      success: typeof result !== "string",
+      recipe: typeof result === "string" ? undefined : result,
+      error: typeof result === "string" ? result : undefined,
+    };
+    self.postMessage(response);
+    self.close();
+  });
+};
 
 export async function importRecipe(
   url: string,

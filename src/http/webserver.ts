@@ -1,7 +1,7 @@
 import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { Services, servicesFactory } from "../data/service/services.ts";
-import { configDirAdapter } from "./adapters/config_dir_adapter.ts";
+import { Settings } from "../settings.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";
@@ -11,11 +11,17 @@ import { Routers } from "./routes/routers.ts";
 
 export interface AppState {
   services: Services;
+  settings: Settings;
+  configDir: string;
 }
 
-function buildState(db: Database): AppState {
+function buildState(
+  args: { db: Database; settings: Settings; configDir: string },
+): AppState {
   return {
-    services: servicesFactory(db),
+    services: servicesFactory(args.db),
+    settings: args.settings,
+    configDir: args.configDir,
   };
 }
 
@@ -29,13 +35,17 @@ export async function spawnServer(
     cert?: string;
     configDir: string;
     db: Database;
+    settings: Settings;
   },
 ) {
-  const state: AppState = buildState(args.db);
+  const state: AppState = buildState({
+    db: args.db,
+    settings: args.settings,
+    configDir: args.configDir,
+  });
 
   const app = new Oak.Application<AppState>({ state });
   app.use(
-    configDirAdapter(args.configDir),
     parameterAdapter(),
     orderByAdapter(),
     templateAdapter(args.debug),

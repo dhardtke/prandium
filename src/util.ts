@@ -39,3 +39,8 @@ export function root(...parts: string[]): string {
 export function roundUpToThreeDigits(n: number): number {
   return Math.round((n + Number.EPSILON) * 1000) / 1000;
 }
+
+export function getCpuCores(): number | undefined {
+  // @ts-ignore IntelliJ hiccup
+  return Deno.systemCpuInfo().cores;
+}

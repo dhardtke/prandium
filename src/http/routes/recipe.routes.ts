@@ -1,6 +1,6 @@
 import { fs, Oak, path } from "../../../deps.ts";
 import { Recipe } from "../../data/model/recipe.ts";
-import { importRecipes } from "../../data/parse/import_recipe.ts";
+import { importRecipes } from "../../data/parse/import/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { toNumber } from "../../data/util/convert.ts";
 import {
@@ -139,10 +139,11 @@ router
       if (!urls) {
         return await next();
       }
-      const results = await importRecipes(
-        urls!.split("\n"),
-        ctx.configDir(),
-      );
+      const results = await importRecipes({
+        urls: urls!.split("\n"),
+        configDir: ctx.state.configDir,
+        importWorkerCount: ctx.state.settings.importWorkerCount,
+      });
       const service = ctx.state.services.RecipeService;
       service.create(results.filter((r) => r.success).map((r) => r.recipe!));
       await ctx.render(RecipeImportTemplate, { results });
@@ -183,7 +184,7 @@ router
         const formDataReader: Oak.FormDataReader = await ctx.request.body({
           type: "form-data",
         }).value;
-        await assignRecipeFields(formDataReader, recipe, ctx.configDir());
+        await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
         service.update([recipe]);
         ctx.response.redirect(
           urlWithParams(UrlHelper.INSTANCE.recipe(recipe), {
@@ -207,7 +208,7 @@ router
       const formDataReader: Oak.FormDataReader = await ctx.request.body({
         type: "form-data",
       }).value;
-      await assignRecipeFields(formDataReader, recipe, ctx.configDir());
+      await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
       service.create([recipe]);
       ctx.response.redirect(
         urlWithParams(UrlHelper.INSTANCE.recipe(recipe), {
@@ -242,7 +243,7 @@ router
       if (!recipe) {
         await next();
       } else {
-        await deleteThumbnail(recipe, ctx.configDir());
+        await deleteThumbnail(recipe, ctx.state.configDir);
         service.delete([recipe]);
         ctx.response.redirect(
           urlWithParams(UrlHelper.INSTANCE.recipeList(), {
