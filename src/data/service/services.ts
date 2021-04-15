@@ -29,8 +29,10 @@ export const services = new class implements Services {
 
   get<S>(serviceClass: Class<S>): S {
     if (!this.lut[serviceClass.name]) {
-      throw Error(`Fatal: ${String(serviceClass.name)} is not a registered service.`);
+      throw Error(
+        `Fatal: ${String(serviceClass.name)} is not a registered service.`,
+      );
     }
     return this.lut[serviceClass.name]! as unknown as S;
   }
-};
+}();

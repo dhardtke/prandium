@@ -40,7 +40,10 @@ export async function spawnServer(
   services.initialize(args.db);
 
   // TODO remove explicit HttpServerStd instantiation once https://github.com/denoland/deno/issues/10193 is fixed
-  const app = new Oak.Application<AppState>({ state, serverConstructor: HttpServerStd });
+  const app = new Oak.Application<AppState>({
+    state,
+    serverConstructor: HttpServerStd,
+  });
   app.use(
     parameterAdapter(),
     orderByAdapter(),
@@ -60,11 +63,13 @@ export async function spawnServer(
     log.info(`Server started: Listening on ${url}`);
   });
 
-  const sslOptions = args.secure ? {
-    secure: true,
-    certFile: args.cert || "",
-    keyFile: args.key || "",
-  } : {};
+  const sslOptions = args.secure
+    ? {
+      secure: true,
+      certFile: args.cert || "",
+      keyFile: args.key || "",
+    }
+    : {};
   await app.listen({
     hostname: args.host,
     port: args.port,

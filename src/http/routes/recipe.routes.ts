@@ -5,8 +5,17 @@ import { RecipeService } from "../../data/service/recipe.service.ts";
 import { services } from "../../data/service/services.ts";
 import { TagService } from "../../data/service/tag.service.ts";
 import { toNumber } from "../../data/util/convert.ts";
-import { getThumbnailDir, getUniqueFilename, } from "../../data/util/thumbnails.ts";
-import { RecipeDeleteTemplate, RecipeDetailTemplate, RecipeEditTemplate, RecipeImportTemplate, RecipeListTemplate, } from "../../tpl/mod.ts";
+import {
+  getThumbnailDir,
+  getUniqueFilename,
+} from "../../data/util/thumbnails.ts";
+import {
+  RecipeDeleteTemplate,
+  RecipeDetailTemplate,
+  RecipeEditTemplate,
+  RecipeImportTemplate,
+  RecipeListTemplate,
+} from "../../tpl/mod.ts";
 import { UrlHelper } from "../url_helper.ts";
 import { collectFormData, urlWithParams } from "../util.ts";
 import { AppState } from "../webserver.ts";
