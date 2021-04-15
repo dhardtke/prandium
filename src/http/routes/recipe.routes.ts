@@ -2,6 +2,8 @@ import { fs, Oak, path } from "../../../deps.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { importRecipes } from "../../data/parse/import/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
+import { services } from "../../data/service/services.ts";
+import { TagService } from "../../data/service/tag.service.ts";
 import { toNumber } from "../../data/util/convert.ts";
 import {
   getThumbnailDir,
@@ -94,7 +96,7 @@ async function assignRecipeFields(
 const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
 router
   .get("/", async (ctx: Oak.Context<AppState>) => {
-    const service: RecipeService = ctx.state.services.RecipeService;
+    const service: RecipeService = services.get(RecipeService);
 
     const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
       toNumber(id, -1)
@@ -116,7 +118,7 @@ router
         ),
     );
     const tags = tagIds.length
-      ? ctx.state.services.TagService.list({
+      ? services.get(TagService).list({
         filters: { ids: tagIds },
       })
       : [];
@@ -144,7 +146,7 @@ router
         configDir: ctx.state.configDir,
         importWorkerCount: ctx.state.settings.importWorkerCount,
       });
-      const service = ctx.state.services.RecipeService;
+      const service = services.get(RecipeService);
       service.create(results.filter((r) => r.success).map((r) => r.recipe!));
       await ctx.render(RecipeImportTemplate, { results });
     },
@@ -152,7 +154,7 @@ router
   .get(
     "/:id/:slug/edit",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
-      const service = ctx.state.services.RecipeService;
+      const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
         true,
@@ -171,7 +173,7 @@ router
   .post(
     "/:id/:slug/edit",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
-      const service = ctx.state.services.RecipeService;
+      const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
         true,
@@ -203,7 +205,7 @@ router
   .post(
     "/create",
     async (ctx: Oak.Context<AppState>) => {
-      const service = ctx.state.services.RecipeService;
+      const service = services.get(RecipeService);
       const recipe = new Recipe({});
       const formDataReader: Oak.FormDataReader = await ctx.request.body({
         type: "form-data",
@@ -220,7 +222,7 @@ router
   .get(
     "/:id/:slug/delete",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
-      const service = ctx.state.services.RecipeService;
+      const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
       );
@@ -236,7 +238,7 @@ router
   .post(
     "/:id/:slug/delete",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
-      const service = ctx.state.services.RecipeService;
+      const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
       );
@@ -256,7 +258,7 @@ router
   .get(
     "/:id/:slug",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
-      const service = ctx.state.services.RecipeService;
+      const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
         true,

@@ -1,7 +1,8 @@
 export * as sqlite from "https://deno.land/x/sqlite@v2.4.0/mod.ts";
 export * as Eta from "https://deno.land/x/eta@v1.12.1/mod.ts";
 export * as Dom from "https://deno.land/x/deno_dom@v0.1.7-alpha/deno-dom-wasm.ts";
-export * as Oak from "https://deno.land/x/oak@v6.5.1/mod.ts";
+export * as Oak from "https://deno.land/x/oak@v7.0.0/mod.ts";
+export { HttpServerStd } from "https://deno.land/x/oak@v7.0.0/http_server_std.ts";
 export { default as parseIngredient } from "https://cdn.skypack.dev/parse-ingredient@v0.3.0?min";
 export * from "https://cdn.skypack.dev/numeric-quantity@v1.0.1?min";
 export * as Zod from "https://cdn.skypack.dev/zod@3.0.0-alpha.33?dts";

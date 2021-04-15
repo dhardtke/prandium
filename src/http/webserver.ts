@@ -1,6 +1,6 @@
-import { log, Oak } from "../../deps.ts";
+import { HttpServerStd, log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
-import { Services, servicesFactory } from "../data/service/services.ts";
+import { services } from "../data/service/services.ts";
 import { Settings } from "../settings.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
@@ -10,19 +10,14 @@ import { handleNotFound, handleServerError } from "./error.ts";
 import { Routers } from "./routes/routers.ts";
 
 export interface AppState {
-  services: Services;
   settings: Settings;
   configDir: string;
 }
 
 function buildState(
-  args: { db: Database; settings: Settings; configDir: string },
+  args: { settings: Settings; configDir: string },
 ): AppState {
-  return {
-    services: servicesFactory(args.db),
-    settings: args.settings,
-    configDir: args.configDir,
-  };
+  return { ...args };
 }
 
 export async function spawnServer(
@@ -39,12 +34,16 @@ export async function spawnServer(
   },
 ) {
   const state: AppState = buildState({
-    db: args.db,
     settings: args.settings,
     configDir: args.configDir,
   });
+  services.initialize(args.db);
 
-  const app = new Oak.Application<AppState>({ state });
+  // TODO remove explicit HttpServerStd instantiation once https://github.com/denoland/deno/issues/10193 is fixed
+  const app = new Oak.Application<AppState>({
+    state,
+    serverConstructor: HttpServerStd,
+  });
   app.use(
     parameterAdapter(),
     orderByAdapter(),
@@ -64,11 +63,16 @@ export async function spawnServer(
     log.info(`Server started: Listening on ${url}`);
   });
 
+  const sslOptions = args.secure
+    ? {
+      secure: true,
+      certFile: args.cert || "",
+      keyFile: args.key || "",
+    }
+    : {};
   await app.listen({
     hostname: args.host,
     port: args.port,
-    secure: args.secure,
-    certFile: args.cert || "",
-    keyFile: args.key || "",
+    ...sslOptions,
   });
 }
