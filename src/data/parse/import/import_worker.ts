@@ -20,7 +20,6 @@ self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
       error: typeof result === "string" ? result : undefined,
     };
     self.postMessage(response);
-    self.close();
   });
 };
 

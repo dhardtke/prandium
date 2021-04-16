@@ -1,3 +1,4 @@
+import { getCpuCores } from "../../../util.ts";
 import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
@@ -16,19 +17,52 @@ export function importRecipes(
   },
 ): Promise<ImportResult[]> {
   const results: ImportResult[] = [];
-  let running = 0;
+  let pending = 0;
 
   return new Promise((resolve) => {
-    const workerDone = (e: MessageEvent<ImportRecipeResponse>) => {
-      running--;
+    if (args.urls.length === 0) {
+      resolve(results);
+    }
+
+    const workers: Worker[] = [];
+    const jobs: string[] = [...args.urls];
+    const cores = getCpuCores();
+    const workerCount = Math.min(
+      args.urls.length,
+      args.importWorkerCount || cores || 1,
+    );
+
+    const workerDone = (
+      e: MessageEvent<ImportRecipeResponse>,
+      worker: Worker,
+    ) => {
+      pending--;
       results.push(e.data);
-      if (running === 0) {
+      if (!maybePostJob(worker)) {
+        workers.splice(workers.indexOf(worker), 1);
+        worker.terminate();
+      }
+      if (pending === 0) {
+        workers.forEach((worker) => worker.terminate());
         resolve(results);
       }
     };
 
-    // TODO control how many workers are spawned
-    for (const url of args.urls) {
+    const maybePostJob = (worker: Worker): boolean => {
+      if (jobs.length === 0) {
+        return false;
+      }
+      const url = jobs.splice(0, 1)[0];
+      const request: ImportRecipeRequest = {
+        url: url.trim(),
+        configDir: args.configDir,
+      };
+      worker.postMessage(request);
+      pending++;
+      return true;
+    };
+
+    for (let i = 0; i < workerCount; i++) {
       const worker = new Worker(
         new URL("./import_worker.ts", import.meta.url).href,
         {
@@ -39,13 +73,10 @@ export function importRecipes(
           },
         },
       );
-      worker.onmessage = workerDone;
-      const request: ImportRecipeRequest = {
-        url: url.trim(),
-        configDir: args.configDir,
-      };
-      worker.postMessage(request);
-      running++;
+      worker.onmessage = (e: MessageEvent<ImportRecipeResponse>) =>
+        workerDone(e, worker);
+      workers.push(worker);
+      maybePostJob(worker);
     }
   });
 }
