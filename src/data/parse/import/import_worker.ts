@@ -12,24 +12,27 @@ import { ensureArray, extractNumber, first } from "../util.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
 self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
-  importRecipe(e.data.url, e.data.configDir).then((result) => {
-    const response: ImportRecipeResponse = {
-      url: e.data.url,
-      success: typeof result !== "string",
-      recipe: typeof result === "string" ? undefined : result,
-      error: typeof result === "string" ? result : undefined,
-    };
-    self.postMessage(response);
-  });
+  importRecipe(e.data.url, e.data.configDir, e.data.userAgent).then(
+    (result) => {
+      const response: ImportRecipeResponse = {
+        url: e.data.url,
+        success: typeof result !== "string",
+        recipe: typeof result === "string" ? undefined : result,
+        error: typeof result === "string" ? result : undefined,
+      };
+      self.postMessage(response);
+    },
+  );
 };
 
 export async function importRecipe(
   url: string,
   configDir: string,
+  userAgent: string,
 ): Promise<Recipe | string> {
   let html: string;
   try {
-    const response = await fetchCustom(url);
+    const response = await fetchCustom(url, userAgent);
     html = new TextDecoder().decode(
       new Uint8Array(await response.arrayBuffer()),
     );
@@ -72,6 +75,7 @@ export async function importRecipe(
     source: url,
     thumbnail: await downloadThumbnail(
       configDir,
+      userAgent,
       first(schemaRecipe.image as string),
     ),
     prepTime: schemaRecipe.prepTime

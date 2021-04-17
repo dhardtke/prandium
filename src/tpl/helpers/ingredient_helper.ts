@@ -1,4 +1,5 @@
 import { parseIngredient } from "../../../deps.ts";
+import { IngredientSortOrder } from "../../settings.ts";
 import { roundUpToThreeDigits } from "../../util.ts";
 
 // copied from https://github.com/jakeboone02/parse-ingredient/blob/master/src/index.ts#L3
@@ -56,9 +57,11 @@ interface Ingredient {
   amountType: AmountType;
 }
 
-const ingredientToWeight = (
+type IngredientWeightFunction = (i: Ingredient) => number;
+
+const ingredientToWeightFn = (
   order: AmountType[],
-): (ingredient: Ingredient) => number => {
+): IngredientWeightFunction => {
   return (ingredient) => {
     for (let i = order.length - 1; i >= 0; i--) {
       if (ingredient.amountType === order[i]) {
@@ -69,25 +72,57 @@ const ingredientToWeight = (
   };
 };
 
-const SortOrder = {
-  ORIGINAL: undefined,
-  FULL_UNITLESS_EMPTY: ingredientToWeight(["full", "unitless", "empty"]),
-  UNITLESS_EMPTY_FULL: ingredientToWeight(["unitless", "empty", "full"]),
-  EMPTY_UNITLESS_FULL: ingredientToWeight(["empty", "unitless", "full"]),
-  UNITLESS_FULL_EMPTY: ingredientToWeight(["unitless", "full", "empty"]),
-  EMPTY_FULL_UNITLESS: ingredientToWeight(["empty", "full", "unitless"]),
-  FULL_EMPTY_UNITLESS: ingredientToWeight(["full", "empty", "unitless"]),
+const SortOrder: Record<
+  IngredientSortOrder,
+  IngredientWeightFunction | undefined
+> = {
+  [IngredientSortOrder.ORIGINAL]: undefined,
+  [IngredientSortOrder.FULL_UNITLESS_EMPTY]: ingredientToWeightFn([
+    "full",
+    "unitless",
+    "empty",
+  ]),
+  [IngredientSortOrder.UNITLESS_EMPTY_FULL]: ingredientToWeightFn([
+    "unitless",
+    "empty",
+    "full",
+  ]),
+  [IngredientSortOrder.EMPTY_UNITLESS_FULL]: ingredientToWeightFn([
+    "empty",
+    "unitless",
+    "full",
+  ]),
+  [IngredientSortOrder.UNITLESS_FULL_EMPTY]: ingredientToWeightFn([
+    "unitless",
+    "full",
+    "empty",
+  ]),
+  [IngredientSortOrder.EMPTY_FULL_UNITLESS]: ingredientToWeightFn([
+    "empty",
+    "full",
+    "unitless",
+  ]),
+  [IngredientSortOrder.FULL_EMPTY_UNITLESS]: ingredientToWeightFn([
+    "full",
+    "empty",
+    "unitless",
+  ]),
 };
 
 export class IngredientHelper {
-  public static INSTANCE: IngredientHelper = new IngredientHelper();
-
+  private readonly sortOrder: IngredientSortOrder;
+  private readonly unitPostprocessing: string[];
   private cache: Map<string, ParsedIngredient | undefined> = new Map();
 
-  private constructor() {
+  public constructor(
+    sortOrder: IngredientSortOrder,
+    unitPostprocessing: string[],
+  ) {
+    this.sortOrder = sortOrder;
+    this.unitPostprocessing = unitPostprocessing;
   }
 
-  private static parse(raw: string): ParsedIngredient | undefined {
+  private parse(raw: string): ParsedIngredient | undefined {
     const candidates: ParsedIngredient[] = parseIngredient(raw, {
       normalizeUOM: false,
     });
@@ -96,8 +131,7 @@ export class IngredientHelper {
     if (parsed) {
       // TODO make configurable
       if (!parsed.unitOfMeasure) {
-        const postprocessing = ["TL", "EL", "dl", "kl.", "gr."];
-        const match = postprocessing.find((prefix) =>
+        const match = this.unitPostprocessing.find((prefix) =>
           parsed.description.startsWith(prefix)
         );
         if (match) {
@@ -125,7 +159,7 @@ export class IngredientHelper {
     portions = 1,
   ): Ingredient => {
     if (!this.cache.has(raw)) {
-      const parsed = IngredientHelper.parse(raw);
+      const parsed = this.parse(raw);
       this.cache.set(raw, parsed);
     }
     const cached = this.cache.get(raw)!;
@@ -153,27 +187,19 @@ export class IngredientHelper {
     };
   };
 
-  public sortedIngredients(
+  public ingredients = (
     ingredients: string[],
     recipeYield = 1,
     portions = 1,
-    sortOrder = SortOrder.FULL_UNITLESS_EMPTY,
-  ): Ingredient[] {
-    // TODO add configuration option for ingredient sorting
+  ): Ingredient[] => {
+    const sortFn = SortOrder[this.sortOrder]!;
     return ingredients
       .map((i) => this.ingredient(i, recipeYield, portions))
-      .sort(
-        sortOrder
-          ? (i1, i2) => {
-            // @ts-ignore sortOrder can not be null or undefined here
-            return sortOrder(i1) - sortOrder(i2);
-          }
-          : undefined,
-      );
-  }
+      .sort((i1, i2) => sortFn(i1) - sortFn(i2));
+  };
 
   public api = {
     ingredient: this.ingredient,
-    ingredients: this.sortedIngredients,
+    ingredients: this.ingredients,
   };
 }

@@ -145,6 +145,7 @@ router
         urls: urls!.split("\n"),
         configDir: ctx.state.configDir,
         importWorkerCount: ctx.state.settings.importWorkerCount,
+        userAgent: ctx.state.settings.userAgent,
       });
       const service = services.get(RecipeService);
       service.create(results.filter((r) => r.success).map((r) => r.recipe!));

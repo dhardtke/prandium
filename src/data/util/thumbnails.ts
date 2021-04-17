@@ -17,6 +17,7 @@ export function getUniqueFilename(dir: string, origFilename: string): string {
 
 export async function downloadThumbnail(
   configDir: string,
+  userAgent: string,
   url?: string,
 ): Promise<string | undefined> {
   if (!url) {
@@ -28,7 +29,7 @@ export async function downloadThumbnail(
     path.basename(new URL(url).pathname),
   );
   log.debug(() => `[Thumbnail] Downloading ${url} as ${filename}`);
-  const response = await fetchCustom(url);
+  const response = await fetchCustom(url, userAgent);
   await Deno.writeFile(
     path.join(thumbnailDir, filename),
     new Uint8Array(await response.arrayBuffer()),
@@ -53,12 +54,11 @@ const merge = (target: any, source: any) => {
 };
 
 /**
- * A custom wrapper around fetch to make sure requests use the Googlebot User Agent.
- * @param input
- * @param init
+ * A custom wrapper around fetch to make sure requests use the configured User Agent.
  */
 export function fetchCustom(
   input: RequestInfo,
+  userAgent: string,
   init?: RequestInit,
 ): Promise<Response> {
   return fetch(
@@ -67,10 +67,7 @@ export function fetchCustom(
       init ?? {},
       {
         headers: {
-          // TODO make configurable
-          "User-Agent":
-            // "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0",
+          "User-Agent": userAgent,
         },
       },
     ),

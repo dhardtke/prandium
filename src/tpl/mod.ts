@@ -5,7 +5,7 @@ import { ImportResult } from "../data/parse/import/import_recipe.ts";
 import { Eta, log, path } from "../../deps.ts";
 import { AppState } from "../http/webserver.ts";
 import { root } from "../util.ts";
-import { Helpers } from "./helpers/helpers.ts";
+import { helperFactory, Helpers } from "./helpers/helpers.ts";
 
 const TEMPLATE_DIR = root("src", "tpl", "templates");
 
@@ -19,7 +19,7 @@ interface TemplateData<Data = void> {
   data?: Data;
   appState: AppState;
   currentUrl: URL;
-  h: typeof Helpers;
+  h: Helpers;
 }
 
 export class Template<Data = void> {
@@ -68,7 +68,7 @@ export class Template<Data = void> {
       currentUrl,
       ...data || {},
       ...{
-        h: Helpers,
+        h: helperFactory(appState),
       },
     };
   }

@@ -1,4 +1,3 @@
-import { getCpuCores } from "../../../util.ts";
 import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
@@ -13,7 +12,8 @@ export function importRecipes(
   args: {
     urls: string[];
     configDir: string;
-    importWorkerCount: number | null;
+    importWorkerCount: number;
+    userAgent: string;
   },
 ): Promise<ImportResult[]> {
   const results: ImportResult[] = [];
@@ -26,10 +26,9 @@ export function importRecipes(
 
     const workers: Worker[] = [];
     const jobs: string[] = [...args.urls];
-    const cores = getCpuCores();
     const workerCount = Math.min(
       args.urls.length,
-      args.importWorkerCount || cores || 1,
+      args.importWorkerCount,
     );
 
     const workerDone = (
@@ -56,6 +55,7 @@ export function importRecipes(
       const request: ImportRecipeRequest = {
         url: url.trim(),
         configDir: args.configDir,
+        userAgent: args.userAgent,
       };
       worker.postMessage(request);
       pending++;
