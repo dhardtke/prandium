@@ -4,11 +4,22 @@ export function process(
   cwd?: string,
   ...cmd: (string | undefined)[]
 ): () => Deno.Process {
-  return () =>
-    Deno.run({
-      ...cwd ? { cwd: path.resolve(Deno.cwd(), cwd) } : {},
-      cmd: cmd.filter((c) => Boolean(c)) as string[],
-    });
+  return () => {
+    const actualCmd = cmd.filter((c) => Boolean(c)) as string[];
+    try {
+      return Deno.run({
+        ...cwd ? { cwd: path.resolve(Deno.cwd(), cwd) } : {},
+        cmd: actualCmd,
+      });
+    } catch (e) {
+      console.error(`Could not execute ${actualCmd.join(" ")}`);
+      throw e;
+    }
+  };
+}
+
+export function isWindows() {
+  return Deno.build.os === "windows";
 }
 
 export async function map<In, Out>(

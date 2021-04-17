@@ -1,5 +1,5 @@
 import { Cliffy, Colors, fs, path, slash } from "../deps.ts";
-import { process } from "./internal/util.ts";
+import { isWindows, process } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
@@ -220,7 +220,7 @@ if (import.meta.main) {
           "index*css*",
           process(
             undefined,
-            "sass",
+            `sass${isWindows() ? ".cmd" : ""}`,
             "-I",
             "assets/node_modules",
             "assets/index.scss",
