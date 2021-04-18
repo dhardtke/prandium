@@ -1,7 +1,13 @@
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { pushAll, toArray, toCamelCase, toDate } from "../util/convert.ts";
-import { buildFilters, buildOrderBySql, columns, Filter } from "../util/sql.ts";
+import {
+  buildFilters,
+  buildOrderBySql,
+  columns,
+  Filter,
+  placeholders,
+} from "../util/sql.ts";
 import { OrderBy, Service } from "./service.ts";
 import { TagService } from "./tag.service.ts";
 
@@ -176,68 +182,93 @@ export class RecipeService implements Service<Recipe> {
     });
   }
 
-  update(recipes: Recipe[]): void {
+  update(recipes: Recipe[], updateHistory = false): void {
     // TODO update related tables
     // TODO add missing fields
-    this.db.prepare(
-      `UPDATE recipe
-       SET updated_at                = ?,
-           title                     = ?,
-           description               = ?,
-           source                    = ?,
-           thumbnail                 = ?,
-           yield                     = ?,
-           nutrition_calories        = ?,
-           nutrition_carbohydrate    = ?,
-           nutrition_cholesterol     = ?,
-           nutrition_fat             = ?,
-           nutrition_fiber           = ?,
-           nutrition_protein         = ?,
-           nutrition_saturated_fat   = ?,
-           nutrition_sodium          = ?,
-           nutrition_sugar           = ?,
-           nutrition_trans_fat       = ?,
-           nutrition_unsaturated_fat = ?,
-           prep_time                 = ?,
-           cook_time                 = ?,
-           aggregate_rating_value    = ?,
-           aggregate_rating_count    = ?,
-           rating                    = ?,
-           ingredients               = json(?),
-           instructions              = json(?)
-       WHERE id = ?`,
-      (query) => {
-        for (const recipe of recipes) {
-          query([
-            recipe.updatedAt,
-            recipe.title,
-            recipe.description,
-            recipe.source,
-            recipe.thumbnail,
-            recipe.yield,
-            recipe.nutritionCalories,
-            recipe.nutritionCarbohydrate,
-            recipe.nutritionCholesterol,
-            recipe.nutritionFat,
-            recipe.nutritionFiber,
-            recipe.nutritionProtein,
-            recipe.nutritionSaturatedFat,
-            recipe.nutritionSodium,
-            recipe.nutritionSugar,
-            recipe.nutritionTransFat,
-            recipe.nutritionUnsaturatedFat,
-            recipe.prepTime,
-            recipe.cookTime,
-            recipe.aggregateRatingValue,
-            recipe.aggregateRatingCount,
-            recipe.rating,
-            JSON.stringify(recipe.ingredients),
-            JSON.stringify(recipe.instructions),
-            recipe.id,
-          ]);
-        }
-      },
-    );
+    this.db.transaction(() => {
+      this.db.prepare(
+        `UPDATE recipe
+         SET updated_at                = ?,
+             title                     = ?,
+             description               = ?,
+             source                    = ?,
+             thumbnail                 = ?,
+             yield                     = ?,
+             nutrition_calories        = ?,
+             nutrition_carbohydrate    = ?,
+             nutrition_cholesterol     = ?,
+             nutrition_fat             = ?,
+             nutrition_fiber           = ?,
+             nutrition_protein         = ?,
+             nutrition_saturated_fat   = ?,
+             nutrition_sodium          = ?,
+             nutrition_sugar           = ?,
+             nutrition_trans_fat       = ?,
+             nutrition_unsaturated_fat = ?,
+             prep_time                 = ?,
+             cook_time                 = ?,
+             aggregate_rating_value    = ?,
+             aggregate_rating_count    = ?,
+             rating                    = ?,
+             ingredients               = json(?),
+             instructions              = json(?)
+         WHERE id = ?`,
+        (query) => {
+          for (const recipe of recipes) {
+            query([
+              recipe.updatedAt,
+              recipe.title,
+              recipe.description,
+              recipe.source,
+              recipe.thumbnail,
+              recipe.yield,
+              recipe.nutritionCalories,
+              recipe.nutritionCarbohydrate,
+              recipe.nutritionCholesterol,
+              recipe.nutritionFat,
+              recipe.nutritionFiber,
+              recipe.nutritionProtein,
+              recipe.nutritionSaturatedFat,
+              recipe.nutritionSodium,
+              recipe.nutritionSugar,
+              recipe.nutritionTransFat,
+              recipe.nutritionUnsaturatedFat,
+              recipe.prepTime,
+              recipe.cookTime,
+              recipe.aggregateRatingValue,
+              recipe.aggregateRatingCount,
+              recipe.rating,
+              JSON.stringify(recipe.ingredients),
+              JSON.stringify(recipe.instructions),
+              recipe.id,
+            ]);
+          }
+        },
+      );
+
+      if (updateHistory) {
+        this.db.exec(
+          `DELETE
+                      FROM recipe_history
+                      WHERE recipe_id IN (${placeholders(recipes)})`,
+          recipes.map((r) => r.id),
+        );
+        this.db.prepare(
+          `INSERT INTO recipe_history (recipe_id, timestamp)
+                         VALUES (?, ?)`,
+          (query) => {
+            for (const recipe of recipes) {
+              for (const date of recipe.history) {
+                query([
+                  recipe.id,
+                  date,
+                ]);
+              }
+            }
+          },
+        );
+      }
+    });
   }
 
   find(

@@ -197,6 +197,33 @@ router
       }
     },
   )
+  .post(
+    "/:id/:slug/rate",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      // TODO use update route and ensure only non-empty fields are set?
+      const service = services.get(RecipeService);
+      const recipe = service.find(
+        toNumber(ctx.parameter("id")),
+        false,
+        true,
+      );
+      if (!recipe) {
+        await next();
+      } else {
+        const formData: URLSearchParams = await ctx.request.body({
+          type: "form",
+        }).value;
+        if (ctx.state.settings.addHistoryEntryWhenRating) {
+          if (!recipe.rating) {
+            recipe.history.push(new Date());
+          }
+        }
+        recipe.rating = parseFloat(formData.get("rating") ?? "0");
+        service.update([recipe], true);
+        ctx.response.body = "Ok";
+      }
+    },
+  )
   .get(
     "/create",
     async (ctx: Oak.Context<AppState>) => {

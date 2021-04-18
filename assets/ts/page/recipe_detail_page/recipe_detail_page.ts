@@ -36,8 +36,28 @@ function registerPortionsControls() {
   });
 }
 
+function initializeRating() {
+  const SELECTORS = {
+    RATING: "#recipe-rating",
+    CURRENT_VALUE: ".current"
+  };
+
+  const $rating = document.querySelector<HTMLDivElement>(SELECTORS.RATING)!;
+  const $currentValue = $rating.querySelector(SELECTORS.CURRENT_VALUE)!;
+  $rating.querySelectorAll<HTMLInputElement>("input").forEach(($radio) => {
+    $radio.addEventListener("change", async () => {
+      await fetch(`${new URL(window.location.href).pathname}/rate`, {
+        method: "POST",
+        body: new URLSearchParams({ rating: $radio.value })
+      });
+      $currentValue.textContent = parseFloat($radio.value).toFixed(1);
+    });
+  });
+}
+
 export const RecipeDetailPage = async () => {
   registerPortionsControls();
+  initializeRating();
 
   await requestWakeLock();
 };

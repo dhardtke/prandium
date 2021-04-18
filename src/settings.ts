@@ -57,6 +57,12 @@ export interface Settings {
    * @see #DEFAULT_USER_AGENT
    */
   userAgent: string;
+
+  /**
+   * Whether a new history entry should be added when rating a Recipe for the first time.
+   * @default true
+   */
+  addHistoryEntryWhenRating: boolean;
 }
 
 export const DEFAULT_SETTINGS: Partial<Settings> = {};
@@ -84,6 +90,7 @@ const Schema = z.object({
     DEFAULT_INGREDIENT_POSTPROCESSING,
   ),
   userAgent: z.string().optional().default(DEFAULT_USER_AGENT),
+  addHistoryEntryWhenRating: z.boolean().optional().default(true),
 });
 
 export const SETTINGS_FILENAME = "settings.json";

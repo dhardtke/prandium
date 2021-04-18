@@ -1,5 +1,10 @@
-.bi::before {
-    display: inline-block;
-    line-height: 1;
-    vertical-align: -.125em;
+.bi {
+    width: 16px;
+    height: 16px;
+
+    &::before {
+        display: inline-block;
+        line-height: 1;
+        vertical-align: -.125em;
+    }
 }

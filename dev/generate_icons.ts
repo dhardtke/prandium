@@ -22,6 +22,8 @@ const icons = new Set([
   "x-circle-fill",
   "bar-chart",
   "star",
+  "star-fill",
+  "star-half",
   "people",
   "pencil",
   "three-dots",
@@ -56,7 +58,7 @@ for (const icon of icons) {
   if (!glyph) {
     throw new Error(`Can't find glyph for icon ${icon}`);
   }
-  glyphs.push(glyph);
+  glyphs.push(glyph.replace(' xmlns="http://www.w3.org/2000/svg"', ""));
 }
 
 await Deno.writeTextFile(

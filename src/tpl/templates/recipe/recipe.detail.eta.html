@@ -114,12 +114,38 @@
 <% if (recipe.description) { %>
     <p class="lead"><%= recipe.description %></p>
 <% } %>
+
+<div class="row">
+    <div class="col-sm mb-3">
+        <div class="card">
+            <div class="card-body d-flex align-items-center" id="recipe-rating">
+                <span class="text-muted me-auto">
+                    <%= h.t("recipe.rating") %>
+                </span>
+                <% ~includeFile("_partials/ratings.eta.html", {h, value: recipe.rating}) %>
+                <small class="current ms-1"><%= h.number.format(recipe.rating, 1) %></small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm mb-3">
+        <div class="card">
+            <div class="card-body d-flex align-items-center">
+                <span class="text-muted me-auto">
+                    <%= h.t("recipe.aggregate_rating") %>
+                </span>
+                <% ~includeFile("_partials/ratings.eta.html", {h, value: recipe.aggregateRatingValue, readonly: true}) %>
+                <small class="current ms-1"><%= h.number.format(recipe.aggregateRatingValue, 2) %></small>
+            </div>
+        </div>
+    </div>
+</div>
+
 <% recipe.history.forEach((date) => { %>
     <div><%= h.date.format(date) %></div>
 <% }) %>
 
 <!-- TODO show metadata like last cooked, etc.? -->
-<!-- TODO show rating -->
 
 <% if (recipe.thumbnail) { %>
     <div>

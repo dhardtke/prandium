@@ -1,6 +1,12 @@
 @use "_bootstrap";
 
 .dark {
+    .rating {
+        --color-star-hover: #{bootstrap.$gray-700};
+        --color-filled-star: #{bootstrap.$gray-600};
+        --color-empty-star: #{bootstrap.$gray-500};
+    }
+
     body {
         background: bootstrap.$dark;
         color: #fff;

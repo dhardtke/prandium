@@ -1,0 +1,63 @@
+@use "_bootstrap";
+
+// based on https://codepen.io/anefzaoui/pen/NWPZzMa
+.rating {
+    --color-star-hover: #{bootstrap.$gray-700};
+    --color-filled-star: #{bootstrap.$gray-900};
+    --color-empty-star: #{bootstrap.$gray-200};
+
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: start;
+
+    input {
+        display: none;
+    }
+
+    label {
+        transition: bootstrap.$transition-base;
+        color: var(--color-empty-star);
+
+        svg {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        &.half {
+            svg {
+                position: absolute;
+                padding-right: 0;
+                clip-path: inset(0px 16px 0px 0px);
+            }
+        }
+
+        &:not(:last-child) {
+            svg {
+                margin-right: 2px;
+            }
+        }
+    }
+
+    /* Click + hover color */
+    input:checked ~ label, /* color current and previous stars on checked */{
+        color: var(--color-star-hover);
+    }
+
+    &:not(.disabled) {
+        label {
+            cursor: pointer;
+        }
+
+        label:hover,
+        label:hover ~ label {
+            color: var(--color-star-hover);
+        }
+
+        input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
+        input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
+        label:hover ~ input:checked ~ label /* highlight previous selected stars */
+        {
+            color: var(--color-filled-star);
+        }
+    }
+}
