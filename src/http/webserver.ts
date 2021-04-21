@@ -3,6 +3,7 @@ import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { Settings } from "../settings.ts";
 import { ingredient } from "../data/util/ingredient.ts";
+import { Page } from "../tpl/templates/_structure/page.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";
@@ -43,6 +44,7 @@ export async function spawnServer(
     args.settings.ingredientSortOrder,
     args.settings.ingredientUnitPostprocessing,
   );
+  Page.minifying = args.settings.minifyHtml;
 
   const app = new Oak.Application<AppState>({
     state,

@@ -4,12 +4,12 @@ import { e, html } from "../../mod.ts";
 import { Favicons } from "./favicons.ts";
 import { Navbar } from "./navbar.ts";
 
-export const Page = (title?: string) =>
+const Page = (title?: string) =>
   (body: string) => {
     const stylesheet = asset.ifExists("index.min.css", "index.css");
     const javascript = asset.ifExists("index.min.js", "index.js");
 
-    return html`
+    const markup = html`
     <!DOCTYPE html>
     <html lang="en">
     <style>html {
@@ -36,4 +36,14 @@ export const Page = (title?: string) =>
     </main>
     </html>
   `;
+    return Page.minifying
+      ? markup.replace(/>\s+|\s+</g, (m) => m.trim())
+      : markup;
   };
+
+/**
+ * Determines whether the markup should be minified or not.
+ */
+Page.minifying = false;
+
+export { Page };

@@ -63,6 +63,12 @@ export interface Settings {
    * @default true
    */
   addHistoryEntryWhenRating: boolean;
+
+  /**
+   * Whether the HTML should be minified.
+   * @default false
+   */
+  minifyHtml: boolean;
 }
 
 export const DEFAULT_SETTINGS: Partial<Settings> = {};
@@ -91,6 +97,7 @@ const Schema = z.object({
   ),
   userAgent: z.string().optional().default(DEFAULT_USER_AGENT),
   addHistoryEntryWhenRating: z.boolean().optional().default(true),
+  minifyHtml: z.boolean().optional().default(false),
 });
 
 export const SETTINGS_FILENAME = "settings.json";
