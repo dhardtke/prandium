@@ -54,7 +54,8 @@ export const RecipeDetailTemplate = (
             <a title="${e(tag.description)}" href="${
         UrlGenerator.recipeList({ tagIds: [tag.id!] })
       }"
-               class="badge badge-linked bg-dark mb-3${i < recipe.tags.length &&
+               class="badge badge-linked bg-dark mb-3${i <
+          recipe.tags.length - 1 &&
         " me-1"}">
               ${e(tag.title)}
             </a>

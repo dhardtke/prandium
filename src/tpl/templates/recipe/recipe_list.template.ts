@@ -131,8 +131,9 @@ export const RecipeListTemplate = (
             <a title="${e(tag.description)}" href="${
         removeParameterValue(currentUrl, "tagId", tag.id)
       }"
-               class="badge badge-linked bg-secondary mb-3${i < tags.length &&
-        "me-1"}">
+               class="badge badge-linked bg-secondary mb-3${i <
+          tags.length - 1 &&
+        " me-1"}">
               <div class="d-flex align-items-center h-100">
                 ${LabeledIcon(tag.title, "x-circle-fill")}
               </div>
