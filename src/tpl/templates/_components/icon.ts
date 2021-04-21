@@ -29,6 +29,7 @@ export const ICONS = [
   "three-dots",
   "trash",
   "plus-square",
+  "check",
 ] as const;
 
 export type IconName = typeof ICONS[number];
