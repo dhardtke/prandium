@@ -1,6 +1,6 @@
 import { ImportResult } from "../../../data/parse/import/import_recipe.ts";
-import { t } from "../../helpers/translation_helper.ts";
-import { UrlGenerator } from "../../helpers/url_generator.ts";
+import { t } from "../../util/translation.ts";
+import { UrlGenerator } from "../../../http/util/url_generator.ts";
 import { e, html } from "../../mod.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";

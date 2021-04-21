@@ -1,4 +1,4 @@
-import { t } from "../../helpers/translation_helper.ts";
+import { t } from "../../util/translation.ts";
 import { html } from "../../mod.ts";
 import { Icon } from "../_components/icon.ts";
 

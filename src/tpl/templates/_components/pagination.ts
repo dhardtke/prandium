@@ -1,5 +1,5 @@
 import { Pagination as _Pagination } from "../../../data/pagination.ts";
-import { t } from "../../helpers/translation_helper.ts";
+import { t } from "../../util/translation.ts";
 import { e, html } from "../../mod.ts";
 import { Icon } from "./icon.ts";
 

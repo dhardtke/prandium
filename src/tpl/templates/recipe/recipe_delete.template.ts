@@ -1,6 +1,6 @@
 import { Recipe } from "../../../data/model/recipe.ts";
-import { t } from "../../helpers/translation_helper.ts";
-import { UrlGenerator } from "../../helpers/url_generator.ts";
+import { t } from "../../util/translation.ts";
+import { UrlGenerator } from "../../../http/util/url_generator.ts";
 import { html } from "../../mod.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { LabeledIcon } from "../_components/icon.ts";

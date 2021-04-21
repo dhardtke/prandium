@@ -1,4 +1,4 @@
-import { t } from "../../helpers/translation_helper.ts";
+import { t } from "../../util/translation.ts";
 import { html } from "../../mod.ts";
 
 function Item(title: string, active: boolean, url?: string) {

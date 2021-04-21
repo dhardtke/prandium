@@ -1,5 +1,5 @@
-import { asset } from "../../helpers/assets_helper.ts";
-import { t } from "../../helpers/translation_helper.ts";
+import { asset } from "../../util/asset.ts";
+import { t } from "../../util/translation.ts";
 import { html } from "../../mod.ts";
 import { Favicons } from "./favicons.ts";
 import { Navbar } from "./navbar.ts";

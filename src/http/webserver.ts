@@ -2,7 +2,7 @@ import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { Settings } from "../settings.ts";
-import { ingredient } from "../tpl/helpers/ingredient_helper.ts";
+import { ingredient } from "../data/util/ingredient.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";

@@ -1,4 +1,4 @@
-import { t } from "../../helpers/translation_helper.ts";
+import { t } from "../../util/translation.ts";
 import { html } from "../../mod.ts";
 import { Alert } from "../_components/alert.ts";
 import { PageTemplate } from "../_structure/page.template.ts";

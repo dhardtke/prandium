@@ -9,13 +9,13 @@ import {
   getThumbnailDir,
   getUniqueFilename,
 } from "../../data/util/thumbnails.ts";
-import { UrlGenerator } from "../../tpl/helpers/url_generator.ts";
+import { UrlGenerator } from "../util/url_generator.ts";
 import { RecipeDeleteTemplate } from "../../tpl/templates/recipe/recipe_delete.template.ts";
 import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.template.ts";
 import { RecipeEditTemplate } from "../../tpl/templates/recipe/recipe_edit.template.ts";
 import { RecipeImportTemplate } from "../../tpl/templates/recipe/recipe_import.template.ts";
 import { RecipeListTemplate } from "../../tpl/templates/recipe/recipe_list.template.ts";
-import { collectFormData, urlWithParams } from "../util.ts";
+import { collectFormData, urlWithParams } from "../util/mod.ts";
 import { AppState } from "../webserver.ts";
 
 async function deleteThumbnail(recipe: Recipe, configDir: string) {
