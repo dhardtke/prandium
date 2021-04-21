@@ -1,5 +1,5 @@
 import { t } from "../../util/translation.ts";
-import { html } from "../../mod.ts";
+import { e, html } from "../../mod.ts";
 import { Icon } from "../_components/icon.ts";
 
 export const Navbar = () =>
@@ -12,7 +12,7 @@ export const Navbar = () =>
             ${Icon("journal-richtext")}
           </div>
           <div class="app-name">
-            ${t("appName")}
+            ${e(t("appName"))}
           </div>
         </div>
       </a>

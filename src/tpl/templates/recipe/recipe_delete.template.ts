@@ -1,6 +1,6 @@
 import { Recipe } from "../../../data/model/recipe.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
-import { html } from "../../mod.ts";
+import { e, html } from "../../mod.ts";
 import { t } from "../../util/translation.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { LabeledIcon } from "../_components/icon.ts";
@@ -18,8 +18,8 @@ export const RecipeDeleteTemplate = (recipe: Recipe) =>
   }
 
   <form method="POST">
-    <h1>${t("confirmation")}</h1>
-    <p>${t("recipe.delete_confirmation")}</p>
+    <h1>${e(t("confirmation"))}</h1>
+    <p>${e(t("recipe.delete_confirmation"))}</p>
 
     <a class="btn btn-primary me-2" href="${UrlGenerator.recipe(recipe)}">
       ${LabeledIcon(t("no"), "arrow-left", 2)}

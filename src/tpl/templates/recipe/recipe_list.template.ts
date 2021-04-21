@@ -19,7 +19,7 @@ import { PageTemplate } from "../_structure/page.template.ts";
 export const TagFilter = () =>
   html`
   <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${
-    t("navigation.tags")
+    e(t("navigation.tags"))
   }
   </button>
   <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
@@ -28,9 +28,9 @@ export const TagFilter = () =>
           ${Icon("funnel")}
         </span>
       <input type="search" class="form-control input-filter" autocomplete="off" title="${
-    t("navigation.filter_title")
+    e(t("navigation.filter_title"))
   }"
-             placeholder="${t("navigation.filter_placeholder")}">
+             placeholder="${e(t("navigation.filter_placeholder"))}">
       <button class="btn btn-outline-secondary btn-tag-clear" type="button">Clear</button>
     </div>
     <div class="overflow-auto list-group list-group-flush pe-2"></div>
@@ -70,7 +70,7 @@ function OrderBy(currentUrl: URL) {
                 ${e(t("order_by.title"))}
             </span>
         <select class="form-select" title="${
-    t("recipe.order_by")
+    e(t("recipe.order_by"))
   }" autocomplete="off" name="orderBy">
           ${
     options.map(([optionValue, optionLabel]) =>
@@ -111,8 +111,8 @@ export const RecipeListTemplate = (
     <form class="d-flex col-lg-9" method="get" action="${UrlGenerator.recipeList()}">
       <div class="input-group">
         <input class="form-control" type="search" name="title" placeholder="${
-    t("search")
-  }" title="${t("search")}"
+    e(t("search"))
+  }" title="${e(t("search"))}"
                value="${parameter(currentUrl, "title")}">
         ${TagFilter()}
         <button class="btn btn-outline-info" type="submit">
@@ -201,23 +201,23 @@ export const RecipeListTemplate = (
                           <small class="text-muted">
                             ${
             recipe.lastCookedAt
-              ? t("recipe.last_cooked", {
+              ? e(t("recipe.last_cooked", {
                 distance: date.formatDistanceToNow(recipe.lastCookedAt),
-              })
-              : t("recipe.not_cooked_yet")
+              }))
+              : e(t("recipe.not_cooked_yet"))
           }
                           </small>
                         </p>
                       </div>
                       <div class="card-footer text-muted d-flex justify-content-between">
                         <div>
-                    <span title="${t("recipe.cooked_count")}" class="me-2">
+                    <span title="${e(t("recipe.cooked_count"))}" class="me-2">
                         ${LabeledIcon(recipe.cookedCount, "bar-chart")}
                     </span>
-                          <span title="${t("recipe.rating")}" class="me-2">
+                          <span title="${e(t("recipe.rating"))}" class="me-2">
                         ${LabeledIcon(number.format(recipe.rating), "star")}
                     </span>
-                          <span title="${t("recipe.aggregate_rating")}">
+                          <span title="${e(t("recipe.aggregate_rating"))}">
                       ${
             LabeledIcon(number.format(recipe.aggregateRatingValue), "people")
           }
@@ -225,7 +225,7 @@ export const RecipeListTemplate = (
                         </div>
 
                         <span class="d-flex align-items-center" title="${
-            t("recipe.time.total")
+            e(t("recipe.time.total"))
           }">
                     ${
             LabeledIcon(date.formatSeconds(recipe.totalTime!), "clock-fill")

@@ -100,7 +100,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
           <div class="card-body">
             <div class="mb-3">
               <label for="title" class="form-label">
-                ${t("title")} *
+                ${e(t("title"))} *
               </label>
               <input class="form-control" id="title" name="title" required value="${
     e(recipe?.title ?? "")
@@ -154,7 +154,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
     !recipe || !recipe.thumbnail ? " disabled" : ""
   } class="btn btn-sm btn-danger"
                       title="${
-    t("recipe.form.delete_thumbnail")
+    e(t("recipe.form.delete_thumbnail"))
   }" data-hook="delete">
                 ${Icon("trash")}
               </button>
@@ -174,78 +174,118 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
             <label for="nutritionCalories" class="form-label">
               ${e(t("recipe.nutrition.calories"))}
             </label>
-            <input class="form-control" id="nutritionCalories" name="nutritionCalories" value="${recipe
-    ?.nutritionCalories ?? ""}">
+            <input class="form-control" id="nutritionCalories" name="nutritionCalories" value="${
+    e(
+      recipe
+        ?.nutritionCalories ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionCarbohydrate" class="form-label">
               ${e(t("recipe.nutrition.carbohydrate"))}
             </label>
-            <input class="form-control" id="nutritionCarbohydrate" name="nutritionCarbohydrate" value="${recipe
-    ?.nutritionCarbohydrate ?? ""}">
+            <input class="form-control" id="nutritionCarbohydrate" name="nutritionCarbohydrate" value="${
+    e(
+      recipe
+        ?.nutritionCarbohydrate ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionCholesterol" class="form-label">
               ${e(t("recipe.nutrition.cholesterol"))}
             </label>
-            <input class="form-control" id="nutritionCholesterol" name="nutritionCholesterol" value="${recipe
-    ?.nutritionCholesterol ?? ""}">
+            <input class="form-control" id="nutritionCholesterol" name="nutritionCholesterol" value="${
+    e(
+      recipe
+        ?.nutritionCholesterol ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionFat" class="form-label">
               ${e(t("recipe.nutrition.fat"))}
             </label>
-            <input class="form-control" id="nutritionFat" name="nutritionFat" value="${recipe
-    ?.nutritionFat ?? ""}">
+            <input class="form-control" id="nutritionFat" name="nutritionFat" value="${
+    e(
+      recipe
+        ?.nutritionFat ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionFiber" class="form-label">
               ${e(t("recipe.nutrition.fiber"))}
             </label>
-            <input class="form-control" id="nutritionFiber" name="nutritionFiber" value="${recipe
-    ?.nutritionFiber ?? ""}">
+            <input class="form-control" id="nutritionFiber" name="nutritionFiber" value="${
+    e(
+      recipe
+        ?.nutritionFiber ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionProtein" class="form-label">
               ${e(t("recipe.nutrition.protein"))}
             </label>
-            <input class="form-control" id="nutritionProtein" name="nutritionProtein" value="${recipe
-    ?.nutritionProtein ?? ""}">
+            <input class="form-control" id="nutritionProtein" name="nutritionProtein" value="${
+    e(
+      recipe
+        ?.nutritionProtein ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionSaturatedFat" class="form-label">
               ${e(t("recipe.nutrition.saturated_fat"))}
             </label>
-            <input class="form-control" id="nutritionSaturatedFat" name="nutritionSaturatedFat" value="${recipe
-    ?.nutritionSaturatedFat ?? ""}">
+            <input class="form-control" id="nutritionSaturatedFat" name="nutritionSaturatedFat" value="${
+    e(
+      recipe
+        ?.nutritionSaturatedFat ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionSodium" class="form-label">
               ${e(t("recipe.nutrition.sodium"))}
             </label>
-            <input class="form-control" id="nutritionSodium" name="nutritionSodium" value="${recipe
-    ?.nutritionSodium ?? ""}">
+            <input class="form-control" id="nutritionSodium" name="nutritionSodium" value="${
+    e(
+      recipe
+        ?.nutritionSodium ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionSugar" class="form-label">
               ${e(t("recipe.nutrition.sugar"))}
             </label>
-            <input class="form-control" id="nutritionSugar" name="nutritionSugar" value="${recipe
-    ?.nutritionSugar ?? ""}">
+            <input class="form-control" id="nutritionSugar" name="nutritionSugar" value="${
+    e(
+      recipe
+        ?.nutritionSugar ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionTransFat" class="form-label">
               ${e(t("recipe.nutrition.trans_fat"))}
             </label>
-            <input class="form-control" id="nutritionTransFat" name="nutritionTransFat" value="${recipe
-    ?.nutritionTransFat ?? ""}">
+            <input class="form-control" id="nutritionTransFat" name="nutritionTransFat" value="${
+    e(
+      recipe
+        ?.nutritionTransFat ?? "",
+    )
+  }">
           </div>
           <div class="col-lg-2">
             <label for="nutritionUnsaturatedFat" class="form-label">
               ${e(t("recipe.nutrition.unsaturated_fat"))}
             </label>
             <input class="form-control" id="nutritionUnsaturatedFat" name="nutritionUnsaturatedFat"
-                   value="${recipe?.nutritionUnsaturatedFat ?? ""}">
+                   value="${e(recipe?.nutritionUnsaturatedFat ?? "")}">
           </div>
         </div>
       </div>
@@ -262,8 +302,12 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
             <label for="prepTime" class="form-label">
               ${e(t("recipe.prep_time"))}
             </label>
-            <input type="number" min="0" class="form-control" id="prepTime" name="prepTime" value="${recipe
-    ?.prepTime ?? ""}">
+            <input type="number" min="0" class="form-control" id="prepTime" name="prepTime" value="${
+    e(
+      recipe
+        ?.prepTime ?? "",
+    )
+  }">
             <div class="form-text">
               ${e(t("recipe.form.time_hint"))}
             </div>
@@ -272,8 +316,12 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
             <label for="cookTime" class="form-label">
               ${e(t("recipe.cook_time"))}
             </label>
-            <input type="number" min="0" class="form-control" id="cookTime" name="cookTime" value="${recipe
-    ?.cookTime ?? ""}">
+            <input type="number" min="0" class="form-control" id="cookTime" name="cookTime" value="${
+    e(
+      recipe
+        ?.cookTime ?? "",
+    )
+  }">
             <div class="form-text">
               ${e(t("recipe.form.time_hint"))}
             </div>
@@ -293,7 +341,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
               ${e(t("recipe.aggregate_rating_value"))}
             </label>
             <input type="number" min="0" step=".01" class="form-control" id="aggregateRatingValue" name="aggregateRatingValue"
-                   value="${recipe?.aggregateRatingValue ?? ""}">
+                   value="${e(recipe?.aggregateRatingValue ?? "")}">
           </div>
 
           <div class="col-sm">
@@ -301,14 +349,18 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
               ${e(t("recipe.aggregate_rating_count"))}
             </label>
             <input type="number" min="0" class="form-control" id="aggregateRatingCount" name="aggregateRatingCount"
-                   value="${recipe?.aggregateRatingCount ?? ""}">
+                   value="${e(recipe?.aggregateRatingCount ?? "")}">
           </div>
           <div class="col-sm">
             <label for="rating" class="form-label">
               ${e(t("recipe.rating"))}
             </label>
-            <input type="number" min="0" step=".5" class="form-control" id="rating" name="rating" value="${recipe
-    ?.rating ?? ""}">
+            <input type="number" min="0" step=".5" class="form-control" id="rating" name="rating" value="${
+    e(
+      recipe
+        ?.rating ?? "",
+    )
+  }">
           </div>
         </div>
       </div>

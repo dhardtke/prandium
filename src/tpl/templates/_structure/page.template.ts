@@ -1,6 +1,6 @@
 import { asset } from "../../util/asset.ts";
 import { t } from "../../util/translation.ts";
-import { html } from "../../mod.ts";
+import { e, html } from "../../mod.ts";
 import { Favicons } from "./favicons.ts";
 import { Navbar } from "./navbar.ts";
 
@@ -20,7 +20,7 @@ export const PageTemplate = (title?: string) =>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     ${Favicons()}
 
-    <title>${title ?? t("appName")}</title>
+    <title>${e(title) ?? e(t("appName"))}</title>
 
     <link rel="stylesheet" href="/assets/dist/${stylesheet}?${
       asset.modificationTimestamp(stylesheet)

@@ -52,7 +52,9 @@ export const RecipeDetailTemplate = (
     recipe.tags.map((tag, i) =>
       html`
             <a title="${e(tag.description)}" href="${
-        UrlGenerator.recipeList({ tagIds: [tag.id!] })
+        e(
+          UrlGenerator.recipeList({ tagIds: [tag.id!] }),
+        )
       }"
                class="badge badge-linked bg-dark mb-3${i <
           recipe.tags.length - 1 &&
@@ -79,8 +81,10 @@ export const RecipeDetailTemplate = (
       <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">${Icon("layout-wtf")}</span>
-                <span class="me-1">${t("recipe.time.prep")}</span>${
-    date.formatSeconds(recipe.prepTime)
+                <span class="me-1">${e(t("recipe.time.prep"))}</span>${
+    e(
+      date.formatSeconds(recipe.prepTime),
+    )
   }
             </span>
         </span>
@@ -90,8 +94,10 @@ export const RecipeDetailTemplate = (
       <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">${Icon("alarm")}</span>
-                <span class="me-1">${t("recipe.time.cook")}</span>${
-    date.formatSeconds(recipe.cookTime)
+                <span class="me-1">${e(t("recipe.time.cook"))}</span>${
+    e(
+      date.formatSeconds(recipe.cookTime),
+    )
   }
             </span>
         </span>
@@ -101,8 +107,8 @@ export const RecipeDetailTemplate = (
       <span class="badge bg-dark mb-3 me-1">
             <span class="d-flex align-items-center">
                 <span class="me-1">${Icon("clock-fill")}</span>
-                <span class="me-1">${t("recipe.time.total")}</span>
-                ${date.formatSeconds(recipe.prepTime + recipe.cookTime)}
+                <span class="me-1">${e(t("recipe.time.total"))}</span>
+                ${e(date.formatSeconds(recipe.prepTime + recipe.cookTime))}
             </span>
         </span>
     `}
@@ -124,7 +130,7 @@ export const RecipeDetailTemplate = (
     <div class="col-sm mb-3">
       <div class="card">
         <div class="card-body d-flex align-items-center" id="recipe-rating">
-          <span class="text-muted me-auto">${t("recipe.rating")}</span>
+          <span class="text-muted me-auto">${e(t("recipe.rating"))}</span>
           ${Rating(recipe.rating)}
           <small class="current ms-1">${
     e(number.format(recipe.rating, 1))
@@ -137,11 +143,11 @@ export const RecipeDetailTemplate = (
       <div class="card">
         <div class="card-body d-flex align-items-center">
           <span class="text-muted me-auto">${
-    t("recipe.aggregate_rating")
+    e(t("recipe.aggregate_rating"))
   }</span>
           ${Rating(recipe.aggregateRatingValue, true)}
           <small class="current ms-1">${
-    number.format(recipe.aggregateRatingValue, 2)
+    e(number.format(recipe.aggregateRatingValue, 2))
   }</small>
         </div>
       </div>
@@ -151,7 +157,7 @@ export const RecipeDetailTemplate = (
   ${
     recipe.history.map((d) =>
       html`
-        <div>${date.format(d)}</div>`
+        <div>${e(date.format(d))}</div>`
     )
   }
 
@@ -171,11 +177,13 @@ export const RecipeDetailTemplate = (
       <div class="card-header">
         <div class="d-flex align-items-center justify-content-between">
           <h2 class="h5 mb-0">
-            ${t("recipe.ingredients.title")}
+            ${e(t("recipe.ingredients.title"))}
           </h2>
           <form class="d-flex" method="get" id="ingredients-form" action="#ingredients">
             <div class="input-group input-group-sm w-auto">
-              <input type="number" class="form-control portions" name="portions" value="${portions}" min="1" max="99"
+              <input type="number" class="form-control portions" name="portions" value="${
+    e(portions)
+  }" min="1" max="99"
                      title="${e(t("recipe.portions"))}">
               <div class="input-group-text">
                 ${e(t("recipe.portions"))}
@@ -216,7 +224,7 @@ export const RecipeDetailTemplate = (
 
   ${recipe.instructions.length && html`
     <h3 class="mt-3">
-      ${t("recipe.instructions")}
+      ${e(t("recipe.instructions"))}
     </h3>
     <div class="accordion">
       ${
@@ -225,7 +233,7 @@ export const RecipeDetailTemplate = (
             <div class="accordion-item">
               <h2 class="accordion-header" id="heading-instruction-${i}">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-instruction-${i}">
-                  ${t("recipe.ingredients.step", { step: i + 1 })}
+                  ${e(t("recipe.ingredients.step", { step: i + 1 }))}
                 </button>
               </h2>
               <div id="collapse-instruction-${i}" class="accordion-collapse collapse show">
@@ -241,7 +249,7 @@ export const RecipeDetailTemplate = (
   `}
 
   ${recipe.reviews.length && html`
-    <h3 class="mt-3">${t("recipe.reviews")}</h3>
+    <h3 class="mt-3">${e(t("recipe.reviews"))}</h3>
     ${
     recipe.reviews.map((review, i) =>
       html`

@@ -1,4 +1,4 @@
-import { html } from "../../mod.ts";
+import { e, html } from "../../mod.ts";
 import { t } from "../../util/translation.ts";
 
 const Item = (title: string, active: boolean, url?: string) =>
@@ -20,9 +20,11 @@ export const Breadcrumb = (
   html`
   <nav>
     <ol class="breadcrumb${noMargin ? " mb-0" : ""}">
-      ${Item(t("home"), !items?.length, "/")}
+      ${Item(e(t("home")), !items?.length, "/")}
       ${items &&
-    items.map((item, i) => Item(item.title, i === items.length - 1, item.url))}
+    items.map((item, i) =>
+      Item(e(item.title), i === items.length - 1, item.url)
+    )}
     </ol>
   </nav>
 `;

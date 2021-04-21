@@ -23,7 +23,7 @@ export function PaginationPartial<T>(pagination: _Pagination<T>) {
       : html`
           <li class="page-item">
             <a class="page-link" href="${pagination.previousPage
-        ?.url}" rel="prev" title="${t("pagination.previous")}">
+        ?.url}" rel="prev" title="${e(t("pagination.previous"))}">
               ${Icon("arrow-left-short")}
             </a>
           </li>`
@@ -54,7 +54,7 @@ export function PaginationPartial<T>(pagination: _Pagination<T>) {
       : html`
             <li class="page-item">
               <a class="page-link" href="${pagination.nextPage
-        ?.url}" rel="next" title="${t("pagination.next")}">
+        ?.url}" rel="next" title="${e(t("pagination.next"))}">
                 ${Icon("arrow-right-short")}
               </a>
             </li>
