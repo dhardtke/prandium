@@ -11,7 +11,11 @@ export const asset = {
     return _default;
   },
   modificationTimestamp: (filename: string): number | undefined => {
-    return Deno.statSync(path.join(COMPILED_ASSETS_DIR, filename)).mtime
-      ?.getTime();
+    try {
+      return Deno.statSync(path.join(COMPILED_ASSETS_DIR, filename)).mtime
+        ?.getTime();
+    } catch {
+      return undefined;
+    }
   },
 };
