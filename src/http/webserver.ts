@@ -1,11 +1,11 @@
-import { HttpServerStd, log, Oak } from "../../deps.ts";
+import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { Settings } from "../settings.ts";
+import { ingredient } from "../tpl/helpers/ingredient_helper.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
 import { parameterAdapter } from "./adapters/parameter_adapter.ts";
-import { templateAdapter } from "./adapters/template_adapter.ts";
 import { handleNotFound, handleServerError } from "./error.ts";
 import { Routers } from "./routes/routers.ts";
 
@@ -37,17 +37,19 @@ export async function spawnServer(
     settings: args.settings,
     configDir: args.configDir,
   });
+  // Global App State initialize
   services.initialize(args.db);
+  ingredient.initialize(
+    args.settings.ingredientSortOrder,
+    args.settings.ingredientUnitPostprocessing,
+  );
 
-  // TODO remove explicit HttpServerStd instantiation once https://github.com/denoland/deno/issues/10193 is fixed
   const app = new Oak.Application<AppState>({
     state,
-    serverConstructor: HttpServerStd,
   });
   app.use(
     parameterAdapter(),
     orderByAdapter(),
-    templateAdapter(args.debug),
     paginationAdapter(),
   );
 

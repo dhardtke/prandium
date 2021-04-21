@@ -34,7 +34,6 @@ Please see [Development](docs/development.md) for information on how to set up y
 * [Bootstrap](https://getbootstrap.com/)
 * [ESBuild](https://esbuild.github.io/)
 * [Oak](https://oakserver.github.io/oak/)
-* [Eta](https://eta.js.org)
 * [deno_dom](https://github.com/b-fuze/deno-dom)
 * [parse-ingredient](https://jakeboone02.github.io/parse-ingredient/)
 * [Nextcloud Cookbook](https://github.com/nextcloud/cookbook)

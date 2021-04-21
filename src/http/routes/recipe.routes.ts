@@ -9,14 +9,12 @@ import {
   getThumbnailDir,
   getUniqueFilename,
 } from "../../data/util/thumbnails.ts";
-import {
-  RecipeDeleteTemplate,
-  RecipeDetailTemplate,
-  RecipeEditTemplate,
-  RecipeImportTemplate,
-  RecipeListTemplate,
-} from "../../tpl/mod.ts";
-import { UrlHelper } from "../url_helper.ts";
+import { UrlGenerator } from "../../tpl/helpers/url_generator.ts";
+import { RecipeDeleteTemplate } from "../../tpl/templates/recipe/recipe_delete.template.ts";
+import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.template.ts";
+import { RecipeEditTemplate } from "../../tpl/templates/recipe/recipe_edit.template.ts";
+import { RecipeImportTemplate } from "../../tpl/templates/recipe/recipe_import.template.ts";
+import { RecipeListTemplate } from "../../tpl/templates/recipe/recipe_list.template.ts";
 import { collectFormData, urlWithParams } from "../util.ts";
 import { AppState } from "../webserver.ts";
 
@@ -95,7 +93,7 @@ async function assignRecipeFields(
 
 const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
 router
-  .get("/", async (ctx: Oak.Context<AppState>) => {
+  .get("/", (ctx: Oak.Context<AppState>) => {
     const service: RecipeService = services.get(RecipeService);
 
     const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
@@ -122,13 +120,10 @@ router
         filters: { ids: tagIds },
       })
       : [];
-    await ctx.render(RecipeListTemplate, {
-      recipes,
-      tags,
-    });
+    ctx.response.body = RecipeListTemplate(recipes, tags, ctx.request.url);
   })
-  .get("/import", async (ctx: Oak.Context<AppState>) => {
-    await ctx.render(RecipeImportTemplate, undefined);
+  .get("/import", (ctx: Oak.Context<AppState>) => {
+    ctx.response.body = RecipeImportTemplate();
   })
   .post(
     "/import",
@@ -149,7 +144,7 @@ router
       });
       const service = services.get(RecipeService);
       service.create(results.filter((r) => r.success).map((r) => r.recipe!));
-      await ctx.render(RecipeImportTemplate, { results });
+      ctx.response.body = RecipeImportTemplate(results);
     },
   )
   .get(
@@ -165,9 +160,7 @@ router
       if (!recipe) {
         await next();
       } else {
-        await ctx.render(RecipeEditTemplate, {
-          recipe,
-        });
+        ctx.response.body = RecipeEditTemplate(recipe);
       }
     },
   )
@@ -190,7 +183,7 @@ router
         await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
         service.update([recipe]);
         ctx.response.redirect(
-          urlWithParams(UrlHelper.INSTANCE.recipe(recipe), {
+          urlWithParams(UrlGenerator.recipe(recipe), {
             "flash": "editSuccessful",
           }, ctx.request.url),
         );
@@ -226,8 +219,8 @@ router
   )
   .get(
     "/create",
-    async (ctx: Oak.Context<AppState>) => {
-      await ctx.render(RecipeEditTemplate, undefined);
+    (ctx: Oak.Context<AppState>) => {
+      ctx.response.body = RecipeEditTemplate();
     },
   )
   .post(
@@ -241,7 +234,7 @@ router
       await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
       service.create([recipe]);
       ctx.response.redirect(
-        urlWithParams(UrlHelper.INSTANCE.recipe(recipe), {
+        urlWithParams(UrlGenerator.recipe(recipe), {
           "flash": "createSuccessful",
         }, ctx.request.url),
       );
@@ -257,9 +250,7 @@ router
       if (!recipe) {
         await next();
       } else {
-        await ctx.render(RecipeDeleteTemplate, {
-          recipe,
-        });
+        ctx.response.body = RecipeDeleteTemplate(recipe);
       }
     },
   )
@@ -276,7 +267,7 @@ router
         await deleteThumbnail(recipe, ctx.state.configDir);
         service.delete([recipe]);
         ctx.response.redirect(
-          urlWithParams(UrlHelper.INSTANCE.recipeList(), {
+          urlWithParams(UrlGenerator.recipeList(), {
             "flash": "deleteSuccessful",
           }, ctx.request.url),
         );
@@ -296,10 +287,11 @@ router
       if (!recipe) {
         await next();
       } else {
-        await ctx.render(RecipeDetailTemplate, {
+        ctx.response.body = RecipeDetailTemplate(
           recipe,
-          portions: toNumber(ctx.parameter("portions"), recipe.yield),
-        });
+          ctx.request.url,
+          toNumber(ctx.parameter("portions"), recipe.yield),
+        );
       }
     },
   );

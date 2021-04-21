@@ -1,5 +1,6 @@
 import { log, Oak } from "../../deps.ts";
-import { NotFoundTemplate, ServerErrorTemplate } from "../tpl/mod.ts";
+import { Error404 } from "../tpl/templates/error/error_404.template.ts";
+import { Error500 } from "../tpl/templates/error/error_500.template.ts";
 import { AppState } from "./webserver.ts";
 
 export async function handleServerError(
@@ -11,13 +12,13 @@ export async function handleServerError(
   } catch (e) {
     log.error(e);
     ctx.response.status = 500;
-    await ctx.render(ServerErrorTemplate, null);
+    ctx.response.body = Error500();
   }
 }
 
-export async function handleNotFound(
+export function handleNotFound(
   ctx: Oak.Context<AppState>,
 ) {
   ctx.response.status = 404;
-  await ctx.render(NotFoundTemplate, null);
+  ctx.response.body = Error404();
 }

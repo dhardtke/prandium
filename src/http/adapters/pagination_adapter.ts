@@ -1,8 +1,8 @@
 import { toNumber } from "../../data/util/convert.ts";
 import { Pagination, PaginationBuilder } from "../../data/pagination.ts";
-import type { Context } from "https://deno.land/x/oak@v7.2.0/mod.ts";
+import type { Context } from "https://deno.land/x/oak@v7.3.0/mod.ts";
 
-declare module "https://deno.land/x/oak@v7.2.0/mod.ts" {
+declare module "https://deno.land/x/oak@v7.3.0/mod.ts" {
   interface Context {
     paginate: <T>(
       total: number,

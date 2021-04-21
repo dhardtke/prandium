@@ -109,60 +109,63 @@ const SortOrder: Record<
   ]),
 };
 
-export class IngredientHelper {
-  private readonly sortOrder: IngredientSortOrder;
-  private readonly unitPostprocessing: string[];
-  private cache: Map<string, ParsedIngredient | undefined> = new Map();
+let sortOrder: IngredientSortOrder;
+let unitPostprocessing: string[];
+const cache: Map<string, ParsedIngredient | undefined> = new Map();
 
-  public constructor(
-    sortOrder: IngredientSortOrder,
-    unitPostprocessing: string[],
-  ) {
-    this.sortOrder = sortOrder;
-    this.unitPostprocessing = unitPostprocessing;
-  }
-
-  private parse(raw: string): ParsedIngredient | undefined {
-    const candidates: ParsedIngredient[] = parseIngredient(raw, {
-      normalizeUOM: false,
-    });
-    const parsed = candidates.find((c) => !c.isGroupHeader);
-    // manual post-processing
-    if (parsed) {
-      // TODO make configurable
-      if (!parsed.unitOfMeasure) {
-        const match = this.unitPostprocessing.find((prefix) =>
-          parsed.description.startsWith(prefix)
-        );
-        if (match) {
-          parsed.unitOfMeasure = parsed.description.substr(0, match.length);
-          parsed.description = parsed.description.substr(match.length);
-          parsed.spaceBetweenQuantityAndUnit = true;
-        }
-      }
-      // cleanup
-      if (parsed.description.startsWith(", ")) {
-        parsed.description = parsed.description.substr(2);
+function _parse(raw: string): ParsedIngredient | undefined {
+  const candidates: ParsedIngredient[] = parseIngredient(raw, {
+    normalizeUOM: false,
+  });
+  const parsed = candidates.find((c) => !c.isGroupHeader);
+  // manual post-processing
+  if (parsed) {
+    if (!parsed.unitOfMeasure) {
+      const match = unitPostprocessing.find((prefix) =>
+        parsed.description.startsWith(prefix)
+      );
+      if (match) {
+        parsed.unitOfMeasure = parsed.description.substr(0, match.length);
+        parsed.description = parsed.description.substr(match.length);
+        parsed.spaceBetweenQuantityAndUnit = true;
       }
     }
-    return parsed;
+    // cleanup
+    if (parsed.description.startsWith(", ")) {
+      parsed.description = parsed.description.substr(2);
+    }
   }
+  return parsed;
+}
 
+let initialized = false;
+export const ingredient = {
+  initialize: (
+    _sortOrder: IngredientSortOrder,
+    _unitPostprocessing: string[],
+  ) => {
+    if (initialized) {
+      throw new Error("Already initialized");
+    }
+    initialized = true;
+    sortOrder = _sortOrder;
+    unitPostprocessing = _unitPostprocessing;
+  },
   /**
    * @param raw the raw ingredient string to parse
    * @param recipeYield the original recipe yield
    * @param portions the desired amount of portions
    */
-  public ingredient = (
+  parse: (
     raw: string,
     recipeYield = 1,
     portions = 1,
   ): Ingredient => {
-    if (!this.cache.has(raw)) {
-      const parsed = this.parse(raw);
-      this.cache.set(raw, parsed);
+    if (!cache.has(raw)) {
+      const parsed = _parse(raw);
+      cache.set(raw, parsed);
     }
-    const cached = this.cache.get(raw)!;
+    const cached = cache.get(raw)!;
     const computed = {
       quantity: cached?.quantity
         ? roundUpToThreeDigits(cached.quantity * (portions / recipeYield))
@@ -185,21 +188,15 @@ export class IngredientHelper {
         ? (cached?.unitOfMeasure ? "full" : "unitless")
         : "empty",
     };
-  };
-
-  public ingredients = (
+  },
+  parseMany: (
     ingredients: string[],
     recipeYield = 1,
     portions = 1,
   ): Ingredient[] => {
-    const sortFn = SortOrder[this.sortOrder]!;
+    const sortFn = SortOrder[sortOrder]!;
     return ingredients
-      .map((i) => this.ingredient(i, recipeYield, portions))
+      .map((i) => ingredient.parse(i, recipeYield, portions))
       .sort((i1, i2) => sortFn(i1) - sortFn(i2));
-  };
-
-  public api = {
-    ingredient: this.ingredient,
-    ingredients: this.ingredients,
-  };
-}
+  },
+};
