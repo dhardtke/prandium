@@ -8,14 +8,14 @@ import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { Rating } from "../_components/rating.ts";
-import { PageTemplate } from "../_structure/page.template.ts";
+import { Page } from "../_structure/page.ts";
 
 export const RecipeDetailTemplate = (
   recipe: Recipe,
   currentUrl: URL,
   portions?: number,
 ) =>
-  PageTemplate(recipe.title)(html`
+  Page(recipe.title)(html`
   ${
     Breadcrumb(
       false,

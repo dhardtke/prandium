@@ -14,7 +14,7 @@ import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { PaginationPartial } from "../_components/pagination.ts";
-import { PageTemplate } from "../_structure/page.template.ts";
+import { Page } from "../_structure/page.ts";
 
 export const TagFilter = () =>
   html`
@@ -104,7 +104,7 @@ export const RecipeListTemplate = (
   tags: Tag[],
   currentUrl: URL,
 ) =>
-  PageTemplate(t("recipes"))(html`
+  Page(t("recipes"))(html`
   ${Breadcrumb(false, { title: t("recipes"), url: UrlGenerator.recipeList() })}
 
   <div class="row g-3 mb-3">

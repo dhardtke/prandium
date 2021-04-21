@@ -5,7 +5,7 @@ import { t } from "../../util/translation.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
-import { PageTemplate } from "../_structure/page.template.ts";
+import { Page } from "../_structure/page.ts";
 
 function arrayField(
   title: string,
@@ -74,7 +74,7 @@ function arrayField(
 }
 
 export const RecipeEditTemplate = (recipe?: Recipe) =>
-  PageTemplate(recipe ? recipe.title : t("create"))(html`
+  Page(recipe ? recipe.title : t("create"))(html`
   ${
     Breadcrumb(
       false,

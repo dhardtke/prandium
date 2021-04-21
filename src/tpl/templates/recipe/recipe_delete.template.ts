@@ -4,10 +4,10 @@ import { e, html } from "../../mod.ts";
 import { t } from "../../util/translation.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { LabeledIcon } from "../_components/icon.ts";
-import { PageTemplate } from "../_structure/page.template.ts";
+import { Page } from "../_structure/page.ts";
 
 export const RecipeDeleteTemplate = (recipe: Recipe) =>
-  PageTemplate(recipe.title)(html`
+  Page(recipe.title)(html`
   ${
     Breadcrumb(
       false,

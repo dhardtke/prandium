@@ -4,7 +4,7 @@ import { e, html } from "../../mod.ts";
 import { Favicons } from "./favicons.ts";
 import { Navbar } from "./navbar.ts";
 
-export const PageTemplate = (title?: string) =>
+export const Page = (title?: string) =>
   (body: string) => {
     const stylesheet = asset.ifExists("index.min.css", "index.css");
     const javascript = asset.ifExists("index.min.js", "index.js");

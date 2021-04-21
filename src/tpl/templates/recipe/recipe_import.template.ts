@@ -5,10 +5,10 @@ import { t } from "../../util/translation.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
-import { PageTemplate } from "../_structure/page.template.ts";
+import { Page } from "../_structure/page.ts";
 
 export const RecipeImportTemplate = (results?: ImportResult[]) =>
-  PageTemplate(t("recipe.import.title"))(html`
+  Page(t("recipe.import.title"))(html`
   ${
     Breadcrumb(
       false,
