@@ -1,30 +1,28 @@
-import { t } from "../../util/translation.ts";
 import { html } from "../../mod.ts";
+import { t } from "../../util/translation.ts";
 
-function Item(title: string, active: boolean, url?: string) {
-  return active
+const Item = (title: string, active: boolean, url?: string) =>
+  active
     ? html`
-    <li class="breadcrumb-item active">
-      ${title}
-    </li>
-  `
+      <li class="breadcrumb-item active">
+        ${title}
+      </li>
+    `
     : html`
-    <li class="breadcrumb-item">
-      ${url ? html`<a href="${url}">${title}</a>` : title}
-    </li>`;
-}
+      <li class="breadcrumb-item">
+        ${url ? html`<a href="${url}">${title}</a>` : title}
+      </li>`;
 
-export function Breadcrumb(
+export const Breadcrumb = (
   noMargin = false,
   ...items: { title: string; url?: string }[]
-) {
-  return html`
-    <nav>
-      <ol class="breadcrumb${noMargin ? " mb-0" : ""}">
-        ${Item(t("home"), !items?.length, "/")}
-        ${items &&
+) =>
+  html`
+  <nav>
+    <ol class="breadcrumb${noMargin ? " mb-0" : ""}">
+      ${Item(t("home"), !items?.length, "/")}
+      ${items &&
     items.map((item, i) => Item(item.title, i === items.length - 1, item.url))}
-      </ol>
-    </nav>
-  `;
-}
+    </ol>
+  </nav>
+`;

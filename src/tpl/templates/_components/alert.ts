@@ -10,18 +10,17 @@ export type AlertType =
   | "dark"
   | "light";
 
-export function Alert(
+export const Alert = (
   type: AlertType,
   title: string,
   description: string,
   className?: string,
   escapeDescription = true,
-) {
-  return html`
-    <div class="alert alert-${type}${
+) =>
+  html`
+  <div class="alert alert-${type}${
     className ? ` ${className}` : ""
   }" role="alert">
-      <h4 class="alert-heading">${e(title)}</h4>
-      ${escapeDescription ? e(description) : description}
-    </div>`;
-}
+    <h4 class="alert-heading">${e(title)}</h4>
+    ${escapeDescription ? e(description) : description}
+  </div>`;

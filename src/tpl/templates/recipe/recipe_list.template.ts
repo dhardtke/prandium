@@ -7,45 +7,46 @@ import {
   removeParameter,
   removeParameterValue,
 } from "../../../http/util/parameters.ts";
-import { t } from "../../util/translation.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
 import { e, html } from "../../mod.ts";
+import { t } from "../../util/translation.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { PaginationPartial } from "../_components/pagination.ts";
 import { PageTemplate } from "../_structure/page.template.ts";
 
-export function TagFilter() {
-  return html`
-    <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${
+export const TagFilter = () =>
+  html`
+  <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${
     t("navigation.tags")
-  }</button>
-    <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
-      <div class="input-group mb-2">
+  }
+  </button>
+  <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
+    <div class="input-group mb-2">
         <span class="input-group-text">
           ${Icon("funnel")}
         </span>
-        <input type="search" class="form-control input-filter" autocomplete="off" title="${
+      <input type="search" class="form-control input-filter" autocomplete="off" title="${
     t("navigation.filter_title")
   }"
-               placeholder="${t("navigation.filter_placeholder")}">
-        <button class="btn btn-outline-secondary btn-tag-clear" type="button">Clear</button>
-      </div>
-      <div class="overflow-auto list-group list-group-flush pe-2"></div>
-      <template>
-        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="">
-          <div class="me-auto tag-title"></div>
-          <span class="badge bg-dark rounded-pill tag-recipe-count"></span>
-          <input type="hidden" name="tagId" value=""/>
-        </a>
-      </template>
+             placeholder="${t("navigation.filter_placeholder")}">
+      <button class="btn btn-outline-secondary btn-tag-clear" type="button">Clear</button>
     </div>
-  `;
-}
+    <div class="overflow-auto list-group list-group-flush pe-2"></div>
+    <template>
+      <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="">
+        <div class="me-auto tag-title"></div>
+        <span class="badge bg-dark rounded-pill tag-recipe-count"></span>
+        <input type="hidden" name="tagId" value=""/>
+      </a>
+    </template>
+  </div>
+`;
 
 function OrderBy(currentUrl: URL) {
   const orderBy = parameter(currentUrl, "orderBy", "title");
+
   const options = [
     ["id"],
     ["created_at"],
@@ -74,11 +75,11 @@ function OrderBy(currentUrl: URL) {
           ${
     options.map(([optionValue, optionLabel]) =>
       html`
-            <option value="${optionValue}" ${
+                <option value="${optionValue}" ${
         orderBy === optionValue ? "selected" : ""
       }>
-              ${t(optionLabel || optionValue)}
-            </option>`
+                  ${t(optionLabel || optionValue)}
+                </option>`
     )
   }
         </select>
@@ -98,159 +99,156 @@ function OrderBy(currentUrl: URL) {
     </form>`;
 }
 
-export function RecipeListTemplate(
+export const RecipeListTemplate = (
   recipes: Pagination<Recipe>,
   tags: Tag[],
   currentUrl: URL,
-) {
-  return PageTemplate(t("recipes"))(html`
-    ${
-    Breadcrumb(false, { title: t("recipes"), url: UrlGenerator.recipeList() })
-  }
+) =>
+  PageTemplate(t("recipes"))(html`
+  ${Breadcrumb(false, { title: t("recipes"), url: UrlGenerator.recipeList() })}
 
-    <div class="row g-3 mb-3">
-      <form class="d-flex col-lg-9" method="get" action="${UrlGenerator.recipeList()}">
-        <div class="input-group">
-          <input class="form-control" type="search" name="title" placeholder="${
+  <div class="row g-3 mb-3">
+    <form class="d-flex col-lg-9" method="get" action="${UrlGenerator.recipeList()}">
+      <div class="input-group">
+        <input class="form-control" type="search" name="title" placeholder="${
     t("search")
   }" title="${t("search")}"
-                 value="${parameter(currentUrl, "title")}">
-          ${TagFilter()}
-          <button class="btn btn-outline-info" type="submit">
-            ${Icon("search")}
-          </button>
-        </div>
-      </form>
-      ${OrderBy(currentUrl)}
-    </div>
+               value="${parameter(currentUrl, "title")}">
+        ${TagFilter()}
+        <button class="btn btn-outline-info" type="submit">
+          ${Icon("search")}
+        </button>
+      </div>
+    </form>
+    ${OrderBy(currentUrl)}
+  </div>
 
-    ${tags.length && html`
-      <div class="d-flex flex-wrap">
-        ${
+  ${tags.length && html`
+    <div class="d-flex flex-wrap">
+      ${
     tags.map((tag, i) =>
       html`
-          <a title="${e(tag.description)}" href="${
+            <a title="${e(tag.description)}" href="${
         removeParameterValue(currentUrl, "tagId", tag.id)
       }"
-             class="badge badge-linked bg-secondary mb-3${i < tags.length &&
+               class="badge badge-linked bg-secondary mb-3${i < tags.length &&
         "me-1"}">
-            <div class="d-flex align-items-center h-100">
-              ${LabeledIcon(tag.title, "x-circle-fill")}
-            </div>
-          </a>`
+              <div class="d-flex align-items-center h-100">
+                ${LabeledIcon(tag.title, "x-circle-fill")}
+              </div>
+            </a>`
     )
   }
 
-        ${tags.length > 1 && html`
-          <a href="${
+      ${tags.length > 1 && html`
+        <a href="${
     e(removeParameter(currentUrl, "tagId"))
   }" class="badge badge-linked bg-danger ms-2 mb-3">
-            <div class="d-flex align-items-center h-100">
-              ${LabeledIcon(t("recipe.clear_all_tags"), "x-circle-fill")}
-            </div>
-          </a>`}
-      </div>
-    `}
+          <div class="d-flex align-items-center h-100">
+            ${LabeledIcon(t("recipe.clear_all_tags"), "x-circle-fill")}
+          </div>
+        </a>`}
+    </div>
+  `}
 
-    ${currentUrl.searchParams.get("flash") === "deleteSuccessful" &&
+  ${currentUrl.searchParams.get("flash") === "deleteSuccessful" &&
     Alert("success", t("info"), t("recipe.delete_successful"))}
 
-    ${
+  ${
     recipes.totalItems
       ? html`
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        ${
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+          ${
         recipes.items.map((recipe) =>
           html`
-          <div class="col">
-            <div class="recipe h-100">
-              <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown">
-                  ${Icon("three-dots")}
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <a class="dropdown-item text-primary" href="${
+                <div class="col">
+                  <div class="recipe h-100">
+                    <div class="dropdown">
+                      <button class="btn btn-light dropdown-toggle no-caret" type="button" data-bs-toggle="dropdown">
+                        ${Icon("three-dots")}
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                          <a class="dropdown-item text-primary" href="${
             UrlGenerator.recipeEdit(recipe)
           }">
-                      ${LabeledIcon(t("edit"), "pencil")}
-                    </a>
-                  </li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li>
-                    <a class="dropdown-item text-danger" href="${
+                            ${LabeledIcon(t("edit"), "pencil")}
+                          </a>
+                        </li>
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                          <a class="dropdown-item text-danger" href="${
             UrlGenerator.recipeDelete(recipe)
           }">
-                      ${LabeledIcon(t("delete"), "trash")}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <a class="card card-linked h-100" href="${
+                            ${LabeledIcon(t("delete"), "trash")}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                    <a class="card card-linked h-100" href="${
             UrlGenerator.recipe(recipe)
           }">
-                <img src="${
+                      <img src="${
             UrlGenerator.thumbnail(recipe.thumbnail)
           }" class="card-img-top" alt="" loading="lazy">
-                <div class="card-body">
-                  <h5 class="card-title">${e(recipe.title)}</h5>
-                  <p class="card-text">${e(recipe.description)}</p>
-                  <p class="card-text">
-                    <small class="text-muted">
-                      ${
+                      <div class="card-body">
+                        <h5 class="card-title">${e(recipe.title)}</h5>
+                        <p class="card-text">${e(recipe.description)}</p>
+                        <p class="card-text">
+                          <small class="text-muted">
+                            ${
             recipe.lastCookedAt
               ? t("recipe.last_cooked", {
                 distance: date.formatDistanceToNow(recipe.lastCookedAt),
               })
               : t("recipe.not_cooked_yet")
           }
-                    </small>
-                  </p>
-                </div>
-                <div class="card-footer text-muted d-flex justify-content-between">
-                  <div>
+                          </small>
+                        </p>
+                      </div>
+                      <div class="card-footer text-muted d-flex justify-content-between">
+                        <div>
                     <span title="${t("recipe.cooked_count")}" class="me-2">
                         ${LabeledIcon(recipe.cookedCount, "bar-chart")}
                     </span>
-                    <span title="${t("recipe.rating")}" class="me-2">
+                          <span title="${t("recipe.rating")}" class="me-2">
                         ${LabeledIcon(number.format(recipe.rating), "star")}
                     </span>
-                    <span title="${t("recipe.aggregate_rating")}">
+                          <span title="${t("recipe.aggregate_rating")}">
                       ${
             LabeledIcon(number.format(recipe.aggregateRatingValue), "people")
           }
                     </span>
-                  </div>
+                        </div>
 
-                  <span class="d-flex align-items-center" title="${
+                        <span class="d-flex align-items-center" title="${
             t("recipe.time.total")
           }">
                     ${
             LabeledIcon(date.formatSeconds(recipe.totalTime!), "clock-fill")
           }
                   </span>
+                      </div>
+                    </a>
+                  </div>
                 </div>
-              </a>
-            </div>
-          </div>
-        `
+              `
         )
       }
-      </div>
-    `
+        </div>
+      `
       : Alert("info", t("info"), t("recipe.no_recipes.found"))
   }
 
-    ${PaginationPartial(recipes)}
+  ${PaginationPartial(recipes)}
 
-    <a class="btn btn-primary me-2" href="${UrlGenerator.recipeCreate()}" role="button">
-      ${LabeledIcon(t("create"), "plus-square", 2)}
-    </a>
+  <a class="btn btn-primary me-2" href="${UrlGenerator.recipeCreate()}" role="button">
+    ${LabeledIcon(t("create"), "plus-square", 2)}
+  </a>
 
-    <a class="btn btn-success" href="${UrlGenerator.recipeImport()}" role="button">
-      ${LabeledIcon(t("recipe.import.title"), "cloud-arrow-down-fill", 2)}
-    </a>
-  `);
-}
+  <a class="btn btn-success" href="${UrlGenerator.recipeImport()}" role="button">
+    ${LabeledIcon(t("recipe.import.title"), "cloud-arrow-down-fill", 2)}
+  </a>
+`);
