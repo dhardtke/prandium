@@ -19,25 +19,22 @@ export function html(
     parts.push(strings[i + 1]);
   }
 
-  // TODO minify
-  // TODO copy tests?
-  // TODO automatically escape
-
   return parts.join("").trim();
 }
 
 export function e(str: unknown): string {
-  return str
-    ? String(str).replace(
-      /[&<>'"]/g,
-      (tag) =>
-        ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          "'": "&#39;",
-          '"': "&quot;",
-        }[tag])!,
-    )
-    : "";
+  if (!str) {
+    return "";
+  }
+  return String(str).replace(
+    /[&<>'"]/g,
+    (tag) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "'": "&#39;",
+        '"': "&quot;",
+      }[tag])!,
+  );
 }
