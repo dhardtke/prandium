@@ -1,13 +1,12 @@
 import { Oak } from "../../deps.ts";
 import { AppState } from "../../src/http/webserver.ts";
-import { Template } from "../../src/tpl/mod.ts";
 
 export class MockContextBuilder {
   private readonly _request: Oak.Request;
   private readonly _response: Oak.Response;
   private readonly _ctx: Oak.Context<AppState>;
 
-  private readonly _renderCalls: [Template<unknown>, unknown][] = [];
+  //private readonly _renderCalls: [Template<unknown>, unknown][] = [];
 
   constructor() {
     this._request = {} as Oak.Request;
@@ -23,16 +22,16 @@ export class MockContextBuilder {
   }
 
   private _initializeRender() {
-    this._ctx.render = <Data>(tpl: Template<Data>, data: Data) => {
-      this._renderCalls.push([tpl, data]);
-    };
+    // this._ctx.render = <Data>(tpl: Template<Data>, data: Data) => {
+    //   this._renderCalls.push([tpl, data]);
+    // };
   }
 
   public get ctx(): Oak.Context<AppState> {
     return this._ctx;
   }
 
-  public get renderCalls(): [Template<unknown>, unknown][] {
-    return this._renderCalls;
-  }
+  // public get renderCalls(): [Template<unknown>, unknown][] {
+  //   return this._renderCalls;
+  // }
 }
