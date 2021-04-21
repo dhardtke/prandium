@@ -1,8 +1,7 @@
 import { html } from "../../mod.ts";
 import { Icon, IconName } from "./icon.ts";
 
-export function Rating(value = 0, readonly = false) {
-  const id = "rating" + Math.random().toString(36).substring(7);
+export function Rating(name: string, value = 0, readonly = false) {
   const comparisonValue = Math.round(value * 2) / 2;
 
   let stars = "";
@@ -10,10 +9,10 @@ export function Rating(value = 0, readonly = false) {
     const half = i % 2 !== 0;
     const current = i / 2;
     stars += html`
-      <input type="radio" id="${id}-${i}" name="${id}" value="${current}" autocomplete="off"
+      <input type="radio" id="${name}-${i}" name="${name}" value="${current}" autocomplete="off"
              ${current === comparisonValue && " checked"}${readonly &&
       " disabled"}/>
-      <label for="${id}-${i}" title="${!readonly && current}" ${half &&
+      <label for="${name}-${i}" title="${!readonly && current}" ${half &&
       'class="half"'}>
         ${Icon(`star-${half ? "half" : "fill"}` as IconName)}
       </label>

@@ -131,7 +131,7 @@ export const RecipeDetailTemplate = (
       <div class="card">
         <div class="card-body d-flex align-items-center" id="recipe-rating">
           <span class="text-muted me-auto">${e(t("recipe.rating"))}</span>
-          ${Rating(recipe.rating)}
+          ${Rating("rating", recipe.rating)}
           <small class="current ms-1">${
     e(number.format(recipe.rating, 1))
   }</small>
@@ -145,7 +145,7 @@ export const RecipeDetailTemplate = (
           <span class="text-muted me-auto">${
     e(t("recipe.aggregate_rating"))
   }</span>
-          ${Rating(recipe.aggregateRatingValue, true)}
+          ${Rating("aggregate_rating", recipe.aggregateRatingValue, true)}
           <small class="current ms-1">${
     e(number.format(recipe.aggregateRatingValue, 2))
   }</small>
