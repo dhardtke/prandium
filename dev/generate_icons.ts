@@ -1,35 +1,8 @@
+import { ICONS } from "../src/tpl/templates/_components/icon.ts";
 import { root } from "../src/util.ts";
 
-const icons = new Set([
-  "arrow-left-short",
-  "arrow-right-short",
-  "journal-richtext",
-  "moon-fill",
-  "moon",
-  "search",
-  "funnel",
-  "battery-half",
-  "layout-wtf",
-  "alarm",
-  "clock-fill",
-  "link-45deg",
-  "cloud-arrow-down-fill",
-  "check-square-fill",
-  "x",
-  "arrow-down",
-  "arrow-up",
-  "arrow-left",
-  "x-circle-fill",
-  "bar-chart",
-  "star",
-  "star-fill",
-  "star-half",
-  "people",
-  "pencil",
-  "three-dots",
-  "trash",
-  "plus-square",
-]);
+const icons = new Set(ICONS);
+
 const source = root("assets/node_modules/bootstrap-icons/bootstrap-icons.svg");
 const target = root("assets/icons.svg");
 

@@ -1,5 +1,5 @@
 import { html } from "../../mod.ts";
-import { Icon } from "./icon.ts";
+import { Icon, IconName } from "./icon.ts";
 
 export function Rating(value = 0, readonly = false) {
   const id = "rating" + Math.random().toString(36).substring(7);
@@ -15,7 +15,7 @@ export function Rating(value = 0, readonly = false) {
       " disabled"}/>
       <label for="${id}-${i}" title="${!readonly && current}" ${half &&
       'class="half"'}>
-        ${Icon(`star-${half ? "half" : "fill"}`)}
+        ${Icon(`star-${half ? "half" : "fill"}` as IconName)}
       </label>
     `;
   }

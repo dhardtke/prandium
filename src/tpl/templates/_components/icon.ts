@@ -1,8 +1,39 @@
 import { e, html } from "../../mod.ts";
 
-// TODO limit name to proper typings
+export const ICONS = [
+  "arrow-left-short",
+  "arrow-right-short",
+  "journal-richtext",
+  "moon-fill",
+  "moon",
+  "search",
+  "funnel",
+  "battery-half",
+  "layout-wtf",
+  "alarm",
+  "clock-fill",
+  "link-45deg",
+  "cloud-arrow-down-fill",
+  "check-square-fill",
+  "x",
+  "arrow-down",
+  "arrow-up",
+  "arrow-left",
+  "x-circle-fill",
+  "bar-chart",
+  "star",
+  "star-fill",
+  "star-half",
+  "people",
+  "pencil",
+  "three-dots",
+  "trash",
+  "plus-square",
+] as const;
 
-export const Icon = (name: string, className?: string) =>
+export type IconName = typeof ICONS[number];
+
+export const Icon = (name: IconName, className?: string) =>
   html`
     <svg class="bi${className ? ` className` : ""}">
       <use xlink:href="/assets/icons.svg#${name}"/>
@@ -11,7 +42,7 @@ export const Icon = (name: string, className?: string) =>
 
 export const LabeledIcon = (
   label: unknown,
-  name: string,
+  name: IconName,
   spacing = 1,
   className?: string,
 ) =>
