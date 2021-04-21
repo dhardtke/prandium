@@ -26,7 +26,7 @@ function arrayField(
         }" required>${e(item)}</textarea>`
         : html`<input class="form-control me-2" title="" name="${
           e(name)
-        }" required value="${e(item)}`
+        }" required value="${e(item)}">`
     }
           </div>
 
