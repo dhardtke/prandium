@@ -178,7 +178,8 @@ if (import.meta.main) {
     actions: [
       {
         id: "Server",
-        match: /(deps\.ts|lock\.json|\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
+        match:
+          /(deps\.ts|lock\.json|\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
         fn: process(
           undefined,
           "deno",
