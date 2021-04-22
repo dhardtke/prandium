@@ -25,11 +25,6 @@ export function defaultConfigDir(): string {
   return path.resolve(home, ".config", "cook-guide");
 }
 
-// deno-lint-ignore no-explicit-any
-export function get<T = string>(key: string, obj: any): T {
-  return key.split(".").reduce((o, i) => o[i], obj);
-}
-
 const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
 
 export function root(...parts: string[]): string {
