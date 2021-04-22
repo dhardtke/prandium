@@ -173,11 +173,12 @@ if (import.meta.main) {
       "assets",
       "i18n",
       "deps.ts",
+      "lock.json",
     ],
     actions: [
       {
         id: "Server",
-        match: /(deps\.ts|\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
+        match: /(deps\.ts|lock\.json|\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
         fn: process(
           undefined,
           "deno",
