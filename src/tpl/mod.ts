@@ -38,6 +38,7 @@ export function e(str: unknown): string {
         "<": "&lt;",
         ">": "&gt;",
         "'": "&#39;",
+        // deno-fmt-ignore
         "\"": "&quot;",
       }[tag])!,
   );
