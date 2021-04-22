@@ -1,8 +1,10 @@
 import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
-import { Settings } from "../settings.ts";
 import { ingredient } from "../data/util/ingredient.ts";
+import { en } from "../i18n/en.ts";
+import { setLanguage } from "../i18n/mod.ts";
+import { Settings } from "../settings.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
 import { orderByAdapter } from "./adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./adapters/pagination_adapter.ts";
@@ -44,6 +46,7 @@ export async function spawnServer(
     args.settings.ingredientSortOrder,
     args.settings.ingredientUnitPostprocessing,
   );
+  setLanguage(en);
   Page.minifying = args.settings.minifyHtml;
 
   const app = new Oak.Application<AppState>({

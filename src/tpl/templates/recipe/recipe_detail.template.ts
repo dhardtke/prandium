@@ -3,8 +3,8 @@ import { Recipe } from "../../../data/model/recipe.ts";
 import { date, number } from "../../../data/util/format.ts";
 import { ingredient as ingredientHelper } from "../../../data/util/ingredient.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
+import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
-import { t } from "../../util/translation.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
@@ -18,7 +18,7 @@ export const RecipeDetailTemplate = (
 ) => Page(recipe.title)(html`
   ${Breadcrumb(
     false,
-    { title: t("recipes"), url: UrlGenerator.recipeList() },
+    { title: l.recipes, url: UrlGenerator.recipeList() },
     { title: recipe.title, url: UrlGenerator.recipe(recipe) },
   )}
 
@@ -26,18 +26,18 @@ export const RecipeDetailTemplate = (
     <h1 class="mb-0">${e(recipe.title)}</h1>
     <div class="d-flex pt-2">
       <a href="${UrlGenerator.recipeEdit(recipe)}" class="btn btn-secondary btn-sm me-2">
-        ${LabeledIcon(t("edit"), "pencil")}
+        ${LabeledIcon(l.edit, "pencil")}
       </a>
       <a href="${UrlGenerator.recipeDelete(recipe)}" class="btn btn-danger btn-sm">
-        ${LabeledIcon(t("delete"), "trash")}
+        ${LabeledIcon(l.delete, "trash")}
       </a>
     </div>
   </div>
   ${
     currentUrl.searchParams.get("flash") === "editSuccessful"
-      ? Alert("success", t("info"), t("recipe.edit_successful"))
+      ? Alert("success", l.info, l.recipe.editSuccessful)
       : currentUrl.searchParams.get("flash") === "createSuccessful" &&
-      Alert("success", t("info"), t("recipe.create_successful"))
+      Alert("success", l.info, l.recipe.createSuccessful)
   }
 
   ${recipe.tags.length && html`
@@ -64,7 +64,7 @@ export const RecipeDetailTemplate = (
       <span class="badge bg-dark mb-3 me-1">
         <span class="d-flex align-items-center">
             <span class="me-1">${Icon("layout-wtf")}</span>
-            <span class="me-1">${e(t("recipe.time.prep"))}</span>${e(date.formatSeconds(recipe.prepTime))}
+            <span class="me-1">${e(l.recipe.time.prep)}</span>${e(date.formatSeconds(recipe.prepTime))}
         </span>
       </span>
     `}
@@ -73,7 +73,7 @@ export const RecipeDetailTemplate = (
       <span class="badge bg-dark mb-3 me-1">
         <span class="d-flex align-items-center">
             <span class="me-1">${Icon("alarm")}</span>
-            <span class="me-1">${e(t("recipe.time.cook"))}</span>${e(date.formatSeconds(recipe.cookTime))}
+            <span class="me-1">${e(l.recipe.time.cook)}</span>${e(date.formatSeconds(recipe.cookTime))}
         </span>
       </span>
     `}
@@ -82,7 +82,7 @@ export const RecipeDetailTemplate = (
       <span class="badge bg-dark mb-3 me-1">
         <span class="d-flex align-items-center">
             <span class="me-1">${Icon("clock-fill")}</span>
-            <span class="me-1">${e(t("recipe.time.total"))}</span>
+            <span class="me-1">${e(l.recipe.time.total)}</span>
             ${e(date.formatSeconds(recipe.prepTime + recipe.cookTime))}
         </span>
       </span>
@@ -103,7 +103,7 @@ export const RecipeDetailTemplate = (
     <div class="col-sm mb-3">
       <div class="card">
         <div class="card-body d-flex align-items-center" id="recipe-rating">
-          <span class="text-muted me-auto">${e(t("recipe.rating"))}</span>
+          <span class="text-muted me-auto">${e(l.recipe.rating)}</span>
           ${Rating("rating", recipe.rating)}
           <small class="current ms-1">${e(number.format(recipe.rating, 1))}</small>
         </div>
@@ -113,7 +113,7 @@ export const RecipeDetailTemplate = (
     <div class="col-sm mb-3">
       <div class="card">
         <div class="card-body d-flex align-items-center">
-          <span class="text-muted me-auto">${e(t("recipe.aggregate_rating"))}</span>
+          <span class="text-muted me-auto">${e(l.recipe.aggregateRating)}</span>
           ${Rating("aggregate_rating", recipe.aggregateRatingValue, true)}
           <small class="current ms-1">${e(number.format(recipe.aggregateRatingValue, 2))}</small>
         </div>
@@ -139,14 +139,14 @@ export const RecipeDetailTemplate = (
       <div class="card-header">
         <div class="d-flex align-items-center justify-content-between">
           <h2 class="h5 mb-0">
-            ${e(t("recipe.ingredients.title"))}
+            ${e(l.recipe.ingredients.title)}
           </h2>
           <form class="d-flex" method="get" id="ingredients-form" action="#ingredients">
             <div class="input-group input-group-sm w-auto">
               <input type="number" class="form-control portions" name="portions" value="${e(portions)}" min="1" max="99"
-                     title="${e(t("recipe.portions"))}">
+                     title="${e(l.recipe.portions)}">
               <div class="input-group-text">
-                ${e(t("recipe.portions"))}
+                ${e(l.recipe.portions)}
               </div>
               <button class="btn btn-sm btn-outline-secondary d-flex justify-content-center plus" type="button">
                 +
@@ -178,14 +178,14 @@ export const RecipeDetailTemplate = (
 
   ${recipe.instructions.length && html`
     <h3 class="mt-3">
-      ${e(t("recipe.instructions"))}
+      ${e(l.recipe.instructions)}
     </h3>
     <div class="accordion">
       ${recipe.instructions.map((instruction, i) => html`
         <div class="accordion-item">
           <h2 class="accordion-header" id="heading-instruction-${i}">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-instruction-${i}">
-              ${e(t("recipe.ingredients.step", { step: i + 1 }))}
+              ${e(l.recipe.ingredients.step(i + 1))}
             </button>
           </h2>
           <div id="collapse-instruction-${i}" class="accordion-collapse collapse show">
@@ -199,7 +199,7 @@ export const RecipeDetailTemplate = (
   `}
 
   ${recipe.reviews.length && html`
-    <h3 class="mt-3">${e(t("recipe.reviews"))}</h3>
+    <h3 class="mt-3">${e(l.recipe.reviews)}</h3>
     ${recipe.reviews.map((review, i) => html`
       <figure${i < recipe.reviews.length - 1 && " class=\"mb-0\""}>
         <blockquote class="blockquote">

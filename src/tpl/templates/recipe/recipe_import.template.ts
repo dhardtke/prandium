@@ -1,31 +1,31 @@
 // deno-fmt-ignore-file
 import { ImportResult } from "../../../data/parse/import/import_recipe.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
+import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
-import { t } from "../../util/translation.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { Page } from "../_structure/page.ts";
 
 export const RecipeImportTemplate = (results?: ImportResult[]) =>
-  Page(t("recipe.import.title"))(html`
+  Page(l.recipe.import.title)(html`
     ${Breadcrumb(
       false,
-      { title: t("recipes"), url: UrlGenerator.recipeList() },
-      { title: t("recipe.import.title"), url: UrlGenerator.recipeImport() },
+      { title: l.recipes, url: UrlGenerator.recipeList() },
+      { title: l.recipe.import.title, url: UrlGenerator.recipeImport() },
     )}
     ${
       results
         ? html`
-          ${Alert("info", t("info"), t("recipe.import.alert"))}
+          ${Alert("info", l.info, l.recipe.import.alert)}
           <div class="table-responsive">
             <table class="table table-striped table-hover">
               <thead>
               <tr>
                 <th>#</th>
-                <th>${e(t("recipe.import.source_url"))}</th>
-                <th>${e(t("recipe.import.result"))}</th>
+                <th>${e(l.recipe.import.sourceUrl)}</th>
+                <th>${e(l.recipe.import.result)}</th>
               </tr>
               </thead>
               <tbody>
@@ -49,7 +49,7 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
                               <a class="btn btn-success btn-sm" href="${
                                 e(UrlGenerator.recipe(result.recipe!))
                               }" target="_blank">
-                                ${e(t("recipe.open"))}
+                                ${e(l.recipe.open)}
                               </a>
                             `
                             : html`<span class="text-danger">${Icon("x")}${
@@ -69,15 +69,15 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
           <form method="POST">
             <div class="mb-3">
               <label for="urls" class="form-label">
-                ${e(t("recipe.import.urls"))}
+                ${e(l.recipe.import.urls)}
               </label>
               <textarea rows="10" class="form-control" id="urls" name="urls" required></textarea>
               <div class="form-text">
-                ${e(t("recipe.import.url_info"))}
+                ${e(l.recipe.import.urlInfo)}
               </div>
             </div>
             <button type="submit" class="btn btn-primary">
-              ${LabeledIcon(t("recipe.import.title"), "cloud-arrow-down-fill", 2)}
+              ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill", 2)}
             </button>
           </form>
         `

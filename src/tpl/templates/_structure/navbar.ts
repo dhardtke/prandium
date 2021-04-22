@@ -1,6 +1,6 @@
 // deno-fmt-ignore-file
+import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
-import { t } from "../../util/translation.ts";
 import { Icon } from "../_components/icon.ts";
 
 export const Navbar = () =>
@@ -13,7 +13,7 @@ export const Navbar = () =>
               ${Icon("journal-richtext")}
             </div>
             <div class="app-name">
-              ${e(t("appName"))}
+              ${e(l.appName)}
             </div>
           </div>
         </a>

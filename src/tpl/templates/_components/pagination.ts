@@ -1,7 +1,7 @@
 // deno-fmt-ignore-file
 import { Pagination as _Pagination } from "../../../data/pagination.ts";
+import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
-import { t } from "../../util/translation.ts";
 import { Icon } from "./icon.ts";
 
 export const Pagination = <T>(pagination: _Pagination<T>) => pagination.hasPages && html`
@@ -19,7 +19,7 @@ export const Pagination = <T>(pagination: _Pagination<T>) => pagination.hasPages
           : html`
             <li class="page-item">
               <a class="page-link" href="${pagination.previousPage
-                ?.url}" rel="prev" title="${e(t("pagination.previous"))}">
+                ?.url}" rel="prev" title="${e(l.pagination.previous)}">
                 ${Icon("arrow-left-short")}
               </a>
             </li>`
@@ -44,7 +44,7 @@ export const Pagination = <T>(pagination: _Pagination<T>) => pagination.hasPages
           </li>`
         : html`
           <li class="page-item">
-            <a class="page-link" href="${pagination.nextPage?.url}" rel="next" title="${e(t("pagination.next"))}">
+            <a class="page-link" href="${pagination.nextPage?.url}" rel="next" title="${e(l.pagination.next)}">
               ${Icon("arrow-right-short")}
             </a>
           </li>`}

@@ -171,15 +171,13 @@ if (import.meta.main) {
     watchPaths: [
       "src",
       "assets",
-      "i18n",
       "deps.ts",
       "lock.json",
     ],
     actions: [
       {
         id: "Server",
-        match:
-          /(deps\.ts|lock\.json|\/src\/(.+)\.(ts|html))|(\/i18n\/.+\.json)/,
+        match: /(deps\.ts|lock\.json|\/src\/(.+)\.(ts|html))/,
         fn: process(
           undefined,
           "deno",

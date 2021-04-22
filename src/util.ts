@@ -26,7 +26,7 @@ export function defaultConfigDir(): string {
 }
 
 // deno-lint-ignore no-explicit-any
-export function get(key: string, obj: any): string {
+export function get<T = string>(key: string, obj: any): T {
   return key.split(".").reduce((o, i) => o[i], obj);
 }
 
