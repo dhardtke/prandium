@@ -157,7 +157,7 @@ export const RecipeListTemplate = (
                   <h5 class="card-title">${e(recipe.title)}</h5>
                   <p class="card-text">${e(recipe.description)}</p>
                   <p class="card-text">
-                    <small class="text-muted">
+                    <small class="text-muted" ${recipe.lastCookedAt && `title=${date.format(recipe.lastCookedAt)}`}>
                       ${
                         recipe.lastCookedAt
                           ? e(l.recipe.lastCooked(date.formatDistanceToNow(recipe.lastCookedAt)))
@@ -168,9 +168,9 @@ export const RecipeListTemplate = (
                 </div>
                 <div class="card-footer text-muted d-flex justify-content-between">
                   <div>
-                      <span title="${e(l.recipe.cookedCount)}" class="me-2">
-                        ${LabeledIcon(recipe.cookedCount, "bar-chart")}
-                      </span>
+                    <span title="${e(l.recipe.cookedCount)}" class="me-2">
+                      ${LabeledIcon(recipe.cookedCount, "bar-chart")}
+                    </span>
                     <span title="${e(l.recipe.rating)}" class="me-2">
                         ${LabeledIcon(number.format(recipe.rating), "star")}
                       </span>
