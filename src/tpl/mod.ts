@@ -22,6 +22,10 @@ export function html(
   return parts.join("").trim();
 }
 
+/**
+ * Escapes the given string to be safe to be included in HTML.
+ * @param str the string to escape
+ */
 export function e(str: unknown): string {
   if (!str) {
     return "";
@@ -34,7 +38,7 @@ export function e(str: unknown): string {
         "<": "&lt;",
         ">": "&gt;",
         "'": "&#39;",
-        '"': "&quot;",
+        "\"": "&quot;",
       }[tag])!,
   );
 }
