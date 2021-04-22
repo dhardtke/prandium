@@ -10,7 +10,7 @@ import { t } from "../../util/translation.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
-import { PaginationPartial } from "../_components/pagination.ts";
+import { Pagination as PaginationComponent } from "../_components/pagination.ts";
 import { Page } from "../_structure/page.ts";
 
 export const TagFilter = () =>
@@ -190,7 +190,7 @@ export const RecipeListTemplate = (
     ` : Alert("info", t("info"), t("recipe.no_recipes.found"))
   }
 
-  ${PaginationPartial(recipes)}
+  ${PaginationComponent(recipes)}
 
   <a class="btn btn-primary me-2" href="${UrlGenerator.recipeCreate()}" role="button">
     ${LabeledIcon(t("create"), "plus-square", 2)}

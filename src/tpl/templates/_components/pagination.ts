@@ -4,7 +4,7 @@ import { e, html } from "../../mod.ts";
 import { t } from "../../util/translation.ts";
 import { Icon } from "./icon.ts";
 
-export const PaginationPartial = <T>(pagination: _Pagination<T>) => pagination.hasPages && html`
+export const Pagination = <T>(pagination: _Pagination<T>) => pagination.hasPages && html`
   <nav>
     <ul class="pagination justify-content-center mt-3">
       ${
