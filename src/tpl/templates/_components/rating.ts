@@ -1,3 +1,4 @@
+// deno-fmt-ignore-file
 import { html } from "../../mod.ts";
 import { Icon, IconName } from "./icon.ts";
 
@@ -11,9 +12,9 @@ export function Rating(name: string, value = 0, readonly = false) {
     stars += html`
       <input type="radio" id="${name}-${i}" name="${name}" value="${current}" autocomplete="off"
              ${current === comparisonValue && " checked"}${readonly &&
-      " disabled"}/>
+             " disabled"}/>
       <label for="${name}-${i}" title="${!readonly && current}" ${half &&
-      'class="half"'}>
+      "class=\"half\""}>
         ${Icon(`star-${half ? "half" : "fill"}` as IconName)}
       </label>
     `;

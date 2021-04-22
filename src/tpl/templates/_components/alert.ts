@@ -1,3 +1,4 @@
+// deno-fmt-ignore-file
 import { e, html } from "../../mod.ts";
 
 export type AlertType =
@@ -18,9 +19,8 @@ export const Alert = (
   escapeDescription = true,
 ) =>
   html`
-  <div class="alert alert-${type}${
-    className ? ` ${className}` : ""
-  }" role="alert">
-    <h4 class="alert-heading">${e(title)}</h4>
-    ${escapeDescription ? e(description) : description}
-  </div>`;
+    <div class="alert alert-${type}${className && ` ${className}`}" role="alert">
+      <h4 class="alert-heading">${e(title)}</h4>
+      ${escapeDescription ? e(description) : description}
+    </div>
+  `;

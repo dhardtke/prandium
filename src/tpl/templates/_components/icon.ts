@@ -1,3 +1,4 @@
+// deno-fmt-ignore-file
 import { e, html } from "../../mod.ts";
 
 export const ICONS = [
@@ -36,7 +37,7 @@ export type IconName = typeof ICONS[number];
 
 export const Icon = (name: IconName, className?: string) =>
   html`
-    <svg class="bi${className ? ` className` : ""}">
+    <svg class="bi${className && ` className`}">
       <use xlink:href="/assets/icons.svg#${name}"/>
     </svg>
   `;
@@ -46,5 +47,4 @@ export const LabeledIcon = (
   name: IconName,
   spacing = 1,
   className?: string,
-) =>
-  html`<span class="me-${spacing}">${Icon(name, className)}</span>${e(label)}`;
+) => html`<span class="me-${spacing}">${Icon(name, className)}</span>${e(label)}`;

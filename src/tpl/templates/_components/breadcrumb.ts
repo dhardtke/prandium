@@ -1,3 +1,4 @@
+// deno-fmt-ignore-file
 import { e, html } from "../../mod.ts";
 import { t } from "../../util/translation.ts";
 
@@ -18,13 +19,12 @@ export const Breadcrumb = (
   ...items: { title: string; url?: string }[]
 ) =>
   html`
-  <nav>
-    <ol class="breadcrumb${noMargin ? " mb-0" : ""}">
-      ${Item(e(t("home")), !items?.length, "/")}
-      ${items &&
-    items.map((item, i) =>
-      Item(e(item.title), i === items.length - 1, item.url)
-    )}
-    </ol>
-  </nav>
-`;
+    <nav>
+      <ol class="breadcrumb${noMargin && " mb-0"}">
+        ${Item(e(t("home")), !items?.length, "/")}
+        ${items && items.map((item, i) =>
+          Item(e(item.title), i === items.length - 1, item.url)
+        )}
+      </ol>
+    </nav>
+  `;

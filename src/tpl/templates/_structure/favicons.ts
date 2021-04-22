@@ -1,3 +1,4 @@
+// deno-fmt-ignore-file
 import { html } from "../../mod.ts";
 
 export const Favicons = () =>
