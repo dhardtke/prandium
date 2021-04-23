@@ -5,7 +5,6 @@ export const ICONS = [
   "arrow-left-short",
   "arrow-right-short",
   "journal-richtext",
-  "moon-fill",
   "sun-fill",
   "moon",
   "globe",
