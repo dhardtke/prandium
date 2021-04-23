@@ -26,12 +26,12 @@ export const dateFns = {
 };
 
 // utils
-export * as path from "https://deno.land/std@0.94.0/path/mod.ts";
-export * as log from "https://deno.land/std@0.94.0/log/mod.ts";
-export { LogRecord } from "https://deno.land/std@0.94.0/log/logger.ts";
+export * as path from "https://deno.land/std@0.95.0/path/mod.ts";
+export * as log from "https://deno.land/std@0.95.0/log/mod.ts";
+export { LogRecord } from "https://deno.land/std@0.95.0/log/logger.ts";
 export * as Cliffy from "https://deno.land/x/cliffy@v0.18.2/command/mod.ts";
-export * as fs from "https://deno.land/std@0.94.0/fs/mod.ts";
-export * as Colors from "https://deno.land/std@0.94.0/fmt/colors.ts";
+export * as fs from "https://deno.land/std@0.95.0/fs/mod.ts";
+export * as Colors from "https://deno.land/std@0.95.0/fmt/colors.ts";
 export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
 
 // types
@@ -47,4 +47,4 @@ export {
   assertEquals,
   assertNotEquals,
   assertThrows,
-} from "https://deno.land/std@0.94.0/testing/asserts.ts";
+} from "https://deno.land/std@0.95.0/testing/asserts.ts";
