@@ -1,6 +1,5 @@
 import { dateFns } from "../../../deps.ts";
-
-// TODO support different locales
+import { l } from "../../i18n/mod.ts";
 
 export const date = {
   /**
@@ -11,7 +10,7 @@ export const date = {
    */
   format: (date: Date, format = "Pp"): string => {
     return dateFns.format(date, format, {
-      locale: dateFns.locale.en,
+      locale: l.meta.dateFns,
     });
   },
 
@@ -23,7 +22,7 @@ export const date = {
   formatDuration: <D>(duration: D): string => {
     // @ts-ignore formatDuration reads the second argument via "arguments" but the compiler doesn't know that
     return dateFns.formatDuration(duration, {
-      locale: dateFns.locale.en,
+      locale: l.meta.dateFns,
     });
   },
 
@@ -36,6 +35,7 @@ export const date = {
       dateFns.intervalToDuration({
         start: 0,
         end: seconds * 1000,
+        locale: l.meta.dateFns,
       }),
     );
   },
@@ -46,7 +46,7 @@ export const date = {
   formatDistanceToNow: (date: Date): string => {
     return dateFns.formatDistanceToNow(date, {
       addSuffix: true,
-      locale: dateFns.locale.en,
+      locale: l.meta.dateFns,
     });
   },
 };
@@ -60,7 +60,7 @@ export const number = {
       return "";
     }
     // deno-lint-ignore no-undef See https://github.com/denoland/deno/issues/9896
-    const formatter = new Intl.NumberFormat("en-US", {
+    const formatter = new Intl.NumberFormat(l.meta.bcp47, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });
