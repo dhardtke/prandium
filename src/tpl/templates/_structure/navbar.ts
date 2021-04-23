@@ -7,7 +7,7 @@ import { Page } from "./page.ts";
 
 const LanguageDropdownItem = (lang: Language) => html`
   <span class="me-2">${lang.meta.flag}</span>
-  ${lang.meta.label}
+  ${l.meta.labels[lang.meta.id]}
 `;
 
 const LanguageDropdown = () => html`

@@ -1,9 +1,11 @@
 import { de } from "./de.ts";
 import { en } from "./en.ts";
 
-export const LANGUAGES: { [key: string]: Language } = {
-  [en.meta.id]: en,
-  [de.meta.id]: de,
+export type LanguageId = "en" | "de";
+
+export const LANGUAGES: Record<LanguageId, Language> = {
+  "en": en,
+  "de": de,
 } as const;
 
 interface OrderBy {
@@ -143,9 +145,12 @@ export interface Language {
   updatedAt: string;
   yes: string;
   meta: {
-    id: string;
-    label: string;
+    id: LanguageId;
     flag: string;
+    labels: {
+      de: string;
+      en: string;
+    };
   };
 }
 
