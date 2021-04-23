@@ -2,14 +2,13 @@ import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { ingredient } from "../data/util/ingredient.ts";
-import { en } from "../i18n/en.ts";
-import { setLanguage } from "../i18n/mod.ts";
 import { Settings } from "../settings.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
-import { orderByAdapter } from "./adapters/order_by_adapter.ts";
-import { paginationAdapter } from "./adapters/pagination_adapter.ts";
-import { parameterAdapter } from "./adapters/parameter_adapter.ts";
-import { handleNotFound, handleServerError } from "./error.ts";
+import { orderByAdapter } from "./middleware/adapters/order_by_adapter.ts";
+import { paginationAdapter } from "./middleware/adapters/pagination_adapter.ts";
+import { parameterAdapter } from "./middleware/adapters/parameter_adapter.ts";
+import { handleNotFound, handleServerError } from "./middleware/error.ts";
+import { languageMiddleware } from "./middleware/language.ts";
 import { Routers } from "./routes/routers.ts";
 
 export interface AppState {
@@ -46,7 +45,6 @@ export async function spawnServer(
     args.settings.ingredientSortOrder,
     args.settings.ingredientUnitPostprocessing,
   );
-  setLanguage(en);
   Page.minifying = args.settings.minifyHtml;
 
   const app = new Oak.Application<AppState>({
@@ -57,7 +55,12 @@ export async function spawnServer(
     orderByAdapter(),
     paginationAdapter(),
   );
+  app.use(async (ctx, next) => {
+    Page.currentUrl = ctx.request.url;
+    await next();
+  });
 
+  app.use(languageMiddleware);
   app.use(handleServerError);
   for (const router of Routers) {
     app.use(router.routes(), router.allowedMethods());

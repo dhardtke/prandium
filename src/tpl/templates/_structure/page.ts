@@ -5,7 +5,14 @@ import { asset } from "../../util/asset.ts";
 import { Favicons } from "./favicons.ts";
 import { Navbar } from "./navbar.ts";
 
-const Page = (title?: string) =>
+interface PageType {
+  minifying: boolean;
+  currentUrl: URL;
+
+  (title?: string): (body: string) => string;
+}
+
+const Page: PageType = (title?: string) =>
   (body: string) => {
     const stylesheet = asset.ifExists("index.min.css", "index.css");
     const javascript = asset.ifExists("index.min.js", "index.js");
@@ -47,5 +54,10 @@ const Page = (title?: string) =>
  * Determines whether the markup should be minified or not.
  */
 Page.minifying = false;
+
+/**
+ * The request's current URL.
+ */
+Page.currentUrl = new URL("https://localhost");
 
 export { Page };

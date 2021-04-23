@@ -6,6 +6,10 @@ Deno.chdir("..");
 
 interface Action {
   id: string;
+  /**
+   * Whether to run the action on startup (default) or only when a matching file has changed.
+   */
+  runOnStart?: boolean;
   match: RegExp;
   fn: () => Deno.Process;
 }
@@ -57,7 +61,11 @@ class DevServer {
 
   async start() {
     const watcher = Deno.watchFs(this.config.watchPaths);
-    this.runActions(this.config.actions);
+    this.runActions(
+      this.config.actions.filter((a) =>
+        a.runOnStart === undefined || a.runOnStart
+      ),
+    );
     DevServer.log("Watcher is up and running...");
 
     const paths: Set<string> = new Set();
@@ -194,6 +202,21 @@ if (import.meta.main) {
           options.key && `--key=${options.key || "-"}`,
           options.cert && `--cert=${options.cert || "-"}`,
         ),
+      },
+      {
+        id: "Icons",
+        match: /icon\.(ts)/,
+        fn: process(
+          undefined,
+          "deno",
+          "run",
+          "--lock=lock.json",
+          "--no-check",
+          "--allow-read",
+          "--allow-write",
+          "dev/generate_icons.ts",
+        ),
+        runOnStart: false,
       },
       {
         id: "JS",

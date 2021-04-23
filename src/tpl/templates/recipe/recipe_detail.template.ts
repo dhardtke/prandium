@@ -13,7 +13,6 @@ import { Page } from "../_structure/page.ts";
 
 export const RecipeDetailTemplate = (
   recipe: Recipe,
-  currentUrl: URL,
   portions?: number,
 ) => Page(recipe.title)(html`
   ${Breadcrumb(
@@ -34,9 +33,9 @@ export const RecipeDetailTemplate = (
     </div>
   </div>
   ${
-    currentUrl.searchParams.get("flash") === "editSuccessful"
+    Page.currentUrl.searchParams.get("flash") === "editSuccessful"
       ? Alert("success", l.info, l.recipe.editSuccessful)
-      : currentUrl.searchParams.get("flash") === "createSuccessful" &&
+      : Page.currentUrl.searchParams.get("flash") === "createSuccessful" &&
       Alert("success", l.info, l.recipe.createSuccessful)
   }
 

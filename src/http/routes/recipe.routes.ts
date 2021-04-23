@@ -120,7 +120,7 @@ router
         filters: { ids: tagIds },
       })
       : [];
-    ctx.response.body = RecipeListTemplate(recipes, tags, ctx.request.url);
+    ctx.response.body = RecipeListTemplate(recipes, tags);
   })
   .get("/import", (ctx: Oak.Context<AppState>) => {
     ctx.response.body = RecipeImportTemplate();
@@ -289,7 +289,6 @@ router
       } else {
         ctx.response.body = RecipeDetailTemplate(
           recipe,
-          ctx.request.url,
           toNumber(ctx.parameter("portions"), recipe.yield),
         );
       }

@@ -1,5 +1,5 @@
 import type { Context } from "https://deno.land/x/oak@v7.3.0/mod.ts";
-import { Oak } from "../../../deps.ts";
+import { Oak } from "../../../../deps.ts";
 
 declare module "https://deno.land/x/oak@v7.3.0/mod.ts" {
   interface Context {
@@ -16,12 +16,13 @@ declare module "https://deno.land/x/oak@v7.3.0/mod.ts" {
 
 export const parameterAdapter = () => {
   return async function (ctx: Context, next: () => Promise<void>) {
+    // TODO remove this abomination ASAP
     ctx.parameter = function (name: string): string {
-      if (!ctx._query) {
-        ctx._query = Oak.helpers.getQuery(ctx, { mergeParams: true });
+      if (!ctx.state.query) {
+        ctx.state.query = Oak.helpers.getQuery(ctx, { mergeParams: true });
       }
 
-      return ctx._query[name];
+      return ctx.state.query[name];
     };
 
     await next();

@@ -39,8 +39,8 @@ export const TagFilter = () =>
     </div>
   `;
 
-function OrderBy(currentUrl: URL) {
-  const orderBy = parameter(currentUrl, "orderBy", "title");
+function OrderBy() {
+  const orderBy = parameter(Page.currentUrl, "orderBy", "title");
 
   const options = [
     ["id", l.id],
@@ -53,9 +53,9 @@ function OrderBy(currentUrl: URL) {
     ["rating", l.recipe.rating],
     ["prep_time", l.recipe.prepTime],
     ["cook_time", l.recipe.cookTime],
-    ["total_time", l.recipe.totalTime],
+    ["total_time", l.recipe.time.total],
   ];
-  const order = parameter(currentUrl, "order", "ASC")?.toUpperCase();
+  const order = parameter(Page.currentUrl, "order", "ASC")?.toUpperCase();
   const otherOrder = order === "ASC" ? "DESC" : "ASC";
   const otherOrderLabel = otherOrder === "ASC" ? l.orderBy.asc : l.orderBy.desc;
 
@@ -76,7 +76,7 @@ function OrderBy(currentUrl: URL) {
                 title="${otherOrderLabel}">
           ${Icon(order === "ASC" ? "arrow-down" : "arrow-up")}
         </button>
-        ${[...currentUrl.searchParams.entries()]
+        ${[...Page.currentUrl.searchParams.entries()]
           .filter(([name]) => !["orderBy", "order", "flash", "page"].includes(name))
           .map(([name, value]) => html`<input type="hidden" name="${name}" value="${value}">`)}
       </div>
@@ -86,7 +86,6 @@ function OrderBy(currentUrl: URL) {
 export const RecipeListTemplate = (
   recipes: Pagination<Recipe>,
   tags: Tag[],
-  currentUrl: URL,
 ) => Page(l.recipes)(html`
   ${Breadcrumb(false, { title: l.recipes, url: UrlGenerator.recipeList() })}
 
@@ -94,20 +93,20 @@ export const RecipeListTemplate = (
     <form class="d-flex col-lg-9" method="get" action="${UrlGenerator.recipeList()}">
       <div class="input-group">
         <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
-               value="${parameter(currentUrl, "title")}">
+               value="${parameter(Page.currentUrl, "title")}">
         ${TagFilter()}
         <button class="btn btn-outline-info" type="submit">
           ${Icon("search")}
         </button>
       </div>
     </form>
-    ${OrderBy(currentUrl)}
+    ${OrderBy()}
   </div>
 
   ${tags.length && html`
     <div class="d-flex flex-wrap">
       ${tags.map((tag, i) => html`
-        <a title="${e(tag.description)}" href="${removeParameterValue(currentUrl, "tagId", tag.id)}"
+        <a title="${e(tag.description)}" href="${removeParameterValue(Page.currentUrl, "tagId", tag.id)}"
            class="badge badge-linked bg-secondary mb-3${i < tags.length - 1 && " me-1"}">
           <div class="d-flex align-items-center h-100">
             ${LabeledIcon(tag.title, "x-circle-fill")}
@@ -116,7 +115,7 @@ export const RecipeListTemplate = (
       )}
 
       ${tags.length > 1 && html`
-        <a href="${e(removeParameter(currentUrl, "tagId"))}" class="badge badge-linked bg-danger ms-2 mb-3">
+        <a href="${e(removeParameter(Page.currentUrl, "tagId"))}" class="badge badge-linked bg-danger ms-2 mb-3">
           <div class="d-flex align-items-center h-100">
             ${LabeledIcon(l.recipe.clearAllTags, "x-circle-fill")}
           </div>
@@ -124,7 +123,7 @@ export const RecipeListTemplate = (
     </div>
   `}
 
-  ${currentUrl.searchParams.get("flash") === "deleteSuccessful" && Alert("success", l.info, l.recipe.deleteSuccessful)}
+  ${Page.currentUrl.searchParams.get("flash") === "deleteSuccessful" && Alert("success", l.info, l.recipe.deleteSuccessful)}
   ${recipes.totalItems
     ? html`
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">

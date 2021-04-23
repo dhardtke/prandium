@@ -1,5 +1,8 @@
 import { assertEquals } from "../../deps.ts";
-import { handleNotFound, handleServerError } from "../../src/http/error.ts";
+import {
+  handleNotFound,
+  handleServerError,
+} from "../../src/http/middleware/error.ts";
 import { disableLogging } from "../_internal/disable_logging.ts";
 import { MockContextBuilder } from "../_internal/mock_context.ts";
 

@@ -1,5 +1,5 @@
 import type { Context } from "https://deno.land/x/oak@v7.3.0/mod.ts";
-import { OrderBy } from "../../data/service/service.ts";
+import { OrderBy } from "../../../data/service/service.ts";
 
 declare module "https://deno.land/x/oak@v7.3.0/mod.ts" {
   interface Context {

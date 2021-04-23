@@ -1,4 +1,4 @@
-export function DarkModeSwitcher() {
+export function NavbarDarkModeSwitcher() {
   const LOCAL_STORAGE_NAME = "COOK_GUIDE_DARK_MODE";
   const DOCUMENT_CLASS_NAME = "dark";
 

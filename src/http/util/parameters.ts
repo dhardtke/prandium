@@ -25,3 +25,13 @@ export function parameter(
 ): string {
   return url.searchParams.get(parameterName) || _default;
 }
+
+export function setParameter(
+  url: URL,
+  parameterName: string,
+  parameterValue: string,
+): URL {
+  const result = new URL(url.toString());
+  result.searchParams.set(parameterName, parameterValue);
+  return result;
+}

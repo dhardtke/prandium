@@ -1,4 +1,10 @@
+import { de } from "./de.ts";
 import { en } from "./en.ts";
+
+export const LANGUAGES: { [key: string]: Language } = {
+  [en.meta.id]: en,
+  [de.meta.id]: de,
+} as const;
 
 interface OrderBy {
   asc: string;
@@ -90,7 +96,6 @@ interface Recipe {
   reviews: string;
   source: string;
   time: Time;
-  totalTime: string;
   yield: string;
 }
 
@@ -137,6 +142,11 @@ export interface Language {
   up: string;
   updatedAt: string;
   yes: string;
+  meta: {
+    id: string;
+    label: string;
+    flag: string;
+  };
 }
 
 export let l = en;
