@@ -1,6 +1,6 @@
 import { Oak } from "../../../deps.ts";
 import { en } from "../../i18n/en.ts";
-import { LANGUAGES, setLanguage } from "../../i18n/mod.ts";
+import { LanguageId, LANGUAGES, setLanguage } from "../../i18n/mod.ts";
 import { AppState } from "../webserver.ts";
 
 const LANGUAGE_COOKIE = "CookGuideLanguage";
@@ -16,7 +16,7 @@ export async function languageMiddleware(
   } else {
     requestedLang = ctx.cookies.get(LANGUAGE_COOKIE);
   }
-  const language = LANGUAGES[requestedLang || "en"] || en;
+  const language = LANGUAGES[requestedLang as LanguageId || "en"] || en;
   setLanguage(language);
   await next();
 }
