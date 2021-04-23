@@ -6,8 +6,10 @@ import { Icon } from "../_components/icon.ts";
 import { Page } from "./page.ts";
 
 const LanguageDropdownItem = (lang: Language) => html`
-  <span class="me-2">${lang.meta.flag}</span>
-  ${l.meta.labels[lang.meta.id]}
+  <div class="d-flex">
+    <span class="me-2">${lang.meta.flag}</span>
+    ${l.meta.labels[lang.meta.id]}
+  </div>
 `;
 
 const LanguageDropdown = () => html`
