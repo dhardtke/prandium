@@ -19,7 +19,7 @@ const Page: PageType = (title?: string) =>
 
     const markup = html`
       <!DOCTYPE html>
-      <html lang="en">
+      <html lang="${l.id}">
       <style>html {
         display: none;
       }</style>

@@ -1,7 +1,9 @@
 import { registerArrayFields } from "./array_field.ts";
+import { History } from "./history.ts";
 import { ImagePicker } from "./image_picker.ts";
 
 export const RecipeEditPage = () => {
+  History();
   registerArrayFields();
   ImagePicker();
 

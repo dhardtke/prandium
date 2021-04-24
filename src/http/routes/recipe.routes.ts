@@ -9,13 +9,13 @@ import {
   getThumbnailDir,
   getUniqueFilename,
 } from "../../data/util/thumbnails.ts";
-import { UrlGenerator } from "../util/url_generator.ts";
 import { RecipeDeleteTemplate } from "../../tpl/templates/recipe/recipe_delete.template.ts";
 import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.template.ts";
 import { RecipeEditTemplate } from "../../tpl/templates/recipe/recipe_edit.template.ts";
 import { RecipeImportTemplate } from "../../tpl/templates/recipe/recipe_import.template.ts";
 import { RecipeListTemplate } from "../../tpl/templates/recipe/recipe_list.template.ts";
 import { collectFormData, urlWithParams } from "../util/mod.ts";
+import { UrlGenerator } from "../util/url_generator.ts";
 import { AppState } from "../webserver.ts";
 
 async function deleteThumbnail(recipe: Recipe, configDir: string) {
@@ -70,6 +70,21 @@ async function assignRecipeFields(
   recipe.rating = toNumber(get("rating"));
   recipe.ingredients = data.ingredients as string[];
   recipe.instructions = data.instructions as string[];
+  if (data.history.length % 2 === 0) {
+    recipe.history = [];
+    for (let i = 0; i < data.history.length; i += 2) {
+      const [year, month, day] = String(data.history[i]).split("-").map(
+        toNumber,
+      );
+      const [hour, minute, second] = String(data.history[i + 1]).split(":").map(
+        toNumber,
+      );
+      const date = new Date(year, month - 1, day); // JS months start at 0
+      date.setHours(hour, minute, second);
+      recipe.history.push(date);
+    }
+  }
+
   if (data.deleteThumbnail) {
     await deleteThumbnail(recipe, configDir);
     recipe.thumbnail = undefined;
@@ -181,7 +196,7 @@ router
           type: "form-data",
         }).value;
         await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
-        service.update([recipe]);
+        service.update([recipe], true);
         ctx.response.redirect(
           urlWithParams(UrlGenerator.recipe(recipe), {
             "flash": "editSuccessful",

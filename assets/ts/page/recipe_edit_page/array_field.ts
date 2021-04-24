@@ -1,3 +1,10 @@
+export enum Events {
+  /**
+   * The item has been created.
+   */
+  CREATE = "ArrayFieldCreate"
+}
+
 const SELECTORS = {
   ARRAY_FIELD: ".array-field",
   LIST: ".list-group",
@@ -6,7 +13,7 @@ const SELECTORS = {
   BTN_DOWN: "button[data-hook='down']",
   BTN_CREATE: "button[data-hook='create']",
   BTN_DELETE: "button[data-hook='delete']",
-};
+} as const;
 
 function ArrayField($arrayField: HTMLDivElement) {
   // TODO Move to util for re-use?
@@ -22,8 +29,14 @@ function ArrayField($arrayField: HTMLDivElement) {
   function registerListeners($parent: HTMLElement) {
     function updateMoveButtons() {
       [...$list.querySelectorAll<HTMLDivElement>(SELECTORS.LIST_ITEM)].forEach(($item, i, $items) => {
-        $item.querySelector<HTMLButtonElement>(SELECTORS.BTN_UP)!.disabled = i === 0;
-        $item.querySelector<HTMLButtonElement>(SELECTORS.BTN_DOWN)!.disabled = i === $items.length - 1;
+        const $up = $item.querySelector<HTMLButtonElement>(SELECTORS.BTN_UP);
+        if ($up) {
+          $up.disabled = i === 0;
+        }
+        const $down = $item.querySelector<HTMLButtonElement>(SELECTORS.BTN_DOWN);
+        if ($down) {
+          $down.disabled = i === $items.length - 1;
+        }
       });
     }
 
@@ -52,6 +65,8 @@ function ArrayField($arrayField: HTMLDivElement) {
       registerListeners($fragment.querySelector<HTMLDivElement>(SELECTORS.LIST_ITEM)!);
       $list.insertBefore($fragment, $template);
       updateMoveButtons();
+      const $items = $list.querySelectorAll(SELECTORS.LIST_ITEM);
+      window.dispatchEvent(new CustomEvent(Events.CREATE, { detail: $items[$items.length - 1] }));
     });
     onClick($parent, SELECTORS.BTN_DELETE, (e: MouseEvent) => {
       const $item = (e.target as HTMLButtonElement).closest(SELECTORS.LIST_ITEM);

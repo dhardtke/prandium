@@ -52,6 +52,7 @@ export const de: Language = {
     deleteSuccessful: "Das Rezept wurde erfolgreich gelöscht.",
     editSuccessful: "Das Rezept wurde erfolgreich bearbeitet.",
     form: {
+      addHistoryEntry: "Neuen Eintrag hinzufügen",
       createIngredient: "Neue Zutat",
       createInstruction: "Neue Anweisung",
       deleteThumbnail: "Lösche Vorschaubild",
@@ -86,7 +87,7 @@ export const de: Language = {
     notCookedYet: "Noch nicht gekocht.",
     nutrition: {
       calories: "Kalorien",
-      carbohydrate: "Kohlenhydrat",
+      carbohydrate: "Kohlenhydrate",
       cholesterol: "Cholesterin",
       fat: "Fett",
       fiber: "Ballaststoffe",
@@ -110,6 +111,7 @@ export const de: Language = {
       total: "Gesamtzeit",
     },
     yield: "Gesamtportionen",
+    history: "Historie",
   },
   recipes: "Rezepte",
   save: "Speichern",

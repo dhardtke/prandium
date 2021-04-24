@@ -8,33 +8,46 @@ import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { Page } from "../_structure/page.ts";
 
-function arrayField(
+const arrayFieldTextarea = (name: string, item?: string) =>
+  html`<textarea class="form-control me-2" title="" name="${e(name)}" required>${e(item)}</textarea>`;
+
+const arrayFieldTextInput = (name: string, item?: string) =>
+  html`<input class="form-control me-2" title="" name="${e(name)}" required value="${e(item)}">`;
+
+const arrayFieldDateTimeInput = (name: string, item?: Date) =>
+  html`
+    <div class="d-flex border rounded">
+      <input class="form-control border-0" type="date" name="${e(name)}" required value="${(item || new Date()).toLocaleDateString("en-CA")}"
+             step="any"/>
+      <input class="form-control border-0" type="time" name="${e(name)}" required value="${item && item.toLocaleTimeString("en-GB")}" step="any"/>
+    </div>`;
+
+function arrayField<T>(
   title: string,
   createBtnLabel: string,
   name: string,
-  textarea: boolean,
-  array: string[] = [],
+  renderer: (name: string, item?: T) => string,
+  array: T[] = [],
+  moveControls = true
 ) {
-  const renderItem = (item = "", i = -1, last = false) => html`
+  const renderItem = (item?: T, i = -1, last = false) => html`
     <li class="list-group-item">
       <div class="row gy-3">
         <div class="col-sm-auto flex-grow-1">
-          ${
-            textarea
-              ? html`<textarea class="form-control me-2" title="" name="${e(name)}" required>${e(item)}</textarea>`
-              : html`<input class="form-control me-2" title="" name="${e(name)}" required value="${e(item)}">`
-          }
+          ${renderer(name, item)}
         </div>
 
         <div class="col-sm-auto d-flex align-items-center">
-          <div class="d-flex border-end me-2 pe-2">
-            <button type="button" data-hook="up" class="btn btn-sm btn-outline-secondary me-1" title="${e(l.up)}" ${!i && "disabled"}>
-              ${Icon("arrow-up")}
-            </button>
-            <button type="button" data-hook="down" class="btn btn-sm btn-outline-secondary" title="${e(l.down)}" ${last && "disabled"}>
-              ${Icon("arrow-down")}
-            </button>
-          </div>
+          ${moveControls && html`
+            <div class="d-flex border-end me-2 pe-2">
+              <button type="button" data-hook="up" class="btn btn-sm btn-outline-secondary me-1" title="${e(l.up)}" ${!i && "disabled"}>
+                ${Icon("arrow-up")}
+              </button>
+              <button type="button" data-hook="down" class="btn btn-sm btn-outline-secondary" title="${e(l.down)}" ${last && "disabled"}>
+                ${Icon("arrow-down")}
+              </button>
+            </div>
+          `}
           <button type="button" data-hook="delete" class="btn btn-sm btn-outline-danger me-1" title="${e(l.delete)}">
             ${Icon("trash")}
           </button>
@@ -271,8 +284,10 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
         </div>
       </div>
 
-      ${arrayField(l.recipe.ingredients.title, l.recipe.form.createIngredient, "ingredients", false, recipe?.ingredients)}
-      ${arrayField(l.recipe.instructions, l.recipe.form.createInstruction, "instructions", true, recipe?.instructions)}
+      ${arrayField(l.recipe.history, l.recipe.form.addHistoryEntry, "history", arrayFieldDateTimeInput, recipe?.history, false)}
+
+      ${arrayField(l.recipe.ingredients.title, l.recipe.form.createIngredient, "ingredients", arrayFieldTextInput, recipe?.ingredients)}
+      ${arrayField(l.recipe.instructions, l.recipe.form.createInstruction, "instructions", arrayFieldTextarea, recipe?.instructions)}
     ${/*TODO edit tags, reviews, history, etc. -->*/""}
 
       <a class="btn btn-danger me-2" href="${recipe ? UrlGenerator.recipe(recipe) : UrlGenerator.recipeList()}">

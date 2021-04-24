@@ -28,6 +28,7 @@ interface Group {
 }
 
 interface Form {
+  addHistoryEntry: string;
   createIngredient: string;
   createInstruction: string;
   deleteThumbnail: string;
@@ -100,6 +101,7 @@ interface Recipe {
   source: string;
   time: Time;
   yield: string;
+  history: string;
 }
 
 interface Navigation {

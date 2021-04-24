@@ -52,6 +52,7 @@ export const en: Language = {
     deleteSuccessful: "The Recipe has been deleted successfully.",
     editSuccessful: "The Recipe has been edited successfully.",
     form: {
+      addHistoryEntry: "Create History entry",
       createIngredient: "Create Ingredient",
       createInstruction: "Create Instruction",
       deleteThumbnail: "Delete thumbnail",
@@ -109,6 +110,7 @@ export const en: Language = {
       total: "Total time",
     },
     yield: "Yield",
+    history: "History",
   },
   recipes: "Recipes",
   save: "Save",

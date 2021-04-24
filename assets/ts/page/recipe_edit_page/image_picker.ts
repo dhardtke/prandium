@@ -4,7 +4,7 @@ const SELECTORS = {
   BTN_DELETE: ".btn[data-hook='delete']",
   INPUT_FILE: "input[type='file']",
   INPUT_DELETE: "input[name='deleteThumbnail']"
-};
+} as const;
 const DISPLAY_NONE = "d-none";
 const CLASS_WHILE_DRAGGING = "dragging";
 

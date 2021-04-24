@@ -120,9 +120,19 @@ export const RecipeDetailTemplate = (
     </div>
   </div>
 
-  ${recipe.history.map((d) => html`
-    <div>${e(date.format(d))}</div>`
-  )}
+  <div class="card mb-3">
+    <div class="card-header">
+      ${e(l.recipe.history)}
+    </div>
+    ${recipe.history.length ? html`
+      <ul class="list-group list-group-horizontal">
+        ${recipe.history.map((d) => html`
+          <li class="list-group-item flex-fill" title="${e(date.format(d))}">${e(date.formatDistanceToNow(d))}</li>
+        `)}
+      </ul>` : html`
+      <div class="card-body">${e(l.recipe.notCookedYet)}</div>
+    `}
+  </div>
 
   ${/*TODO show metadata like last cooked, etc.?*/""}
 
