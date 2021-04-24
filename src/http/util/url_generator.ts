@@ -9,15 +9,17 @@ const PLACEHOLDER_IMAGE = "/assets/placeholder.svg";
 const ACCENTS_PATTERN = /[\u0300-\u036f]/g;
 const SUPERFLUOUS_CHARACTERS_PATTERN = /[^a-z0-9 ]/g;
 const SPACE_PATTERN = /\s+/g;
+const SLUG_MAX_LENGTH = 80;
 
 const slug = (str: string): string => {
   return str
-    .normalize("NFD") // split an accented letter in the base letter and the acent
+    .normalize("NFD") // split an accented letter in the base letter and the accent
     .replace(ACCENTS_PATTERN, "") // remove all previously split accents
     .toLowerCase()
     .trim()
     .replace(SUPERFLUOUS_CHARACTERS_PATTERN, "") // remove all chars not letters, numbers and spaces (to be replaced)
-    .replace(SPACE_PATTERN, "-");
+    .replace(SPACE_PATTERN, "-")
+    .substr(0, SLUG_MAX_LENGTH);
 };
 
 export const UrlGenerator = {
