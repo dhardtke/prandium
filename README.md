@@ -35,6 +35,7 @@ Please see [Development](docs/development.md) for information on how to set up y
 * [ESBuild](https://esbuild.github.io/)
 * [Oak](https://oakserver.github.io/oak/)
 * [deno_dom](https://github.com/b-fuze/deno-dom)
+* [deno-sqlite](https://github.com/dyedgreen/deno-sqlite)
 * [parse-ingredient](https://jakeboone02.github.io/parse-ingredient/)
 * [IntelliJ](https://www.jetbrains.com/idea/)
 * [Nextcloud Cookbook](https://github.com/nextcloud/cookbook)
