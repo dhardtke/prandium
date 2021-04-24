@@ -31,6 +31,7 @@ Please see [Development](docs/development.md) for information on how to set up y
 ## Acknowledgements
 
 * [Deno: A secure runtime for JavaScript and TypeScript](https://deno.land/)
+* [TypeScript](https://www.typescriptlang.org/)
 * [Bootstrap](https://getbootstrap.com/)
 * [ESBuild](https://esbuild.github.io/)
 * [Oak](https://oakserver.github.io/oak/)
