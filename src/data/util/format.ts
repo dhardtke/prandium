@@ -31,13 +31,19 @@ export const date = {
    * @param seconds the seconds to format
    */
   formatSeconds: (seconds: number): string => {
-    return date.formatDuration(
-      dateFns.intervalToDuration({
-        start: 0,
-        end: seconds * 1000,
-        locale: l.meta.dateFns,
-      }),
-    );
+    try {
+      return date.formatDuration(
+        dateFns.intervalToDuration({
+          start: 0,
+          end: seconds * 1000,
+          locale: l.meta.dateFns,
+        }),
+      );
+    } catch {
+      // errors can occur if the given number is way to large or small to be parsed into a Date
+      // see https://262.ecma-international.org/11.0/#sec-time-values-and-time-range
+      return "";
+    }
   },
 
   /**
