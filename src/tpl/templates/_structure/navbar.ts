@@ -17,7 +17,7 @@ const LanguageDropdown = () => html`
     <button class="btn btn-sm btn-outline-primary h-100 dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
       ${Icon("globe")}
     </button>
-    <ul class="dropdown-menu">
+    <ul class="dropdown-menu dropdown-menu-end">
       ${Object.entries(LANGUAGES).map(([id, lang]) => l.meta.id === id
         ? html`
           <li class="dropdown-item text-center active">${LanguageDropdownItem(lang)}</li>`
