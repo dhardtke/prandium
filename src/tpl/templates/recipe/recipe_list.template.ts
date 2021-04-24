@@ -153,8 +153,8 @@ export const RecipeListTemplate = (
               <a class="card card-linked h-100" href="${UrlGenerator.recipe(recipe)}">
                 <img src="${UrlGenerator.thumbnail(recipe.thumbnail)}" class="card-img-top" alt="" loading="lazy">
                 <div class="card-body">
-                  <h5 class="card-title">${e(recipe.title)}</h5>
-                  <p class="card-text">${e(recipe.description)}</p>
+                  <h5 class="card-title text-clamp">${e(recipe.title)}</h5>
+                  <p class="card-text text-clamp">${e(recipe.description)}</p>
                   <p class="card-text">
                     <small class="text-muted" ${recipe.lastCookedAt && `title=${date.format(recipe.lastCookedAt)}`}>
                       ${
@@ -171,16 +171,16 @@ export const RecipeListTemplate = (
                       ${LabeledIcon(recipe.cookedCount, "bar-chart")}
                     </span>
                     <span title="${e(l.recipe.rating)}" class="me-2">
-                        ${LabeledIcon(number.format(recipe.rating), "star")}
-                      </span>
+                      ${LabeledIcon(number.format(recipe.rating), "star")}
+                    </span>
                     <span title="${e(l.recipe.aggregateRating)}">
-                        ${LabeledIcon(number.format(recipe.aggregateRatingValue), "people")}
-                      </span>
+                      ${LabeledIcon(number.format(recipe.aggregateRatingValue), "people")}
+                    </span>
                   </div>
 
                   <span class="d-flex align-items-center" title="${e(l.recipe.time.total)}">
-                      ${LabeledIcon(date.formatSeconds(recipe.totalTime!), "clock-fill")}
-                    </span>
+                    ${LabeledIcon(date.formatSeconds(recipe.totalTime!), "clock-fill")}
+                  </span>
                 </div>
               </a>
             </div>
