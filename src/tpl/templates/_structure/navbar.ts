@@ -14,7 +14,7 @@ const LanguageDropdownItem = (lang: Language) => html`
 
 const LanguageDropdown = () => html`
   <div class="dropdown ms-2" id="language-dropdown">
-    <button class="btn btn-sm btn-outline-primary h-100 dropdown-toggle" data-bs-toggle="dropdown">
+    <button class="btn btn-sm btn-outline-primary h-100 dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
       ${Icon("globe")}
     </button>
     <ul class="dropdown-menu">
@@ -44,13 +44,9 @@ export const Navbar = () => html`
       </a>
 
       <div class="d-flex">
-        <button id="dark-mode-switcher" type="button" class="btn btn-sm btn-outline-light h-100">
-          <span class="active d-none">
-            ${Icon("sun-fill")}
-          </span>
-          <span class="inactive">
-            ${Icon("moon")}
-          </span>
+        <button id="dark-mode-switcher" type="button" class="btn btn-sm btn-outline-light h-100 d-flex align-items-center">
+          ${Icon("sun-fill", "active d-none")}
+          ${Icon("moon", "inactive")}
         </button>
 
         ${LanguageDropdown()}
