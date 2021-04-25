@@ -14,7 +14,7 @@ import { RecipeEditPage } from "./ts/page/recipe_edit_page/recipe_edit_page.ts";
 import { RecipeListPage } from "./ts/page/recipe_list_page/recipe_list_page.ts";
 
 // components
-Component.register(Observer);
+Component.register("Observer", Observer);
 bootComponents();
 
 const globals = [

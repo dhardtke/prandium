@@ -11,8 +11,8 @@ export abstract class Component {
     this.ctx = ctx;
   }
 
-  static register(cmp: Class<Component>) {
-    registry[cmp.name] = cmp;
+  static register(name: string, cmp: Class<Component>) {
+    registry[name] = cmp;
   }
 
   abstract mount(): void;
