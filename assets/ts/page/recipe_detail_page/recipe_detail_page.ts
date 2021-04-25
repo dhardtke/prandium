@@ -3,7 +3,7 @@ import { requestWakeLock } from "./wake_lock.ts";
 const Selectors = {
   Rating: "#recipe-rating",
   CurrentValue: ".current"
-};
+} as const;
 
 function registerPortionsControls() {
   const $form = document.getElementById("ingredients-form") as HTMLFormElement;

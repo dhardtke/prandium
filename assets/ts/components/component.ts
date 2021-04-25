@@ -1,7 +1,7 @@
 // deno-lint-ignore no-explicit-any
 type Class<S> = new (...args: any[]) => S;
 
-const registry: {[name: string]: Class<Component>} = {};
+const registry: { [name: string]: Class<Component> } = {};
 const registeredElements: HTMLElement[] = [];
 
 export abstract class Component {

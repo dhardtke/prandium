@@ -19,12 +19,12 @@ const Selectors = {
   Item: ".list-group-item",
   ClearBtn: ".btn-tag-clear",
   InputFilter: ".input-filter"
-};
+} as const;
 const Classes = {
   Active: "active",
   Disabled: "disabled",
   Hidden: "d-none"
-};
+} as const;
 
 export class TagFilter {
   private readonly $tagFilter: HTMLDivElement;

@@ -3,7 +3,7 @@
 // Definitions by: Chris Milson <https://github.com/chrismilson>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
-type WakeLockType = 'screen';
+type WakeLockType = "screen";
 
 /**
  * A WakeLockSentinel provides a handle to a platform wake lock, and it holds on
@@ -18,14 +18,15 @@ interface WakeLockSentinel extends EventTarget {
   readonly released: boolean;
   /** The WakeLockSentinel's wake lock type. */
   readonly type: WakeLockType;
-  /** Releases the WakeLockSentinel's lock on the screen. */
-  release(): Promise<undefined>;
   /**
    * Called when the WakeLockSentinel's handle is released. Note that the
    * WakeLockSentinel's handle being released does not necessarily mean that
    * the underlying wake lock has been released.
    */
   onrelease: EventListener;
+
+  /** Releases the WakeLockSentinel's lock on the screen. */
+  release(): Promise<undefined>;
 }
 
 /**

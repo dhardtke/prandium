@@ -1,8 +1,8 @@
 import { Component } from "./component.ts";
 
-export enum Events {
-  Intersecting = "ObserverIntersecting"
-}
+export const Events = {
+  Intersecting: "ObserverIntersecting"
+} as const;
 
 export class Observer extends Component {
   private observer?: IntersectionObserver;

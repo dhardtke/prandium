@@ -1,9 +1,9 @@
-export enum Events {
+export const Events = {
   /**
    * The item has been created.
    */
-  Create = "ArrayFieldCreate"
-}
+  Create: "ArrayFieldCreate"
+} as const;
 
 const Selectors = {
   ArrayField: ".array-field",

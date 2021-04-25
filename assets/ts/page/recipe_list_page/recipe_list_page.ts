@@ -3,10 +3,10 @@ import { bootComponents } from "../../components/component.ts";
 import { Events } from "../../components/observer.ts";
 import { TagFilter } from "./tag_filter.ts";
 
-enum Data {
-  PaginationHasMore = "paginationHasMore",
-  InfiniteScrolling = "infiniteScrolling"
-}
+const Data = {
+  PaginationHasMore: "paginationHasMore",
+  InfiniteScrolling: "infiniteScrolling"
+} as const;
 
 const Selectors = {
   Pagination: ".pagination",
