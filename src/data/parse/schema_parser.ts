@@ -1,13 +1,13 @@
 import { Dom, SchemaRecipe } from "../../../deps.ts";
 
-const TEXT_HTML = "text/html";
-const LD_JSON = "application/ld+json";
+const TextHtml = "text/html";
+const LdJson = "application/ld+json";
 
 export class SchemaParser {
   private readonly document: Dom.Document;
 
   constructor(html: string) {
-    const document = new Dom.DOMParser().parseFromString(html, TEXT_HTML);
+    const document = new Dom.DOMParser().parseFromString(html, TextHtml);
     if (!document) {
       throw new Error("TODO");
     }
@@ -23,7 +23,7 @@ export class SchemaParser {
 
   private findFirst<T>(type: string): T | null {
     const $scripts: Dom.Node[] = Array.from(
-      this.document.querySelectorAll(`script[type="${LD_JSON}"]`),
+      this.document.querySelectorAll(`script[type="${LdJson}"]`),
     );
     for (const $script of $scripts) {
       const json = $script.textContent;

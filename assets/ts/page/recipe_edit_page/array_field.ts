@@ -2,17 +2,17 @@ export enum Events {
   /**
    * The item has been created.
    */
-  CREATE = "ArrayFieldCreate"
+  Create = "ArrayFieldCreate"
 }
 
-const SELECTORS = {
-  ARRAY_FIELD: ".array-field",
-  LIST: ".list-group",
-  LIST_ITEM: ".list-group-item",
-  BTN_UP: "button[data-hook='up']",
-  BTN_DOWN: "button[data-hook='down']",
-  BTN_CREATE: "button[data-hook='create']",
-  BTN_DELETE: "button[data-hook='delete']",
+const Selectors = {
+  ArrayField: ".array-field",
+  List: ".list-group",
+  ListItem: ".list-group-item",
+  BtnUp: "button[data-hook='up']",
+  BtnDown: "button[data-hook='down']",
+  BtnCreate: "button[data-hook='create']",
+  BtnDelete: "button[data-hook='delete']",
 } as const;
 
 function ArrayField($arrayField: HTMLDivElement) {
@@ -24,24 +24,24 @@ function ArrayField($arrayField: HTMLDivElement) {
   }
 
   const $template = $arrayField.querySelector<HTMLTemplateElement>("template")!;
-  const $list = $arrayField.querySelector<HTMLDivElement>(SELECTORS.LIST)!;
+  const $list = $arrayField.querySelector<HTMLDivElement>(Selectors.List)!;
 
   function registerListeners($parent: HTMLElement) {
     function updateMoveButtons() {
-      [...$list.querySelectorAll<HTMLDivElement>(SELECTORS.LIST_ITEM)].forEach(($item, i, $items) => {
-        const $up = $item.querySelector<HTMLButtonElement>(SELECTORS.BTN_UP);
+      [...$list.querySelectorAll<HTMLDivElement>(Selectors.ListItem)].forEach(($item, i, $items) => {
+        const $up = $item.querySelector<HTMLButtonElement>(Selectors.BtnUp);
         if ($up) {
           $up.disabled = i === 0;
         }
-        const $down = $item.querySelector<HTMLButtonElement>(SELECTORS.BTN_DOWN);
+        const $down = $item.querySelector<HTMLButtonElement>(Selectors.BtnDown);
         if ($down) {
           $down.disabled = i === $items.length - 1;
         }
       });
     }
 
-    onClick($parent, SELECTORS.BTN_UP, (e) => {
-      const $item = (e.target as HTMLButtonElement).closest(SELECTORS.LIST_ITEM);
+    onClick($parent, Selectors.BtnUp, (e) => {
+      const $item = (e.target as HTMLButtonElement).closest(Selectors.ListItem);
       if ($item) {
         const $otherItem = $item.previousElementSibling;
         if ($otherItem) {
@@ -50,8 +50,8 @@ function ArrayField($arrayField: HTMLDivElement) {
         }
       }
     });
-    onClick($parent, SELECTORS.BTN_DOWN, (e) => {
-      const $item = (e.target as HTMLButtonElement).closest(SELECTORS.LIST_ITEM);
+    onClick($parent, Selectors.BtnDown, (e) => {
+      const $item = (e.target as HTMLButtonElement).closest(Selectors.ListItem);
       if ($item) {
         const $otherItem = $item.nextElementSibling;
         if ($otherItem) {
@@ -60,16 +60,16 @@ function ArrayField($arrayField: HTMLDivElement) {
         }
       }
     });
-    onClick($parent, SELECTORS.BTN_CREATE, () => {
+    onClick($parent, Selectors.BtnCreate, () => {
       const $fragment = $template.content.cloneNode(true) as DocumentFragment;
-      registerListeners($fragment.querySelector<HTMLDivElement>(SELECTORS.LIST_ITEM)!);
+      registerListeners($fragment.querySelector<HTMLDivElement>(Selectors.ListItem)!);
       $list.insertBefore($fragment, $template);
       updateMoveButtons();
-      const $items = $list.querySelectorAll(SELECTORS.LIST_ITEM);
-      window.dispatchEvent(new CustomEvent(Events.CREATE, { detail: $items[$items.length - 1] }));
+      const $items = $list.querySelectorAll(Selectors.ListItem);
+      window.dispatchEvent(new CustomEvent(Events.Create, { detail: $items[$items.length - 1] }));
     });
-    onClick($parent, SELECTORS.BTN_DELETE, (e: MouseEvent) => {
-      const $item = (e.target as HTMLButtonElement).closest(SELECTORS.LIST_ITEM);
+    onClick($parent, Selectors.BtnDelete, (e: MouseEvent) => {
+      const $item = (e.target as HTMLButtonElement).closest(Selectors.ListItem);
       $item?.remove();
       updateMoveButtons();
     });
@@ -79,7 +79,7 @@ function ArrayField($arrayField: HTMLDivElement) {
 }
 
 export function registerArrayFields() {
-  const $arrayFields = document.querySelectorAll<HTMLDivElement>((SELECTORS.ARRAY_FIELD));
+  const $arrayFields = document.querySelectorAll<HTMLDivElement>((Selectors.ArrayField));
   for (const $arrayField of $arrayFields) {
     ArrayField($arrayField);
   }

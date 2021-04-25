@@ -14,11 +14,11 @@ contents = contents.substring(
   contents.lastIndexOf("</symbol>"),
 );
 const allGlyphs: { [iconName: string]: string } = {};
-const ID_PATTERN = /id=["'](.*?)["']/;
+const IdPattern = /id=["'](.*?)["']/;
 
 for (const symbol of contents.split("</symbol>")) {
   const source = `${symbol}</symbol>`;
-  const match = source.match(ID_PATTERN);
+  const match = source.match(IdPattern);
   if (match) {
     allGlyphs[match[1]] = source;
   } else {

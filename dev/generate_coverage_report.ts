@@ -4,18 +4,18 @@ import { path } from "../deps.ts";
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
 
-const SOURCE_DIR = path.join("out", "coverage");
-const OUTPUT_DIR = path.join("out", "coverage_html");
+const SourceDir = path.join("out", "coverage");
+const OutputDir = path.join("out", "coverage_html");
 
 // remove output dir
 try {
-  await Deno.remove(OUTPUT_DIR, { recursive: true });
+  await Deno.remove(OutputDir, { recursive: true });
 } catch {
   // ignore
 }
 
 const coverage = Deno.run({
-  cmd: ["deno", "coverage", "--unstable", SOURCE_DIR, "--lcov"],
+  cmd: ["deno", "coverage", "--unstable", SourceDir, "--lcov"],
   stdout: "piped",
 });
 const output = await coverage.output();
@@ -26,11 +26,11 @@ if (coverageStatus.success && coverageStatus.code === 0) {
   });
   await Deno.writeFileSync(tmpFile, output);
   const htmlStatus = await Deno.run({
-    cmd: ["genhtml", "-o", OUTPUT_DIR, tmpFile],
+    cmd: ["genhtml", "-o", OutputDir, tmpFile],
   }).status();
   if (htmlStatus.success && htmlStatus.code === 0) {
     await Deno.remove(tmpFile);
-    console.log(`Generated ${OUTPUT_DIR}`);
+    console.log(`Generated ${OutputDir}`);
     Deno.exit(0);
   }
 }

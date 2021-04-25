@@ -8,22 +8,22 @@ declare type Tag = {
   recipeCount: number;
 };
 
-const TAG_LIST_ENDPOINT = "/tag/filter";
-const ID = "tag-filter";
-const URL_PARAMETER = "tagId";
-const JARO_WINKLER_SIMILARITY_THRESHOLD = .75;
-const SELECTORS = {
-  TITLE: ".tag-title",
-  RECIPE_COUNT: ".tag-recipe-count",
-  RESULTS: ".list-group",
-  ITEM: ".list-group-item",
-  CLEAR_BTN: ".btn-tag-clear",
-  INPUT_FILTER: ".input-filter"
+const TagListEndpoint = "/tag/filter";
+const Id = "tag-filter";
+const UrlParameter = "tagId";
+const JaroWinklerSimilarityThreshold = .75;
+const Selectors = {
+  Title: ".tag-title",
+  RecipeCount: ".tag-recipe-count",
+  Results: ".list-group",
+  Item: ".list-group-item",
+  ClearBtn: ".btn-tag-clear",
+  InputFilter: ".input-filter"
 };
-const CLASSES = {
-  ACTIVE: "active",
-  DISABLED: "disabled",
-  HIDDEN: "d-none"
+const Classes = {
+  Active: "active",
+  Disabled: "disabled",
+  Hidden: "d-none"
 };
 
 export class TagFilter {
@@ -37,11 +37,11 @@ export class TagFilter {
   private readonly hiddenTagIds: Set<number> = new Set();
 
   constructor() {
-    this.$tagFilter = document.getElementById(ID)! as HTMLDivElement;
-    this.$results = this.$tagFilter.querySelector(SELECTORS.RESULTS)!;
+    this.$tagFilter = document.getElementById(Id)! as HTMLDivElement;
+    this.$results = this.$tagFilter.querySelector(Selectors.Results)!;
     this.$template = this.$tagFilter.querySelector("template")!;
-    this.$tagFilter.querySelector(SELECTORS.CLEAR_BTN)!.addEventListener("click", this.clear);
-    this.$inputFilter = this.$tagFilter.querySelector(SELECTORS.INPUT_FILTER)!;
+    this.$tagFilter.querySelector(Selectors.ClearBtn)!.addEventListener("click", this.clear);
+    this.$inputFilter = this.$tagFilter.querySelector(Selectors.InputFilter)!;
     this.$inputFilter.addEventListener("input", this.inputFilter);
     this.requestUrl = new URL(window.location.href);
     this.activeTagIds = new Set(this.requestUrl.searchParams.getAll("tagId").map((id) => parseInt(id, 10)));
@@ -60,13 +60,13 @@ export class TagFilter {
 
   private inputFilter = () => {
     const query = this.$inputFilter.value.trim().toLowerCase();
-    const $items = this.$results.querySelectorAll<HTMLAnchorElement>(SELECTORS.ITEM);
+    const $items = this.$results.querySelectorAll<HTMLAnchorElement>(Selectors.Item);
     for (let i = 0; i < $items.length; i++) {
       const $item = $items[i];
-      const title = $item.querySelector(SELECTORS.TITLE)!.textContent!.trim().toLowerCase();
+      const title = $item.querySelector(Selectors.Title)!.textContent!.trim().toLowerCase();
       const id = parseInt($item.dataset.tagId!, 10);
-      const shouldBeHidden = Boolean(query) && !$item.classList.contains(CLASSES.ACTIVE) && jaroWinklerDistance(query, title) < JARO_WINKLER_SIMILARITY_THRESHOLD;
-      $item.classList.toggle(CLASSES.HIDDEN, shouldBeHidden);
+      const shouldBeHidden = Boolean(query) && !$item.classList.contains(Classes.Active) && jaroWinklerDistance(query, title) < JaroWinklerSimilarityThreshold;
+      $item.classList.toggle(Classes.Hidden, shouldBeHidden);
       if (shouldBeHidden) {
         this.hiddenTagIds.add(id);
       } else {
@@ -79,11 +79,11 @@ export class TagFilter {
     $item.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      if (parseInt($item.querySelector(SELECTORS.RECIPE_COUNT)!.textContent!, 10) === 0) {
+      if (parseInt($item.querySelector(Selectors.RecipeCount)!.textContent!, 10) === 0) {
         return;
       }
       const id = parseInt($item.dataset.tagId!, 10);
-      const isActive = $item.classList.toggle(CLASSES.ACTIVE);
+      const isActive = $item.classList.toggle(Classes.Active);
       const $input = $item.querySelector("input") as HTMLInputElement;
       $input.disabled = !isActive;
       if (isActive) {
@@ -98,16 +98,16 @@ export class TagFilter {
   private buildTagUrl(tagId: number): string {
     const url = new URL(this.requestUrl.toString());
     if (this.activeTagIds.has(tagId)) {
-      removeUrlParameterValue(url, URL_PARAMETER, tagId + "");
+      removeUrlParameterValue(url, UrlParameter, tagId + "");
     } else {
-      url.searchParams.append(URL_PARAMETER, tagId + "");
+      url.searchParams.append(UrlParameter, tagId + "");
     }
     return url.toString();
   }
 
   private buildEndpointUrl(): URL {
-    const url = new URL(TAG_LIST_ENDPOINT, window.location.href);
-    this.activeTagIds.forEach((id) => url.searchParams.append(URL_PARAMETER, id + ""));
+    const url = new URL(TagListEndpoint, window.location.href);
+    this.activeTagIds.forEach((id) => url.searchParams.append(UrlParameter, id + ""));
     return url;
   }
 
@@ -115,17 +115,17 @@ export class TagFilter {
     const $input = $item.querySelector("input") as HTMLInputElement;
     $input.value = tag.id + "";
     $item.dataset.tagId = tag.id + "";
-    $item.querySelector(SELECTORS.TITLE)!.textContent = tag.title;
-    const $countBadge = $item.querySelector(SELECTORS.RECIPE_COUNT)!;
+    $item.querySelector(Selectors.Title)!.textContent = tag.title;
+    const $countBadge = $item.querySelector(Selectors.RecipeCount)!;
     $countBadge.textContent = tag.recipeCount + "";
-    $countBadge.classList.toggle(CLASSES.HIDDEN, tag.recipeCount === 0);
+    $countBadge.classList.toggle(Classes.Hidden, tag.recipeCount === 0);
     $item.href = this.buildTagUrl(tag.id);
     const isActive = this.activeTagIds.has(tag.id);
     $input.disabled = !isActive;
     const isDisabled = $input.disabled && tag.recipeCount === 0;
-    $item.classList.toggle(CLASSES.ACTIVE, isActive);
-    $item.classList.toggle(CLASSES.DISABLED, isDisabled);
-    $item.classList.toggle(CLASSES.HIDDEN, this.hiddenTagIds.has(tag.id));
+    $item.classList.toggle(Classes.Active, isActive);
+    $item.classList.toggle(Classes.Disabled, isDisabled);
+    $item.classList.toggle(Classes.Hidden, this.hiddenTagIds.has(tag.id));
     $item.title = !isDisabled && tag.description || "";
   }
 

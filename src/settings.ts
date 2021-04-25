@@ -1,7 +1,7 @@
 import { fs, log, path, Zod as z } from "../deps.ts";
 import { getCpuCores } from "./util.ts";
 
-export const DEFAULT_USER_AGENT =
+export const DefaultUserAgent =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0";
 
 /**
@@ -14,17 +14,17 @@ export enum IngredientSortOrder {
   /**
    * List them in the order they are stored.
    */
-  ORIGINAL = "ORIGINAL",
+  Original = "Original",
 
-  FULL_UNITLESS_EMPTY = "FULL_UNITLESS_EMPTY",
-  UNITLESS_EMPTY_FULL = "UNITLESS_EMPTY_FULL",
-  EMPTY_UNITLESS_FULL = "EMPTY_UNITLESS_FULL",
-  UNITLESS_FULL_EMPTY = "UNITLESS_FULL_EMPTY",
-  EMPTY_FULL_UNITLESS = "EMPTY_FULL_UNITLESS",
-  FULL_EMPTY_UNITLESS = "FULL_EMPTY_UNITLESS",
+  FullUnitlessEmpty = "FullUnitlessEmpty",
+  UnitlessEmptyFull = "UnitlessEmptyFull",
+  EmptyUnitlessFull = "EmptyUnitlessFull",
+  UnitlessFullEmpty = "UnitlessFullEmpty",
+  EmptyFullUnitless = "EmptyFullUnitless",
+  FullEmptyUnitless = "FullEmptyUnitless",
 }
 
-export const DEFAULT_INGREDIENT_POSTPROCESSING = [
+export const DefaultIngredientPostprocessing = [
   "TL",
   "EL",
   "dl",
@@ -41,20 +41,20 @@ export interface Settings {
 
   /**
    * Configure in which order ingredients are sorted.
-   * @see IngredientSortOrder#FULL_UNITLESS_EMPTY
+   * @see IngredientSortOrder#FullUnitlessEmpty
    */
   ingredientSortOrder: IngredientSortOrder;
 
   /**
    * The ingredient extraction parser does not work one hundred percent for all locales.
    * Strings may be specified here which will be moved from an ingredient's description to its unit.
-   * @see DEFAULT_INGREDIENT_POSTPROCESSING
+   * @see DefaultIngredientPostprocessing
    */
   ingredientUnitPostprocessing: string[];
 
   /**
    * The User Agent to use when doing HTTP Requests.
-   * @see #DEFAULT_USER_AGENT
+   * @see #DefaultUserAgent
    */
   userAgent: string;
 
@@ -83,18 +83,17 @@ export interface Settings {
   pageSize: number;
 }
 
-export const DEFAULT_SETTINGS: Partial<Settings> = {};
-const CPU_CORES = getCpuCores();
+const CpuCores = getCpuCores();
 const Schema = z.object({
   importWorkerCount: z.number().refine(
     (val?: number) =>
-      CPU_CORES === undefined || val === undefined ||
-      val > 0 && val <= CPU_CORES,
+      CpuCores === undefined || val === undefined ||
+      val > 0 && val <= CpuCores,
     (val?: number) => ({
       message:
         `importWorkerCount: Value ${val} must be greater 0 and lower than number of CPU cores available, i.e. ${getCpuCores()}.`,
     }),
-  ).optional().default(CPU_CORES || 1),
+  ).optional().default(CpuCores || 1),
   ingredientSortOrder: z.string().refine(
     (val: string) =>
       Boolean(IngredientSortOrder[val as unknown as IngredientSortOrder]),
@@ -103,33 +102,34 @@ const Schema = z.object({
         Object.values(IngredientSortOrder)
       }`,
     }),
-  ).optional().default(IngredientSortOrder.FULL_UNITLESS_EMPTY),
+  ).optional().default(IngredientSortOrder.FullUnitlessEmpty),
   ingredientUnitPostprocessing: z.array(z.string()).optional().default(
-    DEFAULT_INGREDIENT_POSTPROCESSING,
+    DefaultIngredientPostprocessing,
   ),
-  userAgent: z.string().optional().default(DEFAULT_USER_AGENT),
+  userAgent: z.string().optional().default(DefaultUserAgent),
   addHistoryEntryWhenRating: z.boolean().optional().default(true),
   minifyHtml: z.boolean().optional().default(false),
   infiniteScrolling: z.boolean().optional().default(true),
   pageSize: z.number().optional().default(24),
 });
 
-export const SETTINGS_FILENAME = "settings.json";
+export const SettingsFilename = "settings.json";
 
 export async function readFromDisk(configDir: string): Promise<Settings> {
-  const file = path.join(configDir, SETTINGS_FILENAME);
+  const file = path.join(configDir, SettingsFilename);
   if (await fs.exists(file)) {
     const contents = await Deno.readTextFile(file);
     try {
       return Schema.parse(JSON.parse(contents)) as Settings;
     } catch (e) {
-      throw new Error(`Error reading ${SETTINGS_FILENAME}: ${e}`);
+      throw new Error(`Error reading ${SettingsFilename}: ${e}`);
     }
   }
+  const defaultSettings = Schema.parse({}) as Settings;
   log.debug(() =>
-    `Could not find settings file ${SETTINGS_FILENAME}. Using default settings: ${
-      JSON.stringify(DEFAULT_SETTINGS)
+    `Could not find settings file ${SettingsFilename}. Using default settings: ${
+      JSON.stringify(defaultSettings)
     }`
   );
-  return Schema.parse(DEFAULT_SETTINGS) as Settings;
+  return defaultSettings;
 }

@@ -1,7 +1,7 @@
-export function NavbarDarkModeSwitcher() {
-  const LOCAL_STORAGE_NAME = "COOK_GUIDE_DARK_MODE";
-  const DOCUMENT_CLASS_NAME = "dark";
+const LocalStorageName = "COOK_GUIDE_DARK_MODE";
+const DocumentClassName = "dark";
 
+export function NavbarDarkModeSwitcher() {
   const $darkModeSwitcher = document.getElementById("dark-mode-switcher");
   if (!$darkModeSwitcher) {
     return;
@@ -11,7 +11,7 @@ export function NavbarDarkModeSwitcher() {
   const toggleDarkMode = () => {
     $active?.classList.remove("d-none");
     $inactive?.classList.remove("d-none");
-    if (document.documentElement.classList.toggle(DOCUMENT_CLASS_NAME, localStorage.getItem(LOCAL_STORAGE_NAME) === "true")) {
+    if (document.documentElement.classList.toggle(DocumentClassName, localStorage.getItem(LocalStorageName) === "true")) {
       $inactive?.classList.add("d-none");
     } else {
       $active?.classList.add("d-none");
@@ -20,7 +20,7 @@ export function NavbarDarkModeSwitcher() {
   toggleDarkMode();
 
   $darkModeSwitcher.addEventListener("click", () => {
-    localStorage.setItem(LOCAL_STORAGE_NAME, localStorage.getItem("COOK_GUIDE_DARK_MODE") === "true" ? "false" : "true");
+    localStorage.setItem(LocalStorageName, localStorage.getItem("COOK_GUIDE_DARK_MODE") === "true" ? "false" : "true");
     toggleDarkMode();
   });
 }

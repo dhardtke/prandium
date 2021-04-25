@@ -2,7 +2,7 @@ import { Cliffy, Colors, fs, log, LogRecord, path } from "../deps.ts";
 import { Database } from "./data/db.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { readFromDisk, Settings } from "./settings.ts";
-import { DEFAULT_CONFIG_DIR, defaultConfigDir } from "./util.ts";
+import { DefaultConfigDir, defaultConfigDir } from "./util.ts";
 
 interface Options {
   host: string;
@@ -20,7 +20,7 @@ async function parseOptions(): Promise<Options> {
     .option("-h, --host [hostname]", "the host name.", { default: "127.0.0.1" })
     .option("-d, --debug [debug:boolean]", "enable debug mode")
     .option("-c --configDir [config:string]", "The config directory", {
-      default: DEFAULT_CONFIG_DIR,
+      default: DefaultConfigDir,
     })
     .option("-s, --secure [secure:boolean]", "enable HTTPS server", {
       default: false,
@@ -35,7 +35,7 @@ async function parseOptions(): Promise<Options> {
     )
     .parse(Deno.args);
 
-  if (options.configDir === DEFAULT_CONFIG_DIR) {
+  if (options.configDir === DefaultConfigDir) {
     options.configDir = defaultConfigDir();
   }
 

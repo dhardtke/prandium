@@ -3,7 +3,7 @@ export interface Page {
   url: string;
 }
 
-const PAGE_PARAMETER = "page";
+const PageParameter = "page";
 
 // based on https://jasonwatmore.com/post/2018/08/07/javascript-pure-pagination-logic-in-vanilla-js-typescript
 export class PaginationBuilder<T> {
@@ -66,7 +66,7 @@ export class PaginationBuilder<T> {
   }
 
   private static buildPageUrl(url: URL, page: number): string {
-    url.searchParams.set(PAGE_PARAMETER, page + "");
+    url.searchParams.set(PageParameter, page + "");
     return url.toString();
   }
 

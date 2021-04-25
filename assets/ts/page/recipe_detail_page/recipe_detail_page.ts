@@ -1,5 +1,10 @@
 import { requestWakeLock } from "./wake_lock.ts";
 
+const Selectors = {
+  Rating: "#recipe-rating",
+  CurrentValue: ".current"
+};
+
 function registerPortionsControls() {
   const $form = document.getElementById("ingredients-form") as HTMLFormElement;
   if (!$form) {
@@ -37,13 +42,8 @@ function registerPortionsControls() {
 }
 
 function initializeRating() {
-  const SELECTORS = {
-    RATING: "#recipe-rating",
-    CURRENT_VALUE: ".current"
-  };
-
-  const $rating = document.querySelector<HTMLDivElement>(SELECTORS.RATING)!;
-  const $currentValue = $rating.querySelector(SELECTORS.CURRENT_VALUE)!;
+  const $rating = document.querySelector<HTMLDivElement>(Selectors.Rating)!;
+  const $currentValue = $rating.querySelector(Selectors.CurrentValue)!;
   $rating.querySelectorAll<HTMLInputElement>("input").forEach(($radio) => {
     $radio.addEventListener("change", async () => {
       await fetch(`${new URL(window.location.href).pathname}/rate`, {

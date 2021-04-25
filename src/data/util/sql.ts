@@ -12,7 +12,7 @@ export interface Filters {
   bindings: QueryParam[];
 }
 
-export const EMPTY_FILTER = { sql: "TRUE", bindings: [] };
+export const EmptyFilter = { sql: "TRUE", bindings: [] };
 
 export function buildFilters(...filters: Filter[]): Filters {
   const activeFilters = filters.filter((f) => f.active);
@@ -26,11 +26,11 @@ export function buildFilters(...filters: Filter[]): Filters {
       return result;
     }, { sql: "", bindings: [] });
   } else {
-    return EMPTY_FILTER;
+    return EmptyFilter;
   }
 }
 
-export const EMPTY_ORDER_BY = "ORDER BY TRUE";
+export const EmptyOrderBy = "ORDER BY TRUE";
 
 export function buildOrderBySql(
   orderBy: OrderBy | undefined,
@@ -43,7 +43,7 @@ export function buildOrderBySql(
       }`;
     }
   }
-  return EMPTY_ORDER_BY;
+  return EmptyOrderBy;
 }
 
 export function columns(

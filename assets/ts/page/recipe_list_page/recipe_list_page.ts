@@ -8,7 +8,7 @@ enum Data {
   InfiniteScrolling = "infiniteScrolling"
 }
 
-const SELECTORS = {
+const Selectors = {
   Pagination: ".pagination",
   RecipeList: "#recipe-list",
   OrderBy: "#orderBy"
@@ -17,7 +17,7 @@ const SELECTORS = {
 const pageParam = "page";
 
 function registerOrderByControl() {
-  const $orderBy = document.querySelector<HTMLFormElement>(SELECTORS.OrderBy);
+  const $orderBy = document.querySelector<HTMLFormElement>(Selectors.OrderBy);
   if ($orderBy) {
     const $select = $orderBy.querySelector("select");
     $select!.addEventListener("change", () => {
@@ -28,7 +28,7 @@ function registerOrderByControl() {
 
 function registerInfiniteScrolling($recipeList: HTMLElement) {
   window.addEventListener(Events.Intersecting, async () => {
-    const $pagination = document.querySelector<HTMLElement>(SELECTORS.Pagination);
+    const $pagination = document.querySelector<HTMLElement>(Selectors.Pagination);
     if (!$pagination || $pagination.dataset[Data.PaginationHasMore] !== "true") {
       return;
     }
@@ -37,8 +37,8 @@ function registerInfiniteScrolling($recipeList: HTMLElement) {
     const response = await fetch(url.toString());
     if (response.status === 200) {
       const $document = new DOMParser().parseFromString(await response.text(), "text/html");
-      const $newRecipeList = $document.querySelector(SELECTORS.RecipeList);
-      const $newPagination = $document.querySelector(SELECTORS.Pagination);
+      const $newRecipeList = $document.querySelector(Selectors.RecipeList);
+      const $newPagination = $document.querySelector(Selectors.Pagination);
       if (!$newRecipeList || !$newPagination) {
         return;
       }
@@ -55,7 +55,7 @@ export const RecipeListPage = () => {
   registerOrderByControl();
   new TagFilter();
 
-  const $recipeList = document.querySelector<HTMLElement>(SELECTORS.RecipeList);
+  const $recipeList = document.querySelector<HTMLElement>(Selectors.RecipeList);
   if ($recipeList && $recipeList.dataset[Data.InfiniteScrolling] === "true") {
     registerInfiniteScrolling($recipeList);
   }

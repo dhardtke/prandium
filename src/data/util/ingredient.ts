@@ -76,33 +76,33 @@ const SortOrder: Record<
   IngredientSortOrder,
   IngredientWeightFunction | undefined
 > = {
-  [IngredientSortOrder.ORIGINAL]: undefined,
-  [IngredientSortOrder.FULL_UNITLESS_EMPTY]: ingredientToWeightFn([
+  [IngredientSortOrder.Original]: undefined,
+  [IngredientSortOrder.FullUnitlessEmpty]: ingredientToWeightFn([
     "full",
     "unitless",
     "empty",
   ]),
-  [IngredientSortOrder.UNITLESS_EMPTY_FULL]: ingredientToWeightFn([
+  [IngredientSortOrder.UnitlessEmptyFull]: ingredientToWeightFn([
     "unitless",
     "empty",
     "full",
   ]),
-  [IngredientSortOrder.EMPTY_UNITLESS_FULL]: ingredientToWeightFn([
+  [IngredientSortOrder.EmptyUnitlessFull]: ingredientToWeightFn([
     "empty",
     "unitless",
     "full",
   ]),
-  [IngredientSortOrder.UNITLESS_FULL_EMPTY]: ingredientToWeightFn([
+  [IngredientSortOrder.UnitlessFullEmpty]: ingredientToWeightFn([
     "unitless",
     "full",
     "empty",
   ]),
-  [IngredientSortOrder.EMPTY_FULL_UNITLESS]: ingredientToWeightFn([
+  [IngredientSortOrder.EmptyFullUnitless]: ingredientToWeightFn([
     "empty",
     "full",
     "unitless",
   ]),
-  [IngredientSortOrder.FULL_EMPTY_UNITLESS]: ingredientToWeightFn([
+  [IngredientSortOrder.FullEmptyUnitless]: ingredientToWeightFn([
     "full",
     "empty",
     "unitless",

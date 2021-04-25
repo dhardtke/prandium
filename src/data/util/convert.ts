@@ -26,7 +26,7 @@ export function toDate(source?: Date | string, _default = new Date()): Date {
   return parsed;
 }
 
-const SNAKE_CASE_PATTERN = /_([a-z])/g;
+const SnakeCasePattern = /_([a-z])/g;
 
 export function toCamelCase<T, O>(obj: O): T {
   // based on https://stackoverflow.com/a/58257506
@@ -34,7 +34,7 @@ export function toCamelCase<T, O>(obj: O): T {
     .entries(obj)
     .reduce((acc, [key, val]) => {
       const modifiedKey = key.replace(
-        SNAKE_CASE_PATTERN,
+        SnakeCasePattern,
         (g) => g[1].toUpperCase(),
       );
       const modifiedVal = typeof val === "object" && val !== null

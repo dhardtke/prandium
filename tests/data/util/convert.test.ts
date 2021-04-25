@@ -7,9 +7,9 @@ import {
   toNumber,
 } from "../../../src/data/util/convert.ts";
 
-const TEST_PREFIX = "[data/util/convert]";
+const TestPrefix = "[data/util/convert]";
 
-Deno.test(`${TEST_PREFIX} toNumber should return fallback value when unsuccessful`, () => {
+Deno.test(`${TestPrefix} toNumber should return fallback value when unsuccessful`, () => {
   assertEquals(toNumber("", -1), -1);
   assertEquals(toNumber(undefined, -1), -1);
   assertEquals(toNumber("undefined", -1), -1);
@@ -19,13 +19,13 @@ Deno.test(`${TEST_PREFIX} toNumber should return fallback value when unsuccessfu
   assertEquals(toNumber("+", -1), -1);
 });
 
-Deno.test(`${TEST_PREFIX} toNumber should return parsed value`, () => {
+Deno.test(`${TestPrefix} toNumber should return parsed value`, () => {
   assertEquals(toNumber("42", -1), 42);
   assertEquals(toNumber("0", -1), 0);
   assertEquals(toNumber("102341998323241321", -1), 102341998323241321);
 });
 
-Deno.test(`${TEST_PREFIX} toDate should return fallback value when unsuccessful`, () => {
+Deno.test(`${TestPrefix} toDate should return fallback value when unsuccessful`, () => {
   const fallback = new Date(0);
   assertEquals(toDate("", fallback), fallback);
   assertEquals(toDate(undefined, fallback), fallback);
@@ -33,7 +33,7 @@ Deno.test(`${TEST_PREFIX} toDate should return fallback value when unsuccessful`
   // assertEquals(toDate("-1", fallback), fallback); TODO this one shouldn't fail - maybe a bug in Deno?
 });
 
-Deno.test(`${TEST_PREFIX} toDate should return parsed value`, () => {
+Deno.test(`${TestPrefix} toDate should return parsed value`, () => {
   assertEquals(toDate("0", undefined), new Date(0));
   assertEquals(toDate("1616804763", undefined), new Date(1616804763));
   assertEquals(
@@ -42,7 +42,7 @@ Deno.test(`${TEST_PREFIX} toDate should return parsed value`, () => {
   );
 });
 
-Deno.test(`${TEST_PREFIX} toCamelCase`, () => {
+Deno.test(`${TestPrefix} toCamelCase`, () => {
   assertEquals(toCamelCase({}), {});
   assertEquals(toCamelCase({ hello_world: true }), { helloWorld: true });
   assertEquals(toCamelCase({ bla: null }), { bla: null });
@@ -80,12 +80,12 @@ function* toGenerator<T>(...arr: T[]): Generator<T> {
   }
 }
 
-Deno.test(`${TEST_PREFIX} toArray`, () => {
+Deno.test(`${TestPrefix} toArray`, () => {
   assertEquals(toArray(toGenerator(4, 5, 6)), [4, 5, 6]);
   assertEquals(toArray(toGenerator(4, 5, 6), (num) => num + 1), [5, 6, 7]);
 });
 
-Deno.test(`${TEST_PREFIX} pushAll`, () => {
+Deno.test(`${TestPrefix} pushAll`, () => {
   assertEquals(pushAll([1, 2, 3], []), [1, 2, 3]);
   assertEquals(pushAll([], [4, 5, 6]), [4, 5, 6]);
   assertEquals(pushAll([4, 5, 6], [1, 2, 3]), [1, 2, 3, 4, 5, 6]);

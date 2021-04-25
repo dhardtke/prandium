@@ -15,7 +15,7 @@ export function getHome(): string | undefined {
   return Deno.env.get("HOME");
 }
 
-export const DEFAULT_CONFIG_DIR = "~/.config/cook-guide";
+export const DefaultConfigDir = "~/.config/cook-guide";
 
 export function defaultConfigDir(): string {
   const home = getHome();
@@ -25,10 +25,10 @@ export function defaultConfigDir(): string {
   return path.resolve(home, ".config", "cook-guide");
 }
 
-const SCRIPT_DIR = path.dirname(path.fromFileUrl(import.meta.url));
+const ScriptDir = path.dirname(path.fromFileUrl(import.meta.url));
 
 export function root(...parts: string[]): string {
-  return path.resolve(SCRIPT_DIR, "..", ...parts);
+  return path.resolve(ScriptDir, "..", ...parts);
 }
 
 export function roundUpToThreeDigits(n: number): number {
