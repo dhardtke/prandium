@@ -135,7 +135,11 @@ router
         filters: { ids: tagIds },
       })
       : [];
-    ctx.response.body = RecipeListTemplate(recipes, tags);
+    ctx.response.body = RecipeListTemplate(
+      recipes,
+      tags,
+      ctx.state.settings.infiniteScrolling,
+    );
   })
   .get("/import", (ctx: Oak.Context<AppState>) => {
     ctx.response.body = RecipeImportTemplate();

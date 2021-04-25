@@ -86,6 +86,7 @@ function OrderBy() {
 export const RecipeListTemplate = (
   recipes: Pagination<Recipe>,
   tags: Tag[],
+  infiniteScrolling: boolean,
 ) => Page(l.recipes)(html`
   ${Breadcrumb(false, { title: l.recipes, url: UrlGenerator.recipeList() })}
 
@@ -126,7 +127,7 @@ export const RecipeListTemplate = (
   ${Page.currentUrl.searchParams.get("flash") === "deleteSuccessful" && Alert("success", l.info, l.recipe.deleteSuccessful)}
   ${recipes.totalItems
     ? html`
-      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="recipe-list" data-infinite-scrolling="${infiniteScrolling + ""}">
         ${recipes.items.map((recipe) => html`
           <div class="col">
             <div class="recipe h-100">
@@ -186,6 +187,8 @@ export const RecipeListTemplate = (
             </div>
           </div>
         `)}
+        ${infiniteScrolling && html`
+          <div data-cmp="Observer" class="observer"></div>`}
       </div>
     ` : Alert("info", l.info, l.recipe.noRecipesFound)
   }

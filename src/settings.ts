@@ -69,6 +69,18 @@ export interface Settings {
    * @default false
    */
   minifyHtml: boolean;
+
+  /**
+   * Whether infinite scrolling should be enabled for the recipe list page.
+   * @default true
+   */
+  infiniteScrolling: boolean;
+
+  /**
+   * The default number of recipes per page.
+   * @default 24
+   */
+  pageSize: number;
 }
 
 export const DEFAULT_SETTINGS: Partial<Settings> = {};
@@ -98,6 +110,8 @@ const Schema = z.object({
   userAgent: z.string().optional().default(DEFAULT_USER_AGENT),
   addHistoryEntryWhenRating: z.boolean().optional().default(true),
   minifyHtml: z.boolean().optional().default(false),
+  infiniteScrolling: z.boolean().optional().default(true),
+  pageSize: z.number().optional().default(24),
 });
 
 export const SETTINGS_FILENAME = "settings.json";
