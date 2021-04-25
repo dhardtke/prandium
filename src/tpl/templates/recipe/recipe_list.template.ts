@@ -83,12 +83,28 @@ function OrderBy() {
     </form>`;
 }
 
+const ActionButtons = () => html`
+  <div class="d-flex justify-content-end">
+    <a class="btn btn-primary me-2" href="${UrlGenerator.recipeCreate()}" role="button">
+      ${LabeledIcon(l.create, "plus-square", 2)}
+    </a>
+
+    <a class="btn btn-success" href="${UrlGenerator.recipeImport()}" role="button">
+      ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill", 2)}
+    </a>
+  </div>
+`;
+
 export const RecipeListTemplate = (
   recipes: Pagination<Recipe>,
   tags: Tag[],
   infiniteScrolling: boolean,
 ) => Page(l.recipes)(html`
-  ${Breadcrumb(false, { title: l.recipes, url: UrlGenerator.recipeList() })}
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    ${Breadcrumb(true, { title: l.recipes, url: UrlGenerator.recipeList() })}
+
+    ${ActionButtons()}
+  </div>
 
   <div class="row g-3 mb-3">
     <form class="d-flex col-lg-9" method="get" action="${UrlGenerator.recipeList()}">
@@ -195,11 +211,5 @@ export const RecipeListTemplate = (
 
   ${PaginationComponent(recipes)}
 
-  <a class="btn btn-primary me-2" href="${UrlGenerator.recipeCreate()}" role="button">
-    ${LabeledIcon(l.create, "plus-square", 2)}
-  </a>
-
-  <a class="btn btn-success" href="${UrlGenerator.recipeImport()}" role="button">
-    ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill", 2)}
-  </a>
+  ${ActionButtons()}
 `);
