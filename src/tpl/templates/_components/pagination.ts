@@ -6,7 +6,7 @@ import { Icon } from "./icon.ts";
 
 export const Pagination = <T>(pagination: _Pagination<T>) => pagination.hasPages && html`
   <nav>
-    <ul class="pagination justify-content-center mt-3" data-pagination-has-more="${!pagination.isLastPage + ""}">
+    <ul class="pagination justify-content-center mt-3 flex-wrap" data-pagination-has-more="${!pagination.isLastPage + ""}">
       ${
         pagination.isFirstPage
           ? html`
