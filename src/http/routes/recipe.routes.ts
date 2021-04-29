@@ -70,7 +70,7 @@ async function assignRecipeFields(
   recipe.rating = toNumber(get("rating"));
   recipe.ingredients = data.ingredients as string[];
   recipe.instructions = data.instructions as string[];
-  if (data.history.length % 2 === 0) {
+  if (data.history?.length % 2 === 0) {
     recipe.history = [];
     for (let i = 0; i < data.history.length; i += 2) {
       const [year, month, day] = String(data.history[i]).split("-").map(
