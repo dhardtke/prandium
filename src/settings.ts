@@ -72,7 +72,7 @@ export interface Settings {
 
   /**
    * Whether infinite scrolling should be enabled for the recipe list page.
-   * @default true
+   * @default false
    */
   infiniteScrolling: boolean;
 
@@ -109,7 +109,7 @@ const Schema = z.object({
   userAgent: z.string().optional().default(DefaultUserAgent),
   addHistoryEntryWhenRating: z.boolean().optional().default(true),
   minifyHtml: z.boolean().optional().default(false),
-  infiniteScrolling: z.boolean().optional().default(true),
+  infiniteScrolling: z.boolean().optional().default(false),
   pageSize: z.number().optional().default(24),
 });
 
