@@ -104,7 +104,7 @@ export const RecipeListTemplate = (
   </div>
 
   <div class="row g-3 mb-3">
-    <form class="d-flex col-lg-9" method="get" action="${UrlGenerator.recipeList()}">
+    <form class="d-flex col-lg-9" action="${UrlGenerator.recipeList()}">
       <div class="input-group">
         <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
                value="${parameter(Page.currentUrl, "title")}">

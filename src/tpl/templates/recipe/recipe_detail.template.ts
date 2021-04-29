@@ -150,7 +150,7 @@ export const RecipeDetailTemplate = (
           <h2 class="h5 mb-0">
             ${e(l.recipe.ingredients.title)}
           </h2>
-          <form class="d-flex" method="get" id="ingredients-form" action="#ingredients">
+          <form class="d-flex" id="ingredients-form" action="#ingredients">
             <div class="input-group input-group-sm w-auto">
               <input type="number" class="form-control portions" name="portions" value="${e(portions)}" min="1" max="99"
                      title="${e(l.recipe.portions)}">
