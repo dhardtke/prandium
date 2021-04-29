@@ -13,28 +13,27 @@ import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { Pagination as PaginationComponent } from "../_components/pagination.ts";
 import { Page } from "../_structure/page.ts";
 
-export const TagFilter = () =>
-  html`
-    <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${e(l.navigation.tags)}</button>
-    <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
-      <div class="input-group mb-2">
-        <span class="input-group-text">
-          ${Icon("funnel")}
-        </span>
-        <input type="search" class="form-control input-filter" autocomplete="off" title="${e(l.navigation.filterTitle)}"
-               placeholder="${e(l.navigation.filterPlaceholder)}">
-        <button class="btn btn-outline-secondary btn-tag-clear" type="button">Clear</button>
-      </div>
-      <div class="overflow-auto list-group list-group-flush pe-2"></div>
-      <template>
-        <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="">
-          <div class="me-auto tag-title"></div>
-          <span class="badge bg-dark rounded-pill tag-recipe-count"></span>
-          <input type="hidden" name="tagId" value=""/>
-        </a>
-      </template>
+export const TagFilter = () => html`
+  <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${e(l.navigation.tags)}</button>
+  <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
+    <div class="input-group mb-2">
+      <span class="input-group-text">
+        ${Icon("funnel")}
+      </span>
+      <input type="search" class="form-control input-filter" autocomplete="off" title="${e(l.navigation.filterTitle)}"
+             placeholder="${e(l.navigation.filterPlaceholder)}">
+      <button class="btn btn-outline-secondary btn-tag-clear" type="button">Clear</button>
     </div>
-  `;
+    <div class="overflow-auto list-group list-group-flush pe-2"></div>
+    <template>
+      <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="">
+        <div class="me-auto tag-title"></div>
+        <span class="badge bg-dark rounded-pill tag-recipe-count"></span>
+        <input type="hidden" name="tagId" value=""/>
+      </a>
+    </template>
+  </div>
+`;
 
 function OrderBy() {
   const orderBy = parameter(Page.currentUrl, "orderBy", "title");
