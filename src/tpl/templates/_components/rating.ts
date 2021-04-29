@@ -12,7 +12,7 @@ export function Rating(name: string, value = 0, readonly = false) {
     stars += html`
       <input type="radio" id="${name}-${i}" name="${name}" value="${current}" autocomplete="off"
              ${current === comparisonValue && " checked"}${readonly && " disabled"}/>
-      <label for="${name}-${i}" ${!readonly && `title="${current}"`}"${half && ` class="half"`}>
+      <label for="${name}-${i}" ${!readonly && `title="${current}"`}${half && ` class="half"`}>
         ${Icon(`star-${half ? "half" : "fill"}` as IconName)}
       </label>
     `;
