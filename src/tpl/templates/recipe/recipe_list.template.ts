@@ -15,10 +15,7 @@ import { Page } from "../_structure/page.ts";
 
 export const TagFilter = () =>
   html`
-    <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${
-      e(l.navigation.tags)
-    }
-    </button>
+    <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${e(l.navigation.tags)}</button>
     <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
       <div class="input-group mb-2">
         <span class="input-group-text">
