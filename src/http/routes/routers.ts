@@ -1,7 +1,6 @@
 import { AssetsRouter } from "./assets.routes.ts";
 import { IndexRouter } from "./index.routes.ts";
 import { RecipeRouter } from "./recipe.routes.ts";
-import { TagRouter } from "./tag.routes.ts";
 import { ThumbnailsRouter } from "./thumbnails.routes.ts";
 
 export const Routers = [
@@ -9,5 +8,4 @@ export const Routers = [
   AssetsRouter,
   ThumbnailsRouter,
   RecipeRouter,
-  TagRouter,
 ];

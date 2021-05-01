@@ -9,7 +9,6 @@ export const ICONS = [
   "moon",
   "globe",
   "search",
-  "funnel",
   "battery-half",
   "layout-wtf",
   "alarm",

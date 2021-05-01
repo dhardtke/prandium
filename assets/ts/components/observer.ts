@@ -1,24 +1,26 @@
-import { Component } from "./component.ts";
+import { BaseComponent, Component } from "./component.ts";
 
 export const Events = {
   Intersecting: "ObserverIntersecting"
 } as const;
 
-export class Observer extends Component {
+@Component("Observer")
+export class Observer extends BaseComponent {
   private observer?: IntersectionObserver;
 
-  mount() {
+  constructor(ctx: HTMLElement) {
+    super(ctx);
     this.observer = new IntersectionObserver(([entry]) => {
       if (entry && entry.isIntersecting) {
         window.dispatchEvent(new CustomEvent(Events.Intersecting));
-        this.unmount();
+        this.destructor();
       }
     });
 
     this.observer.observe(this.ctx);
   }
 
-  unmount() {
+  destructor() {
     this.observer?.disconnect();
     this.ctx.remove();
   }

@@ -41,6 +41,7 @@ export const en: Language = {
     previous: "Previous page",
   },
   recipe: {
+    count: (n) => `${n} Recipe${n === 1 ? "" : "s"}`,
     aggregateRating: "Foreign rating",
     aggregateRatingCount: "Number of foreign ratings",
     aggregateRatingValue: "Foreign rating",

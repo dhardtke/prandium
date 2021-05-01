@@ -1,23 +1,24 @@
 // deno-lint-ignore no-explicit-any
 type Class<S> = new (...args: any[]) => S;
 
-const registry: { [name: string]: Class<Component> } = {};
+const registry: { [name: string]: Class<BaseComponent> } = {};
 const registeredElements: HTMLElement[] = [];
 
-export abstract class Component {
-  protected readonly ctx!: HTMLElement;
+export function Component(name: string) {
+  return (ctor: Class<BaseComponent>) => {
+    registry[name] = ctor;
+  }
+}
 
-  constructor(ctx: HTMLElement) {
+export abstract class BaseComponent {
+  static readonly _name: string;
+  protected readonly ctx: HTMLElement;
+
+  protected constructor(ctx: HTMLElement) {
     this.ctx = ctx;
   }
 
-  static register(name: string, cmp: Class<Component>) {
-    registry[name] = cmp;
-  }
-
-  abstract mount(): void;
-
-  unmount(): void {
+  destructor(): void {
   }
 }
 
@@ -31,13 +32,13 @@ export function bootComponents() {
           throw new Error(`No component with the name ${ctx.dataset.cmp} found.`);
         }
         registeredElements.push(ctx);
-        new cmp(ctx).mount();
+        new cmp(ctx);
       }
     });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeComponents);
+    document.addEventListener("DOMContentLoaded", initializeComponents, false);
   } else {
     initializeComponents();
   }

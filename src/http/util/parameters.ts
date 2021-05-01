@@ -18,12 +18,21 @@ export function removeParameter(url: URL, parameterName: string): string {
   return result.toString();
 }
 
+// TODO rename functions for consistency
 export function parameter(
   url: URL,
   parameterName: string,
   _default = "",
 ): string {
   return url.searchParams.get(parameterName) || _default;
+}
+
+export function parameterValues(
+  url: URL,
+  parameterName: string,
+  _default = [],
+): string[] {
+  return url.searchParams.getAll(parameterName) || _default;
 }
 
 export function setParameter(
@@ -33,5 +42,14 @@ export function setParameter(
 ): URL {
   const result = new URL(url.toString());
   result.searchParams.set(parameterName, parameterValue);
+  return result;
+}
+export function appendParameter(
+  url: URL,
+  parameterName: string,
+  parameterValue: unknown,
+): URL {
+  const result = new URL(url.toString());
+  result.searchParams.append(parameterName, String(parameterValue));
   return result;
 }

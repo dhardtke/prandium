@@ -23,34 +23,18 @@
 }
 
 #tag-filter {
-    width: 100%;
+    max-height: 300px;
+    padding-right: .75rem;
 
-    .list-group {
-        max-height: calc(100vh - 200px);
-
-        &-item {
-            transition: bootstrap.$transition-base;
-
-            &.active {
-                // fix weird shift when transitioning
-                margin-top: 0;
-                border-top-width: 0;
-            }
-
-            &.disabled {
-                pointer-events: unset;
-                cursor: unset;
-            }
-        }
+    @include bootstrap.media-breakpoint-down('md') {
+        max-height: 600px;
     }
 
-    @include bootstrap.media-breakpoint-up("lg") {
-        & {
-            width: 350px;
-        }
+    .active {
+        background: bootstrap.$primary;
 
-        .list-group {
-            height: 500px;
+        &:hover {
+            color: #fff;
         }
     }
 }

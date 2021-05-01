@@ -53,7 +53,7 @@ function registerInfiniteScrolling($recipeList: HTMLElement) {
 
 export const RecipeListPage = () => {
   registerOrderByControl();
-  new TagFilter();
+  console.assert(Boolean(TagFilter));
 
   const $recipeList = document.querySelector<HTMLElement>(Selectors.RecipeList);
   if ($recipeList && $recipeList.dataset[Data.InfiniteScrolling] === "true") {

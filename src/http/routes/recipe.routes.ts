@@ -130,11 +130,17 @@ router
           },
         ),
     );
-    const tags = tagIds.length
-      ? services.get(TagService).list({
-        filters: { ids: tagIds },
-      })
-      : [];
+
+    const tags = services.get(TagService).list({
+      orderBy: { column: "title" },
+      loadRecipeCount: true,
+      filters: {
+        tagsWithSameRecipes: {
+          ids: tagIds,
+          includeOthers: true,
+        },
+      },
+    });
     ctx.response.body = RecipeListTemplate(
       recipes,
       tags,

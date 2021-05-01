@@ -73,6 +73,7 @@ interface Ingredients {
 }
 
 interface Recipe {
+  count: (n: number) => string;
   aggregateRating: string;
   aggregateRatingCount: string;
   aggregateRatingValue: string;

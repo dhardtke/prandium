@@ -3,7 +3,7 @@ import { Recipe } from "../../../data/model/recipe.ts";
 import { Tag } from "../../../data/model/tag.ts";
 import { Pagination } from "../../../data/pagination.ts";
 import { date, number } from "../../../data/util/format.ts";
-import { parameter, removeParameter, removeParameterValue, } from "../../../http/util/parameters.ts";
+import { appendParameter, parameter, parameterValues, removeParameter, removeParameterValue, } from "../../../http/util/parameters.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
 import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
@@ -13,27 +13,55 @@ import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { Pagination as PaginationComponent } from "../_components/pagination.ts";
 import { Page } from "../_structure/page.ts";
 
-export const TagFilter = () => html`
-  <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">${e(l.navigation.tags)}</button>
-  <div class="dropdown-menu p-2 dropdown-menu-lg-end" id="tag-filter">
-    <div class="input-group mb-2">
-      <span class="input-group-text">
-        ${Icon("funnel")}
-      </span>
-      <input type="search" class="form-control input-filter" autocomplete="off" title="${e(l.navigation.filterTitle)}"
-             placeholder="${e(l.navigation.filterPlaceholder)}">
-      <button class="btn btn-outline-secondary btn-tag-clear" type="button">Clear</button>
+function TagControls() {
+  const currentTagIds = parameterValues(Page.currentUrl, "tagId");
+
+  return html`
+    <div class="col-auto">
+      <div class="btn-group">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#tag-filter" data-cmp="TagToggle">
+            ${e(l.navigation.tags)}
+          </button>
+        </div>
+        <a class="btn btn-danger${!currentTagIds.length && " disabled"}"
+           href="${e(removeParameter(Page.currentUrl, "tagId"))}"
+           title="${e(l.recipe.clearAllTags)}">
+          ${Icon("trash")}
+        </a>
+      </div>
     </div>
-    <div class="overflow-auto list-group list-group-flush pe-2"></div>
-    <template>
-      <a class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" href="">
-        <div class="me-auto tag-title"></div>
-        <span class="badge bg-dark rounded-pill tag-recipe-count"></span>
-        <input type="hidden" name="tagId" value=""/>
-      </a>
-    </template>
-  </div>
-`;
+  `;
+}
+
+function TagFilter(tags: Tag[]) {
+  const currentTagIds = parameterValues(Page.currentUrl, "tagId");
+
+  return html`
+    <div id="tag-filter" class="collapse card overflow-auto mb-3" data-cmp="TagFilter">
+      <div class="card-body">
+        <div class="row g-2">
+          ${tags.map((tag) => {
+            const active = currentTagIds.includes(tag.id + "");
+            const disabled = !active && tag.recipeCount === 0;
+            const href = active ? removeParameterValue(Page.currentUrl, "tagId", tag.id) : appendParameter(Page.currentUrl, "tagId", tag.id);
+
+            return html`
+              <div class="col-lg-2${active && " text-white"}">
+                <a class="card card-linked p-2${active && " active"}${disabled && " disabled"}" ${!disabled && ` href="${href}"`}>
+                  <div class="d-flex justify-content-between">
+                    <small${tag.recipeCount === 0 && ` class="text-muted"`} title="${tag.description}">${tag.title}</small>
+                      ${tag.recipeCount! > 0 && html`<span class="badge bg-dark">${tag.recipeCount}</span>`}
+                  </div>
+                </a>
+              </div>
+            `;
+          })}
+        </div>
+      </div>
+    </div>
+  `;
+}
 
 function OrderBy() {
   const orderBy = parameter(Page.currentUrl, "orderBy", "title");
@@ -79,15 +107,21 @@ function OrderBy() {
     </form>`;
 }
 
-const ActionButtons = () => html`
+const ActionButtons = (recipeCount: number) => html`
   <div class="d-flex justify-content-end">
     <a class="btn btn-primary me-2" href="${UrlGenerator.recipeCreate()}" role="button">
       ${LabeledIcon(l.create, "plus-square", 2)}
     </a>
 
-    <a class="btn btn-success" href="${UrlGenerator.recipeImport()}" role="button">
+    <a class="btn btn-success me-2" href="${UrlGenerator.recipeImport()}" role="button">
       ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill", 2)}
     </a>
+
+    <div class="badge bg-secondary">
+      <div class="d-flex align-items-center h-100">
+        ${e(l.recipe.count(recipeCount))}
+      </div>
+    </div>
   </div>
 `;
 
@@ -96,45 +130,29 @@ export const RecipeListTemplate = (
   tags: Tag[],
   infiniteScrolling: boolean,
 ) => Page(l.recipes)(html`
-  <div class="d-flex align-items-center justify-content-between mb-3">
+  <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
     ${Breadcrumb(true, { title: l.recipes, url: UrlGenerator.recipeList() })}
 
-    ${ActionButtons()}
+    ${ActionButtons(recipes.totalItems)}
   </div>
 
   <div class="row g-3 mb-3">
-    <form class="d-flex col-lg-9" action="${UrlGenerator.recipeList()}">
+    <form class="d-flex col-lg-6" action="${UrlGenerator.recipeList()}">
       <div class="input-group">
         <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
                value="${parameter(Page.currentUrl, "title")}">
-        ${TagFilter()}
         <button class="btn btn-outline-info" type="submit">
           ${Icon("search")}
         </button>
       </div>
     </form>
+
+    ${TagControls()}
+
     ${OrderBy()}
   </div>
 
-  ${tags.length && html`
-    <div class="d-flex flex-wrap">
-      ${tags.map((tag, i) => html`
-        <a title="${e(tag.description)}" href="${removeParameterValue(Page.currentUrl, "tagId", tag.id)}"
-           class="badge badge-linked bg-secondary mb-3${i < tags.length - 1 && " me-1"}">
-          <div class="d-flex align-items-center h-100">
-            ${LabeledIcon(tag.title, "x-circle-fill")}
-          </div>
-        </a>`
-      )}
-
-      ${tags.length > 1 && html`
-        <a href="${e(removeParameter(Page.currentUrl, "tagId"))}" class="badge badge-linked bg-danger ms-2 mb-3">
-          <div class="d-flex align-items-center h-100">
-            ${LabeledIcon(l.recipe.clearAllTags, "x-circle-fill")}
-          </div>
-        </a>`}
-    </div>
-  `}
+  ${TagFilter(tags)}
 
   ${Page.currentUrl.searchParams.get("flash") === "deleteSuccessful" && Alert("success", l.info, l.recipe.deleteSuccessful)}
   ${recipes.totalItems
@@ -207,5 +225,5 @@ export const RecipeListTemplate = (
 
   ${PaginationComponent(recipes)}
 
-  ${ActionButtons()}
+  ${ActionButtons(recipes.totalItems)}
 `);

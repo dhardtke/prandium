@@ -5,7 +5,7 @@
 /// <reference lib="deno.ns" />
 
 import "./deps.ts";
-import { bootComponents, Component } from "./ts/components/component.ts";
+import { bootComponents, BaseComponent } from "./ts/components/component.ts";
 import { Observer } from "./ts/components/observer.ts";
 import { NavbarDarkModeSwitcher } from "./ts/global/_navbar_dark_mode_switcher.ts";
 import { removeUrlFlashParameter } from "./ts/global/_remove_url_flash_parameter.ts";
@@ -14,7 +14,7 @@ import { RecipeEditPage } from "./ts/page/recipe_edit_page/recipe_edit_page.ts";
 import { RecipeListPage } from "./ts/page/recipe_list_page/recipe_list_page.ts";
 
 // components
-Component.register("Observer", Observer);
+console.assert(Boolean(Observer));
 bootComponents();
 
 const globals = [

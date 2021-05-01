@@ -5,7 +5,14 @@
     color: inherit;
     transition: bootstrap.$transition-base;
 
-    &:hover {
-        border-color: bootstrap.$primary;
+    &:not(.disabled) {
+        &:hover {
+            border-color: bootstrap.$primary;
+        }
+    }
+
+    .disabled {
+        pointer-events: none;
+        cursor: default;
     }
 }
