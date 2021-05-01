@@ -44,7 +44,8 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
           ${tags.map((tag) => {
             const active = currentTagIds.includes(tag.id + "");
             const disabled = !active && tag.recipeCount === 0;
-            const href = active ? parameters(Page.currentUrl).removeSingleValue("tagId", tag.id) : parameters(Page.currentUrl).append("tagId", tag.id);
+            let href = active ? parameters(Page.currentUrl).removeSingleValue("tagId", tag.id) : parameters(Page.currentUrl).append("tagId", tag.id);
+            href = parameters(href).set("tagFilter", "").toString();
 
             return html`
               <div class="col-lg-2${active && " text-white"}">
