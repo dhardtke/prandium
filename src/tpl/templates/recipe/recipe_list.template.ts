@@ -147,9 +147,9 @@ export const RecipeListTemplate = (
       </div>
     </form>
 
-    ${TagControls()}
-
     ${OrderBy()}
+    
+    ${TagControls()}
   </div>
 
   ${TagFilter(tags)}
