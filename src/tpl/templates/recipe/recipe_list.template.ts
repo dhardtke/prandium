@@ -3,7 +3,7 @@ import { Recipe } from "../../../data/model/recipe.ts";
 import { Tag } from "../../../data/model/tag.ts";
 import { Pagination } from "../../../data/pagination.ts";
 import { date, number } from "../../../data/util/format.ts";
-import { appendParameter, parameter, parameterValues, removeParameter, removeParameterValue, } from "../../../http/util/parameters.ts";
+import { parameters } from "../../../http/util/parameters.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
 import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
@@ -14,7 +14,7 @@ import { Pagination as PaginationComponent } from "../_components/pagination.ts"
 import { Page } from "../_structure/page.ts";
 
 function TagControls() {
-  const currentTagIds = parameterValues(Page.currentUrl, "tagId");
+  const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
     <div class="col-auto">
@@ -25,7 +25,7 @@ function TagControls() {
           </button>
         </div>
         <a class="btn btn-danger${!currentTagIds.length && " disabled"}"
-           href="${e(removeParameter(Page.currentUrl, "tagId"))}"
+           href="${e(parameters(Page.currentUrl).remove("tagId"))}"
            title="${e(l.recipe.clearAllTags)}">
           ${Icon("trash")}
         </a>
@@ -35,7 +35,7 @@ function TagControls() {
 }
 
 function TagFilter(tags: Tag[]) {
-  const currentTagIds = parameterValues(Page.currentUrl, "tagId");
+  const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
     <div id="tag-filter" class="collapse card overflow-auto mb-3" data-cmp="TagFilter">
@@ -44,7 +44,7 @@ function TagFilter(tags: Tag[]) {
           ${tags.map((tag) => {
             const active = currentTagIds.includes(tag.id + "");
             const disabled = !active && tag.recipeCount === 0;
-            const href = active ? removeParameterValue(Page.currentUrl, "tagId", tag.id) : appendParameter(Page.currentUrl, "tagId", tag.id);
+            const href = active ? parameters(Page.currentUrl).removeSingleValue("tagId", tag.id) : parameters(Page.currentUrl).append("tagId", tag.id);
 
             return html`
               <div class="col-lg-2${active && " text-white"}">
@@ -64,7 +64,7 @@ function TagFilter(tags: Tag[]) {
 }
 
 function OrderBy() {
-  const orderBy = parameter(Page.currentUrl, "orderBy", "title");
+  const orderBy = parameters(Page.currentUrl).get("orderBy", "title");
 
   const options = [
     ["id", l.id],
@@ -79,7 +79,7 @@ function OrderBy() {
     ["cook_time", l.recipe.cookTime],
     ["total_time", l.recipe.time.total],
   ];
-  const order = parameter(Page.currentUrl, "order", "ASC")?.toUpperCase();
+  const order = parameters(Page.currentUrl).get("order", "ASC")?.toUpperCase();
   const otherOrder = order === "ASC" ? "DESC" : "ASC";
   const otherOrderLabel = otherOrder === "ASC" ? l.orderBy.asc : l.orderBy.desc;
 
@@ -140,7 +140,7 @@ export const RecipeListTemplate = (
     <form class="d-flex col-lg-6" action="${UrlGenerator.recipeList()}">
       <div class="input-group">
         <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
-               value="${parameter(Page.currentUrl, "title")}">
+               value="${parameters(Page.currentUrl).get("title")}">
         <button class="btn btn-outline-info" type="submit">
           ${Icon("search")}
         </button>

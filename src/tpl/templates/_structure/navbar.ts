@@ -1,5 +1,5 @@
 // deno-fmt-ignore-file
-import { setParameter } from "../../../http/util/parameters.ts";
+import { parameters } from "../../../http/util/parameters.ts";
 import { l, Language, LANGUAGES } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
 import { Icon } from "../_components/icon.ts";
@@ -22,7 +22,7 @@ const LanguageDropdown = () => html`
         ? html`
           <li class="dropdown-item text-center active">${LanguageDropdownItem(lang)}</li>`
         : html`
-          <li><a class="dropdown-item text-center" href="${setParameter(Page.currentUrl!, "lang", lang.meta.id)}">
+          <li><a class="dropdown-item text-center" href="${parameters(Page.currentUrl).set("lang", lang.meta.id)}">
             ${LanguageDropdownItem(lang)}
           </a></li>`)}
     </ul>
