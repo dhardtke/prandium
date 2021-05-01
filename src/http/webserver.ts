@@ -50,6 +50,7 @@ export async function spawnServer(
   // TODO remove explicit HttpServerStd instantiation once https://github.com/denoland/deno/issues/10193 is fixed
   const app = new Oak.Application<AppState>({
     state,
+    proxy: true,
     serverConstructor: HttpServerStd,
   });
   app.use(
