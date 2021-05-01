@@ -20,7 +20,7 @@ function TagControls() {
     <div class="col-auto">
       <div class="btn-group">
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#tag-filter" data-cmp="TagToggle">
+          <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#tag-filter">
             ${e(l.navigation.tags)}
           </button>
         </div>
