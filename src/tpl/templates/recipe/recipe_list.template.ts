@@ -34,11 +34,11 @@ function TagControls() {
   `;
 }
 
-function TagFilter(tags: Tag[]) {
+function TagFilter(tags: Tag[], showTagFilter: boolean) {
   const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
-    <div id="tag-filter" class="collapse card overflow-auto mb-3" data-cmp="TagFilter">
+    <div id="tag-filter" class="collapse${showTagFilter && " show"} card overflow-auto mb-3" data-cmp="TagFilter">
       <div class="card-body">
         <div class="row g-2">
           ${tags.map((tag) => {
@@ -128,6 +128,7 @@ const ActionButtons = (recipeCount: number) => html`
 export const RecipeListTemplate = (
   recipes: Pagination<Recipe>,
   tags: Tag[],
+  showTagFilter: boolean,
   infiniteScrolling: boolean,
 ) => Page(l.recipes)(html`
   <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
@@ -148,11 +149,11 @@ export const RecipeListTemplate = (
     </form>
 
     ${OrderBy()}
-    
+
     ${TagControls()}
   </div>
 
-  ${TagFilter(tags)}
+  ${TagFilter(tags, showTagFilter)}
 
   ${Page.currentUrl.searchParams.get("flash") === "deleteSuccessful" && Alert("success", l.info, l.recipe.deleteSuccessful)}
   ${recipes.totalItems

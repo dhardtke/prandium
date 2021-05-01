@@ -144,6 +144,7 @@ router
     ctx.response.body = RecipeListTemplate(
       recipes,
       tags,
+      ctx.request.url.searchParams.has("tagFilter"),
       ctx.state.settings.infiniteScrolling,
     );
   })

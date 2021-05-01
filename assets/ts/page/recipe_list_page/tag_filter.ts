@@ -1,15 +1,18 @@
 import { BaseComponent, Component } from "../../components/component.ts";
 
-const Hash = "#tag-filter-visible";
-
 @Component("TagToggle")
 class TagToggle extends BaseComponent {
   constructor(ctx: HTMLElement) {
     super(ctx);
 
     this.ctx.addEventListener("click", () => {
-      const active = location.href.includes(Hash);
-      window.history.replaceState({}, "", location.href.replace(location.hash, "") + (active ? "" : Hash));
+      const url = new URL(window.location.href);
+      if (url.searchParams.has("tagFilter")) {
+        url.searchParams.delete("tagFilter");
+      } else {
+        url.searchParams.set("tagFilter", "");
+      }
+      window.history.replaceState({}, "", url.toString());
     });
   }
 }
@@ -29,16 +32,13 @@ export class TagFilter extends BaseComponent {
     this.ctx.querySelectorAll<HTMLAnchorElement>("a[href]").forEach(($anchor) => {
       $anchor.addEventListener("click", (e) => {
         e.preventDefault();
-        const scrollRestore: ScrollRestore = {html: document.documentElement.scrollTop, "#tag-filter": ctx.scrollTop};
+        const scrollRestore: ScrollRestore = { html: document.documentElement.scrollTop, "#tag-filter": ctx.scrollTop };
         localStorage.setItem(LocalStorageName, JSON.stringify(scrollRestore));
         // use Hash to show the collapsed div after reload
-        window.history.pushState({}, "", $anchor.href + Hash);
+        window.history.pushState({}, "", $anchor.href);
         window.location.reload();
       });
     });
-    if (window.location.hash === Hash) {
-      this.ctx.classList.add("show");
-    }
     const scroll = localStorage.getItem(LocalStorageName);
     if (scroll) {
       const parsed = JSON.parse(scroll) as ScrollRestore;
