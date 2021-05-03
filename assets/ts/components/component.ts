@@ -7,7 +7,7 @@ const registeredElements: HTMLElement[] = [];
 export function Component(name: string) {
   return (ctor: Class<BaseComponent>) => {
     registry[name] = ctor;
-  }
+  };
 }
 
 export abstract class BaseComponent {
@@ -22,6 +22,12 @@ export abstract class BaseComponent {
   }
 }
 
+declare global {
+  interface HTMLElement {
+    component: BaseComponent;
+  }
+}
+
 export function bootComponents() {
   function initializeComponents() {
     document.querySelectorAll<HTMLElement>(`[data-cmp]`).forEach((ctx) => {
@@ -32,7 +38,7 @@ export function bootComponents() {
           throw new Error(`No component with the name ${ctx.dataset.cmp} found.`);
         }
         registeredElements.push(ctx);
-        new cmp(ctx);
+        ctx.component = new cmp(ctx);
       }
     });
   }
@@ -41,5 +47,11 @@ export function bootComponents() {
     document.addEventListener("DOMContentLoaded", initializeComponents, false);
   } else {
     initializeComponents();
+  }
+}
+
+export function destroyComponents() {
+  while (registeredElements.length > 0) {
+    registeredElements.pop()?.component.destructor();
   }
 }

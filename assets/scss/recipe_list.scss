@@ -23,11 +23,13 @@
 }
 
 #tag-filter {
-    max-height: 300px;
-    padding-right: .75rem;
+    .card-body {
+        padding-right: .75rem;
+        max-height: 300px;
 
-    @include bootstrap.media-breakpoint-down('md') {
-        max-height: 600px;
+        @include bootstrap.media-breakpoint-down('md') {
+            max-height: 600px;
+        }
     }
 
     .active {

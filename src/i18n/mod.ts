@@ -109,6 +109,7 @@ interface Navigation {
   filterPlaceholder: string;
   filterTitle: string;
   tags: string;
+  clear: string;
 }
 
 interface Error {

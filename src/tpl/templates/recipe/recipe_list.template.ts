@@ -38,8 +38,20 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
   const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
-    <div id="tag-filter" class="collapse${showTagFilter && " show"} card overflow-auto mb-3" data-cmp="TagFilter">
-      <div class="card-body">
+    <div id="tag-filter" class="collapse${showTagFilter && " show"} card mb-3" data-cmp="TagFilter">
+      <div class="card-header">
+        <div class="input-group">
+          <span class="input-group-text">
+            ${Icon("funnel")}
+          </span>
+          <input type="search" class="form-control input-filter" autocomplete="off" title="${e(l.navigation.filterTitle)}"
+                 placeholder="${e(l.navigation.filterPlaceholder)}">
+          ${Page.currentUrl.searchParams.has("tagId") ? 
+            `<a class="btn btn-outline-secondary" href="${parameters(Page.currentUrl).remove("tagId")}">${e(l.navigation.clear)}</a>` : 
+            `<button class="btn btn-outline-secondary" disabled>${e(l.navigation.clear)}</button>`}
+        </div>
+      </div>
+      <div class="card-body overflow-auto">
         <div class="row g-2">
           ${tags.map((tag) => {
             const active = currentTagIds.includes(tag.id + "");
@@ -48,11 +60,11 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
             href = parameters(href).set("tagFilter", "").toString();
 
             return html`
-              <div class="col-lg-2${active && " text-white"}">
+              <div class="col-lg-2 tag${active && " text-white"}">
                 <a class="card card-linked p-2${active && " active"}${disabled && " disabled"}" ${!disabled && ` href="${href}"`}>
                   <div class="d-flex justify-content-between">
-                    <small${tag.recipeCount === 0 && ` class="text-muted"`} title="${tag.description}">${tag.title}</small>
-                      ${tag.recipeCount! > 0 && html`<span class="badge bg-dark">${tag.recipeCount}</span>`}
+                    <small class="title${tag.recipeCount === 0 && ` text-muted`}" title="${tag.description}">${tag.title}</small>
+                    ${tag.recipeCount! > 0 && html`<span class="badge bg-dark">${tag.recipeCount}</span>`}
                   </div>
                 </a>
               </div>
