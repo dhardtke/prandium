@@ -201,7 +201,7 @@ export const RecipeListTemplate = (
                   <h5 class="card-title text-clamp">${e(recipe.title)}</h5>
                   <p class="card-text text-clamp">${e(recipe.description)}</p>
                   <p class="card-text">
-                    <small class="text-muted" ${recipe.lastCookedAt && `title=${date.format(recipe.lastCookedAt)}`}>
+                    <small class="text-muted" ${recipe.lastCookedAt && `title="${date.format(recipe.lastCookedAt)}"`}>
                       ${
                         recipe.lastCookedAt
                           ? e(l.recipe.lastCooked(date.formatDistanceToNow(recipe.lastCookedAt)))
