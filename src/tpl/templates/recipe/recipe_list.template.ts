@@ -84,6 +84,7 @@ function OrderBy() {
     ["created_at", l.createdAt],
     ["updated_at", l.updatedAt],
     ["title", l.title],
+    ["flagged", l.recipe.flagged],
     ["last_cooked_at", l.recipe.lastCookedAt],
     ["cooked_count", l.recipe.cookedCount],
     ["aggregate_rating_value", l.recipe.aggregateRatingValue],
@@ -195,7 +196,7 @@ export const RecipeListTemplate = (
                   </li>
                 </ul>
               </div>
-              <a class="card card-linked h-100" href="${UrlGenerator.recipe(recipe)}">
+              <a class="card card-linked h-100${recipe.flagged && ` border-info`}" href="${UrlGenerator.recipe(recipe)}">
                 <img src="${UrlGenerator.thumbnail(recipe.thumbnail)}" class="card-img-top" alt="" loading="lazy">
                 <div class="card-body">
                   <h5 class="card-title text-clamp">${e(recipe.title)}</h5>

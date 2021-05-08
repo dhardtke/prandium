@@ -22,8 +22,18 @@ export const RecipeDetailTemplate = (
   )}
 
   <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-    <h1 class="mb-0">${e(recipe.title)}</h1>
+    <h1 class="mb-0">
+      ${recipe.flagged && html`
+        <span class="me-2">
+          ${Icon("flag-fill", "text-info w-32")}
+        </span>
+      `}
+      ${e(recipe.title)}
+    </h1>
     <div class="d-flex pt-2">
+      <a href="${UrlGenerator.recipeFlag(recipe)}" class="btn btn-info btn-sm me-2">
+        ${LabeledIcon(recipe.flagged ? l.recipe.unflag : l.recipe.flag, "flag")}
+      </a>
       <a href="${UrlGenerator.recipeEdit(recipe)}" class="btn btn-secondary btn-sm me-2">
         ${LabeledIcon(l.edit, "pencil")}
       </a>

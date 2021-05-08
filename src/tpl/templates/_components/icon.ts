@@ -32,6 +32,8 @@ export const ICONS = [
   "trash",
   "plus-square",
   "check",
+  "flag",
+  "flag-fill",
 ] as const;
 
 export type IconName = typeof ICONS[number];

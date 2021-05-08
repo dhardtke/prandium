@@ -90,6 +90,9 @@ interface Recipe {
   instructions: string;
   lastCooked: (distance: string) => string;
   lastCookedAt: string;
+  flagged: string;
+  flag: string;
+  unflag: string;
   noRecipesFound: string;
   notCookedYet: string;
   nutrition: Nutrition;

@@ -301,6 +301,26 @@ router
     },
   )
   .get(
+    "/:id/:slug/flag",
+    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+      const service = services.get(RecipeService);
+      const recipe = service.find(
+        toNumber(ctx.parameter("id")),
+      );
+      if (!recipe) {
+        await next();
+      } else {
+        recipe.flagged = !recipe.flagged;
+        service.update([recipe]);
+        ctx.response.redirect(
+          urlWithParams(UrlGenerator.recipe(recipe), {
+            "flash": "editSuccessful",
+          }, ctx.request.url),
+        );
+      }
+    },
+  )
+  .get(
     "/:id/:slug",
     async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
       const service = services.get(RecipeService);

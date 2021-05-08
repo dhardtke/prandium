@@ -84,6 +84,9 @@ export const de: Language = {
     instructions: "Anweisungen",
     lastCooked: (distance) => `Zuletzt gekocht ${distance}.`,
     lastCookedAt: "Zuletzt gekocht am",
+    flagged: "Gekennzeichnet",
+    flag: "Kennzeichnung hinzufügen",
+    unflag: "Kennzeichnung entfernen",
     noRecipesFound:
       "Für den aktuell gewählten Filter wurden keine Rezepte gefunden. Bitte die Auswahl ändern oder neue Rezepte hinzufügen.",
     notCookedYet: "Noch nicht gekocht.",

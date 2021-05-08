@@ -190,6 +190,7 @@ export class RecipeService implements Service<Recipe> {
         `UPDATE recipe
          SET updated_at                = ?,
              title                     = ?,
+             flagged                   = ?,
              description               = ?,
              source                    = ?,
              thumbnail                 = ?,
@@ -218,6 +219,7 @@ export class RecipeService implements Service<Recipe> {
             query([
               recipe.updatedAt,
               recipe.title,
+              recipe.flagged,
               recipe.description,
               recipe.source,
               recipe.thumbnail,
@@ -249,13 +251,13 @@ export class RecipeService implements Service<Recipe> {
       if (updateHistory) {
         this.db.exec(
           `DELETE
-                      FROM recipe_history
-                      WHERE recipe_id IN (${placeholders(recipes)})`,
+           FROM recipe_history
+           WHERE recipe_id IN (${placeholders(recipes)})`,
           recipes.map((r) => r.id),
         );
         this.db.prepare(
           `INSERT INTO recipe_history (recipe_id, timestamp)
-                         VALUES (?, ?)`,
+           VALUES (?, ?)`,
           (query) => {
             for (const recipe of recipes) {
               for (const date of recipe.history) {

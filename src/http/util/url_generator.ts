@@ -46,6 +46,9 @@ export const UrlGenerator = {
   recipeDelete: (recipe: Recipe): string => {
     return `/recipe/${recipe.id}/${slug(recipe.title)}/delete`;
   },
+  recipeFlag: (recipe: Recipe): string => {
+    return `/recipe/${recipe.id}/${slug(recipe.title)}/flag`;
+  },
   thumbnail: (filename?: string): string => {
     return filename ? `/thumbnails/${filename}` : PlaceholderImage;
   },

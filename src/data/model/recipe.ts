@@ -6,6 +6,7 @@ export class Recipe extends Model {
   static readonly columns = [
     ...Model.columns,
     "title",
+    "flagged",
     "description",
     "source",
     "thumbnail",
@@ -33,6 +34,7 @@ export class Recipe extends Model {
   ];
 
   public title!: string;
+  public flagged: boolean;
   public description?: string;
   public tags: Tag[];
   public thumbnail?: string;
@@ -67,6 +69,7 @@ export class Recipe extends Model {
   constructor(
     args: ModelArgs & {
       title?: string;
+      flagged?: boolean;
       description?: string;
       tags?: Tag[];
       source?: string;
@@ -100,6 +103,7 @@ export class Recipe extends Model {
   ) {
     super(args);
     this.title = args.title || "";
+    this.flagged = Boolean(args.flagged);
     this.description = args.description;
     this.tags = args.tags || [];
     this.source = args.source;
