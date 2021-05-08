@@ -28,18 +28,6 @@
         }
     }
 
-    #dark-mode-switcher {
-        @include bootstrap.media-breakpoint-down('md') {
-            color: rgba(255, 255, 255, 0.55);
-            border-color: rgba(255, 255, 255, 0.1);
-
-            &:hover {
-                color: rgba(255, 255, 255, 0.55);
-                background: transparent;
-            }
-        }
-    }
-
     #language-dropdown {
         svg {
             width: 24px;
