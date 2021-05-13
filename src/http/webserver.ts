@@ -1,4 +1,4 @@
-import { HttpServerStd, log, Oak } from "../../deps.ts";
+import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { ingredient } from "../data/util/ingredient.ts";
@@ -47,11 +47,9 @@ export async function spawnServer(
   );
   Page.minifying = args.settings.minifyHtml;
 
-  // TODO remove explicit HttpServerStd instantiation once https://github.com/denoland/deno/issues/10193 is fixed
   const app = new Oak.Application<AppState>({
     state,
     proxy: true,
-    serverConstructor: HttpServerStd,
   });
   app.use(
     parameterAdapter(),
