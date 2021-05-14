@@ -21,7 +21,7 @@ declare module "https://deno.land/x/oak@v7.4.1/mod.ts" {
 }
 
 export const paginationAdapter = () => {
-  return async function (ctx: Context<AppState>, next: () => Promise<void>) {
+  return async function (ctx: Context<AppState>, next: () => Promise<unknown>) {
     function extractParams() {
       return {
         page: toNumber(ctx.parameter("page"), 1),

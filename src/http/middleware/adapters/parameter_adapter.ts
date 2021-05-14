@@ -15,7 +15,7 @@ declare module "https://deno.land/x/oak@v7.4.1/mod.ts" {
 }
 
 export const parameterAdapter = () => {
-  return async function (ctx: Context, next: () => Promise<void>) {
+  return async function (ctx: Context, next: () => Promise<unknown>) {
     // TODO remove this abomination ASAP
     ctx.parameter = function (name: string): string {
       if (!ctx.state.query) {

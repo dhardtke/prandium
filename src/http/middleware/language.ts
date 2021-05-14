@@ -7,7 +7,7 @@ const LanguageCookie = "CookGuideLanguage";
 
 export async function languageMiddleware(
   ctx: Oak.Context<AppState>,
-  next: () => Promise<void>,
+  next: () => Promise<unknown>,
 ) {
   let requestedLang: string | null | undefined = ctx.request.url.searchParams
     .get("lang");

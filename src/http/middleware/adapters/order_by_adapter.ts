@@ -13,7 +13,7 @@ declare module "https://deno.land/x/oak@v7.4.1/mod.ts" {
 }
 
 export const orderByAdapter = () => {
-  return async function (ctx: Context, next: () => Promise<void>) {
+  return async function (ctx: Context, next: () => Promise<unknown>) {
     ctx.orderBy = function (_default?: OrderBy): OrderBy | undefined {
       const column = ctx.parameter("orderBy");
       if (column) {

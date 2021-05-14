@@ -153,7 +153,7 @@ router
   })
   .post(
     "/import",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       if (!ctx.request.hasBody) {
         return await next();
       }
@@ -175,7 +175,7 @@ router
   )
   .get(
     "/:id/:slug/edit",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
@@ -192,7 +192,7 @@ router
   )
   .post(
     "/:id/:slug/edit",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
@@ -218,7 +218,7 @@ router
   )
   .post(
     "/:id/:slug/rate",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       // TODO use update route and ensure only non-empty fields are set?
       const service = services.get(RecipeService);
       const recipe = service.find(
@@ -268,7 +268,7 @@ router
   )
   .get(
     "/:id/:slug/delete",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
@@ -282,7 +282,7 @@ router
   )
   .post(
     "/:id/:slug/delete",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
@@ -302,7 +302,7 @@ router
   )
   .get(
     "/:id/:slug/flag",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),
@@ -322,7 +322,7 @@ router
   )
   .get(
     "/:id/:slug",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<void>) => {
+    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
         toNumber(ctx.parameter("id")),

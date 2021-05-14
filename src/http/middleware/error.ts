@@ -5,7 +5,7 @@ import { AppState } from "../webserver.ts";
 
 export async function handleServerError(
   ctx: Oak.Context<AppState>,
-  next: () => Promise<void>,
+  next: () => Promise<unknown>,
 ) {
   try {
     await next();
