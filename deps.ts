@@ -1,8 +1,8 @@
 export * as sqlite from "https://deno.land/x/sqlite@v2.4.0/mod.ts";
 export * as Dom from "https://deno.land/x/deno_dom@v0.1.8-alpha/deno-dom-wasm.ts";
 export * as Oak from "https://deno.land/x/oak@v7.4.1/mod.ts";
-export { default as parseIngredient } from "https://cdn.skypack.dev/pin/parse-ingredient@v0.3.0-oGCvUl895cD38Srdtr7M/mode=imports/optimized/parse-ingredient.js";
-export * from "https://cdn.skypack.dev/pin/numeric-quantity@v1.0.1-goQiL1bZ29fHjB8V1O03/mode=imports/optimized/numeric-quantity.js";
+export { default as parseIngredient } from "https://cdn.skypack.dev/parse-ingredient@v0.3.0?min";
+export * from "https://cdn.skypack.dev/numeric-quantity@v1.0.1?min";
 export { z as Zod } from "https://deno.land/x/zod@3.0.0-alpha.39/mod.ts";
 
 import {
@@ -10,9 +10,9 @@ import {
   formatDuration,
   intervalToDuration,
   formatDistanceToNow
-} from "https://cdn.skypack.dev/pin/date-fns@v2.19.0-EL10U9gE4hUMw29k0GgI/mode=imports/optimized/date-fns.js";
-import { default as en } from "https://cdn.skypack.dev/pin/date-fns@v2.19.0-EL10U9gE4hUMw29k0GgI/mode=imports/unoptimized/locale/en-US/index.js";
-import { default as de } from "https://cdn.skypack.dev/pin/date-fns@v2.19.0-EL10U9gE4hUMw29k0GgI/mode=imports/unoptimized/locale/de/index.js";
+} from "https://cdn.skypack.dev/date-fns@v2.19.0?min";
+import { default as en } from "https://cdn.skypack.dev/date-fns@v2.19.0/locale/en-US?min";
+import { default as de } from "https://cdn.skypack.dev/date-fns@v2.19.0/locale/de?min";
 
 export const dateFns = {
   format,
