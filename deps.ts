@@ -10,9 +10,9 @@ import {
   formatDuration,
   intervalToDuration,
   formatDistanceToNow
-} from "https://cdn.skypack.dev/date-fns@v2.19.0?min";
-import { default as en } from "https://cdn.skypack.dev/date-fns@v2.19.0/locale/en-US?min";
-import { default as de } from "https://cdn.skypack.dev/date-fns@v2.19.0/locale/de?min";
+} from "https://cdn.skypack.dev/pin/date-fns@v2.19.0-EL10U9gE4hUMw29k0GgI/mode=imports/optimized/date-fns.js";
+import { default as en } from "https://cdn.skypack.dev/pin/date-fns@v2.19.0-EL10U9gE4hUMw29k0GgI/mode=imports/unoptimized/locale/en-US/index.js";
+import { default as de } from "https://cdn.skypack.dev/pin/date-fns@v2.19.0-EL10U9gE4hUMw29k0GgI/mode=imports/unoptimized/locale/de/index.js";
 
 export const dateFns = {
   format,
