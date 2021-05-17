@@ -98,7 +98,8 @@ async function assignRecipeFields(
         thumbnailDir,
         newThumbnail.originalName,
       );
-      await fs.move(newThumbnail.filename, path.join(thumbnailDir, filename));
+      await fs.copy(newThumbnail.filename, path.join(thumbnailDir, filename));
+      await Deno.remove(newThumbnail.filename);
       await deleteThumbnail(recipe, configDir);
       recipe.thumbnail = filename;
     }
