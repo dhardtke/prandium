@@ -8,7 +8,7 @@ require {
     type http_port_t;
     type httpd_sys_content_t;
     type user_home_t;
-    class file { create execute execute_no_trans map open read write };
+    class file { create execute execute_no_trans map open read setattr write };
     class process execmem;
     class tcp_socket name_connect;
 }
@@ -16,8 +16,7 @@ require {
 #============= init_t ==============
 
 allow init_t http_port_t:tcp_socket name_connect;
-allow init_t httpd_sys_content_t:file create;
-allow init_t httpd_sys_content_t:file { open write };
+allow init_t httpd_sys_content_t:file { create open setattr write };
 allow init_t self:process execmem;
 allow init_t user_home_t:file { execute execute_no_trans map open read };
 ```
@@ -39,6 +38,7 @@ type=AVC msg=audit(1616335278.409:2092): avc:  denied  { execmem } for  pid=1204
 type=AVC msg=audit(1616337025.899:2720): avc:  denied  { name_connect } for  pid=12536 comm="deno" dest=443 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:http_port_t:s0 tclass=tcp_socket permissive=0
 type=AVC msg=audit(1616337111.010:2726): avc:  denied  { create } for  pid=12536 comm="tokio-runtime-w" name="haehnchengeschnetzeltes.jpg-1.jpg" scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
 type=AVC msg=audit(1616337423.744:2732): avc:  denied  { write open } for  pid=12536 comm="tokio-runtime-w" path="/home/cook-guide/.config/cook-guide/thumbnails/haehnchengeschnetzeltes.jpg-3.jpg" dev="dm-1" ino=1384120849 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616337423.744:2732): avc:  denied  { setattr } for  pid=50379 comm="tokio-runtime-w" name="auflauf.jpg" dev="dm-1" ino=125832134 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
 _EOF_
 ```
 with the error messages from `/var/log/audit/audit.log`)
