@@ -1,30 +1,28 @@
 import { assertEquals } from "../../deps.ts";
 import { e, html } from "../../src/tpl/mod.ts";
 
-const TestPrefix = "[tpl/mod]";
-
-Deno.test(`${TestPrefix} html should ignore falsy values`, () => {
+Deno.test(`html should ignore falsy values`, () => {
   assertEquals(html`${undefined}${false}`, "");
   assertEquals(html`${[undefined, false]}`, "");
 });
 
-Deno.test(`${TestPrefix} html should work with multiple values and bindings`, () => {
+Deno.test(`html should work with multiple values and bindings`, () => {
   assertEquals(html`Hello ${"World"}`, "Hello World");
   assertEquals(html`Hello ${42}`, "Hello 42");
 });
 
-Deno.test(`${TestPrefix} html should join arrays`, () => {
+Deno.test(`html should join arrays`, () => {
   assertEquals(
     html`Hello ${["World", ".", " How ", "are ", "you ", "today", "?"]}`,
     "Hello World. How are you today?",
   );
 });
 
-Deno.test(`${TestPrefix} e should return an empty string when input is undefined`, () => {
+Deno.test(`e should return an empty string when input is undefined`, () => {
   assertEquals(e(undefined), "");
 });
 
-Deno.test(`${TestPrefix} e should escape special HTML characters`, () => {
+Deno.test(`e should escape special HTML characters`, () => {
   const actual = e(
     `Lorem ipsum dolor sit "amet", consetetur & sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
    dolore magna aliquyam erat, <sed> diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
@@ -43,7 +41,7 @@ Deno.test(`${TestPrefix} e should escape special HTML characters`, () => {
   assertEquals(actual, expected);
 });
 
-Deno.test(`${TestPrefix} e should not change allowed UTF-8 characters`, () => {
+Deno.test(`e should not change allowed UTF-8 characters`, () => {
   // see https://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html for UTF-8 demo text
   const characters =
     `∮ E⋅da = Q,  n → ∞, ∑ f(i) = ∏ g(i), ∀x∈ℝ: ⌈x⌉ = −⌊−x⌋, α ∧ ¬β = ¬(¬α ∨ β),

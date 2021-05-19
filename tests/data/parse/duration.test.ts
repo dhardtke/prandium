@@ -1,9 +1,7 @@
 import { Duration, parseDuration } from "../../../src/data/parse/duration.ts";
 import { assertEquals, assertThrows } from "../../../deps.ts";
 
-const TestPrefix = "[data/parse/duration]";
-
-Deno.test(`${TestPrefix} Parse duration datetime successful`, () => {
+Deno.test(`Parse duration datetime successful`, () => {
   const tests = new Map<string, Duration>([
     ["P0003-06-04T12:30:05", {
       years: 3,
@@ -90,7 +88,7 @@ Deno.test(`${TestPrefix} Parse duration datetime successful`, () => {
   }
 });
 
-Deno.test(`${TestPrefix} Parse duration unsuccessful`, () => {
+Deno.test(`Parse duration unsuccessful`, () => {
   const tests = new Map<string, string>([
     ["", "Duration must start with 'P'"],
     ["P10", "Unexpected end of input"],

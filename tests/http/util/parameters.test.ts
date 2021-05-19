@@ -1,15 +1,13 @@
 import { assertEquals } from "../../../deps.ts";
 import { parameters } from "../../../src/http/util/parameters.ts";
 
-const TestPrefix = "[http/util/parameters]";
-
-Deno.test(`${TestPrefix} get`, () => {
+Deno.test(`get`, () => {
   assertEquals(parameters("https://www.example.org").get("q"), "");
   assertEquals(parameters("https://www.example.org").get("q", "oops"), "oops");
   assertEquals(parameters("https://www.example.org?q=42").get("q"), "42");
 });
 
-Deno.test(`${TestPrefix} getAll`, () => {
+Deno.test(`getAll`, () => {
   assertEquals(parameters("https://www.example.org").getAll("q"), []);
   assertEquals(
     parameters("https://www.example.org").getAll("q", ["one", "two"]),
@@ -21,7 +19,7 @@ Deno.test(`${TestPrefix} getAll`, () => {
   );
 });
 
-Deno.test(`${TestPrefix} set`, () => {
+Deno.test(`set`, () => {
   assertEquals(
     parameters("https://www.example.org").set("q", "42").toString(),
     "https://www.example.org/?q=42",
@@ -36,7 +34,7 @@ Deno.test(`${TestPrefix} set`, () => {
   );
 });
 
-Deno.test(`${TestPrefix} append`, () => {
+Deno.test(`append`, () => {
   assertEquals(
     parameters("https://www.example.org").append("q", 42).toString(),
     "https://www.example.org/?q=42",
@@ -51,7 +49,7 @@ Deno.test(`${TestPrefix} append`, () => {
   );
 });
 
-Deno.test(`${TestPrefix} remove`, () => {
+Deno.test(`remove`, () => {
   assertEquals(
     parameters("https://www.example.org").remove("q").toString(),
     "https://www.example.org/",
@@ -62,7 +60,7 @@ Deno.test(`${TestPrefix} remove`, () => {
   );
 });
 
-Deno.test(`${TestPrefix} removeSingleValue`, () => {
+Deno.test(`removeSingleValue`, () => {
   assertEquals(
     parameters("https://www.example.org").removeSingleValue("q", "42")
       .toString(),

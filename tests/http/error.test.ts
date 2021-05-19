@@ -6,9 +6,7 @@ import {
 import { disableLogging } from "../_internal/disable_logging.ts";
 import { MockContextBuilder } from "../_internal/mock_context.ts";
 
-const TestPrefix = "[http/error]";
-
-// Deno.test(`${TestPrefix} Parse duration datetime successful`, async () => {
+// Deno.test(`Parse duration datetime successful`, async () => {
 // TODO allow re-use of app in multiple tests
 //   const app = new Oak.Application();
 //   app.use(handleServerError);
@@ -36,7 +34,7 @@ const TestPrefix = "[http/error]";
 //   await listenPromise;
 // });
 
-Deno.test(`${TestPrefix} handleServerError should handle errors correctly`, async () => {
+Deno.test(`handleServerError should handle errors correctly`, async () => {
   await disableLogging();
   const mockContextBuilder = new MockContextBuilder();
 
@@ -48,7 +46,7 @@ Deno.test(`${TestPrefix} handleServerError should handle errors correctly`, asyn
   //assertEquals(mockContextBuilder.renderCalls, [[ServerErrorTemplate, null]]);
 });
 
-Deno.test(`${TestPrefix} handleServerError should not handle if no error was thrown`, async () => {
+Deno.test(`handleServerError should not handle if no error was thrown`, async () => {
   await disableLogging();
   const mockContextBuilder = new MockContextBuilder();
 
@@ -60,7 +58,7 @@ Deno.test(`${TestPrefix} handleServerError should not handle if no error was thr
   //assertEquals(mockContextBuilder.renderCalls, []);
 });
 
-Deno.test(`${TestPrefix} handleNotFound should handle not-found correctly`, async () => {
+Deno.test(`handleNotFound should handle not-found correctly`, async () => {
   await disableLogging();
   const mockContextBuilder = new MockContextBuilder();
 
