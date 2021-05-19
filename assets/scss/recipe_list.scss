@@ -20,6 +20,10 @@
             opacity: 1;
         }
     }
+
+    .flagged {
+        border-color: bootstrap.$info;
+    }
 }
 
 #tag-filter {

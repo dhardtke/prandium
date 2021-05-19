@@ -18,6 +18,9 @@ $utilities: map-remove($utilities, align, float, shadow, top, bottom, start, end
   line-height, text-decoration, text-transform, white-space, gradient, user-select, pointer-events, rounded-top, rounded-end,
   rounded-bottom, rounded-start, visibility);
 
+// minor tweaks
+$enable-important-utilities: false;
+
 // style changes
 $accordion-button-active-bg: $gray-100;
 $list-group-active-bg: $secondary;
@@ -60,3 +63,5 @@ $list-group-active-border-color: $secondary;
 
 // Utilities
 @import "../../node_modules/bootstrap/scss/utilities/api";
+
+@import "_workarounds";
