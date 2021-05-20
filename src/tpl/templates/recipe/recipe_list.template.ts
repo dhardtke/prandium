@@ -20,11 +20,11 @@ function TagControls() {
     <div class="col-auto">
       <div class="btn-group">
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#tag-filter">
+          <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#tag-filter">
             ${e(l.navigation.tags)}
           </button>
         </div>
-        <a class="btn btn-danger${!currentTagIds.length && " disabled"}"
+        <a class="btn btn-outline-danger${!currentTagIds.length && " disabled"}"
            href="${e(parameters(Page.currentUrl).remove("tagId"))}"
            title="${e(l.recipe.clearAllTags)}">
           ${Icon("trash")}
@@ -99,6 +99,9 @@ function OrderBy() {
 
   return html`
     <form class="col" id="orderBy">
+      ${[...Page.currentUrl.searchParams.entries()]
+        .filter(([name]) => !["orderBy", "order", "flash", "page"].includes(name))
+        .map(([name, value]) => html`<input type="hidden" name="${name}" value="${value}">`)}
       <div class="input-group">
         <span class="input-group-text">
             ${e(l.orderBy.title)}
@@ -114,9 +117,6 @@ function OrderBy() {
                 title="${otherOrderLabel}">
           ${Icon(order === "ASC" ? "arrow-down" : "arrow-up")}
         </button>
-        ${[...Page.currentUrl.searchParams.entries()]
-          .filter(([name]) => !["orderBy", "order", "flash", "page"].includes(name))
-          .map(([name, value]) => html`<input type="hidden" name="${name}" value="${value}">`)}
       </div>
     </form>`;
 }
@@ -156,7 +156,7 @@ export const RecipeListTemplate = (
       <div class="input-group">
         <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
                value="${parameters(Page.currentUrl).get("title")}">
-        <button class="btn btn-outline-info" type="submit">
+        <button class="btn btn-outline-secondary" type="submit">
           ${Icon("search")}
         </button>
       </div>

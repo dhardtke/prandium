@@ -1,5 +1,7 @@
 @use "_bootstrap";
 
+$text-color: bootstrap.$gray-400;
+
 .dark {
     .rating {
         --color-star-hover: #{bootstrap.$gray-700};
@@ -9,7 +11,7 @@
 
     body {
         background: bootstrap.$dark;
-        color: #fff;
+        color: $text-color;
     }
 
     .dropdown-menu {
@@ -22,7 +24,7 @@
     }
 
     .text-muted, .form-text {
-        color: #9b9b9b;
+        color: $text-color;
     }
 
     .form-control {
@@ -30,7 +32,7 @@
         background: transparent;
 
         &, &::placeholder {
-            color: #fff;
+            color: $text-color;
         }
     }
 
@@ -38,7 +40,7 @@
         border-bottom-color: rgba(255, 255, 255, 0.1);
 
         .btn {
-            color: #fff;
+            color: $text-color;
             border-color: rgba(255, 255, 255, 0.1);
 
             &:hover {
@@ -55,21 +57,25 @@
         }
     }
 
-    a,
+    .btn:not([class*="btn-outline-"]),
+    .badge {
+        color: bootstrap.$gray-900;
+    }
+
     h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1,
-    p,
+    a, p,
     .breadcrumb-item.active {
-        color: #fff;
+        color: $text-color;
     }
 
     .bg-dark {
-        background: #fff;
-        color: #000;
+        background: bootstrap.$gray-500;
+        color: bootstrap.$gray-900;
     }
 
     .form-select {
         background: bootstrap.$dark;
-        color: #fff;
+        color: $text-color;
         border-color: bootstrap.$secondary;
     }
 
@@ -116,7 +122,7 @@
 
     .list-group-item, .accordion-item,
     .accordion-button {
-        color: #fff;
+        color: $text-color;
         background: transparent;
         border-color: bootstrap.$secondary;
     }
@@ -136,5 +142,14 @@
 
     .accordion-button::after {
         filter: brightness(1) sepia(0) hue-rotate(180deg) saturate(5);
+    }
+
+    .alert-secondary {
+        background: bootstrap.$gray-700;
+        color: $text-color;
+
+        .alert-heading {
+            color: inherit;
+        }
     }
 }
