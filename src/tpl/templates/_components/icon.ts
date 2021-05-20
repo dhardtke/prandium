@@ -1,5 +1,6 @@
 // deno-fmt-ignore-file
 import { e, html } from "../../mod.ts";
+import { asset } from "../../util/asset.ts";
 
 export const ICONS = [
   "arrow-left-short",
@@ -39,10 +40,12 @@ export const ICONS = [
 
 export type IconName = typeof ICONS[number];
 
+const modificationTimestamp = asset.modificationTimestamp("icons.svg");
+
 export const Icon = (name: IconName, className?: string) =>
   html`
     <svg class="bi${className && ` ${className}`}">
-      <use xlink:href="/assets/icons.svg#${name}"/>
+      <use xlink:href="/assets/icons.svg?${modificationTimestamp}#${name}"/>
     </svg>
   `;
 

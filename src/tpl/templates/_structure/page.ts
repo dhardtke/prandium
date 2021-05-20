@@ -14,8 +14,8 @@ interface PageType {
 
 const Page: PageType = (title?: string) =>
   (body: string) => {
-    const stylesheet = asset.ifExists("index.min.css", "index.css");
-    const javascript = asset.ifExists("index.min.js", "index.js");
+    const stylesheet = asset.ifExists("dist/index.min.css", "dist/index.css");
+    const javascript = asset.ifExists("dist/index.min.js", "dist/index.js");
 
     const markup = html`
       <!DOCTYPE html>
@@ -30,10 +30,10 @@ const Page: PageType = (title?: string) =>
 
       <title>${e(title) ?? e(l.appName)}</title>
 
-      <link rel="stylesheet" href="/assets/dist/${stylesheet}?${
+      <link rel="stylesheet" href="/assets/${stylesheet}?${
         asset.modificationTimestamp(stylesheet)
       }">
-      <script src="/assets/dist/${javascript}?${
+      <script src="/assets/${javascript}?${
         asset.modificationTimestamp(javascript)
       }" async type="module"></script>
 
