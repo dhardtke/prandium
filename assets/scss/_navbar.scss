@@ -1,14 +1,42 @@
 @use "_bootstrap";
 
-.navbar {
+header {
     background: bootstrap.$dark;
+    border-bottom: 1px solid transparent;
 
     .container-xxl {
         align-items: stretch;
     }
 
+    @include bootstrap.media-breakpoint-up("lg") {
+        .d-flex {
+            .navbar-brand {
+                width: auto;
+
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+
+            .nav {
+                margin-top: 0;
+                margin-bottom: 0;
+
+                &:last-child {
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+
+    @include bootstrap.media-breakpoint-down("sm") {
+        svg {
+            display: block;
+        }
+    }
+
     .navbar-brand {
-        align-self: end;
+        color: #fff;
+        width: 100%;
 
         .bi {
             width: 24px;
@@ -22,11 +50,24 @@
         }
 
         &:hover {
-            .app-name {
+            color: bootstrap.$info;
+        }
+    }
+
+    .nav-link {
+        &.active {
+            color: #fff;
+        }
+
+        &.inactive {
+            color: bootstrap.$secondary;
+
+            &:hover {
                 color: bootstrap.$info;
             }
         }
     }
+
 
     #language-dropdown {
         svg {

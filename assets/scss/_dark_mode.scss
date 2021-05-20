@@ -34,8 +34,8 @@
         }
     }
 
-    .navbar {
-        background: bootstrap.$primary;
+    header {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
 
         .btn {
             color: #fff;

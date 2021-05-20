@@ -23,10 +23,7 @@ const slug = (str: string): string => {
 };
 
 export const UrlGenerator = {
-  home: (): string => {
-    return "/";
-  },
-  recipeList: (filters?: { tagIds?: number[] }): string => {
+  home: (filters?: { tagIds?: number[] }): string => {
     return `/recipe${filters ? "?" : ""}${
       join(filters?.tagIds?.map((id) => "tagId=" + id))
     }`;

@@ -22,7 +22,6 @@ export const en: Language = {
     },
     title: "Error",
   },
-  home: "Home",
   id: "ID",
   info: "Info",
   navigation: {
@@ -124,6 +123,8 @@ export const en: Language = {
   up: "Up",
   updatedAt: "Updated",
   yes: "Yes",
+  darkMode: "Dark Mode",
+  language: "Language",
   meta: {
     id: "en",
     flag:

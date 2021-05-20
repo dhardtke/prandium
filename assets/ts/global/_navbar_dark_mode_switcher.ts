@@ -19,7 +19,9 @@ export function NavbarDarkModeSwitcher() {
   };
   toggleDarkMode();
 
-  $darkModeSwitcher.addEventListener("click", () => {
+  $darkModeSwitcher.addEventListener("click", (e) => {
+    e.preventDefault();
+
     localStorage.setItem(LocalStorageName, localStorage.getItem("COOK_GUIDE_DARK_MODE") === "true" ? "false" : "true");
     toggleDarkMode();
   });

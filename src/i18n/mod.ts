@@ -139,7 +139,6 @@ export interface Language {
   down: string;
   edit: string;
   error: Error;
-  home: string;
   id: string;
   info: string;
   navigation: Navigation;
@@ -154,6 +153,8 @@ export interface Language {
   up: string;
   updatedAt: string;
   yes: string;
+  darkMode: string;
+  language: string;
   meta: {
     id: LanguageId;
     flag: string;

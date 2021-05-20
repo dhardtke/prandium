@@ -21,7 +21,7 @@ export const Breadcrumb = (
   html`
     <nav>
       <ol class="breadcrumb${noMargin && " mb-0"}">
-        ${Item(e(l.home), !items?.length, "/")}
+        ${Item(e(l.recipes), !items?.length, "/")}
         ${items && items.map((item, i) =>
           Item(e(item.title), i === items.length - 1, item.url)
         )}

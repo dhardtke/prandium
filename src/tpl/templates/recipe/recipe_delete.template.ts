@@ -10,7 +10,6 @@ import { Page } from "../_structure/page.ts";
 export const RecipeDeleteTemplate = (recipe: Recipe) => Page(recipe.title)(html`
   ${Breadcrumb(
     false,
-    { title: l.recipes, url: UrlGenerator.recipeList() },
     { title: recipe.title, url: UrlGenerator.recipe(recipe) },
     { title: l.delete, url: UrlGenerator.recipeDelete(recipe) },
   )}

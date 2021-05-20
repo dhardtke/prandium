@@ -22,7 +22,6 @@ export const de: Language = {
     },
     title: "Fehler",
   },
-  home: "Startseite",
   id: "ID",
   info: "Info",
   navigation: {
@@ -125,6 +124,8 @@ export const de: Language = {
   up: "Hoch",
   updatedAt: "Aktualisiert",
   yes: "Ja",
+  darkMode: "Nachtmodus",
+  language: "Sprache",
   meta: {
     id: "de",
     flag:

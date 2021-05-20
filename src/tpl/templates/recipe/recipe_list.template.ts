@@ -46,8 +46,8 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
           </span>
           <input type="search" class="form-control input-filter" autocomplete="off" title="${e(l.navigation.filterTitle)}"
                  placeholder="${e(l.navigation.filterPlaceholder)}">
-          ${Page.currentUrl.searchParams.has("tagId") ? 
-            `<a class="btn btn-outline-secondary" href="${parameters(Page.currentUrl).remove("tagId")}">${e(l.navigation.clear)}</a>` : 
+          ${Page.currentUrl.searchParams.has("tagId") ?
+            `<a class="btn btn-outline-secondary" href="${parameters(Page.currentUrl).remove("tagId")}">${e(l.navigation.clear)}</a>` :
             `<button class="btn btn-outline-secondary" disabled>${e(l.navigation.clear)}</button>`}
         </div>
       </div>
@@ -146,13 +146,13 @@ export const RecipeListTemplate = (
   infiniteScrolling: boolean,
 ) => Page(l.recipes)(html`
   <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
-    ${Breadcrumb(true, { title: l.recipes, url: UrlGenerator.recipeList() })}
+    ${Breadcrumb(true)}
 
     ${ActionButtons(recipes.totalItems)}
   </div>
 
   <div class="row g-3 mb-3">
-    <form class="d-flex col-lg-6" action="${UrlGenerator.recipeList()}">
+    <form class="d-flex col-lg-6" action="${UrlGenerator.home()}">
       <div class="input-group">
         <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
                value="${parameters(Page.currentUrl).get("title")}">

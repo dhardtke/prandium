@@ -3,7 +3,6 @@ import { Recipe } from "../../data/model/recipe.ts";
 import { importRecipes } from "../../data/parse/import/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { services } from "../../data/service/services.ts";
-import { TagService } from "../../data/service/tag.service.ts";
 import { toNumber } from "../../data/util/convert.ts";
 import {
   getThumbnailDir,
@@ -13,7 +12,6 @@ import { RecipeDeleteTemplate } from "../../tpl/templates/recipe/recipe_delete.t
 import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.template.ts";
 import { RecipeEditTemplate } from "../../tpl/templates/recipe/recipe_edit.template.ts";
 import { RecipeImportTemplate } from "../../tpl/templates/recipe/recipe_import.template.ts";
-import { RecipeListTemplate } from "../../tpl/templates/recipe/recipe_list.template.ts";
 import { collectFormData, urlWithParams } from "../util/mod.ts";
 import { UrlGenerator } from "../util/url_generator.ts";
 import { AppState } from "../webserver.ts";
@@ -109,46 +107,6 @@ async function assignRecipeFields(
 
 const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
 router
-  .get("/", (ctx: Oak.Context<AppState>) => {
-    const service: RecipeService = services.get(RecipeService);
-
-    const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
-      toNumber(id, -1)
-    ).filter((i) => i !== -1);
-    const title = ctx.parameter("title");
-    const recipes = ctx.paginate(
-      service.count({ tagIds, title }),
-      (limit, offset) =>
-        service.list(
-          {
-            limit,
-            offset,
-            orderBy: ctx.orderBy({ column: "title" }),
-            filters: {
-              tagIds,
-              title,
-            },
-          },
-        ),
-    );
-
-    const tags = services.get(TagService).list({
-      orderBy: { column: "title" },
-      loadRecipeCount: true,
-      filters: {
-        tagsWithSameRecipes: {
-          ids: tagIds,
-          includeOthers: true,
-        },
-      },
-    });
-    ctx.response.body = RecipeListTemplate(
-      recipes,
-      tags,
-      ctx.request.url.searchParams.has("tagFilter"),
-      ctx.state.settings.infiniteScrolling,
-    );
-  })
   .get("/import", (ctx: Oak.Context<AppState>) => {
     ctx.response.body = RecipeImportTemplate();
   })
@@ -294,7 +252,7 @@ router
         await deleteThumbnail(recipe, ctx.state.configDir);
         service.delete([recipe]);
         ctx.response.redirect(
-          urlWithParams(UrlGenerator.recipeList(), {
+          urlWithParams(UrlGenerator.home(), {
             "flash": "deleteSuccessful",
           }, ctx.request.url),
         );

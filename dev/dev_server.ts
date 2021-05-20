@@ -154,7 +154,7 @@ if (import.meta.main) {
       default: 8000,
     })
     .option("-h, --host [hostname]", "the host name.", {
-      default: "127.0.0.1",
+      default: "0.0.0.0",
     })
     .option("-d, --debug [debug:boolean]", "enable debug mode", {
       default: true,

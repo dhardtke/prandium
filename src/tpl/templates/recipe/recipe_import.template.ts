@@ -12,7 +12,6 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
   Page(l.recipe.import.title)(html`
     ${Breadcrumb(
       false,
-      { title: l.recipes, url: UrlGenerator.recipeList() },
       { title: l.recipe.import.title, url: UrlGenerator.recipeImport() },
     )}
     ${

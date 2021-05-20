@@ -80,7 +80,6 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
   Page(recipe ? recipe.title : l.create)(html`
     ${Breadcrumb(
       false,
-      { title: l.recipes, url: UrlGenerator.recipeList() },
       ...recipe ? [
         { title: recipe.title, url: UrlGenerator.recipe(recipe) },
         { title: l.edit, url: UrlGenerator.recipeEdit(recipe) },
@@ -290,7 +289,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
       ${arrayField(l.recipe.instructions, l.recipe.form.createInstruction, "instructions", arrayFieldTextarea, recipe?.instructions)}
     ${/*TODO edit tags, reviews, history, etc. -->*/""}
 
-      <a class="btn btn-danger me-2" href="${recipe ? UrlGenerator.recipe(recipe) : UrlGenerator.recipeList()}">
+      <a class="btn btn-danger me-2" href="${recipe ? UrlGenerator.recipe(recipe) : UrlGenerator.home()}">
         ${LabeledIcon(l.cancel, "arrow-left", 2)}
       </a>
       <button type="submit" class="btn btn-primary">
