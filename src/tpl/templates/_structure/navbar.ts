@@ -58,31 +58,6 @@ function Menu() {
 }
 
 export const Navbar = () => html`
-  ${/*<nav class="navbar navbar-expand-md navbar-dark fixed-top">
-    <div class="container-xxl">
-      <a class="navbar-brand" href="/">
-        <div class="d-flex align-items-center">
-          <div class="text-info me-2 d-flex">
-            ${Icon("journal-richtext")}
-          </div>
-          <div class="app-name">
-            ${e(l.appName)}
-          </div>
-        </div>
-      </a>
-
-      <div class="d-flex">
-        <button id="dark-mode-switcher" type="button" class="btn btn-sm btn-outline-light h-100 d-flex align-items-center">
-          ${Icon("sun-fill", "active d-none")}
-          ${Icon("moon", "inactive")}
-        </button>
-
-        ${LanguageDropdown()}
-      </div>
-    </div>
-  </nav>
-  */""}
-
   <header>
     <div class="px-3 py-2">
       <div class="container-xxl">
