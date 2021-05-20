@@ -8,7 +8,19 @@ header {
         align-items: stretch;
     }
 
+    svg {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     @include bootstrap.media-breakpoint-up("lg") {
+        .nav-link {
+            svg {
+                display: inline-block;
+                margin-right: .25rem;
+            }
+        }
         .d-flex {
             .navbar-brand {
                 width: auto;
@@ -25,12 +37,6 @@ header {
                     margin-left: auto;
                 }
             }
-        }
-    }
-
-    @include bootstrap.media-breakpoint-down("sm") {
-        svg {
-            display: block;
         }
     }
 
