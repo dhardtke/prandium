@@ -125,6 +125,7 @@ export const de: Language = {
   updatedAt: "Aktualisiert",
   yes: "Ja",
   darkMode: "Nachtmodus",
+  lightMode: "Tagmodus",
   language: "Sprache",
   meta: {
     id: "de",

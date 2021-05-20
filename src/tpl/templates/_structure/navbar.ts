@@ -14,7 +14,7 @@ const LanguageDropdownItem = (lang: Language) => html`
 
 const LanguageDropdown = () => html`
   <a class="nav-link inactive dropdown-toggle" data-bs-toggle="dropdown" href="#">
-    ${Icon("globe", "mx-auto mb-1")}
+    ${Icon("globe", "mb-1 mx-auto")}
     ${l.language}
   </a>
   <ul class="dropdown-menu dropdown-menu-end">
@@ -49,7 +49,7 @@ function Menu() {
       .map(({ item, active }) => html`
         <li>
           <a class="nav-link ${active ? "active" : "inactive"}" ${!active && ` href="${item.url}"`}>
-            ${Icon(item.icon, "mx-auto mb-1")}
+            ${Icon(item.icon, "mb-1 mx-auto")}
             ${item.label}
           </a>
         </li>
@@ -77,9 +77,14 @@ export const Navbar = () => html`
           <ul class="nav col-auto my-2 justify-content-center">
             <li>
               <a class="nav-link inactive" id="dark-mode-switcher" href="#">
-                ${Icon("sun-fill", "active d-none mx-auto mb-1 text-warning")}
-                ${Icon("moon", "inactive mx-auto mb-1 text-secondary")}
-                ${l.darkMode}
+                <span class="active d-none">
+                  ${Icon("sun-fill", "text-warning mb-1 mx-auto")}
+                  ${l.lightMode}
+                </span>
+                <span class="inactive">
+                  ${Icon("moon", "text-secondary mb-1 mx-auto")}
+                  ${l.darkMode}
+                </span>
               </a>
             </li>
             <li class="nav-item dropdown" id="language-dropdown">

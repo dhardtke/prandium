@@ -154,6 +154,7 @@ export interface Language {
   updatedAt: string;
   yes: string;
   darkMode: string;
+  lightMode: string;
   language: string;
   meta: {
     id: LanguageId;
