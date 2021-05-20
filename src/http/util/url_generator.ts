@@ -1,7 +1,7 @@
 import { Recipe } from "../../data/model/recipe.ts";
 
-function join<T>(parameters?: T[]): string {
-  return parameters ? parameters.join("&") : "";
+function join(...parameters: unknown[]): string {
+  return parameters.filter((p) => Boolean(p)).join("&");
 }
 
 const PlaceholderImage = "/assets/placeholder.svg";
@@ -23,9 +23,12 @@ const slug = (str: string): string => {
 };
 
 export const UrlGenerator = {
-  home: (filters?: { tagIds?: number[] }): string => {
-    return `/recipe${filters ? "?" : ""}${
-      join(filters?.tagIds?.map((id) => "tagId=" + id))
+  home: (filters?: { tagIds?: number[], tagFilter?: boolean }): string => {
+    return `/${filters ? "?" : ""}${
+      join(
+        filters?.tagIds?.map((id) => "tagId=" + id),
+        filters?.tagFilter && "tagFilter=true"
+      )
     }`;
   },
   recipeImport: (): string => {
