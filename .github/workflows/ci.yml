@@ -64,8 +64,13 @@ jobs:
                 # TODO: re-enable lock.json when skypack no longer indeterministically randomly returns new hashes
                 run: deno test --coverage=./cov --unstable --allow-all --fail-fast --jobs=8
 
-        #            -   name: Generate lcov
-        #                if: matrix.deno == "canary"
-        #                run: deno coverage --unstable --lcov ./cov > cov.lcov
+            -   name: Generate lcov
+                run: deno coverage --unstable --lcov ./cov > cov.lcov
+
+            -   name: Upload coverage
+                uses: codecov/codecov-action@v1
+                with:
+                    files: cov.lcov
+                    token: ${{ secrets.CODECOV_TOKEN }}
 
 # TODO bundle jobs
