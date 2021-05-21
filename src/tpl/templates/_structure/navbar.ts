@@ -57,35 +57,37 @@ function Menu() {
 
 export const Navbar = () => html`
   <header>
-    <div class="container-xxl">
-      <div class="d-flex flex-wrap align-items-center justify-content-center">
-        <a href="/" class="navbar-brand d-flex align-items-center justify-content-center my-2">
-          <div class="text-info me-2 d-flex">
-            ${Icon("journal-richtext")}
-          </div>
-          <div class="app-name">
-            ${e(l.appName)}
-          </div>
-        </a>
+    <div class="py-2">
+      <div class="container-xxl">
+        <div class="d-flex flex-wrap align-items-center justify-content-center">
+          <a href="/" class="navbar-brand d-flex align-items-center justify-content-center my-2">
+            <div class="text-info me-2 d-flex">
+              ${Icon("journal-richtext")}
+            </div>
+            <div class="app-name">
+              ${e(l.appName)}
+            </div>
+          </a>
 
-        <ul class="nav col-auto my-2 justify-content-center">
-          ${Menu()}
-        </ul>
-        <ul class="nav col-auto my-2 justify-content-center">
-          <li>
-            <a class="nav-link inactive" id="dark-mode-switcher" href="#">
+          <ul class="nav col-auto my-2 justify-content-center">
+            ${Menu()}
+          </ul>
+          <ul class="nav col-auto my-2 justify-content-center">
+            <li>
+              <a class="nav-link inactive" id="dark-mode-switcher" href="#">
                 <span class="active d-none">
                   ${Icon("sun-fill", "text-warning mb-1")}${l.lightMode}
                 </span>
-              <span class="inactive">
+                <span class="inactive">
                   ${Icon("moon", "text-secondary mb-1")}${l.darkMode}
                 </span>
-            </a>
-          </li>
-          <li class="nav-item dropdown" id="language-dropdown">
-            ${LanguageDropdown()}
-          </li>
-        </ul>
+              </a>
+            </li>
+            <li class="nav-item dropdown" id="language-dropdown">
+              ${LanguageDropdown()}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
