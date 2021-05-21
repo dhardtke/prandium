@@ -1,4 +1,5 @@
 [![Workflow badge](https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/dhardtke/cook-guide/branch/main/graph/badge.svg?token=SIR9GFWW4V)](https://codecov.io/gh/dhardtke/cook-guide)
 
 # CookGuide
 
