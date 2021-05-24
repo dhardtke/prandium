@@ -29,7 +29,7 @@ for (const global of globals) {
 
 const routes = [
   {
-    match: /^\/recipe\/?$/,
+    match: /^\/$/,
     fn: RecipeListPage
   },
   {
