@@ -48,7 +48,7 @@ function initializeRating() {
     $radio.addEventListener("change", async () => {
       await fetch(`${new URL(window.location.href).pathname}/rate`, {
         method: "POST",
-        body: new URLSearchParams({ rating: $radio.value })
+        body: new URLSearchParams({ rating: $radio.value }),
       });
       $currentValue.textContent = parseFloat($radio.value).toFixed(1);
     });

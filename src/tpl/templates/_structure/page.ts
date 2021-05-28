@@ -8,6 +8,7 @@ import { Navbar } from "./navbar.ts";
 interface PageType {
   minifying: boolean;
   currentUrl: URL;
+  authorization: string | null;
 
   (title?: string): (body: string) => string;
 }
@@ -19,7 +20,7 @@ const Page: PageType = (title?: string) =>
 
     const markup = html`
       <!DOCTYPE html>
-      <html lang="${l.meta.id}">
+      <html lang="${l.meta.id}" data-authorization="${e(Page.authorization)}">
       <style>html {
         display: none;
       }</style>
@@ -54,6 +55,11 @@ const Page: PageType = (title?: string) =>
  * Determines whether the markup should be minified or not.
  */
 Page.minifying = false;
+
+/**
+ * The current value of the "Authorization" request header.
+ */
+Page.authorization = null;
 
 /**
  * The request's current URL.

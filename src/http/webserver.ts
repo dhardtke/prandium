@@ -58,6 +58,7 @@ export async function spawnServer(
   );
   app.use(async (ctx, next) => {
     Page.currentUrl = ctx.request.url;
+    Page.authorization = ctx.request.headers.get("Authorization");
     await next();
   });
 

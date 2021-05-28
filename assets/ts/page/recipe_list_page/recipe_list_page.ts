@@ -1,4 +1,5 @@
 import { moveChildren } from "../../_util/dom_util.ts";
+import { request } from "../../_util/request.ts";
 import { bootComponents } from "../../components/component.ts";
 import { Events } from "../../components/observer.ts";
 import { TagFilter } from "./tag_filter.ts";
@@ -34,7 +35,7 @@ function registerInfiniteScrolling($recipeList: HTMLElement) {
     }
     const url = new URL(window.location.href);
     url.searchParams.set(pageParam, String((parseInt(url.searchParams.get(pageParam) || "", 10) || 1) + 1));
-    const response = await fetch(url.toString());
+    const response = await request(url.toString());
     if (response.status === 200) {
       const $document = new DOMParser().parseFromString(await response.text(), "text/html");
       const $newRecipeList = $document.querySelector(Selectors.RecipeList);
