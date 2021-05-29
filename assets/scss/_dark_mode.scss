@@ -144,8 +144,26 @@ $text-color: bootstrap.$gray-400;
         filter: brightness(1) sepia(0) hue-rotate(180deg) saturate(5);
     }
 
+    .alert-danger {
+        background: bootstrap.$red-700;
+    }
+    .alert-primary {
+        background: bootstrap.$blue-700;
+    }
     .alert-secondary {
         background: bootstrap.$gray-700;
+    }
+    .alert-success {
+        background: bootstrap.$green-700;
+    }
+    .alert-info {
+        background: bootstrap.$cyan-700;
+    }
+    .alert-warning {
+        background: bootstrap.$yellow-700;
+    }
+
+    .alert {
         color: $text-color;
 
         .alert-heading {
