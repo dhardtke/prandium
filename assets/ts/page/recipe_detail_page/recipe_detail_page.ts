@@ -7,38 +7,29 @@ const Selectors = {
 
 function registerPortionsControls() {
   const $form = document.getElementById("ingredients-form") as HTMLFormElement;
-  if (!$form) {
-    return;
-  }
   const $input = $form.querySelector("input");
-  if (!$input) {
+  if (!$form || !$input) {
     return;
   }
-  const $plus = $form.querySelector(".plus");
-  let timeout: number;
-  $plus?.addEventListener("click", () => {
-    $input.value = (parseInt($input.value) + 1).toString();
-    if (timeout) {
-      window.clearTimeout(timeout);
-    }
-    if ($form.checkValidity()) {
-      timeout = setTimeout(() => {
-        $form.submit();
-      }, 350);
-    }
-  });
-  const $minus = $form.querySelector(".minus");
-  $minus?.addEventListener("click", () => {
-    $input.value = (parseInt($input.value) - 1).toString();
-    if (timeout) {
-      window.clearTimeout(timeout);
-    }
-    if ($form.checkValidity()) {
-      timeout = setTimeout(() => {
-        $form.submit();
-      }, 350);
-    }
-  });
+  const registerUpdateListener = ($el: HTMLElement | null, increment: number) => {
+    let timeout: number;
+    $el?.addEventListener("click", () => {
+      const oldValue = $input.value;
+      $input.value = (parseInt($input.value) + increment).toString();
+      if (timeout) {
+        window.clearTimeout(timeout);
+      }
+      if ($form.checkValidity()) {
+        timeout = setTimeout(() => {
+          $form.submit();
+        }, 350);
+      } else {
+        $input.value = oldValue;
+      }
+    });
+  };
+  registerUpdateListener($form.querySelector(".plus"), 1);
+  registerUpdateListener($form.querySelector(".minus"), -1);
 }
 
 function initializeRating() {
