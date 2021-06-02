@@ -28,7 +28,6 @@ export const de: Language = {
     filterPlaceholder: "Beginne zu Tippen um zu filtern...",
     filterTitle: "Filter",
     tags: "Tags",
-    clear: "Leeren",
   },
   no: "Nein",
   orderBy: {

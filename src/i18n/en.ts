@@ -28,7 +28,6 @@ export const en: Language = {
     filterPlaceholder: "Start typing to filter...",
     filterTitle: "Filter",
     tags: "Tags",
-    clear: "Clear",
   },
   no: "No",
   orderBy: {

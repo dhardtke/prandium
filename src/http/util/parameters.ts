@@ -34,8 +34,8 @@ export const parameters = (url: URL | string) => {
       return result;
     },
 
-    remove: (name: string): string => {
-      result.searchParams.delete(name);
+    remove: (...names: string[]): string => {
+      names.forEach((name) => result.searchParams.delete(name));
       return result.toString();
     },
 

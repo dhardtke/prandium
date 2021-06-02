@@ -25,7 +25,7 @@ function TagControls() {
           </button>
         </div>
         <a class="btn btn-outline-danger${!currentTagIds.length && " disabled"}"
-           href="${e(parameters(Page.currentUrl).remove("tagId"))}"
+           href="${e(parameters(Page.currentUrl).remove("tagId", "page"))}"
            title="${e(l.recipe.clearAllTags)}">
           ${Icon("trash")}
         </a>
@@ -46,9 +46,6 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
           </span>
           <input type="search" class="form-control input-filter" autocomplete="off" title="${e(l.navigation.filterTitle)}"
                  placeholder="${e(l.navigation.filterPlaceholder)}">
-          ${Page.currentUrl.searchParams.has("tagId") ?
-            `<a class="btn btn-outline-secondary" href="${parameters(Page.currentUrl).remove("tagId")}">${e(l.navigation.clear)}</a>` :
-            `<button class="btn btn-outline-secondary" disabled>${e(l.navigation.clear)}</button>`}
         </div>
       </div>
       <div class="card-body overflow-auto">
@@ -58,6 +55,7 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
             const disabled = !active && tag.recipeCount === 0;
             let href = active ? parameters(Page.currentUrl).removeSingleValue("tagId", tag.id) : parameters(Page.currentUrl).append("tagId", tag.id);
             href = parameters(href).set("tagFilter", "").toString();
+            href = parameters(href).remove("page").toString();
 
             return html`
               <div class="col-lg-2 tag${active && " text-white"}">
