@@ -1,5 +1,6 @@
 import { Colors, log, path, sqlite } from "../../deps.ts";
 import { classNames } from "../util.ts";
+import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
 // see https://deno.land/x/sqlite/src/db.ts
@@ -15,33 +16,28 @@ export type QueryParam =
 export type Values = Record<string, QueryParam> | QueryParam[];
 
 export interface PreparedQuery {
+  finalize: () => void;
+
   // deno-lint-ignore no-explicit-any
   (values?: Values): any;
-
-  finalize: () => void;
 }
 
 export class Database {
   private readonly db: sqlite.DB;
+  private readonly migrations: Migration[];
   private inTransaction = false;
 
-  public constructor(configDir: string) {
+  public constructor(configDir: string, migrations: Migration[] = MIGRATIONS) {
     const dbPath = path.resolve(configDir, "data.db");
     log.debug(() => `[DB] Using database ${Colors.cyan(dbPath)}`);
     this.db = new sqlite.DB(dbPath);
+    this.migrations = migrations;
     // enable FOREIGN KEY support
     this.exec("PRAGMA foreign_keys = ON;");
 
     window.addEventListener("unload", () => {
       this.close();
     });
-  }
-
-  /**
-   * @return the ID of the last inserted row
-   */
-  public get lastInsertRowId(): number {
-    return this.db.lastInsertRowId;
   }
 
   /**
@@ -148,7 +144,7 @@ export class Database {
     log.debug(
       `[DB] Current database version is ${Colors.cyan("" + currentVersion)}`,
     );
-    const migrations = MIGRATIONS.filter((m) => currentVersion < m.version)
+    const migrations = this.migrations.filter((m) => currentVersion < m.version)
       .sort((a, b) => a.version - b.version);
     log.debug(() =>
       `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`
@@ -184,7 +180,7 @@ export class Database {
     }
   }
 
-  private close() {
+  close() {
     this.db.close();
   }
 }
