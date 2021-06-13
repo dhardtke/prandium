@@ -1,4 +1,5 @@
-import { Database, QueryParam } from "../db.ts";
+import { sqlite } from "../../../deps.ts";
+import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { toArray, toCamelCase } from "../util/convert.ts";
@@ -45,7 +46,7 @@ function tagsWithSameRecipes(
 function recipeCountColumn(
   active?: boolean,
   tagIdsWithSameRecipes?: number[],
-): { column: string; bindings: QueryParam[] } {
+): { column: string; bindings: sqlite.QueryParam[] } {
   if (!active) {
     return {
       column: "",

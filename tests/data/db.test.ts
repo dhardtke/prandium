@@ -28,7 +28,7 @@ const baseSuite: TestSuite<{ dir: string; db: Database }> = new TestSuite({
 
 test(baseSuite, "query", (context) => {
   assertThrows(() => {
-    for (const row of context.db.query("SELECT foo FROM bar")) {
+    for (const _row of context.db.query("SELECT foo FROM bar")) {
       unreachable();
     }
   });

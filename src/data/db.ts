@@ -4,23 +4,7 @@ import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
 // see https://deno.land/x/sqlite/src/db.ts
-export type QueryParam =
-  | boolean
-  | number
-  | bigint
-  | string
-  | null
-  | undefined
-  | Date
-  | Uint8Array;
-export type Values = Record<string, QueryParam> | QueryParam[];
-
-export interface PreparedQuery {
-  finalize: () => void;
-
-  // deno-lint-ignore no-explicit-any
-  (values?: Values): any;
-}
+export type Values = Record<string, sqlite.QueryParam> | sqlite.QueryParam[];
 
 export class Database {
   private readonly db: sqlite.DB;
@@ -76,20 +60,20 @@ export class Database {
    * @param values the values to bind
    */
   public exec(sql: string, values?: Values): void {
-    for (const ignored of this.safeQuery(sql, values)) {
+    for (const _ignored of this.safeQuery(sql, values)) {
       // nothing to do
     }
   }
 
   public prepare(
     sql: string,
-    processor: (preparedQuery: PreparedQuery) => void,
+    processor: (preparedQuery: sqlite.PreparedQuery) => void,
   ): void {
     const query = this.db.prepareQuery(sql);
 
     try {
       log.debug(() => `[DB] Preparing ${Colors.cyan(sql)}`);
-      const wrappedQuery: PreparedQuery = (values) => {
+      const wrappedQuery: sqlite.PreparedQuery = (values) => {
         log.debug(() =>
           `Executing prepared query${
             values

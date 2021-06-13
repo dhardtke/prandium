@@ -1,15 +1,15 @@
-import { QueryParam } from "../db.ts";
+import { sqlite } from "../../../deps.ts";
 import { OrderBy } from "../service/service.ts";
 
 export interface Filter {
   active: boolean;
   sql: () => string;
-  bindings?: () => QueryParam[];
+  bindings?: () => sqlite.QueryParam[];
 }
 
 export interface Filters {
   sql: string;
-  bindings: QueryParam[];
+  bindings: sqlite.QueryParam[];
 }
 
 export const EmptyFilter = { sql: "TRUE", bindings: [] };

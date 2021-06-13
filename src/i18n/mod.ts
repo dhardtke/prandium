@@ -125,7 +125,7 @@ interface ErrorDetail {
   title: string;
 }
 
-export type DateFnsLocale = keyof typeof dateFns.locale;
+export type DateFnsLocale = typeof dateFns.locale.en | typeof dateFns.locale.de;
 
 export interface Language {
   appName: string;

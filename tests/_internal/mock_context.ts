@@ -12,7 +12,7 @@ export class MockContextBuilder {
     this._request = {} as Oak.Request;
     this._response = {
       status: -1,
-    } as Oak.Response;
+    } as unknown as Oak.Response;
     this._ctx = {
       request: this._request,
       response: this._response,
