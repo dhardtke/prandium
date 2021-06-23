@@ -60,9 +60,7 @@ jobs:
                         ${{ runner.os }}-
 
             -   name: Run tests
-                #run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all --fail-fast
-                # TODO: re-enable lock.json when skypack no longer indeterministically randomly returns new hashes
-                run: deno test --coverage=./cov --unstable --allow-all --fail-fast --jobs=8
+                run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all --fail-fast
 
             -   name: Generate lcov
                 run: deno coverage --unstable --lcov ./cov > cov.lcov
