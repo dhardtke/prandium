@@ -1,7 +1,7 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v2.4.2/mod.ts";
 export * as Dom from "https://deno.land/x/deno_dom@v0.1.12-alpha/deno-dom-wasm.ts";
-export * as Oak from "https://deno.land/x/oak@v7.6.3/mod.ts";
+export * as Oak from "https://deno.land/x/oak@v7.7.0/mod.ts";
 export { z as Zod } from "https://deno.land/x/zod@v3.2/mod.ts";
 
 export { default as parseIngredient } from "https://esm.sh/parse-ingredient@0.3.0";
@@ -28,12 +28,12 @@ export const dateFns = {
 };
 
 // utils
-export * as path from "https://deno.land/std@0.99.0/path/mod.ts";
-export * as log from "https://deno.land/std@0.99.0/log/mod.ts";
-export { LogRecord } from "https://deno.land/std@0.99.0/log/logger.ts";
+export * as path from "https://deno.land/std@0.100.0/path/mod.ts";
+export * as log from "https://deno.land/std@0.100.0/log/mod.ts";
+export { LogRecord } from "https://deno.land/std@0.100.0/log/logger.ts";
 export * as Cliffy from "https://deno.land/x/cliffy@v0.19.1/command/mod.ts";
-export * as fs from "https://deno.land/std@0.99.0/fs/mod.ts";
-export * as Colors from "https://deno.land/std@0.99.0/fmt/colors.ts";
+export * as fs from "https://deno.land/std@0.100.0/fs/mod.ts";
+export * as Colors from "https://deno.land/std@0.100.0/fmt/colors.ts";
 export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
 
 // types
@@ -50,7 +50,7 @@ export {
   assertNotEquals,
   assertThrows,
   unreachable,
-} from "https://deno.land/std@0.99.0/testing/asserts.ts";
+} from "https://deno.land/std@0.100.0/testing/asserts.ts";
 
 export { test, TestSuite } from "https://deno.land/x/test_suite@v0.7.0/mod.ts";
 // @formatter:on
