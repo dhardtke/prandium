@@ -6,16 +6,17 @@
 <!--suppress HtmlDeprecatedAttribute -->
 <img align="left" src="assets/favicon.svg" width="64" alt="Logo" />
 
-CookGuide is a server-side tool for managing cooking recipes.
+CookGuide is a single-user content management system used to organize recipes.
 
 *WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it
-productively).*
+on a daily basis).*
 
 <br clear="left"/>
 
 ## Features
 
-- Import recipes from foreign pages
+- Import recipes by URL from websites that use [schema.org](https://schema.org/) JSON-LD microdata.
+- Keep track of when and how often you cooked a recipe
 
 ## Installation
 
