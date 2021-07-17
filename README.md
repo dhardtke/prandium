@@ -6,7 +6,7 @@
 <!--suppress HtmlDeprecatedAttribute -->
 <img align="left" src="assets/favicon.svg" width="64" alt="Logo" />
 
-Prandium is a single-user content management system used to organize recipes.
+Prandium, latin for [lunch](https://en.wiktionary.org/wiki/prandium), is a single-user content management system for organizing recipes.
 
 *WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it
 on a daily basis).*
