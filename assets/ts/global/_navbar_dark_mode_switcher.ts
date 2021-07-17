@@ -1,4 +1,4 @@
-const LocalStorageName = "COOK_GUIDE_DARK_MODE";
+const LocalStorageName = "PRANDIUM_DARK_MODE";
 const DocumentClassName = "dark";
 
 export function NavbarDarkModeSwitcher() {
@@ -22,7 +22,7 @@ export function NavbarDarkModeSwitcher() {
   $darkModeSwitcher.addEventListener("click", (e) => {
     e.preventDefault();
 
-    localStorage.setItem(LocalStorageName, localStorage.getItem("COOK_GUIDE_DARK_MODE") === "true" ? "false" : "true");
+    localStorage.setItem(LocalStorageName, localStorage.getItem("PRANDIUM_DARK_MODE") === "true" ? "false" : "true");
     toggleDarkMode();
   });
 }

@@ -15,14 +15,14 @@ export function getHome(): string | undefined {
   return Deno.env.get("HOME");
 }
 
-export const DefaultConfigDir = "~/.config/cook-guide";
+export const DefaultConfigDir = "~/.config/prandium";
 
 export function defaultConfigDir(): string {
   const home = getHome();
   if (!home) {
     throw new Error("Could not read home directory.");
   }
-  return path.resolve(home, ".config", "cook-guide");
+  return path.resolve(home, ".config", "prandium");
 }
 
 const ScriptDir = path.dirname(path.fromFileUrl(import.meta.url));

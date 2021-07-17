@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/assets/assets.iml" filepath="$PROJECT_DIR$/assets/assets.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cook-guide.iml" filepath="$PROJECT_DIR$/cook-guide.iml" />
+      <module fileurl="file://$PROJECT_DIR$/prandium.iml" filepath="$PROJECT_DIR$/prandium.iml" />
     </modules>
   </component>
 </project>

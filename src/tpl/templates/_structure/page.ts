@@ -24,7 +24,7 @@ const Page: PageType = (title?: string) =>
       <style>html {
         display: none;
       }</style>
-      <script>document.documentElement.classList.toggle("dark", localStorage.getItem("COOK_GUIDE_DARK_MODE") === "true")</script>
+      <script>document.documentElement.classList.toggle("dark", localStorage.getItem("PRANDIUM_DARK_MODE") === "true")</script>
       <meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${Favicons()}

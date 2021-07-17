@@ -10,8 +10,8 @@ process.chdir(path.dirname(fs.realpathSync(__filename)));
 const source = "../assets/favicon.svg"; // Source image(s). `string`, `buffer` or array of `string`
 const configuration = {
     path: "/assets/favicons", // Path for overriding default icons path. `string`
-    appName: "CookGuide", // Your application's name. `string`
-    appShortName: "CookGuide", // Your application's short_name. `string`. Optional. If not set, appName will be used
+    appName: "Prandium", // Your application's name. `string`
+    appShortName: "Prandium", // Your application's short_name. `string`. Optional. If not set, appName will be used
     appDescription: null, // Your application's description. `string`
     developerName: null, // Your (or your developer's) name. `string`
     developerURL: null, // Your (or your developer's) URL. `string`

@@ -3,7 +3,7 @@ import { en } from "../../i18n/en.ts";
 import { LanguageId, LANGUAGES, setLanguage } from "../../i18n/mod.ts";
 import { AppState } from "../webserver.ts";
 
-const LanguageCookie = "CookGuideLanguage";
+const LanguageCookie = "PrandiumLanguage";
 
 export async function languageMiddleware(
   ctx: Oak.Context<AppState>,
