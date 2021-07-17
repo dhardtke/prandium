@@ -1,12 +1,12 @@
-[![Workflow badge](https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml/badge.svg)](https://github.com/dhardtke/cook-guide/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/dhardtke/cook-guide/branch/main/graph/badge.svg?token=SIR9GFWW4V)](https://codecov.io/gh/dhardtke/cook-guide)
+[![Workflow badge](https://github.com/dhardtke/prandium/actions/workflows/ci.yml/badge.svg)](https://github.com/dhardtke/prandium/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/dhardtke/prandium/branch/main/graph/badge.svg?token=SIR9GFWW4V)](https://codecov.io/gh/dhardtke/prandium)
 
-# CookGuide
+# Prandium
 
 <!--suppress HtmlDeprecatedAttribute -->
 <img align="left" src="assets/favicon.svg" width="64" alt="Logo" />
 
-CookGuide is a single-user content management system used to organize recipes.
+Prandium is a single-user content management system used to organize recipes.
 
 *WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it
 on a daily basis).*

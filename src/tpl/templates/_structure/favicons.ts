@@ -10,7 +10,7 @@ export const Favicons = () =>
     <link rel="manifest" href="/assets/favicons/manifest.json" crossOrigin="use-credentials">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0dcaf0">
-    <meta name="application-name" content="CookGuide">
+    <meta name="application-name" content="Prandium">
     <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicons/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/assets/favicons/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/assets/favicons/apple-touch-icon-72x72.png">
@@ -24,5 +24,5 @@ export const Favicons = () =>
     <link rel="apple-touch-icon" sizes="1024x1024" href="/assets/favicons/apple-touch-icon-1024x1024.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CookGuide">
+    <meta name="apple-mobile-web-app-title" content="Prandium">
   `;

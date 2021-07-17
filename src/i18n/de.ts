@@ -2,7 +2,7 @@ import { dateFns } from "../../deps.ts";
 import { Language } from "./mod.ts";
 
 export const de: Language = {
-  appName: "CookGuide",
+  appName: "Prandium",
   cancel: "Abbrechen",
   confirmation: "Bestätigung",
   create: "Erstellen",
