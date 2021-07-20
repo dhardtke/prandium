@@ -125,27 +125,29 @@ export class Database {
   public migrate() {
     const [[currentVersionDb]] = this.db.query("PRAGMA user_version");
     let currentVersion: number = currentVersionDb;
-    log.debug(
-      `[DB] Current database version is ${Colors.cyan("" + currentVersion)}`,
-    );
     const migrations = this.migrations.filter((m) => currentVersion < m.version)
       .sort((a, b) => a.version - b.version);
-    log.debug(() =>
-      `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`
-    );
-    for (const migration of migrations) {
-      this.transaction(() => {
-        migration.migrate(this);
-        currentVersion++;
-        this.db.query(`PRAGMA user_version = ${currentVersion}`);
-        return [true, undefined];
-      });
+    if (migrations.length) {
+      log.debug(
+        `[DB] Current database version is ${Colors.cyan("" + currentVersion)}`,
+      );
+      log.debug(() =>
+        `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`
+      );
+      for (const migration of migrations) {
+        this.transaction(() => {
+          migration.migrate(this);
+          currentVersion++;
+          this.db.query(`PRAGMA user_version = ${currentVersion}`);
+          return [true, undefined];
+        });
+      }
+      log.debug(() =>
+        `[DB] Migrations executed. New database version is ${
+          Colors.cyan("" + currentVersion)
+        }`
+      );
     }
-    log.debug(() =>
-      `[DB] Migrations executed. New database version is ${
-        Colors.cyan("" + currentVersion)
-      }`
-    );
   }
 
   private safeQuery(sql: string, values?: Values) {
