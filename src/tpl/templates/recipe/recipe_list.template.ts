@@ -211,18 +211,18 @@ export const RecipeListTemplate = (
                 <div class="card-footer text-muted d-flex justify-content-between">
                   <div>
                     <span title="${e(l.recipe.cookedCount)}" class="me-2">
-                      ${LabeledIcon(recipe.cookedCount, "bar-chart")}
+                      ${LabeledIcon(recipe.cookedCount || "-", "bar-chart")}
                     </span>
                     <span title="${e(l.recipe.rating)}" class="me-2">
-                      ${LabeledIcon(number.format(recipe.rating), "star")}
+                      ${LabeledIcon(number.format(recipe.rating) || "-", "star")}
                     </span>
                     <span title="${e(l.recipe.aggregateRating)}">
-                      ${LabeledIcon(number.format(recipe.aggregateRatingValue), "people")}
+                      ${LabeledIcon(number.format(recipe.aggregateRatingValue) || "-", "people")}
                     </span>
                   </div>
 
                   <span class="d-flex align-items-center" title="${e(l.recipe.time.total)}">
-                    ${LabeledIcon(date.formatSeconds(recipe.totalTime!), "clock-fill")}
+                    ${LabeledIcon(date.formatSeconds(recipe.totalTime) || "-", "clock-fill")}
                   </span>
                 </div>
               </a>

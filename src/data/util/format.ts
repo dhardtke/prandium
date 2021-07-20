@@ -30,12 +30,12 @@ export const date = {
    * Formats the given seconds as duration.
    * @param seconds the seconds to format
    */
-  formatSeconds: (seconds: number): string => {
+  formatSeconds: (seconds?: number): string => {
     try {
       return date.formatDuration(
         dateFns.intervalToDuration({
           start: 0,
-          end: seconds * 1000,
+          end: (seconds || 0) * 1000,
           locale: l.meta.dateFns,
         }),
       );
