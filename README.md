@@ -15,8 +15,10 @@ daily basis).*
 
 ## Features
 
-- Import recipes by URL from websites that use [schema.org](https://schema.org/) JSON-LD microdata.
+- Import recipes by URL from websites that use [schema.org](https://schema.org/) JSON-LD microdata
 - Keep track of when and how often you cooked a recipe
+- Assign tags to each recipe to easily find them later
+- Mobile friendly: Responsive, fast and niche features such as keeping your screen active while you are on a recipe page
 
 ## Installation
 
