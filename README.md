@@ -26,7 +26,7 @@ See [Setup](docs/setup.md)
 
 Light (default)            | Dark
 :-------------------------:|:-------------------------:
-![recipe list in light mode](docs/readme-images/recipe-list-light.png)   |  ![the dark version of the recipe list](docs/readme-images/recipe-list-dark.png)
+![recipe list in light mode](docs/readme-images/recipe-list-light.webp)   |  ![the dark version of the recipe list](docs/readme-images/recipe-list-dark.webp)
 
 ## Contributing
 
