@@ -8,8 +8,8 @@
 
 Prandium, latin for [lunch](https://en.wiktionary.org/wiki/prandium), is a single-user content management system for organizing recipes.
 
-*WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it
-on a daily basis).*
+*WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it on a
+daily basis).*
 
 <br clear="left"/>
 
@@ -21,6 +21,12 @@ on a daily basis).*
 ## Installation
 
 See [Setup](docs/setup.md)
+
+## Screenshots
+
+Light (default)            | Dark
+:-------------------------:|:-------------------------:
+![recipe list in light mode](docs/readme-images/recipe-list-light.png)   |  ![the dark version of the recipe list](docs/readme-images/recipe-list-dark.png)
 
 ## Contributing
 
