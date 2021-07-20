@@ -7,8 +7,11 @@ const Selectors = {
 
 function registerPortionsControls() {
   const $form = document.getElementById("ingredients-form") as HTMLFormElement;
+  if (!$form) {
+    return;
+  }
   const $input = $form.querySelector("input");
-  if (!$form || !$input) {
+  if (!$input) {
     return;
   }
   const registerUpdateListener = ($el: HTMLElement | null, increment: number) => {
