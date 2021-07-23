@@ -20,11 +20,19 @@ const Page: PageType = (title?: string) =>
 
     const markup = html`
       <!DOCTYPE html>
-      <html lang="${l.meta.id}" data-authorization="${e(Page.authorization)}">
-      <style>html {
-        display: none;
-      }</style>
-      <script>document.documentElement.classList.toggle("dark", localStorage.getItem("PRANDIUM_DARK_MODE") === "true")</script>
+      <html lang="${l.meta.id}" data-authorization="${e(Page.authorization)}" class="preload">
+      <style>
+        html {
+          display: none
+        }
+
+        .preload * {
+          transition: none !important
+        }</style>
+      <script>
+        document.documentElement.classList.toggle("dark", localStorage.getItem("PRANDIUM_DARK_MODE") === "true");
+        document.documentElement.classList.remove("preload");
+      </script>
       <meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${Favicons()}
