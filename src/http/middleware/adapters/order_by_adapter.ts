@@ -1,7 +1,7 @@
-import type { Context } from "https://deno.land/x/oak@v7.7.0/mod.ts";
+import type { Context } from "https://deno.land/x/oak@v8.0.0/mod.ts";
 import { OrderBy } from "../../../data/service/service.ts";
 
-declare module "https://deno.land/x/oak@v7.7.0/mod.ts" {
+declare module "https://deno.land/x/oak@v8.0.0/mod.ts" {
   interface Context {
     orderBy: (_default?: OrderBy) => OrderBy | undefined;
   }

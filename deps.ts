@@ -1,7 +1,7 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v2.4.2/mod.ts";
 export * as Dom from "https://deno.land/x/deno_dom@v0.1.12-alpha/deno-dom-wasm.ts";
-export * as Oak from "https://deno.land/x/oak@v7.7.0/mod.ts";
+export * as Oak from "https://deno.land/x/oak@v8.0.0/mod.ts";
 export { z as Zod } from "https://deno.land/x/zod@v3.2/mod.ts";
 
 export { default as parseIngredient } from "https://esm.sh/parse-ingredient@0.3.0";
