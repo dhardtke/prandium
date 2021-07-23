@@ -13,14 +13,14 @@ import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { Pagination as PaginationComponent } from "../_components/pagination.ts";
 import { Page } from "../_structure/page.ts";
 
-function TagControls() {
+function TagControls(tags: Tag[]) {
   const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
     <div class="col-auto">
       <div class="btn-group">
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#tag-filter">
+          <button type="button" class="btn btn-outline-secondary dropdown-toggle${tags.length === 0 && " disabled"}" data-bs-toggle="collapse" data-bs-target="#tag-filter">
             ${e(l.navigation.tags)}
           </button>
         </div>
@@ -161,7 +161,7 @@ export const RecipeListTemplate = (
 
     ${OrderBy()}
 
-    ${TagControls()}
+    ${TagControls(tags)}
   </div>
 
   ${TagFilter(tags, showTagFilter)}
