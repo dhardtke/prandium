@@ -11,7 +11,13 @@ export function NavbarDarkModeSwitcher() {
   const toggleDarkMode = () => {
     $active?.classList.remove("d-none");
     $inactive?.classList.remove("d-none");
-    if (document.documentElement.classList.toggle(DocumentClassName, localStorage.getItem(LocalStorageName) === "true")) {
+
+    let storage = localStorage.getItem(LocalStorageName);
+    if (storage === null) {
+      storage = window.matchMedia("(prefers-color-scheme: dark)").matches ? "true" : "";
+    }
+
+    if (document.documentElement.classList.toggle(DocumentClassName, storage === "true")) {
       $inactive?.classList.add("d-none");
     } else {
       $active?.classList.add("d-none");
