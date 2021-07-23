@@ -27,17 +27,13 @@ $text-color: bootstrap.$gray-400;
         color: $text-color;
     }
 
-    .form-control {
-        border-color: bootstrap.$gray-800;
-        background: transparent;
-
-        &, &::placeholder {
-            color: $text-color;
-        }
-    }
-
     header {
         border-bottom-color: rgba(255, 255, 255, 0.1);
+        background: bootstrap.$gray-800;
+
+        .nav-link {
+            color: bootstrap.$gray-400;
+        }
 
         .btn {
             color: $text-color;
@@ -57,9 +53,18 @@ $text-color: bootstrap.$gray-400;
         }
     }
 
-    .btn:not([class*="btn-outline-"]),
+    .btn-light {
+        border: bootstrap.$gray-100;
+        background: bootstrap.$black;
+    }
+
+    .btn:not(.btn-info):not(.btn-danger),
     .badge {
-        color: bootstrap.$gray-900;
+        color: bootstrap.$gray-400;
+    }
+
+    .btn-info, &.btn-danger {
+        color: bootstrap.$black;
     }
 
     h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1,
@@ -73,10 +78,14 @@ $text-color: bootstrap.$gray-400;
         color: bootstrap.$gray-900;
     }
 
+    .form-control,
     .form-select {
-        background: bootstrap.$dark;
-        color: $text-color;
+        background: bootstrap.$gray-800;
         border-color: bootstrap.$secondary;
+
+        &, &::placeholder {
+            color: $text-color;
+        }
     }
 
     .page-item {
@@ -121,7 +130,7 @@ $text-color: bootstrap.$gray-400;
     }
 
     .list-group-item, .accordion-item,
-    .accordion-button {
+    .accordion-button, .input-group-text {
         color: $text-color;
         background: transparent;
         border-color: bootstrap.$secondary;
@@ -147,18 +156,23 @@ $text-color: bootstrap.$gray-400;
     .alert-danger {
         background: bootstrap.$red-700;
     }
+
     .alert-primary {
         background: bootstrap.$blue-700;
     }
+
     .alert-secondary {
         background: bootstrap.$gray-700;
     }
+
     .alert-success {
         background: bootstrap.$green-700;
     }
+
     .alert-info {
         background: bootstrap.$cyan-700;
     }
+
     .alert-warning {
         background: bootstrap.$yellow-700;
     }
@@ -169,5 +183,10 @@ $text-color: bootstrap.$gray-400;
         .alert-heading {
             color: inherit;
         }
+    }
+
+    .img-thumbnail {
+        border-color: bootstrap.$secondary;
+        background: none;
     }
 }
