@@ -23,6 +23,13 @@ $text-color: bootstrap.$gray-400;
         border-top-color: #fff;
     }
 
+    .dropdown-item:not(.active) {
+        &:hover, &:focus {
+            background: bootstrap.$secondary;
+            color: bootstrap.$gray-300;
+        }
+    }
+
     .text-muted, .form-text {
         color: $text-color;
     }
