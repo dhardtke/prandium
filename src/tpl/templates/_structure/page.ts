@@ -33,7 +33,8 @@ const Page: PageType = (title?: string) =>
         document.documentElement.classList.toggle("dark", localStorage.getItem("PRANDIUM_DARK_MODE") === "true");
         document.documentElement.classList.remove("preload");
       </script>
-      <meta charset="utf-8"/>
+      <meta charset="utf-8">
+      <meta name="color-scheme" content="dark light">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       ${Favicons()}
 
