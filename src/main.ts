@@ -12,6 +12,7 @@ interface Options {
   secure?: boolean;
   cert?: string;
   key?: string;
+  watchServer?: string;
 }
 
 async function parseOptions(): Promise<Options> {
@@ -25,6 +26,7 @@ async function parseOptions(): Promise<Options> {
     .option("-s, --secure [secure:boolean]", "enable HTTPS server", {
       default: false,
     })
+    .option("-w, --watchServer [address]", "the host and port under which the watch server will be spawned")
     .option(
       "--cert [cert:string]",
       "path to a certificate file to use for the HTTPS server",

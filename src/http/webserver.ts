@@ -30,6 +30,7 @@ export async function spawnServer(
     secure?: boolean;
     key?: string;
     cert?: string;
+    watchServer?: string;
     configDir: string;
     db: Database;
     settings: Settings;
@@ -46,6 +47,7 @@ export async function spawnServer(
     args.settings.ingredientUnitPostprocessing,
   );
   Page.minifying = args.settings.minifyHtml;
+  Page.watchServer = args.watchServer;
 
   const app = new Oak.Application<AppState>({
     state,

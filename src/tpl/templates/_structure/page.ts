@@ -9,6 +9,7 @@ interface PageType {
   minifying: boolean;
   currentUrl: URL;
   authorization: string | null;
+  watchServer?: string;
 
   (title?: string): (body: string) => string;
 }
@@ -33,6 +34,23 @@ const Page: PageType = (title?: string) =>
         document.documentElement.classList.toggle("dark", localStorage.getItem("PRANDIUM_DARK_MODE") === "true");
         document.documentElement.classList.remove("preload");
       </script>
+      ${Page.watchServer && html`
+        <script>
+          function connect() {
+            let ws = new WebSocket("ws://${Page.watchServer}");
+            ws.onmessage = function () {
+              window.location.reload();
+            };
+            ws.onclose = function () {
+              setTimeout(function () {
+                connect();
+              }, 1000);
+            };
+          }
+
+          connect();
+        </script>
+      `}
       <meta charset="utf-8">
       <meta name="color-scheme" content="dark light">
       <meta name="viewport" content="width=device-width, initial-scale=1">

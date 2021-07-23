@@ -4,6 +4,8 @@ import { isWindows, process } from "./internal/util.ts";
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
 
+const ACTIONS_EXECUTION_DEBOUNCE_DELAY = 350;
+
 interface Action {
   id: string;
   /**
@@ -12,9 +14,21 @@ interface Action {
   runOnStart?: boolean;
   match: RegExp;
   fn: () => Deno.Process;
+  /**
+   * Whether the page should reload after this action has completed successfully.
+   * If true, the page should be reloaded once the process has ended.
+   * If false, the page should not be reloaded.
+   * If a number the page should be reloaded after the configured number of milliseconds have passed since starting the process.
+   */
+  reload?: boolean | number;
 }
 
 interface DevServerConfig {
+  /**
+   * The address of the watch server.
+   */
+  watchServer: string;
+
   /**
    * The actions that should be executed on changes.
    */
@@ -30,11 +44,22 @@ class DevServer {
   private static NS = "dev-server";
 
   private config: DevServerConfig;
+  private readonly worker: Worker;
   private readonly processes: { [id: string]: Deno.Process } = {};
   private timeout: number | undefined = undefined;
 
   constructor(config: DevServerConfig) {
     this.config = config;
+    this.worker = new Worker(
+      new URL("./dev_worker.ts", import.meta.url).href,
+      {
+        type: "module",
+        // @ts-ignore IntelliJ hiccup
+        deno: {
+          namespace: true,
+        },
+      },
+    );
   }
 
   private static shouldIncludePath(path: string, event: Deno.FsEvent): boolean {
@@ -42,7 +67,7 @@ class DevServer {
     if (path.endsWith("~")) {
       return false;
     }
-    // ignore modification of directory's timestamp
+    // ignore directory timestamp modifications
     return !(event.kind === "modify" && DevServer.isDirectory(path));
   }
 
@@ -61,7 +86,7 @@ class DevServer {
 
   async start() {
     const watcher = Deno.watchFs(this.config.watchPaths);
-    this.runActions(
+    await this.runActions(
       this.config.actions.filter((a) =>
         a.runOnStart === undefined || a.runOnStart
       ),
@@ -75,15 +100,15 @@ class DevServer {
           paths.add(path);
         }
       }
-      this.refreshHook(paths);
+      await this.refreshHook(paths);
     }
   }
 
-  private refreshHook(paths: Set<string>) {
+  private async refreshHook(paths: Set<string>) {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
-    this.timeout = setTimeout(() => {
+    this.timeout = setTimeout(async () => {
       if (paths.size === 0) {
         return;
       }
@@ -94,18 +119,39 @@ class DevServer {
             actions.map((a) => a.id).join(", ")
           }...`,
         );
-        this.runActions(actions);
+        await this.runActions(actions, true);
       }
       paths.clear();
-    }, 350);
+    }, ACTIONS_EXECUTION_DEBOUNCE_DELAY);
   }
 
-  private runActions(actions: Action[]) {
+  private async runActions(actions: Action[], mayReload = false) {
+    let reload: boolean | number = false;
     for (const action of actions) {
       if (this.processes[action.id]) {
         this.processes[action.id].close();
       }
       this.processes[action.id] = action.fn();
+      if (mayReload && Boolean(action.reload)) {
+        if (action.reload === true) {
+          reload = reload || true;
+        } else {
+          reload = Math.max(Number(reload), action.reload as number);
+        }
+      }
+    }
+    // TODO: Update logic to include error message in worker message without blocking
+    if (reload) {
+      for (const action of actions) {
+        const process = this.processes[action.id];
+        if (action.reload === true) {
+          await process.status();
+        }
+      }
+      setTimeout(() => {
+        // tell worker to send reload message to clients
+        this.worker.postMessage("reload");
+      }, Number(reload));
     }
   }
 
@@ -123,6 +169,7 @@ interface Options {
   secure?: boolean;
   cert?: string;
   key?: string;
+  watchServer: string;
 }
 
 function removeAndThen(
@@ -156,6 +203,9 @@ if (import.meta.main) {
     .option("-h, --host [hostname]", "the host name.", {
       default: "127.0.0.1",
     })
+    .option("-w, --watchServer [address]", "the host and port under which the watch server will be spawned", {
+      default: "127.0.0.1:8080"
+    })
     .option("-d, --debug [debug:boolean]", "enable debug mode", {
       default: true,
     })
@@ -176,6 +226,7 @@ if (import.meta.main) {
   fs.ensureDirSync("assets/dist");
 
   const config: DevServerConfig = {
+    watchServer: options.watchServer,
     watchPaths: [
       "src",
       "assets",
@@ -199,9 +250,11 @@ if (import.meta.main) {
           `--port=${options.port}`,
           `--debug=${options.debug || false}`,
           `--secure=${options.secure}`,
+          `--watchServer=${options.watchServer}`,
           options.key && `--key=${options.key || "-"}`,
           options.cert && `--cert=${options.cert || "-"}`,
         ),
+        reload: 500,
       },
       {
         id: "Icons",
@@ -217,6 +270,7 @@ if (import.meta.main) {
           "dev/generate_icons.ts",
         ),
         runOnStart: false,
+        reload: true,
       },
       {
         id: "JS",
@@ -234,6 +288,7 @@ if (import.meta.main) {
             "assets/dist/index.js",
           ),
         ),
+        reload: true,
       },
       {
         id: "SCSS",
@@ -250,6 +305,7 @@ if (import.meta.main) {
             "assets/dist/index.css",
           ),
         ),
+        reload: true,
       },
     ],
   };
