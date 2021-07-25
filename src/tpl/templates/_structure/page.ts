@@ -30,7 +30,6 @@ const Page: PageType = (title?: string) =>
           transition: none !important
         }</style>
       <script>
-        document.documentElement.classList.toggle("dark", localStorage.getItem("PRANDIUM_DARK_MODE") === "true");
         document.documentElement.classList.remove("preload");
       </script>
       <meta charset="utf-8">
