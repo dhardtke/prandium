@@ -44,6 +44,10 @@ Deno.test(`toCamelCase`, () => {
   assertEquals(toCamelCase({}), {});
   assertEquals(toCamelCase({ hello_world: true }), { helloWorld: true });
   assertEquals(toCamelCase({ bla: null }), { bla: null });
+  assertEquals(toCamelCase(["a", "b"]), ["a", "b"]);
+  assertEquals(toCamelCase({ arr: ["a", "b", { my_arr: ["d"] }] }), {
+    arr: ["a", "b", { myArr: ["d"] }],
+  });
   assertEquals(
     toCamelCase({
       id: 42,
