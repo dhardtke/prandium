@@ -143,7 +143,7 @@ export const RecipeListTemplate = (
   infiniteScrolling: boolean,
 ) => Page(l.recipes)(html`
   <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
-    ${Breadcrumb(true)}
+    ${Breadcrumb()}
 
     ${ActionButtons(recipes.totalItems)}
   </div>
