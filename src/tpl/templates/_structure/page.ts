@@ -9,6 +9,7 @@ interface PageType {
   minifying: boolean;
   currentUrl: URL;
   authorization: string | null;
+  dark: boolean;
 
   (title?: string): (body: string) => string;
 }
@@ -20,7 +21,7 @@ const Page: PageType = (title?: string) =>
 
     const markup = html`
       <!DOCTYPE html>
-      <html lang="${l.meta.id}" data-authorization="${e(Page.authorization)}" class="preload">
+      <html lang="${l.meta.id}" data-authorization="${e(Page.authorization)}" class="preload${Page.dark && " dark"}">
       <style>
         html {
           display: none
@@ -73,5 +74,10 @@ Page.authorization = null;
  * The request's current URL.
  */
 Page.currentUrl = new URL("https://localhost");
+
+/**
+ * Whether the dark mode is currently enabled.
+ */
+Page.dark = false;
 
 export { Page };

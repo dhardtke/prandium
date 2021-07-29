@@ -75,10 +75,10 @@ export const Navbar = () => html`
           <ul class="nav col-auto my-2 justify-content-center">
             <li>
               <a class="nav-link inactive" id="dark-mode-switcher" href="#">
-                <span class="active d-none">
+                <span class="active${!Page.dark && " d-none"}">
                   ${Icon("sun-fill", "text-warning mb-1")}${l.lightMode}
                 </span>
-                <span class="inactive">
+                <span class="inactive${Page.dark && " d-none"}">
                   ${Icon("moon", "text-secondary mb-1")}${l.darkMode}
                 </span>
               </a>

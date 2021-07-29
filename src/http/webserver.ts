@@ -3,6 +3,7 @@ import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { ingredient } from "../data/util/ingredient.ts";
 import { Settings } from "../settings.ts";
+import { DarkModeCookie } from "../shared/constants.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
 import { orderByAdapter } from "./middleware/adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./middleware/adapters/pagination_adapter.ts";
@@ -59,6 +60,7 @@ export async function spawnServer(
   app.use(async (ctx, next) => {
     Page.currentUrl = ctx.request.url;
     Page.authorization = ctx.request.headers.get("Authorization");
+    Page.dark = ctx.cookies.get(DarkModeCookie) === "true";
     await next();
   });
 

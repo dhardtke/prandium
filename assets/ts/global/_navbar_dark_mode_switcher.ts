@@ -1,4 +1,6 @@
-const LocalStorageName = "PRANDIUM_DARK_MODE";
+import { DarkModeCookie } from "../../../src/shared/constants.ts";
+import { getCookie, setCookie } from "../_util/cookie_util.ts";
+
 const DocumentClassName = "dark";
 
 export function NavbarDarkModeSwitcher() {
@@ -12,23 +14,24 @@ export function NavbarDarkModeSwitcher() {
     $active?.classList.remove("d-none");
     $inactive?.classList.remove("d-none");
 
-    let storage = localStorage.getItem(LocalStorageName);
-    if (storage === null) {
-      storage = window.matchMedia("(prefers-color-scheme: dark)").matches ? "true" : "";
-    }
-
-    if (document.documentElement.classList.toggle(DocumentClassName, storage === "true")) {
+    if (document.documentElement.classList.toggle(DocumentClassName)) {
       $inactive?.classList.add("d-none");
     } else {
       $active?.classList.add("d-none");
     }
   };
-  toggleDarkMode();
+
+  let storage = getCookie(DarkModeCookie);
+  if (storage === null) {
+    const wantsDark = "" + window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setCookie(DarkModeCookie, wantsDark);
+    toggleDarkMode();
+  }
 
   $darkModeSwitcher.addEventListener("click", (e) => {
     e.preventDefault();
 
-    localStorage.setItem(LocalStorageName, localStorage.getItem("PRANDIUM_DARK_MODE") === "true" ? "false" : "true");
+    setCookie(DarkModeCookie, storage === "true" ? "false" : "true");
     toggleDarkMode();
   });
 }
