@@ -86,6 +86,7 @@ export class Database {
         return res;
       };
       wrappedQuery.finalize = query.finalize;
+      wrappedQuery.columns = query.columns;
       processor(wrappedQuery);
     } catch (e) {
       log.error(() => `Error executing ${Colors.cyan(sql)}`);
