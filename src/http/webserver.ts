@@ -51,6 +51,7 @@ export async function spawnServer(
   const app = new Oak.Application<AppState>({
     state,
     proxy: true,
+    logErrors: false,
   });
   app.use(
     parameterAdapter(),
