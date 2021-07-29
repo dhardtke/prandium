@@ -74,14 +74,16 @@ export class Database {
     try {
       log.debug(() => `[DB] Preparing ${Colors.cyan(sql)}`);
       const wrappedQuery: sqlite.PreparedQuery = (values) => {
+        const duration = performance.now();
+        const res = query(values);
         log.debug(() =>
           `Executing prepared query${
             values
               ? ` with values ${Colors.brightCyan(JSON.stringify(values))}`
               : ""
-          }`
+          } took ${(performance.now() - duration).toFixed(2)}ms`
         );
-        return query(values);
+        return res;
       };
       wrappedQuery.finalize = query.finalize;
       processor(wrappedQuery);
@@ -152,12 +154,13 @@ export class Database {
 
   private safeQuery(sql: string, values?: Values) {
     try {
+      const duration = performance.now();
       log.debug(() =>
         `[DB] Executing ${Colors.cyan(sql)}${
           values
             ? ` with values ${Colors.brightCyan(JSON.stringify(values))}`
             : ""
-        }`
+        } took ${(performance.now() - duration).toFixed(2)}ms`
       );
       return this.db.query(sql, values);
     } catch (e) {
