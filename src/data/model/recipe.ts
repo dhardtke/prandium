@@ -36,7 +36,6 @@ export class Recipe extends Model {
   public title!: string;
   public flagged: boolean;
   public description?: string;
-  public tags: Tag[];
   public thumbnail?: string;
   public source?: string;
   public yield: number;
@@ -62,6 +61,7 @@ export class Recipe extends Model {
   public instructions: string[];
 
   // synthetic columns
+  public tags: Tag[];
   public totalTime?: number;
   public lastCookedAt?: Date;
   public cookedCount?: number;
@@ -71,7 +71,6 @@ export class Recipe extends Model {
       title?: string;
       flagged?: boolean;
       description?: string;
-      tags?: Tag[];
       source?: string;
       thumbnail?: string;
       yield?: number;
@@ -96,6 +95,7 @@ export class Recipe extends Model {
       ingredients?: string[];
       instructions?: string[];
 
+      tags?: Tag[];
       totalTime?: number;
       lastCookedAt?: Date | string;
       cookedCount?: number;
@@ -105,7 +105,6 @@ export class Recipe extends Model {
     this.title = args.title || "";
     this.flagged = Boolean(args.flagged);
     this.description = args.description;
-    this.tags = args.tags || [];
     this.source = args.source;
     this.thumbnail = args.thumbnail;
     this.yield = args.yield || 1;
@@ -130,6 +129,7 @@ export class Recipe extends Model {
     this.ingredients = args.ingredients || [];
     this.instructions = args.instructions || [];
 
+    this.tags = args.tags || [];
     this.totalTime = args.totalTime;
     this.lastCookedAt = args.lastCookedAt
       ? toDate(args.lastCookedAt)
