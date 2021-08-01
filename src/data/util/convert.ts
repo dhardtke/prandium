@@ -53,14 +53,6 @@ export function toCamelCase<T, O>(obj: O): T {
   return obj as unknown as T;
 }
 
-export function toArray<S, T>(
-  data: Generator<S>,
-  mapper: (src: S) => T = (src) => src as unknown as T,
-): T[] {
-  return Array.from(data)
-    .map((src: S) => mapper(src));
-}
-
 export function pushAll<T>(source: T[], target: T[]): T[] {
   source.forEach((el) => target.push(el));
   return target;

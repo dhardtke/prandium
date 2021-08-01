@@ -1,7 +1,6 @@
 import { assertEquals } from "../../../deps.ts";
 import {
   pushAll,
-  toArray,
   toCamelCase,
   toDate,
   toNumber,
@@ -74,17 +73,6 @@ Deno.test(`toCamelCase`, () => {
       },
     },
   );
-});
-
-function* toGenerator<T>(...arr: T[]): Generator<T> {
-  for (const val of arr) {
-    yield val;
-  }
-}
-
-Deno.test(`toArray`, () => {
-  assertEquals(toArray(toGenerator(4, 5, 6)), [4, 5, 6]);
-  assertEquals(toArray(toGenerator(4, 5, 6), (num) => num + 1), [5, 6, 7]);
 });
 
 Deno.test(`pushAll`, () => {
