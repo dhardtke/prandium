@@ -1,6 +1,6 @@
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
-import { pushAll, toArray, toCamelCase, toDate } from "../util/convert.ts";
+import { pushAll, toCamelCase, toDate } from "../util/convert.ts";
 import {
   buildFilters,
   buildOrderBySql,
@@ -83,27 +83,24 @@ export class RecipeService implements Service<Recipe> {
       "(SELECT MAX(timestamp) FROM recipe_history WHERE recipe_id = recipe.id) AS last_cooked_at";
     const cookedCount =
       "(SELECT COUNT(*) FROM recipe_history WHERE recipe_id = recipe.id) AS cooked_count";
-    return toArray(
-      this.db.query(
-        `SELECT ${
-          columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])
-        }
-         FROM recipe
-         WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, orderByColumns)}
-         LIMIT ? OFFSET ?`,
-        [
-          ...filter.bindings,
-          args.limit || -1,
-          args.offset || 0,
-        ],
-      ),
-      (src) => new Recipe(toCamelCase(src)),
-    );
+    return this.db.query(
+      `SELECT ${
+        columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])
+      }
+       FROM recipe
+       WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, orderByColumns)}
+       LIMIT ? OFFSET ?`,
+      [
+        ...filter.bindings,
+        args.limit || -1,
+        args.offset || 0,
+      ],
+    ).map((src) => new Recipe(toCamelCase(src)));
   }
 
   create(recipes: Recipe[]): void {
     this.db.transaction(() => {
-      this.db.prepare(
+      this.db.prepare<{ id: number }>(
         `INSERT INTO recipe (created_at, updated_at, title, description, source, thumbnail, yield, nutrition_calories, nutrition_carbohydrate,
                              nutrition_cholesterol, nutrition_fat, nutrition_fiber, nutrition_protein, nutrition_saturated_fat, nutrition_sodium,
                              nutrition_sugar, nutrition_trans_fat, nutrition_unsaturated_fat, prep_time, cook_time, aggregate_rating_value,
@@ -138,7 +135,7 @@ export class RecipeService implements Service<Recipe> {
               JSON.stringify(recipe.ingredients),
               JSON.stringify(recipe.instructions),
             ]);
-            recipe.id = [...rows.asObjects()][0].id;
+            recipe.id = rows[0].id;
           }
         },
       );

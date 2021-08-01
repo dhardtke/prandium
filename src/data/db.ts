@@ -3,8 +3,7 @@ import { classNames } from "../util.ts";
 import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
-// see https://deno.land/x/sqlite/src/db.ts
-export type Values = Record<string, sqlite.QueryParam> | sqlite.QueryParam[];
+export type RowObject = Record<string, unknown>;
 
 export class Database {
   private readonly db: sqlite.DB;
@@ -25,33 +24,16 @@ export class Database {
   }
 
   /**
-   * Query the database using the given SQL query.
-   * @param sql the SQL query to execute
-   * @param values the values to bind
-   */
-  // deno-lint-ignore no-explicit-any
-  public *query<T extends Record<string, any>>(
-    sql: string,
-    values?: Values,
-  ): Generator<T> {
-    const result = this.safeQuery(sql, values);
-    const rows = result.asObjects();
-    for (const row of rows) {
-      yield row as T;
-    }
-  }
-
-  /**
    * Query the database for a single result row.
    * @param sql the SQL to execute
    * @param values the values to bind
    */
-  public single<T>(sql: string, values?: Values): T | undefined {
-    const result = this.safeQuery(sql, values);
-    const rows = result.asObjects();
-    const value = rows.next().value;
-    result.return();
-    return value;
+  public single<T>(
+    sql: string,
+    values?: sqlite.QueryParameterSet,
+  ): T | undefined {
+    const result = this.query(sql, values);
+    return result[0] as unknown as T;
   }
 
   /**
@@ -59,35 +41,34 @@ export class Database {
    * @param sql the SQL to execute
    * @param values the values to bind
    */
-  public exec(sql: string, values?: Values): void {
-    for (const _ignored of this.safeQuery(sql, values)) {
+  public exec(sql: string, values?: sqlite.QueryParameterSet): void {
+    for (const _ignored of this.query(sql, values)) {
       // nothing to do
     }
   }
 
-  public prepare(
+  public prepare<O extends RowObject = RowObject>(
     sql: string,
-    processor: (preparedQuery: sqlite.PreparedQuery) => void,
+    processor: (execute: (params?: sqlite.QueryParameterSet) => O[]) => void,
   ): void {
-    const query = this.db.prepareQuery(sql);
+    const query = this.db.prepareQuery<unknown[], O>(sql);
 
     try {
       log.debug(() => `[DB] Preparing ${Colors.cyan(sql)}`);
-      const wrappedQuery: sqlite.PreparedQuery = (values) => {
+
+      const allEntries = (params?: sqlite.QueryParameterSet): O[] => {
         const duration = performance.now();
-        const res = query(values);
+        const result = query.allEntries(params);
         log.debug(() =>
           `Executing prepared query${
-            values
-              ? ` with values ${Colors.brightCyan(JSON.stringify(values))}`
+            params
+              ? ` with values ${Colors.brightCyan(JSON.stringify(params))}`
               : ""
           } took ${(performance.now() - duration).toFixed(2)}ms`
         );
-        return res;
+        return result;
       };
-      wrappedQuery.finalize = query.finalize;
-      wrappedQuery.columns = query.columns;
-      processor(wrappedQuery);
+      processor(allEntries);
     } catch (e) {
       log.error(() => `Error executing ${Colors.cyan(sql)}`);
       throw e;
@@ -126,7 +107,9 @@ export class Database {
   }
 
   public migrate() {
-    const [[currentVersionDb]] = this.db.query("PRAGMA user_version");
+    const [[currentVersionDb]] = this.db.query(
+      "PRAGMA user_version",
+    ) as number[][];
     let currentVersion: number = currentVersionDb;
     const migrations = this.migrations.filter((m) => currentVersion < m.version)
       .sort((a, b) => a.version - b.version);
@@ -153,7 +136,12 @@ export class Database {
     }
   }
 
-  private safeQuery(sql: string, values?: Values) {
+  /**
+   * Query the database using the given SQL query.
+   * @param sql the SQL query to execute
+   * @param values the values to bind
+   */
+  public query<O>(sql: string, values?: sqlite.QueryParameterSet): Array<O> {
     try {
       const duration = performance.now();
       log.debug(() =>
@@ -163,7 +151,8 @@ export class Database {
             : ""
         } took ${(performance.now() - duration).toFixed(2)}ms`
       );
-      return this.db.query(sql, values);
+      // returning Record<string, unknown> does not really make sense as interfaces do not satisfy this constraint
+      return this.db.queryEntries(sql, values) as O[];
     } catch (e) {
       log.error(() => `Error executing ${Colors.cyan(sql)}`);
       throw e;

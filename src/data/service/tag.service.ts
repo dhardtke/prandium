@@ -2,7 +2,7 @@ import { sqlite } from "../../../deps.ts";
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
-import { toArray, toCamelCase } from "../util/convert.ts";
+import { toCamelCase } from "../util/convert.ts";
 import { buildFilters, buildOrderBySql, columns, Filter } from "../util/sql.ts";
 import { OrderBy, Service } from "./service.ts";
 import { idsFilter } from "./util/generic_filters.ts";
@@ -46,7 +46,7 @@ function tagsWithSameRecipes(
 function recipeCountColumn(
   active?: boolean,
   tagIdsWithSameRecipes?: number[],
-): { column: string; bindings: sqlite.QueryParam[] } {
+): { column: string; bindings: sqlite.QueryParameter[] } {
   if (!active) {
     return {
       column: "",
@@ -112,26 +112,23 @@ export class TagService implements Service<Tag> {
       ...Tag.columns,
       recipeCount.column,
     ]);
-    return toArray(
-      this.db.query(
-        `SELECT ${cols}
-         FROM tag
-         WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, Tag.columns)}
-         LIMIT ? OFFSET ?`,
-        [
-          ...recipeCount.bindings,
-          ...filter.bindings,
-          args.limit || -1,
-          args.offset || 0,
-        ],
-      ),
-      (src) => new Tag(toCamelCase(src)),
-    );
+    return this.db.query(
+      `SELECT ${cols}
+       FROM tag
+       WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, Tag.columns)}
+       LIMIT ? OFFSET ?`,
+      [
+        ...recipeCount.bindings,
+        ...filter.bindings,
+        args.limit || -1,
+        args.offset || 0,
+      ],
+    ).map((src) => new Tag(toCamelCase(src)));
   }
 
   create(tags: Tag[]): void {
     this.db.transaction(() => {
-      this.db.prepare(
+      this.db.prepare<{ id: number }>(
         `INSERT INTO tag (created_at, updated_at, title, description)
          VALUES (?, ?, ?, ?) RETURNING id`,
         (query) => {
@@ -142,7 +139,7 @@ export class TagService implements Service<Tag> {
               tag.title,
               tag.description || "",
             ]);
-            tag.id = [...rows.asObjects()][0].id;
+            tag.id = rows[0].id;
           }
         },
       );

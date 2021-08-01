@@ -4,12 +4,12 @@ import { OrderBy } from "../service/service.ts";
 export interface Filter {
   active: boolean;
   sql: () => string;
-  bindings?: () => sqlite.QueryParam[];
+  bindings?: () => sqlite.QueryParameter[];
 }
 
 export interface Filters {
   sql: string;
-  bindings: sqlite.QueryParam[];
+  bindings: sqlite.QueryParameter[];
 }
 
 export const EmptyFilter = { sql: "TRUE", bindings: [] };
