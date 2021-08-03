@@ -1,5 +1,6 @@
 import { Cliffy, Colors, fs, log, LogRecord, path } from "../deps.ts";
 import { Database } from "./data/db.ts";
+import { buildDbPath } from "./data/util/build_db_path.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { readFromDisk, Settings } from "./settings.ts";
 import { DefaultConfigDir, defaultConfigDir } from "./util.ts";
@@ -88,7 +89,7 @@ async function main(): Promise<number> {
     log.error(e);
     return 1;
   }
-  const database = new Database(options.configDir);
+  const database = new Database(buildDbPath(options.configDir));
   database.migrate();
 
   await spawnServer({

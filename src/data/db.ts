@@ -10,8 +10,7 @@ export class Database {
   private readonly migrations: Migration[];
   private inTransaction = false;
 
-  public constructor(configDir: string, migrations: Migration[] = MIGRATIONS) {
-    const dbPath = path.resolve(configDir, "data.db");
+  public constructor(dbPath: string, migrations: Migration[] = MIGRATIONS) {
     log.debug(() => `[DB] Using database ${Colors.cyan(dbPath)}`);
     this.db = new sqlite.DB(dbPath);
     this.migrations = migrations;

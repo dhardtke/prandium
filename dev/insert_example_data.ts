@@ -3,11 +3,12 @@ import { Recipe, Review } from "../src/data/model/recipe.ts";
 import { Tag } from "../src/data/model/tag.ts";
 import { RecipeService } from "../src/data/service/recipe.service.ts";
 import { TagService } from "../src/data/service/tag.service.ts";
+import { buildDbPath } from "../src/data/util/build_db_path.ts";
 import { downloadThumbnail } from "../src/data/util/thumbnails.ts";
 import { defaultConfigDir } from "../src/util.ts";
 
 const configDir = defaultConfigDir();
-const db = new Database(configDir);
+const db = new Database(buildDbPath(configDir));
 const tagService = new TagService(db);
 const recipeService = new RecipeService(db, tagService);
 
