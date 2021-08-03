@@ -16,7 +16,7 @@ const baseSuite: TestSuite<{ dir: string; db: Database }> = new TestSuite({
   async beforeAll() {
     await disableLogging();
   },
-  async beforeEach(context) {
+  beforeEach(context) {
     context.db = new Database(":memory:");
   },
   afterEach(context) {
