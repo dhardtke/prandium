@@ -18,7 +18,7 @@ const baseSuite: TestSuite<{ dir: string; db: Database }> = new TestSuite({
   },
   async beforeEach(context) {
     context.dir = await Deno.makeTempDir({ prefix: "db.test" });
-    context.db = new Database(context.dir);
+    context.db = new Database(`${context.dir}/data.db`);
   },
   async afterEach(context) {
     context.db.close();
@@ -69,3 +69,7 @@ const migrationSuite = new TestSuite({
 test(migrationSuite, "no migrations should be executed if current version equals latest version", (context) => {
 });
 */
+//
+// Deno.test("bla", () => {
+//   const db = new Database(":memory:");
+// });
