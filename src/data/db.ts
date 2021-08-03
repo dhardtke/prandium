@@ -144,6 +144,8 @@ export class Database {
   public query<O>(sql: string, values?: sqlite.QueryParameterSet): Array<O> {
     try {
       const duration = performance.now();
+      // returning Record<string, unknown> does not really make sense as interfaces do not satisfy this constraint
+      const result = this.db.queryEntries(sql, values) as O[];
       log.debug(() =>
         `[DB] Executing ${Colors.cyan(sql)}${
           values
@@ -151,8 +153,7 @@ export class Database {
             : ""
         } took ${(performance.now() - duration).toFixed(2)}ms`
       );
-      // returning Record<string, unknown> does not really make sense as interfaces do not satisfy this constraint
-      return this.db.queryEntries(sql, values) as O[];
+      return result;
     } catch (e) {
       log.error(() => `Error executing ${Colors.cyan(sql)}`);
       throw e;
