@@ -32,8 +32,8 @@ export class Database {
     sql: string,
     values?: sqlite.QueryParameterSet,
   ): T | undefined {
-    const result = this.query(sql, values);
-    return result[0] as unknown as T;
+    const result = this.query<T>(sql, values);
+    return result[0];
   }
 
   /**
