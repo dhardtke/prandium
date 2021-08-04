@@ -119,7 +119,8 @@ $text-color: bootstrap.$gray-400;
         &:not(.active):not(.disabled) {
             .page-link {
                 &:hover {
-                    color: bootstrap.$secondary;
+                    color: bootstrap.$gray-400;
+                    background: bootstrap.$secondary;
                 }
             }
         }
