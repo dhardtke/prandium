@@ -1,17 +1,16 @@
-import { Dom, SchemaRecipe } from "../../../deps.ts";
+import { log, SchemaRecipe } from "../../../deps.ts";
 
-const TextHtml = "text/html";
 const LdJson = "application/ld+json";
 
+const ScriptClose = "</script>";
+const ScriptOpen = "<script";
+const AngleBracketClose = ">";
+
 export class SchemaParser {
-  private readonly document: Dom.Document;
+  private readonly html: string;
 
   constructor(html: string) {
-    const document = new Dom.DOMParser().parseFromString(html, TextHtml);
-    if (!document) {
-      throw new Error("TODO");
-    }
-    this.document = document!;
+    this.html = html;
   }
 
   /**
@@ -21,20 +20,51 @@ export class SchemaParser {
     return this.findFirst<SchemaRecipe>("Recipe");
   }
 
+  private *collectJsons(): Generator<string> {
+    for (
+      let pos = this.html.indexOf(ScriptOpen);
+      pos !== -1;
+      pos = this.html.indexOf(ScriptOpen, pos)
+    ) {
+      const scriptOpen = pos;
+      const openingScriptEnd = this.html.indexOf(AngleBracketClose, pos);
+      pos = openingScriptEnd;
+      if (openingScriptEnd !== -1) {
+        const scriptEnd = this.html.indexOf(ScriptClose, openingScriptEnd);
+        pos = scriptEnd;
+        if (scriptEnd !== -1) {
+          const scriptAttributes = this.html.substring(
+            scriptOpen,
+            openingScriptEnd + AngleBracketClose.length,
+          );
+          if (
+            ["", "'", '"'].some((char) =>
+              scriptAttributes.includes(`type=${char}${LdJson}${char}`)
+            )
+          ) {
+            yield this.html.substring(
+              openingScriptEnd + AngleBracketClose.length,
+              scriptEnd,
+            );
+          }
+        }
+      }
+    }
+  }
+
   private findFirst<T>(type: string): T | null {
-    const $scripts: Dom.Node[] = Array.from(
-      this.document.querySelectorAll(`script[type="${LdJson}"]`),
-    );
-    for (const $script of $scripts) {
-      const json = $script.textContent;
-      if (json) {
+    for (const json of this.collectJsons()) {
+      try {
         const parsed = JSON.parse(json);
         const candidates = Array.isArray(parsed) ? parsed : [parsed];
         for (const candidate of candidates) {
           if ("@type" in candidate && candidate["@type"] === type) {
+            delete candidate["@context"];
             return candidate;
           }
         }
+      } catch (e) {
+        log.warning(`Skipping invalid JSON ${json}`, e);
       }
     }
     return null;
