@@ -36,8 +36,10 @@ export const date = {
    * @param relative  - the relative dateTime, generally is in the past or future
    * @param pivot     - the dateTime of reference, generally is the current time
    */
-  formatRelative: (relative: Date | null, pivot: Date = new Date()): string => {
-    if (!relative) return "";
+  formatRelative: (relative?: Date, pivot: Date = new Date()): string => {
+    if (!relative) {
+      return "";
+    }
     const elapsed = relative.getTime() - pivot.getTime();
     return date.relativeTimeFromElapsed(elapsed);
   },
@@ -46,8 +48,8 @@ export const date = {
    * Get language-sensitive relative time message from elapsed time.
    * @param elapsed   - the elapsed time in milliseconds
    */
-  relativeTimeFromElapsed: (elapsed: number | undefined): string => {
-    if (elapsed) {
+  relativeTimeFromElapsed: (elapsed?: number): string => {
+    if (typeof elapsed === "number") {
       const { unit, ms } = closestUnit(elapsed);
       const rtf = new Intl.RelativeTimeFormat(l.meta.bcp47, {
         numeric: "auto",
@@ -61,8 +63,8 @@ export const date = {
    * Get language-sensitive formatted number for the given seconds.
    * @param seconds the seconds
    */
-  formatSeconds: (seconds: number | undefined): string => {
-    if (seconds) {
+  formatSeconds: (seconds?: number): string => {
+    if (typeof seconds === "number") {
       const { unit, ms } = closestUnit(seconds * 1000);
       return new Intl.NumberFormat(l.meta.bcp47, {
         style: "unit",
