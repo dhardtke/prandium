@@ -2,7 +2,7 @@
 import { Recipe } from "../../../data/model/recipe.ts";
 import { Tag } from "../../../data/model/tag.ts";
 import { Pagination } from "../../../data/pagination.ts";
-import { date, number } from "../../../data/util/format.ts";
+import { date, number } from "../../util/format.ts";
 import { parameters } from "../../../http/util/parameters.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
 import { l } from "../../../i18n/mod.ts";
