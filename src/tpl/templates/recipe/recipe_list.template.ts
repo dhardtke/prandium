@@ -202,7 +202,7 @@ export const RecipeListTemplate = (
                     <small class="text-muted" ${recipe.lastCookedAt && `title="${date.format(recipe.lastCookedAt)}"`}>
                       ${
                         recipe.lastCookedAt
-                          ? e(l.recipe.lastCooked(date.formatDistanceToNow(recipe.lastCookedAt)))
+                          ? e(l.recipe.lastCooked(date.formatRelative(recipe.lastCookedAt)))
                           : e(l.recipe.notCookedYet)
                       }
                     </small>

@@ -1,4 +1,3 @@
-import { dateFns } from "../../deps.ts";
 import { de } from "./de.ts";
 import { en } from "./en.ts";
 
@@ -125,8 +124,6 @@ interface ErrorDetail {
   title: string;
 }
 
-export type DateFnsLocale = typeof dateFns.locale.en | typeof dateFns.locale.de;
-
 export interface Language {
   appName: string;
   cancel: string;
@@ -162,7 +159,6 @@ export interface Language {
       de: string;
       en: string;
     };
-    dateFns: DateFnsLocale;
     bcp47: string;
   };
 }

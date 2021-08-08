@@ -1,59 +1,76 @@
-import { dateFns } from "../../../deps.ts";
 import { l } from "../../i18n/mod.ts";
+
+const units: { unit: Intl.RelativeTimeFormatUnit; ms: number }[] = [
+  { unit: "year", ms: 24 * 60 * 60 * 1000 * 365 },
+  { unit: "month", ms: 24 * 60 * 60 * 1000 * 365 / 12 },
+  { unit: "day", ms: 24 * 60 * 60 * 1000 },
+  { unit: "hour", ms: 60 * 60 * 1000 },
+  { unit: "minute", ms: 60 * 1000 },
+  { unit: "second", ms: 1000 },
+];
+
+function closestUnit(
+  millis: number,
+): { unit: Intl.RelativeTimeFormatUnit; ms: number } {
+  for (const { unit, ms } of units) {
+    if (Math.abs(millis) >= ms || unit === "second") {
+      return { unit, ms: Math.round(millis / ms) };
+    }
+  }
+  throw new Error("Unreachable");
+}
 
 export const date = {
   /**
    * Formats the given date.
    * @param date the date to format
-   * @param format the format to use
+   * @param options the options to use for formatting
    * @return the formatted date
    */
-  format: (date: Date, format = "Pp"): string => {
-    return dateFns.format(date, format, {
-      locale: l.meta.dateFns,
-    });
+  format: (date: Date, options?: Intl.DateTimeFormatOptions): string => {
+    return new Intl.DateTimeFormat(l.meta.bcp47, options).format(date);
   },
 
   /**
-   * Formats the given duration as string.
-   * @param duration the duration to format
-   * @return the formatted duration
+   * Get language-sensitive relative time message from Dates.
+   * @param relative  - the relative dateTime, generally is in the past or future
+   * @param pivot     - the dateTime of reference, generally is the current time
    */
-  formatDuration: <D>(duration: D): string => {
-    // @ts-ignore formatDuration reads the second argument via "arguments" but the compiler doesn't know that
-    return dateFns.formatDuration(duration, {
-      locale: l.meta.dateFns,
-    });
+  formatRelative: (relative: Date | null, pivot: Date = new Date()): string => {
+    if (!relative) return "";
+    const elapsed = relative.getTime() - pivot.getTime();
+    return date.relativeTimeFromElapsed(elapsed);
   },
 
   /**
-   * Formats the given seconds as duration.
-   * @param seconds the seconds to format
+   * Get language-sensitive relative time message from elapsed time.
+   * @param elapsed   - the elapsed time in milliseconds
    */
-  formatSeconds: (seconds?: number): string => {
-    try {
-      return date.formatDuration(
-        dateFns.intervalToDuration({
-          start: 0,
-          end: (seconds || 0) * 1000,
-          locale: l.meta.dateFns,
-        }),
-      );
-    } catch {
-      // errors can occur if the given number is way to large or small to be parsed into a Date
-      // see https://262.ecma-international.org/11.0/#sec-time-values-and-time-range
-      return "";
+  relativeTimeFromElapsed: (elapsed: number | undefined): string => {
+    if (elapsed) {
+      const { unit, ms } = closestUnit(elapsed);
+      const rtf = new Intl.RelativeTimeFormat(l.meta.bcp47, {
+        numeric: "auto",
+      });
+      return rtf.format(ms, unit);
     }
+    return "";
   },
 
   /**
-   * Formats the given date to indicate the duration from the current date.
+   * Get language-sensitive formatted number for the given seconds.
+   * @param seconds the seconds
    */
-  formatDistanceToNow: (date: Date): string => {
-    return dateFns.formatDistanceToNow(date, {
-      addSuffix: true,
-      locale: l.meta.dateFns,
-    });
+  formatSeconds: (seconds: number | undefined): string => {
+    if (seconds) {
+      const { unit, ms } = closestUnit(seconds * 1000);
+      return new Intl.NumberFormat(l.meta.bcp47, {
+        style: "unit",
+        unit: unit,
+        unitDisplay: "long",
+      }).format(ms);
+    }
+    return "";
   },
 };
 

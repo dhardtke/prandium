@@ -136,7 +136,7 @@ export const RecipeDetailTemplate = (
     ${recipe.history.length ? html`
       <ul class="list-group list-group-horizontal">
         ${recipe.history.map((d) => html`
-          <li class="list-group-item flex-fill" title="${e(date.format(d))}">${e(date.formatDistanceToNow(d))}</li>
+          <li class="list-group-item flex-fill" title="${e(date.format(d))}">${e(date.formatRelative(d))}</li>
         `)}
       </ul>` : html`
       <div class="card-body">${e(l.recipe.notCookedYet)}</div>

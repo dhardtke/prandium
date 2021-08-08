@@ -6,26 +6,6 @@ export { z as Zod } from "https://deno.land/x/zod@v3.7.0/mod.ts";
 export { default as parseIngredient } from "https://esm.sh/parse-ingredient@0.3.0";
 export * from "https://esm.sh/numeric-quantity@1.0.1";
 
-import {
-  format,
-  formatDuration,
-  intervalToDuration,
-  formatDistanceToNow
-} from "https://esm.sh/date-fns@2.23.0?no-check";
-import { default as en } from "https://esm.sh/date-fns@2.23.0/locale/en-US?no-check";
-import { default as de } from "https://esm.sh/date-fns@2.23.0/locale/de?no-check";
-
-export const dateFns = {
-  format,
-  formatDuration,
-  intervalToDuration,
-  formatDistanceToNow,
-  locale: {
-    en,
-    de,
-  },
-};
-
 // utils
 export * as path from "https://deno.land/std@0.103.0/path/mod.ts";
 export * as log from "https://deno.land/std@0.103.0/log/mod.ts";

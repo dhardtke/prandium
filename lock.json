@@ -1,7 +1,4 @@
 {
-  "https://cdn.esm.sh/v43/date-fns@2.23.0/deno/date-fns.js": "6c50f0ac8b3b7a882fc6d1a088c96708ef52abf9a264ea7b02365a01bbf1cfdb",
-  "https://cdn.esm.sh/v43/date-fns@2.23.0/deno/locale/de.js": "5db0eb1bdb8a6f7ebc197e01030adb57f4674ebaba3e9ec25d68b8d5e5b9fc8b",
-  "https://cdn.esm.sh/v43/date-fns@2.23.0/deno/locale/en-US.js": "16017768288b48d2fff6c615618a8a3ed67d8e696a4d7a4f17fa79882adcabc7",
   "https://cdn.esm.sh/v43/numeric-quantity@1.0.1/deno/numeric-quantity.js": "dddb35d31b7d21f4909c1cb9d1b4ab34ab9b524b0444929275206614376e5217",
   "https://cdn.esm.sh/v43/numeric-quantity@1.0.1/dist/index.d.ts": "be53797e7ec5d3a5abc9735a819eb994ea2b26365f310d51a9c98ae3fb239146",
   "https://cdn.esm.sh/v43/parse-ingredient@0.3.0/deno/parse-ingredient.js": "e6dcb178f19508889c1235e522b5bc6778e5d4beaf2ca527ade81edd9569ed0d",
@@ -212,9 +209,6 @@
   "https://deno.land/x/zod@v3.7.0/index.ts": "e245f85f4bebc90a9439c7b286f1776aa3ddcf634ff5151c1a41e4dc05dbb693",
   "https://deno.land/x/zod@v3.7.0/mod.ts": "64e55237cb4410e17d968cd08975566059f27638ebb0b86048031b987ba251c4",
   "https://deno.land/x/zod@v3.7.0/types.ts": "da671baddd7a2c2657ff4d92888d693e5e044ff156623144d299129910d13842",
-  "https://esm.sh/date-fns@2.23.0/locale/de?no-check": "d07617c000b33fa954c5a1ccad955de41885aabf5d39ca0630469c8829961730",
-  "https://esm.sh/date-fns@2.23.0/locale/en-US?no-check": "5a346fd1ce3246de7d2c76c239b4c3245384dd935921ce9903c4e68cc550380a",
-  "https://esm.sh/date-fns@2.23.0?no-check": "dc4db8b745d0d89247069cb707c036ed3ea6dbc72f2e9a9bc71d6c85115826fa",
   "https://esm.sh/numeric-quantity@1.0.1": "2f939cb9a9b6b510afec59e769e9c3e50ad4a76e2d90238d67b964788de00d41",
   "https://esm.sh/parse-ingredient@0.3.0": "9853d84933a2d3e98c8f8a3876192e4dc478b366672cdc872ed249f7378792ff",
   "https://esm.sh/schema-dts@0.10.0": "333aa8e56b1f71984ecd74cb71b35ff7af3842f96e5f27094e71ced3f7b6ca63"

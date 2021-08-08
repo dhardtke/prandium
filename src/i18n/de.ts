@@ -1,4 +1,3 @@
-import { dateFns } from "../../deps.ts";
 import { Language } from "./mod.ts";
 
 export const de: Language = {
@@ -134,7 +133,6 @@ export const de: Language = {
       de: "Deutsch",
       en: "Englisch",
     },
-    dateFns: dateFns.locale.de,
     bcp47: "de-DE",
   },
 } as const;
