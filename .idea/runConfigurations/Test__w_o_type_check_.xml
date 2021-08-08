@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test (w/o type check)" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="test --lock=lock.json --coverage=out/coverage --allow-read --unstable --allow-net --allow-env --fail-fast --jobs=8 --allow-write --no-check">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
