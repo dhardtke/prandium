@@ -36,6 +36,5 @@ export function roundUpToThreeDigits(n: number): number {
 }
 
 export function getCpuCores(): number | undefined {
-  // @ts-ignore IntelliJ hiccup
-  return Deno.systemCpuInfo().cores;
+  return navigator.hardwareConcurrency;
 }
