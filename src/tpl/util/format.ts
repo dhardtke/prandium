@@ -84,7 +84,6 @@ export const number = {
     if (!num) {
       return "";
     }
-    // deno-lint-ignore no-undef See https://github.com/denoland/deno/issues/9896
     const formatter = new Intl.NumberFormat(l.meta.bcp47, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
