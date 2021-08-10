@@ -1,4 +1,6 @@
-import { Cliffy, Colors, fs, path, slash } from "../deps.ts";
+import { Colors, fs, path, slash } from "../deps.ts";
+import { Argparser } from "../src/data/util/argparser.ts";
+import { DefaultConfigDir } from "../src/util.ts";
 import { isWindows, process } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
@@ -149,28 +151,60 @@ function removeAndThen(
 }
 
 if (import.meta.main) {
-  const { options }: { options: Options } = await new Cliffy.Command()
-    .option("-p, --port [port:number]", "the port number.", {
+  const argparser = new Argparser<Options>([
+    {
+      name: "help",
+      description: "Show help text",
+      type: "void",
+    },
+    {
+      name: "port",
+      description: "the port number",
       default: 8000,
-    })
-    .option("-h, --host [hostname]", "the host name.", {
+      type: "number",
+    },
+    {
+      name: "host",
+      description: "the host name",
       default: "127.0.0.1",
-    })
-    .option("-d, --debug [debug:boolean]", "enable debug mode", {
+      type: "string",
+    },
+    {
+      name: "debug",
+      description: "enable debug mode",
+      type: "boolean",
       default: true,
-    })
-    .option("-s, --secure [secure:boolean]", "enable HTTPS server", {
-      default: false,
-    })
-    .option(
-      "--cert [cert:string]",
-      "path to a certificate file to use for the HTTPS server",
-    )
-    .option(
-      "--key [key:string]",
-      "path to a key file to use for the HTTPS server",
-    )
-    .parse(Deno.args);
+    },
+    {
+      name: "configDir",
+      description: "The config dir",
+      default: DefaultConfigDir,
+      type: "string",
+    },
+    {
+      name: "secure",
+      description: "enable HTTPS server",
+      type: "boolean",
+    },
+    {
+      name: "cert",
+      description: "path to a certificate file to use for the HTTPS server",
+      type: "string",
+      default: "",
+    },
+    {
+      name: "key",
+      description: "path to a key file to use for the HTTPS server",
+      type: "string",
+      default: "",
+    },
+  ]);
+  const options: Options = argparser.parse(Deno.args);
+
+  if ("help" in options) {
+    console.log(argparser.help());
+    Deno.exit(0);
+  }
 
   // ensure assets/dist exists
   fs.ensureDirSync("assets/dist");

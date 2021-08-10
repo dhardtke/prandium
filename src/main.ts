@@ -1,5 +1,6 @@
-import { Cliffy, Colors, fs, log, LogRecord, path } from "../deps.ts";
+import { Colors, fs, log, LogRecord, path } from "../deps.ts";
 import { Database } from "./data/db.ts";
+import { Argparser } from "./data/util/argparser.ts";
 import { buildDbPath } from "./data/util/build_db_path.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { readFromDisk, Settings } from "./settings.ts";
@@ -15,33 +16,53 @@ interface Options {
   key?: string;
 }
 
-async function parseOptions(): Promise<Options> {
-  const { options }: { options: Options } = await new Cliffy.Command()
-    .option("-p, --port [port:number]", "the port number.", { default: 8000 })
-    .option("-h, --host [hostname]", "the host name.", { default: "127.0.0.1" })
-    .option("-d, --debug [debug:boolean]", "enable debug mode")
-    .option("-c --configDir [config:string]", "The config directory", {
-      default: DefaultConfigDir,
-    })
-    .option("-s, --secure [secure:boolean]", "enable HTTPS server", {
-      default: false,
-    })
-    .option(
-      "--cert [cert:string]",
-      "path to a certificate file to use for the HTTPS server",
-    )
-    .option(
-      "--key [key:string]",
-      "path to a key file to use for the HTTPS server",
-    )
-    .parse(Deno.args);
-
-  if (options.configDir === DefaultConfigDir) {
-    options.configDir = defaultConfigDir();
-  }
-
-  return options;
-}
+const argparser = new Argparser<Options>([
+  {
+    name: "help",
+    description: "Show help text",
+    type: "void",
+  },
+  {
+    name: "port",
+    description: "the port number",
+    default: 8000,
+    type: "number",
+  },
+  {
+    name: "host",
+    description: "the host name",
+    default: "127.0.0.1",
+    type: "string",
+  },
+  {
+    name: "debug",
+    description: "enable debug mode",
+    type: "boolean",
+  },
+  {
+    name: "configDir",
+    description: "The config dir",
+    default: DefaultConfigDir,
+    type: "string",
+  },
+  {
+    name: "secure",
+    description: "enable HTTPS server",
+    type: "boolean",
+  },
+  {
+    name: "cert",
+    description: "path to a certificate file to use for the HTTPS server",
+    type: "string",
+    default: "",
+  },
+  {
+    name: "key",
+    description: "path to a key file to use for the HTTPS server",
+    type: "string",
+    default: "",
+  },
+]);
 
 async function prepareConfigDir(options: Options) {
   await fs.ensureDir(options.configDir);
@@ -79,7 +100,24 @@ async function setupLogger(debug?: boolean) {
 }
 
 async function main(): Promise<number> {
-  const options = await parseOptions();
+  let options: Options;
+  try {
+    options = argparser.parse(Deno.args);
+
+    if ("help" in options) {
+      console.log(argparser.help());
+      return 0;
+    }
+
+    if (options.configDir === DefaultConfigDir) {
+      options.configDir = defaultConfigDir();
+    }
+  } catch (e) {
+    console.error(e.message);
+    console.log(argparser.help());
+    return 1;
+  }
+
   await prepareConfigDir(options);
   await setupLogger(options.debug);
   let settings: Settings;
