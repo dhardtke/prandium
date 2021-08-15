@@ -1,5 +1,5 @@
 // @formatter:off
-export * as sqlite from "https://deno.land/x/sqlite@v3.0.0/mod.ts";
+export * as sqlite from "https://deno.land/x/sqlite@v3.1.0/mod.ts";
 export * as Oak from "https://deno.land/x/oak@v8.0.0/mod.ts";
 export { z as Zod } from "https://deno.land/x/zod@v3.7.0/mod.ts";
 
