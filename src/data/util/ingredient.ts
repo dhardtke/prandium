@@ -37,7 +37,7 @@ interface ParsedIngredient {
 
 type AmountType = "full" | "unitless" | "empty";
 
-interface Ingredient {
+export interface Ingredient {
   /**
    * The amount of the ingredient to use, e.g. "1 cup" or "1-3 table spoons".
    */
@@ -46,7 +46,7 @@ interface Ingredient {
   /**
    * The description of the ingredient, e.g. "sugar"
    */
-  description: string;
+  description?: string;
 
   /**
    * What type of information is present in the amount string:
@@ -72,10 +72,8 @@ const ingredientToWeightFn = (
   };
 };
 
-const SortOrder: Record<
-  IngredientSortOrder,
-  IngredientWeightFunction | undefined
-> = {
+const SortOrder: Record<IngredientSortOrder,
+  IngredientWeightFunction | undefined> = {
   [IngredientSortOrder.Original]: undefined,
   [IngredientSortOrder.FullUnitlessEmpty]: ingredientToWeightFn([
     "full",
@@ -109,9 +107,8 @@ const SortOrder: Record<
   ]),
 };
 
-let sortOrder: IngredientSortOrder;
-let unitPostprocessing: string[];
-const cache: Map<string, ParsedIngredient | undefined> = new Map();
+let sortOrder: IngredientSortOrder = IngredientSortOrder.Original;
+let unitPostprocessing: string[] = [];
 
 function _parse(raw: string): ParsedIngredient | undefined {
   const candidates: ParsedIngredient[] = parseIngredient(raw, {
@@ -138,16 +135,11 @@ function _parse(raw: string): ParsedIngredient | undefined {
   return parsed;
 }
 
-let initialized = false;
 export const ingredient = {
   initialize: (
     _sortOrder: IngredientSortOrder,
     _unitPostprocessing: string[],
   ) => {
-    if (initialized) {
-      throw new Error("Already initialized");
-    }
-    initialized = true;
     sortOrder = _sortOrder;
     unitPostprocessing = _unitPostprocessing;
   },
@@ -161,31 +153,27 @@ export const ingredient = {
     recipeYield = 1,
     portions = 1,
   ): Ingredient => {
-    if (!cache.has(raw)) {
-      const parsed = _parse(raw);
-      cache.set(raw, parsed);
-    }
-    const cached = cache.get(raw)!;
+    const parsed = _parse(raw);
     const computed = {
-      quantity: cached?.quantity
-        ? roundUpToThreeDigits(cached.quantity * (portions / recipeYield))
+      quantity: parsed?.quantity
+        ? roundUpToThreeDigits(parsed.quantity * (portions / recipeYield))
         : null,
-      quantity2: cached?.quantity2
-        ? roundUpToThreeDigits(cached.quantity2 * (portions / recipeYield))
+      quantity2: parsed?.quantity2
+        ? roundUpToThreeDigits(parsed.quantity2 * (portions / recipeYield))
         : null,
     };
 
     return {
       amount: computed.quantity
         ? `${computed.quantity}${
-          computed.quantity2 ? `- ${computed.quantity2}` : ""
+          computed.quantity2 ? ` - ${computed.quantity2}` : ""
         }${
-          cached.spaceBetweenQuantityAndUnit ? " " : ""
-        }${cached.unitOfMeasure ?? ""}`
+          parsed?.spaceBetweenQuantityAndUnit ? " " : ""
+        }${parsed?.unitOfMeasure ?? ""}`
         : undefined,
-      description: cached?.description.trim(),
-      amountType: cached?.quantity
-        ? (cached?.unitOfMeasure ? "full" : "unitless")
+      description: parsed?.description.trim(),
+      amountType: parsed?.quantity
+        ? (parsed?.unitOfMeasure ? "full" : "unitless")
         : "empty",
     };
   },
@@ -194,9 +182,12 @@ export const ingredient = {
     recipeYield = 1,
     portions = 1,
   ): Ingredient[] => {
-    const sortFn = SortOrder[sortOrder]!;
-    return ingredients
-      .map((i) => ingredient.parse(i, recipeYield, portions))
-      .sort((i1, i2) => sortFn(i1) - sortFn(i2));
+    const mapped = ingredients
+      .map((i) => ingredient.parse(i, recipeYield, portions));
+    const sortFn = SortOrder[sortOrder];
+    if (sortFn) {
+      return mapped.sort((i1, i2) => sortFn(i1) - sortFn(i2));
+    }
+    return mapped;
   },
 };
