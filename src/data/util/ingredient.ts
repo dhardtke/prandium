@@ -72,8 +72,10 @@ const ingredientToWeightFn = (
   };
 };
 
-const SortOrder: Record<IngredientSortOrder,
-  IngredientWeightFunction | undefined> = {
+const SortOrder: Record<
+  IngredientSortOrder,
+  IngredientWeightFunction | undefined
+> = {
   [IngredientSortOrder.Original]: undefined,
   [IngredientSortOrder.FullUnitlessEmpty]: ingredientToWeightFn([
     "full",
