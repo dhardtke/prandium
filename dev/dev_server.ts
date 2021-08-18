@@ -1,5 +1,5 @@
 import { Colors, fs, path, slash } from "../deps.ts";
-import { Argparser } from "../src/data/util/argparser.ts";
+import { Argparser } from "../src/data/parse/argparser.ts";
 import { DefaultConfigDir } from "../src/util.ts";
 import { isWindows, process } from "./internal/util.ts";
 

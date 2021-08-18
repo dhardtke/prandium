@@ -1,5 +1,5 @@
 import { assertEquals, assertThrows } from "../../../deps.ts";
-import { Argparser } from "../../../src/data/util/argparser.ts";
+import { Argparser } from "../../../src/data/parse/argparser.ts";
 
 Deno.test(`Argparser.parse should throw if unknown arguments are provided`, () => {
   assertThrows(

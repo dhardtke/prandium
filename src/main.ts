@@ -1,6 +1,6 @@
 import { Colors, fs, log, LogRecord, path } from "../deps.ts";
 import { Database } from "./data/db.ts";
-import { Argparser } from "./data/util/argparser.ts";
+import { Argparser } from "./data/parse/argparser.ts";
 import { buildDbPath } from "./data/util/build_db_path.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { readFromDisk, Settings } from "./settings.ts";
