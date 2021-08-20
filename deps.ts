@@ -7,12 +7,12 @@ export { default as parseIngredient } from "https://esm.sh/parse-ingredient@0.3.
 export * from "https://esm.sh/numeric-quantity@1.0.1";
 
 // utils
-export * as path from "https://deno.land/std@0.104.0/path/mod.ts";
-export * as log from "https://deno.land/std@0.104.0/log/mod.ts";
-export { LogRecord } from "https://deno.land/std@0.104.0/log/logger.ts";
-export * as fs from "https://deno.land/std@0.104.0/fs/mod.ts";
-export * as Colors from "https://deno.land/std@0.104.0/fmt/colors.ts";
-export { sprintf } from "https://deno.land/std@0.104.0/fmt/printf.ts";
+export * as path from "https://deno.land/std@0.105.0/path/mod.ts";
+export * as log from "https://deno.land/std@0.105.0/log/mod.ts";
+export { LogRecord } from "https://deno.land/std@0.105.0/log/logger.ts";
+export * as fs from "https://deno.land/std@0.105.0/fs/mod.ts";
+export * as Colors from "https://deno.land/std@0.105.0/fmt/colors.ts";
+export { sprintf } from "https://deno.land/std@0.105.0/fmt/printf.ts";
 export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
 
 // types
@@ -29,7 +29,7 @@ export {
   assertNotEquals,
   assertThrows,
   unreachable,
-} from "https://deno.land/std@0.104.0/testing/asserts.ts";
+} from "https://deno.land/std@0.105.0/testing/asserts.ts";
 
 export { test, TestSuite } from "https://deno.land/x/test_suite@v0.8.0/mod.ts";
 // @formatter:on
