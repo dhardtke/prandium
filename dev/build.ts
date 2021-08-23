@@ -1,5 +1,5 @@
 import { Colors, fs, path } from "../deps.ts";
-import { callAndWait, ProcessLike } from "./internal/util.ts";
+import { callAndWait, isWindows, ProcessLike } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
@@ -24,7 +24,7 @@ const steps: Step[] = [
     description: "Compile SCSS to CSS",
     process: callAndWait(
       "assets",
-      "sass",
+      `sass${isWindows() ? ".cmd" : ""}`,
       "--no-source-map",
       "-I",
       "node_modules",
@@ -61,7 +61,7 @@ const steps: Step[] = [
     description: "Minify JS",
     process: callAndWait(
       "assets",
-      "esbuild",
+      `esbuild${isWindows() ? ".cmd" : ""}`,
       "--bundle",
       "--format=esm",
       "--minify",
@@ -77,7 +77,7 @@ const steps: Step[] = [
     description: "Compress assets (using gzip)",
     process: callAndWait(
       "assets/dist",
-      "gzip",
+      `gzip`,
       "-f",
       "-k",
       "index.css",
