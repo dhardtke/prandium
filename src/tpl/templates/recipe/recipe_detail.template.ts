@@ -1,15 +1,34 @@
 // deno-fmt-ignore-file
 import { Recipe } from "../../../data/model/recipe.ts";
-import { date, number } from "../../util/format.ts";
-import { ingredient as ingredientHelper } from "../../../data/util/ingredient.ts";
+import { Ingredient, ingredient as ingredientHelper } from "../../../data/parse/ingredient/mod.ts";
 import { UrlGenerator } from "../../../http/util/url_generator.ts";
 import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
+import { date, number } from "../../util/format.ts";
 import { Alert } from "../_components/alert.ts";
 import { Breadcrumb } from "../_components/breadcrumb.ts";
 import { Icon, LabeledIcon } from "../_components/icon.ts";
 import { Rating } from "../_components/rating.ts";
 import { Page } from "../_structure/page.ts";
+
+function IngredientQuantity(ingredient: Ingredient): string | undefined {
+  if (ingredient.quantity) {
+    let text = "";
+
+    if (typeof ingredient.quantity === "number") {
+      text += ingredient.quantity;
+    } else {
+      text += `${ingredient.quantity.from} - ${ingredient.quantity.to}`;
+    }
+
+    if (ingredient.unit) {
+      text += " " + ingredient.unit;
+    }
+
+    return html`
+      <span class="badge bg-dark">${e(text)}</span>`;
+  }
+}
 
 export const RecipeDetailTemplate = (
   recipe: Recipe,
@@ -180,9 +199,8 @@ export const RecipeDetailTemplate = (
         ${ingredientHelper.parseMany(recipe.ingredients, recipe.yield, portions).map((ingredient) => html`
           <li class="list-group-item">
             <div class="d-flex align-items-center">
-              <div class="text-center ingredient-amount">
-                ${ingredient.amount &&
-                html`<span class="badge bg-dark">${e(ingredient.amount)}</span>`}
+              <div class="text-center ingredient-quantity">
+                ${ingredient.quantity && IngredientQuantity(ingredient)}
               </div>
               <div>
                 ${e(ingredient.description)}

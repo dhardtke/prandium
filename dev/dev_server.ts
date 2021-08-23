@@ -1,7 +1,13 @@
 import { Colors, fs, path, slash } from "../deps.ts";
 import { Argparser } from "../src/data/parse/argparser.ts";
 import { DefaultConfigDir } from "../src/util.ts";
-import { isWindows, process } from "./internal/util.ts";
+import {
+  call,
+  callAndWait,
+  combine,
+  isWindows,
+  ProcessLike,
+} from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
@@ -13,7 +19,7 @@ interface Action {
    */
   runOnStart?: boolean;
   match: RegExp;
-  fn: () => Deno.Process;
+  process: ProcessLike;
 }
 
 interface DevServerConfig {
@@ -32,7 +38,7 @@ class DevServer {
   private static NS = "dev-server";
 
   private config: DevServerConfig;
-  private readonly processes: { [id: string]: Deno.Process } = {};
+  private readonly processes: { [id: string]: ProcessLike } = {};
   private timeout: number | undefined = undefined;
 
   constructor(config: DevServerConfig) {
@@ -63,7 +69,7 @@ class DevServer {
 
   async start() {
     const watcher = Deno.watchFs(this.config.watchPaths);
-    this.runActions(
+    await this.runActions(
       this.config.actions.filter((a) =>
         a.runOnStart === undefined || a.runOnStart
       ),
@@ -85,7 +91,7 @@ class DevServer {
     if (this.timeout) {
       clearTimeout(this.timeout);
     }
-    this.timeout = setTimeout(() => {
+    this.timeout = setTimeout(async () => {
       if (paths.size === 0) {
         return;
       }
@@ -96,18 +102,19 @@ class DevServer {
             actions.map((a) => a.id).join(", ")
           }...`,
         );
-        this.runActions(actions);
+        await this.runActions(actions);
       }
       paths.clear();
     }, 350);
   }
 
-  private runActions(actions: Action[]) {
+  private async runActions(actions: Action[]) {
     for (const action of actions) {
       if (this.processes[action.id]) {
         this.processes[action.id].close();
       }
-      this.processes[action.id] = action.fn();
+      this.processes[action.id] = action.process;
+      await this.processes[action.id].run();
     }
   }
 
@@ -130,23 +137,28 @@ interface Options {
 function removeAndThen(
   dir: string,
   glob: string,
-  fn: () => Deno.Process,
-): () => Deno.Process {
-  return () => {
-    const pattern = path.globToRegExp(glob, {
-      extended: true,
-      globstar: true,
-    });
-    for (const f of fs.walkSync(dir)) {
-      if (f.name.match(pattern)) {
-        try {
-          Deno.removeSync(f.path);
-        } catch {
-          // ignore
+  process: ProcessLike,
+): ProcessLike {
+  return {
+    async run() {
+      const pattern = path.globToRegExp(glob, {
+        extended: true,
+        globstar: true,
+      });
+      for (const f of fs.walkSync(dir)) {
+        if (f.name.match(pattern)) {
+          try {
+            Deno.removeSync(f.path);
+          } catch {
+            // ignore
+          }
         }
       }
-    }
-    return fn();
+      await process.run();
+    },
+    close() {
+      process.close();
+    },
   };
 }
 
@@ -220,7 +232,7 @@ if (import.meta.main) {
       {
         id: "Server",
         match: /(deps\.ts|lock\.json|\/src\/(.+)\.(ts|html))/,
-        fn: process(
+        process: call(
           undefined,
           "deno",
           "run",
@@ -239,8 +251,8 @@ if (import.meta.main) {
       },
       {
         id: "Icons",
-        match: /icon\.(ts)/,
-        fn: process(
+        match: /icon\.ts/,
+        process: call(
           undefined,
           "deno",
           "run",
@@ -253,12 +265,51 @@ if (import.meta.main) {
         runOnStart: false,
       },
       {
+        id: "Ingredient parser",
+        match: /parser\.pegjs/,
+        process: combine(
+          callAndWait(
+            undefined,
+            `peggy${isWindows() ? ".cmd" : ""}`,
+            "--format",
+            "es",
+            "--output",
+            "src/data/parse/ingredient/parser.js",
+            "src/data/parse/ingredient/parser.pegjs",
+          ),
+          callAndWait(
+            undefined,
+            `terser${isWindows() ? ".cmd" : ""}`,
+            "-c",
+            "-m",
+            "-o",
+            "src/data/parse/ingredient/parser.js",
+            "--",
+            "src/data/parse/ingredient/parser.js",
+          ),
+          {
+            async run() {
+              const text = await Deno.readTextFile(
+                "src/data/parse/ingredient/parser.js",
+              );
+              const preamble =
+                `// deno-lint-ignore-file\n// deno-fmt-ignore-file`;
+              await Deno.writeTextFile(
+                "src/data/parse/ingredient/parser.js",
+                `${preamble}\n${text}`,
+              );
+            },
+          },
+        ),
+        runOnStart: false,
+      },
+      {
         id: "JS",
         match: /\/assets\/(.+)\.(ts)/,
-        fn: removeAndThen(
+        process: removeAndThen(
           "assets/dist",
           "index*js*",
-          process(
+          call(
             undefined,
             "deno",
             "bundle",
@@ -272,10 +323,10 @@ if (import.meta.main) {
       {
         id: "SCSS",
         match: /\/assets\/(.+)\.(scss)/,
-        fn: removeAndThen(
+        process: removeAndThen(
           "assets/dist",
           "index*css*",
-          process(
+          call(
             undefined,
             `sass${isWindows() ? ".cmd" : ""}`,
             "-I",

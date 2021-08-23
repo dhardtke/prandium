@@ -1,6 +1,59 @@
 import { path } from "../../deps.ts";
 
-export function process(
+export interface ProcessLike {
+  run(): Promise<void>;
+
+  close?(): void;
+}
+
+export function combine(...processes: ProcessLike[]): ProcessLike {
+  return {
+    close() {
+      for (const process of processes) {
+        process.close && process.close();
+      }
+    },
+    async run() {
+      for (const process of processes) {
+        await process.run();
+      }
+    },
+  };
+}
+
+export function call(
+  cwd?: string,
+  ...cmd: (string | undefined)[]
+): ProcessLike {
+  let p: Deno.Process;
+  return {
+    close() {
+      p && p.close();
+    },
+    // deno-lint-ignore require-await
+    async run() {
+      p = process(cwd, ...cmd)();
+    },
+  };
+}
+
+export function callAndWait(
+  cwd?: string,
+  ...cmd: (string | undefined)[]
+): ProcessLike {
+  let p: Deno.Process;
+  return {
+    close() {
+      p && p.close();
+    },
+    async run() {
+      p = process(cwd, ...cmd)();
+      await p.status();
+    },
+  };
+}
+
+function process(
   cwd?: string,
   ...cmd: (string | undefined)[]
 ): () => Deno.Process {
@@ -20,18 +73,4 @@ export function process(
 
 export function isWindows() {
   return Deno.build.os === "windows";
-}
-
-export async function map<In, Out>(
-  promise: Promise<In>,
-  mapper: (input: In) => Out,
-): Promise<Out> {
-  return mapper(await promise);
-}
-
-export function processAsync(
-  cwd: string,
-  ...cmd: string[]
-): () => Promise<unknown> {
-  return () => process(cwd, ...cmd)().status();
 }

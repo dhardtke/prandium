@@ -1,23 +1,28 @@
 import { Colors, fs, path } from "../deps.ts";
-import { processAsync } from "./internal/util.ts";
+import { callAndWait, ProcessLike } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
 
 interface Step {
   description: string;
-  fn: () => Promise<unknown>;
+  process: ProcessLike;
 }
 
 // TODO build index.min.css and leave index.css unminified
 const steps: Step[] = [
   {
     description: "Clean dist/ folder",
-    fn: () => fs.emptyDir("assets/dist"),
+    process: {
+      // deno-lint-ignore require-await
+      async run() {
+        fs.emptyDir("assets/dist");
+      },
+    },
   },
   {
     description: "Compile SCSS to CSS",
-    fn: processAsync(
+    process: callAndWait(
       "assets",
       "sass",
       "--no-source-map",
@@ -31,22 +36,30 @@ const steps: Step[] = [
   },
   {
     description: "Remove leftover comments from CSS",
-    fn: async () => {
-      // some comments aren't removed even when using --style compressed (e.g. "/* rtl: begin */") so we need to remove them manually
-      const p = /\s*\/\*.*?\*\/\s*/g;
-      const compiledCssFile = "assets/dist/index.css";
-      let contents = await Deno.readTextFile(compiledCssFile);
-      contents = contents.replaceAll(p, "");
-      await Deno.writeTextFile(compiledCssFile, contents);
+    process: {
+      async run() {
+        // some comments aren't removed even when using --style compressed (e.g. "/* rtl: begin */") so we need to remove them manually
+        const p = /\s*\/\*.*?\*\/\s*/g;
+        const compiledCssFile = "assets/dist/index.css";
+        let contents = await Deno.readTextFile(compiledCssFile);
+        contents = contents.replaceAll(p, "");
+        await Deno.writeTextFile(compiledCssFile, contents);
+      },
     },
   },
   {
     description: "Compile TS to JS",
-    fn: processAsync("assets", "deno", "bundle", "index.ts", "dist/index.js"),
+    process: callAndWait(
+      "assets",
+      "deno",
+      "bundle",
+      "index.ts",
+      "dist/index.js",
+    ),
   },
   {
     description: "Minify JS",
-    fn: processAsync(
+    process: callAndWait(
       "assets",
       "esbuild",
       "--bundle",
@@ -62,7 +75,7 @@ const steps: Step[] = [
   // },
   {
     description: "Compress assets (using gzip)",
-    fn: processAsync(
+    process: callAndWait(
       "assets/dist",
       "gzip",
       "-f",
@@ -74,7 +87,7 @@ const steps: Step[] = [
   },
   {
     description: "Compress assets (using brotli)",
-    fn: processAsync(
+    process: callAndWait(
       "assets/dist",
       "brotli",
       "-f",
@@ -90,7 +103,7 @@ if (import.meta.main) {
   for (const step of steps) {
     const prefix = Colors.blue(`[${step.description}]`);
     console.log(`${prefix} Start`);
-    await step.fn();
+    await step.process.run();
     console.log(`${prefix} End`);
   }
 }

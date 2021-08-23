@@ -1,7 +1,6 @@
 import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
-import { ingredient } from "../data/util/ingredient.ts";
 import { Settings } from "../settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
@@ -42,10 +41,6 @@ export async function spawnServer(
   });
   // Global App State initialize
   services.initialize(args.db);
-  ingredient.initialize(
-    args.settings.ingredientSortOrder,
-    args.settings.ingredientUnitPostprocessing,
-  );
   Page.minifying = args.settings.minifyHtml;
 
   const app = new Oak.Application<AppState>({
