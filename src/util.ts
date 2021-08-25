@@ -35,6 +35,6 @@ export function roundUpToThreeDigits(n: number): number {
   return Math.round((n + Number.EPSILON) * 1000) / 1000;
 }
 
-export function getCpuCores(): number | undefined {
+export function getCpuCores(): number {
   return navigator.hardwareConcurrency;
 }

@@ -1,4 +1,4 @@
-import { fs, log, path, Zod as z } from "../deps.ts";
+import { fs, log, path } from "../deps.ts";
 import { getCpuCores } from "./util.ts";
 
 export const DefaultUserAgent =
@@ -42,41 +42,66 @@ export interface Settings {
   pageSize: number;
 }
 
-const CpuCores = getCpuCores();
-const Schema = z.object({
-  importWorkerCount: z.number().refine(
-    (val?: number) =>
-      CpuCores === undefined || val === undefined ||
-      val > 0 && val <= CpuCores,
-    (val?: number) => ({
-      message:
-        `importWorkerCount: Value ${val} must be greater 0 and lower than number of CPU cores available, i.e. ${getCpuCores()}.`,
-    }),
-  ).optional().default(CpuCores || 1),
-  userAgent: z.string().optional().default(DefaultUserAgent),
-  addHistoryEntryWhenRating: z.boolean().optional().default(true),
-  minifyHtml: z.boolean().optional().default(false),
-  infiniteScrolling: z.boolean().optional().default(false),
-  pageSize: z.number().optional().default(24),
-});
-
 export const SettingsFilename = "settings.json";
+
+const CpuCores = getCpuCores();
+const DefaultSettings: Settings = {
+  importWorkerCount: CpuCores,
+  userAgent: DefaultUserAgent,
+  addHistoryEntryWhenRating: true,
+  minifyHtml: false,
+  infiniteScrolling: false,
+  pageSize: 24,
+};
+
+// deno-lint-ignore no-explicit-any
+function validate(settings: any): Settings {
+  const validate: Record<keyof Settings, unknown> = Object.assign(
+    DefaultSettings,
+    settings,
+  );
+  if (
+    typeof validate.importWorkerCount !== "number" ||
+    validate.importWorkerCount <= 0 || validate.importWorkerCount > CpuCores
+  ) {
+    throw new Error(`importWorkerCount must be between 1 and ${CpuCores}`);
+  }
+  const types: Record<keyof Settings, "boolean" | "string" | "number"> = {
+    importWorkerCount: "number",
+    userAgent: "string",
+    addHistoryEntryWhenRating: "boolean",
+    minifyHtml: "boolean",
+    infiniteScrolling: "boolean",
+    pageSize: "number",
+  };
+  for (const [property, type] of Object.entries(types)) {
+    // deno-lint-ignore valid-typeof
+    if (typeof validate[property as keyof Settings] !== type) {
+      throw new Error(`${property} must be of type ${type}`);
+    }
+  }
+  for (const option of Object.keys(validate)) {
+    if (!(option in types)) {
+      throw new Error(`Unknown property ${option}`);
+    }
+  }
+  return validate as Settings;
+}
 
 export async function readFromDisk(configDir: string): Promise<Settings> {
   const file = path.join(configDir, SettingsFilename);
   if (await fs.exists(file)) {
     const contents = await Deno.readTextFile(file);
     try {
-      return Schema.parse(JSON.parse(contents)) as Settings;
+      return validate(JSON.parse(contents));
     } catch (e) {
       throw new Error(`Error reading ${SettingsFilename}: ${e}`);
     }
   }
-  const defaultSettings = Schema.parse({}) as Settings;
   log.debug(() =>
     `Could not find settings file ${SettingsFilename}. Using default settings: ${
-      JSON.stringify(defaultSettings)
+      JSON.stringify(DefaultSettings)
     }`
   );
-  return defaultSettings;
+  return DefaultSettings;
 }
