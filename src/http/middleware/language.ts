@@ -14,7 +14,7 @@ export async function languageMiddleware(
   if (requestedLang) {
     ctx.cookies.set(LanguageCookie, requestedLang);
   } else {
-    requestedLang = ctx.cookies.get(LanguageCookie);
+    requestedLang = await ctx.cookies.get(LanguageCookie);
   }
   const language = LANGUAGES[requestedLang as LanguageId || "en"] || en;
   setLanguage(language);
