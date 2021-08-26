@@ -1,5 +1,5 @@
 import { Colors, log, sqlite } from "../../deps.ts";
-import { classNames } from "../util.ts";
+import { classNames } from "../shared/util.ts";
 import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 

@@ -1,4 +1,4 @@
-import { roundUpToThreeDigits } from "../../../util.ts";
+import { roundUpToThreeDigits } from "../../../shared/util.ts";
 import { parse } from "./parser.js";
 
 export type Quantity = number | { from: number; to: number };

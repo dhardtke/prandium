@@ -3,8 +3,8 @@ import { Database } from "./data/db.ts";
 import { Argparser } from "./data/parse/argparser.ts";
 import { buildDbPath } from "./data/util/build_db_path.ts";
 import { spawnServer } from "./http/webserver.ts";
-import { readFromDisk, Settings } from "./settings.ts";
-import { DefaultConfigDir, defaultConfigDir } from "./util.ts";
+import { readFromDisk, Settings } from "./data/settings.ts";
+import { DefaultConfigDir, defaultConfigDir } from "./shared/util.ts";
 
 interface Options {
   host: string;

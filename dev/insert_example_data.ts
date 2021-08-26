@@ -5,7 +5,7 @@ import { RecipeService } from "../src/data/service/recipe.service.ts";
 import { TagService } from "../src/data/service/tag.service.ts";
 import { buildDbPath } from "../src/data/util/build_db_path.ts";
 import { downloadThumbnail } from "../src/data/util/thumbnails.ts";
-import { defaultConfigDir } from "../src/util.ts";
+import { defaultConfigDir } from "../src/shared/util.ts";
 
 const configDir = defaultConfigDir();
 const db = new Database(buildDbPath(configDir));

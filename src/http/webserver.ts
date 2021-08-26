@@ -1,7 +1,7 @@
 import { log, Oak } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
-import { Settings } from "../settings.ts";
+import { Settings } from "../data/settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
 import { orderByAdapter } from "./middleware/adapters/order_by_adapter.ts";
