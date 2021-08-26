@@ -1,7 +1,7 @@
 import { fs, log, path } from "../../deps.ts";
 import { getCpuCores } from "../shared/util.ts";
 
-export const DefaultUserAgent =
+const DefaultUserAgent =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0";
 
 export interface Settings {
@@ -45,7 +45,7 @@ export interface Settings {
 export const SettingsFilename = "settings.json";
 
 const CpuCores = getCpuCores();
-const DefaultSettings: Settings = {
+export const DefaultSettings: Settings = {
   importWorkerCount: CpuCores,
   userAgent: DefaultUserAgent,
   addHistoryEntryWhenRating: true,
@@ -57,6 +57,7 @@ const DefaultSettings: Settings = {
 // deno-lint-ignore no-explicit-any
 function validate(settings: any): Settings {
   const validate: Record<keyof Settings, unknown> = Object.assign(
+    {},
     DefaultSettings,
     settings,
   );
