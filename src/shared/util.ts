@@ -28,7 +28,7 @@ export function defaultConfigDir(): string {
 const ScriptDir = path.dirname(path.fromFileUrl(import.meta.url));
 
 export function root(...parts: string[]): string {
-  return path.resolve(ScriptDir, "..", ...parts);
+  return path.resolve(ScriptDir, "..", "..", ...parts);
 }
 
 export function roundUpToThreeDigits(n: number): number {
