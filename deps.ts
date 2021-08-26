@@ -24,6 +24,7 @@ export {
   assertEquals,
   assertNotEquals,
   assertThrows,
+  assertThrowsAsync,
   unreachable,
 } from "https://deno.land/std@0.106.0/testing/asserts.ts";
 
