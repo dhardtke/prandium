@@ -43,7 +43,7 @@ _EOF_
 ```
 with the error messages from `/var/log/audit/audit.log`)
 
-## nginx
+## Set context and flags
 ```shell
 CONFIG_DIR="/home/prandium/.config/prandium"
 INSTALL_DIR="/home/prandium/repository"
