@@ -1,6 +1,6 @@
 import { Colors, fs, path, slash } from "../deps.ts";
 import { Argparser } from "../src/data/parse/argparser.ts";
-import { DefaultConfigDir } from "../src/util.ts";
+import { DefaultConfigDir } from "../src/shared/util.ts";
 import {
   call,
   callAndWait,
