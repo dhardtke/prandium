@@ -76,7 +76,7 @@ Deno.test(`ingredient.parse`, () => {
     },
     {
       input: "0.5 Kalbsfond",
-      output: { quantity: .5, unit: null, description: "Kalbsfond" }
+      output: { quantity: .5, unit: null, description: "Kalbsfond" },
     },
   ];
   for (const { input, output } of tests) {

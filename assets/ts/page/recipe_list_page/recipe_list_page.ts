@@ -28,7 +28,7 @@ function registerOrderByControl() {
 }
 
 function registerInfiniteScrolling($recipeList: HTMLElement) {
-  window.addEventListener(Events.Intersecting, async () => {
+  globalThis.addEventListener(Events.Intersecting, async () => {
     const $pagination = document.querySelector<HTMLElement>(Selectors.Pagination);
     if (!$pagination || $pagination.dataset[Data.PaginationHasMore] !== "true") {
       return;
