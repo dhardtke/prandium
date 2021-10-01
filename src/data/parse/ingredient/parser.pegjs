@@ -35,6 +35,8 @@ Quantity
 SingleQuantity
   = VulgarFraction
   / a:Integer _ b:VulgarFraction { return a + b; }
+  / a:Integer "." b:Integer { return Number(a + "." + b); }
+  / a:Integer "," b:Integer { return Number(a + "." + b); }
   / Integer
 
 RangeQuantity

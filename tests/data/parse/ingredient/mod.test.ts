@@ -74,6 +74,10 @@ Deno.test(`ingredient.parse`, () => {
       input: "4 große Paprika",
       output: { quantity: 4, unit: null, description: "große Paprika" },
     },
+    {
+      input: "0.5 Kalbsfond",
+      output: { quantity: .5, unit: null, description: "Kalbsfond" }
+    },
   ];
   for (const { input, output } of tests) {
     assertEquals(ingredient.parse(input), output);
