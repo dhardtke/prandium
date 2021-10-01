@@ -1,6 +1,6 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v3.1.1/mod.ts";
-export * as Oak from "https://deno.land/x/oak@v9.0.0/mod.ts";
+export * as Oak from "https://deno.land/x/oak@v9.0.1/mod.ts";
 
 // utils
 export * as path from "https://deno.land/std@0.107.0/path/mod.ts";
@@ -17,7 +17,7 @@ export type {
   NutritionInformation as SchemaNutritionInformation,
   Recipe as SchemaRecipe,
   Review as SchemaReview,
-} from "https://esm.sh/schema-dts@0.11.0";
+} from "https://esm.sh/schema-dts@1.0.0";
 
 // tests
 export {
@@ -28,5 +28,5 @@ export {
   unreachable,
 } from "https://deno.land/std@0.107.0/testing/asserts.ts";
 
-export { test, TestSuite } from "https://deno.land/x/test_suite@v0.8.0/mod.ts";
+export { test, TestSuite } from "https://deno.land/x/test_suite@0.9.0/mod.ts";
 // @formatter:on
