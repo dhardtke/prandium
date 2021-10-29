@@ -70,7 +70,7 @@ export const RecipeDetailTemplate = (
   ${recipe.tags.length && html`
     <div class="d-flex flex-wrap">
       ${recipe.tags.map((tag, i) => html`
-        <a title="${e(tag.description)}" href="${e(UrlGenerator.home({ tagIds: [tag.id!], tagFilter: true }))}"
+        <a${tag.description && ` title="${e(tag.description)}"`} href="${e(UrlGenerator.home({ tagIds: [tag.id!], tagFilter: true }))}"
            class="badge badge-linked bg-dark mb-3${i < recipe.tags.length - 1 && " me-1"}">
           ${e(tag.title)}
         </a>`)}

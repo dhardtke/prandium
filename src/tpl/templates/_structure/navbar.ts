@@ -47,7 +47,7 @@ function Menu() {
     ${items.map((item) => ({ item, active: Page.currentUrl.pathname === item.url }))
       .map(({ item, active }) => html`
         <li>
-          <a class="nav-link ${active ? "active" : "inactive"}" ${!active && ` href="${item.url}"`}>
+          <a class="nav-link${active ? " active" : " inactive"}" ${!active && ` href="${item.url}"`}>
             ${Icon(item.icon, "mb-1")}${item.label}
           </a>
         </li>
