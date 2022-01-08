@@ -24,3 +24,7 @@ body {
     background: var(--page-bg);
     color: var(--text-primary);
 }
+
+img, svg {
+    vertical-align: middle
+}

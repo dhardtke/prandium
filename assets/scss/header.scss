@@ -43,8 +43,7 @@ header {
 
         .nav-item {
             @include spacing($vertical: $s-2, $horizontal: $s-3);
-            display: flex;
-            align-items: center;
+            display: block;
             transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 
             @include media-breakpoint-down(md) {
@@ -71,6 +70,8 @@ header {
             }
 
             svg {
+                @include spacing($bottom: $s-1, $asPadding: false);
+
                 @include media-breakpoint-up(md) {
                     @include spacing($right: $s-1, $asPadding: false);
                 }
@@ -129,8 +130,7 @@ header {
     span {
         &:not(.hidden) {
             @include media-breakpoint-up(md) {
-                display: flex;
-                align-items: center;
+                display: block;
             }
         }
     }
