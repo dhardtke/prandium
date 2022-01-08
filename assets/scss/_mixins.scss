@@ -1,5 +1,4 @@
-// TODO responsive
-@mixin spacing($top: null, $right: null, $bottom: null, $left: null, $vertical: null, $horizontal: null, $media: null, $asPadding: true) {
+@mixin spacing($top: null, $right: null, $bottom: null, $left: null, $vertical: null, $horizontal: null, $asPadding: true) {
     $prop: if($asPadding, 'padding', 'margin');
 
     $top: if($top, $top, $vertical);
@@ -8,17 +7,8 @@
     $right: if($right, $right, $horizontal);
     $left: if($left, $left, $horizontal);
 
-    @if $media {
-        @media #{$media} {
-            #{$prop}-top: $top;
-            #{$prop}-right: $right;
-            #{$prop}-bottom: $bottom;
-            #{$prop}-left: $left;
-        }
-    } @else {
-        #{$prop}-top: $top;
-        #{$prop}-right: $right;
-        #{$prop}-bottom: $bottom;
-        #{$prop}-left: $left;
-    }
+    #{$prop}-top: $top;
+    #{$prop}-right: $right;
+    #{$prop}-bottom: $bottom;
+    #{$prop}-left: $left;
 }
