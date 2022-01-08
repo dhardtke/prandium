@@ -1,4 +1,5 @@
-@import "mixins";
+@import "mixins/spacing";
+@import "mixins/breakpoints";
 @import "variables";
 
 .dropdown {
@@ -10,14 +11,14 @@
     background: var(--dropdown-bg);
     min-width: 10rem;
 
-    // TODO mixin
-    @media (max-width: 767px) {
+    @include media-breakpoint-down(md) {
         @include spacing($horizontal: auto, $asPadding: false);
         width: 75%;
         left: 0;
         right: 0;
     }
-    @media (max-width: 1320px) {
+
+    @include media-breakpoint-down(lg) {
         right: $s-3;
     }
 

@@ -1,5 +1,6 @@
 @import "variables";
-@import "mixins";
+@import "mixins/spacing";
+@import "mixins/breakpoints";
 
 header {
     @include spacing($vertical: $s-2);
@@ -27,15 +28,13 @@ header {
         flex-wrap: wrap;
         flex: 0 0 auto;
 
-        @media (min-width: 768px) {
+        @include media-breakpoint-up(md) {
             &:last-child {
                 @include spacing($left: auto, $asPadding: false);
             }
         }
 
-        // @include media-breakpoint-up, etc.
-
-        @media (max-width: 767px) {
+        @include media-breakpoint-down(md) {
             svg {
                 @include spacing($horizontal: auto, $asPadding: false);
                 display: block;
@@ -48,7 +47,7 @@ header {
             align-items: center;
             transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 
-            @media (max-width: 767px) {
+            @include media-breakpoint-down(md) {
                 display: block;
             }
 
@@ -72,13 +71,13 @@ header {
             }
 
             svg {
-                @media (min-width: 768px) {
+                @include media-breakpoint-up(md) {
                     @include spacing($right: $s-1, $asPadding: false);
                 }
             }
         }
 
-        @media (max-width: 767px) {
+        @include media-breakpoint-down(md) {
             .collapsible {
                 label {
                     display: block;
@@ -116,8 +115,7 @@ header {
             }
         }
 
-        // TODO tablet down only
-        @media (max-width: 767px) {
+        @include media-breakpoint-down(md) {
             width: 100%;
         }
     }
@@ -130,7 +128,7 @@ header {
 
     span {
         &:not(.hidden) {
-            @media (min-width: 768px) {
+            @include media-breakpoint-up(md) {
                 display: flex;
                 align-items: center;
             }
@@ -144,14 +142,14 @@ header {
         align-items: center;
         justify-content: start;
 
-        @media (max-width: 767px) {
+        @include media-breakpoint-down(md) {
             justify-content: center;
         }
 
         svg {
             @include spacing($right: $s-2, $asPadding: false);
 
-            @media (max-width: 767px) {
+            @include media-breakpoint-down(md) {
                 @include spacing($left: $s-0, $asPadding: false);
             }
             width: 24px;

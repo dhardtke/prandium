@@ -6,3 +6,11 @@ $s-2: $spacer * .5;
 $s-3: $spacer;
 $s-4: $spacer * 1.5;
 $s-5: $spacer * 3;
+
+$grid-breakpoints: (
+  sm: 0,
+  md: 768px,
+  lg: 1400px
+);
+
+$container-max-width: 1320px;
