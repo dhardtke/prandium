@@ -1,4 +1,4 @@
-import { fs, Oak, path } from "../../../deps.ts";
+import { Oak, path } from "../../../deps.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { importRecipes } from "../../data/parse/import/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
@@ -96,7 +96,10 @@ async function assignRecipeFields(
         thumbnailDir,
         newThumbnail.originalName,
       );
-      await fs.copy(newThumbnail.filename, path.join(thumbnailDir, filename));
+      await Deno.copyFile(
+        newThumbnail.filename,
+        path.join(thumbnailDir, filename),
+      );
       await Deno.remove(newThumbnail.filename);
       await deleteThumbnail(recipe, configDir);
       recipe.thumbnail = filename;

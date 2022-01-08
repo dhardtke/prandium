@@ -5,7 +5,7 @@ import { AppState } from "../webserver.ts";
 const router: Oak.Router = new Oak.Router();
 router.get(
   "/thumbnails/(.+)",
-  async (ctx: Oak.RouterContext<{ 0: string }, AppState>, next) => {
+  async (ctx: Oak.RouterContext<string, { 0: string }, AppState>, next) => {
     try {
       await Oak.send(ctx, ctx.params[0]!, {
         root: getThumbnailDir(ctx.state.configDir),

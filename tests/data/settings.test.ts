@@ -1,4 +1,4 @@
-import { assertEquals, assertThrowsAsync, path } from "../../deps.ts";
+import { assertEquals, assertRejects, path } from "../../deps.ts";
 import {
   DefaultSettings,
   readFromDisk,
@@ -69,7 +69,7 @@ Deno.test(
         path.join(tmpDir, SettingsFilename),
         typeof data === "string" ? data : JSON.stringify(data),
       );
-      await assertThrowsAsync(
+      await assertRejects(
         async () => {
           await readFromDisk(tmpDir);
         },
