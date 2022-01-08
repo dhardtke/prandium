@@ -1,7 +1,6 @@
 /// <reference no-default-lib="true"/>
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
-//@ts-ignore
 /// <reference lib="deno.ns" />
 
 import "./deps.ts";

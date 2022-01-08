@@ -1,0 +1,40 @@
+.collapsible {
+    input[type='checkbox'] {
+        display: none;
+    }
+
+    label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+
+        &::after {
+            display: inline-block;
+            margin-left: .255em;
+            vertical-align: .255em;
+            content: "";
+            border-top: .3em solid;
+            border-right: .3em solid transparent;
+            border-bottom: 0;
+            border-left: .3em solid transparent;
+        }
+    }
+
+    .content {
+        //max-height: 0;
+        display: none;
+        overflow: hidden;
+        //transition: max-height .25s ease-in-out;
+    }
+
+    input[type='checkbox']:checked + label + .content {
+        //max-height: 350px;
+        display: block;
+    }
+
+    input[type='checkbox']:checked + label {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}

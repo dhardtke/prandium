@@ -3,7 +3,7 @@ import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
 import { asset } from "../../util/asset.ts";
 import { Favicons } from "./favicons.ts";
-import { Navbar } from "./navbar.ts";
+import { Header } from "./header.ts";
 
 interface PageType {
   minifying: boolean;
@@ -40,16 +40,12 @@ const Page: PageType = (title?: string) =>
 
       <title>${e(title) ?? e(l.appName)}</title>
 
-      <link rel="stylesheet" href="/assets/${stylesheet}?${
-        asset.modificationTimestamp(stylesheet)
-      }">
-      <script src="/assets/${javascript}?${
-        asset.modificationTimestamp(javascript)
-      }" async type="module"></script>
+      <link rel="stylesheet" href="/assets/${stylesheet}?${asset.modificationTimestamp(stylesheet)}">
+      <script src="/assets/${javascript}?${asset.modificationTimestamp(javascript)}" async type="module"></script>
 
-      ${Navbar()}
+      ${Header()}
 
-      <main class="container-xxl">
+      <main class="container">
         ${body}
       </main>
       </html>

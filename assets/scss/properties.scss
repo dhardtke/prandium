@@ -1,0 +1,37 @@
+html {
+    --text-primary: #6c757d;
+    --text-secondary: #8cabd9;
+    --page-bg: #fff;
+    --header-bg: #212529;
+    --header-border: transparent;
+    --header-active-nav-item: #fff;
+    --header-inactive-nav-item: #6c757d;
+    --header-inactive-nav-item-hover: #0dcaf0;
+    --header-app-icon: #0dcaf0;
+    --header-app-name-hover: #0dcaf0;
+    --dark-mode-switcher-icon: #808080;
+    --dropdown-bg: #fff;
+    --dropdown-border: #00000026;
+    --dropdown-item: var(--text-primary);
+    --dropdown-item-hover: #1e2125;
+    --dropdown-item-hover-bg: #e9ecef;
+    --dropdown-item-active: #fff;
+    --dropdown-item-active-bg: #0d6efd;
+
+    &.dark {
+        --text-primary: #ced4da;
+        --text-secondary: #000;
+        --page-bg: #212529;
+        --header-bg: #343a40;
+        --header-border: #ffffff19;
+        --header-inactive-nav-item: #adb5bd;
+        --dark-mode-switcher-icon: #ffff00;
+        --dropdown-bg: #212529;
+        --dropdown-border: #6c757d;
+        --dropdown-item: #ced4da;
+        --dropdown-item-hover: #dee2e6;
+        --dropdown-item-hover-bg: #6c757d;
+        --dropdown-item-active: #fff;
+        --dropdown-item-active-bg:  #0d6efd;
+    }
+}

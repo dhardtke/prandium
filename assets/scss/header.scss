@@ -1,0 +1,160 @@
+@import "variables";
+@import "mixins";
+
+header {
+    @include spacing($vertical: $s-2);
+    display: flex;
+    justify-content: center;
+    background: var(--header-bg);
+    border-bottom: 1px solid;
+    border-bottom-color: var(--header-border);
+
+    .header-inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    .nav {
+        display: flex;
+        flex-wrap: wrap;
+        flex: 0 0 auto;
+
+        @media (min-width: 768px) {
+            &:last-child {
+                @include spacing($left: auto, $asPadding: false);
+            }
+        }
+
+        // @include media-breakpoint-up, etc.
+
+        @media (max-width: 767px) {
+            svg {
+                @include spacing($horizontal: auto, $asPadding: false);
+                display: block;
+            }
+        }
+
+        .nav-item {
+            @include spacing($vertical: $s-2, $horizontal: $s-3);
+            display: flex;
+            align-items: center;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+
+            @media (max-width: 767px) {
+                display: block;
+            }
+
+            &.active {
+                color: var(--header-active-nav-item);
+            }
+
+            &:not(.active) {
+                &:not(.nav-item-collapsible) {
+                    cursor: pointer;
+                }
+                color: var(--header-inactive-nav-item);
+
+                &:hover {
+                    color: var(--header-inactive-nav-item-hover);
+                }
+            }
+
+            > a {
+                color: inherit;
+            }
+
+            svg {
+                @media (min-width: 768px) {
+                    @include spacing($right: $s-1, $asPadding: false);
+                }
+            }
+        }
+
+        @media (max-width: 767px) {
+            .collapsible {
+                label {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    .app {
+        @include spacing($top: $s-1, $bottom: $s-1, $right: $s-3, $asPadding: false);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem; // TODO mixin
+
+        &-icon {
+            @include spacing($right: $s-2, $asPadding: false);
+
+            svg {
+                color: var(--header-app-icon);
+                width: 24px;
+                height: 24px;
+                display: flex;
+            }
+        }
+
+        &-name {
+            color: #fff;
+            transition: all .2s ease-in-out;
+        }
+
+        &:hover {
+            .app-name {
+                color: var(--header-app-name-hover);
+            }
+        }
+
+        // TODO tablet down only
+        @media (max-width: 767px) {
+            width: 100%;
+        }
+    }
+}
+
+#dark-mode-switcher {
+    svg {
+        color: var(--dark-mode-switcher-icon);
+    }
+
+    span {
+        &:not(.hidden) {
+            @media (min-width: 768px) {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+}
+
+#language-dropdown  {
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: start;
+
+        @media (max-width: 767px) {
+            justify-content: center;
+        }
+
+        svg {
+            @include spacing($right: $s-2, $asPadding: false);
+
+            @media (max-width: 767px) {
+                @include spacing($left: $s-0, $asPadding: false);
+            }
+            width: 24px;
+        }
+    }
+}
