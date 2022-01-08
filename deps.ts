@@ -27,6 +27,4 @@ export {
   assertRejects,
   unreachable,
 } from "https://deno.land/std@0.120.0/testing/asserts.ts";
-
-export { test, TestSuite } from "https://deno.land/x/test_suite@0.9.3/mod.ts";
 // @formatter:on
