@@ -17,7 +17,7 @@ export class Database {
     // enable FOREIGN KEY support
     this.exec("PRAGMA foreign_keys = ON;");
 
-    window.addEventListener("unload", () => {
+    globalThis.addEventListener("unload", () => {
       this.close();
     });
   }

@@ -1,3 +1,3 @@
 export enum Events {
-  PageLoaded = "PageLoaded"
+  PageLoaded = "PageLoaded",
 }
