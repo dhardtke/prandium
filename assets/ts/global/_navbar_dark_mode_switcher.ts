@@ -23,7 +23,7 @@ export function NavbarDarkModeSwitcher() {
     }
   };
 
-  const storage = getCookie(DarkModeCookie);
+  let storage = getCookie(DarkModeCookie);
   if (storage === null) {
     const wantsDark = "" + window.matchMedia("(prefers-color-scheme: dark)").matches;
     setCookie(DarkModeCookie, wantsDark);
@@ -33,7 +33,8 @@ export function NavbarDarkModeSwitcher() {
   $darkModeSwitcher.addEventListener("click", (e) => {
     e.preventDefault();
 
-    setCookie(DarkModeCookie, storage === "true" ? "false" : "true");
+    storage = storage === "true" ? "false" : "true";
+    setCookie(DarkModeCookie, storage);
     toggleDarkMode();
   });
 }
