@@ -14,31 +14,41 @@ export interface CollapsibleHtml {
 
 export function Collapsible(
   options: {
-    label?: string,
-    labelClass?: string,
-    wrapperClass?: string,
-    content: string,
-    opened?: boolean,
-    contentClass?: string,
-    caret?: boolean | "right"
+    label?: string;
+    labelClass?: string;
+    wrapperClass?: string;
+    content: string;
+    opened?: boolean;
+    contentClass?: string;
+    caret?: boolean | "right";
   },
 ): CollapsibleHtml {
   count++;
   const labelId = `collapsible${count}`;
   return {
-    toString: () => html`
+    toString: () =>
+      html`
       <div
-        class="collapsible${options.caret && " collapsible--with-caret"}${options.caret === "right" && " collapsible--with-caret-right"}${options.wrapperClass && ` ${options.wrapperClass}`}">
-        ${options.label && html`<label for="${labelId}" ${options.labelClass && ` class="${options.labelClass}"`}>
+        class="collapsible${options.caret && " collapsible--with-caret"}${
+        options.caret === "right" && " collapsible--with-caret-right"
+      }${options.wrapperClass && ` ${options.wrapperClass}`}">
+        ${
+        options.label &&
+        html`<label for="${labelId}" ${
+          options.labelClass && ` class="${options.labelClass}"`
+        }>
           ${options.label}
-        </label>`}
+        </label>`
+      }
         <input id="${labelId}" type="checkbox" ${
-          options.opened && " checked"
-        } autocomplete="off">
-        <div class="content${options.contentClass && ` ${options.contentClass}`}">
+        options.opened && " checked"
+      } autocomplete="off">
+        <div class="content${
+        options.contentClass && ` ${options.contentClass}`
+      }">
           ${options.content}
         </div>
       </div>`,
-    labelId
+    labelId,
   };
 }

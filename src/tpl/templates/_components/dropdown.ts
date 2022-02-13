@@ -21,22 +21,24 @@ function Item(item: DropdownItem) {
 
 export function Dropdown(
   options: {
-    label: string,
-    labelClass?: string,
-    spacing?: boolean,
-    caret?: boolean,
-    items: DropdownItem[]
-  }
+    label: string;
+    labelClass?: string;
+    spacing?: boolean;
+    caret?: boolean;
+    items: DropdownItem[];
+  },
 ) {
-  return `${Collapsible({
-    label: options.label,
-    labelClass: options.labelClass,
-    caret: options.caret,
-    content: html`
+  return `${
+    Collapsible({
+      label: options.label,
+      labelClass: options.labelClass,
+      caret: options.caret,
+      content: html`
       <ul class="dropdown${options.spacing && " dropdown--with-spacing"}">
         ${options.items.map((item) => Item(item))}
       </ul>`,
-  })}`;
+    })
+  }`;
 }
 
 export const DIVIDER = Symbol();
