@@ -19,10 +19,10 @@ export const RecipeDeleteTemplate = (recipe: Recipe) => Page(recipe.title)(html`
     <p>${e(l.recipe.deleteConfirmation)}</p>
 
     <a class="btn btn-primary me-2" href="${UrlGenerator.recipe(recipe)}">
-      ${LabeledIcon(l.no, "arrow-left", 2)}
+      ${LabeledIcon(l.no, "arrow-left")}
     </a>
     <button type="submit" class="btn btn-danger">
-      ${LabeledIcon(l.yes, "trash", 2)}
+      ${LabeledIcon(l.yes, "trash")}
     </button>
   </form>
 `);

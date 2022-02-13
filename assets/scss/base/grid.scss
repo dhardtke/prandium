@@ -1,0 +1,37 @@
+@use "variables";
+@use "../mixins/breakpoints";
+
+// based on https://github.com/twbs/bootstrap/blob/main/scss/_grid.scss
+// and https://github.com/twbs/bootstrap/blob/44ea0d69252ce736686c9a8a6a5bd55799384e6b/../mixins/_grid.scss
+$grid-columns: 12;
+$grid-gutter-width: 1.5rem;
+
+@mixin make-cssgrid($columns: $grid-columns, $breakpoints: variables.$grid-breakpoints) {
+    @each $breakpoint in map-keys($breakpoints) {
+        $infix: breakpoints.breakpoint-infix($breakpoint, $breakpoints);
+
+        @include breakpoints.media-breakpoint-up($breakpoint, $breakpoints) {
+            @if $columns > 0 {
+                @for $i from 1 through $columns {
+                    .col#{$infix}-#{$i} {
+                        grid-column: auto / span $i !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-rows: repeat(var(-rows, 1), 1fr);
+    grid-template-columns: repeat(var(--columns, #{$grid-columns}), 1fr);
+    gap: var(--gap, #{$grid-gutter-width});
+}
+
+.col {
+    // full width
+    grid-column: 1 / -1;
+}
+
+@include make-cssgrid();

@@ -1,0 +1,11 @@
+@use "variables";
+
+a {
+    color: var(--link);
+    text-decoration: underline;
+    transition: variables.$transition-base;
+
+    &:hover {
+        color: var(--link-hover);
+    }
+}

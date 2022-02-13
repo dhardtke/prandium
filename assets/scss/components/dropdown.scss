@@ -1,0 +1,75 @@
+@use "../mixins/spacing" as *;
+@use "../mixins/breakpoints";
+@use "../mixins/z-index" as *;
+@use "../base/variables" as *;
+
+.dropdown {
+    @include spacing($vertical: $s-1);
+    @include z-index(dropdown);
+    position: absolute;
+    border: 1px solid;
+    border-color: var(--dropdown-border);
+    background: var(--dropdown-bg);
+    min-width: 10rem;
+
+    &--with-spacing {
+        @include spacing($top: $s-4, $asPadding: false);
+    }
+
+    @include breakpoints.media-breakpoint-down(md) {
+        @include spacing($horizontal: auto, $asPadding: false);
+
+        width: 75%;
+        left: 0;
+        right: 0;
+    }
+
+    @include breakpoints.media-breakpoint-down(lg) {
+        right: $s-4;
+    }
+
+    .item {
+        @include spacing($vertical: $s-1, $horizontal: $s-4);
+
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        background: transparent;
+        user-select: none;
+        color: var(--dropdown-item);
+
+        &:hover {
+            color: var(--dropdown-item-hover);
+            background: var(--dropdown-item-hover-bg);
+        }
+
+        &.active {
+            color: var(--dropdown-item-active);
+            text-decoration: none;
+            background: var(--dropdown-item-active-bg);
+
+            &:hover {
+                cursor: text;
+            }
+        }
+
+        a {
+            color: inherit;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: inherit;
+            text-decoration: none;
+        }
+    }
+
+    .divider {
+        @include spacing($vertical: $s-2, $asPadding: false);
+        height: 1px;
+        overflow: hidden;
+        color: inherit;
+        background: currentColor;
+        border: 0;
+        opacity: .25;
+    }
+}

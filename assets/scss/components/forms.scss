@@ -1,0 +1,41 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables";
+
+input, select {
+    @include spacing($left: variables.$s-3, $right: variables.$s-3);
+
+    padding: .375rem .75rem;
+
+    width: 100%;
+    border: 1px solid #ced4da; // TODO variable
+    background: #fff; // TODO variable
+    color: #212529; // TODO variable
+    transition: variables.$transition-base;
+    line-height: 1.5;
+
+    &:focus {
+        color: #212529; // TODO variable
+        background-color: #fff;
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+    }
+}
+
+.input-group {
+    display: flex;
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+}

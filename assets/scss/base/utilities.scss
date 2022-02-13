@@ -1,0 +1,91 @@
+@use "../mixins/spacing" as *;
+@use "variables";
+
+.hidden {
+    display: none;
+}
+
+.bi {
+    width: 16px;
+    height: 16px;
+
+    &::before {
+        display: inline-block;
+        line-height: 1;
+        vertical-align: -.125em;
+    }
+
+    &.labeled {
+        @include spacing($right: variables.$s-1, $asPadding: false);
+    }
+}
+
+.img-responsive {
+    max-width: 100%;
+    height: auto;
+}
+
+.img-thumbnail {
+    padding: .25rem; // TODO use spacing mixin
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    max-width: 100%;
+}
+
+.text-clamp {
+    //noinspection CssUnknownProperty
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    display: -webkit-box;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.action-bar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: variables.$s-1;
+
+    &--right {
+        justify-content: end;
+    }
+}
+
+.side-by-side {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.mb {
+    @include spacing($bottom: variables.$s-4, $asPadding: false);
+}
+
+.ml {
+    @include spacing($left: variables.$s-1, $asPadding: false);
+}
+
+.mr {
+    @include spacing($right: variables.$s-1, $asPadding: false);
+}
+
+.mra {
+    @include spacing($right: auto, $asPadding: false);
+}
+
+.mla {
+    @include spacing($left: auto, $asPadding: false);
+}
+
+.mbo {
+    @include spacing($bottom: 0, $asPadding: false);
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+}

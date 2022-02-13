@@ -125,6 +125,7 @@ export const de: Language = {
   darkMode: "Nachtmodus",
   lightMode: "Tagmodus",
   language: "Sprache",
+  nutritionalValue: "Nährwertangaben",
   meta: {
     id: "de",
     flag:

@@ -1,0 +1,45 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables" as *;
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    li {
+        .page-link {
+            padding: .375rem .75rem;
+            position: relative;
+            display: block;
+            color: var(--page-link);
+            text-decoration: none;
+            background: var(--page-link-bg);
+            border: 1px solid var(--page-link-border);
+            transition: $transition-base;
+
+            &:hover {
+                z-index: 2;
+                color: var(--page-link-hover);
+                background: var(--page-link-hover-bg);
+            }
+
+            &.disabled {
+                color: var(--page-link-disabled);
+                pointer-events: none;
+            }
+
+            &.active {
+                z-index: 3;
+                color: #fff;
+                background: var(--page-link-active-bg);
+                border-color: var(--page-link-active-border);
+            }
+        }
+
+        &:not(:first-child) {
+            .page-link {
+                margin-left: -1px;
+            }
+        }
+    }
+}

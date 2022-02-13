@@ -52,6 +52,5 @@ export const Icon = (name: IconName, className?: string) =>
 export const LabeledIcon = (
   label: unknown,
   name: IconName,
-  spacing = 1,
   className?: string,
-) => html`<span class="me-${spacing}">${Icon(name, className)}</span>${e(label)}`;
+) => html`${Icon(name, className ? `${className} labeled` : "labeled")}${e(label)}`;

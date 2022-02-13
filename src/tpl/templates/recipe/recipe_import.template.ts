@@ -76,7 +76,7 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
               </div>
             </div>
             <button type="submit" class="btn btn-primary">
-              ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill", 2)}
+              ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill")}
             </button>
           </form>
         `

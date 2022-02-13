@@ -1,5 +1,5 @@
-@import "mixins/spacing";
-@import "variables";
+@use "../mixins/spacing" as *;
+@use "../base/variables" as *;
 
 .breadcrumb {
     display: flex;

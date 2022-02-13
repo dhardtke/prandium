@@ -1,0 +1,84 @@
+@use "../mixins/breakpoints";
+@use "../mixins/z-index" as *;
+@use "../base/variables";
+
+.recipe {
+    position: relative;
+
+    .card {
+        height: 100%;
+    }
+
+    img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .collapsible {
+        @include z-index(dropdown);
+
+        position: absolute;
+        right: 10px;
+        top: 10px;
+
+        @include breakpoints.media-breakpoint-up('lg') {
+            opacity: 0;
+            transition: variables.$transition-base;
+        }
+    }
+
+    &:hover {
+        .collapsible {
+            opacity: 1;
+        }
+    }
+
+    &.flagged {
+        .card {
+            border-width: 2px;
+            border-color: #0dcaf0; // TODO var
+        }
+    }
+}
+
+/*
+#tag-filter {
+    .card-body {
+        padding-right: .75rem;
+        max-height: 300px;
+
+        @include media-breakpoint-down('md') {
+            max-height: 600px;
+        }
+    }
+
+    .active {
+        background: $primary;
+
+        &:hover {
+            color: #fff;
+        }
+    }
+}
+ */
+
+// TODO: lazy loading of images does not work. Investigate..
+
+#recipe-list {
+    --gap: #{variables.$s-3};
+}
+
+#recipe-filter {
+    --gap: #{variables.$s-3};
+}
+
+#tag-filter {
+    .tag {
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .grid {
+        --gap: #{variables.$s-3};
+    }
+}

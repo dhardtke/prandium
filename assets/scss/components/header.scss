@@ -1,9 +1,9 @@
-@import "variables";
-@import "mixins/spacing";
-@import "mixins/breakpoints";
+@use "../base/variables";
+@use "../mixins/spacing" as *;
+@use "../mixins/breakpoints";
 
 header {
-    @include spacing($vertical: $s-2);
+    @include spacing($vertical: variables.$s-2);
     display: flex;
     justify-content: center;
     background: var(--header-bg);
@@ -28,13 +28,13 @@ header {
         flex-wrap: wrap;
         flex: 0 0 auto;
 
-        @include media-breakpoint-up(md) {
+        @include breakpoints.media-breakpoint-up(md) {
             &:last-child {
                 @include spacing($left: auto, $asPadding: false);
             }
         }
 
-        @include media-breakpoint-down(md) {
+        @include breakpoints.media-breakpoint-down(md) {
             svg {
                 @include spacing($horizontal: auto, $asPadding: false);
                 display: block;
@@ -42,11 +42,12 @@ header {
         }
 
         .nav-item {
-            @include spacing($vertical: $s-2, $horizontal: $s-3);
-            display: block;
-            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+            @include spacing($vertical: variables.$s-2, $horizontal: variables.$s-4);
 
-            @include media-breakpoint-down(md) {
+            display: block;
+            transition: variables.$transition-base;
+
+            @include breakpoints.media-breakpoint-down(md) {
                 display: block;
             }
 
@@ -67,18 +68,19 @@ header {
 
             > a {
                 color: inherit;
+                text-decoration: none;
             }
 
             svg {
-                @include spacing($bottom: $s-1, $asPadding: false);
+                @include spacing($bottom: variables.$s-1, $asPadding: false);
 
-                @include media-breakpoint-up(md) {
-                    @include spacing($right: $s-1, $asPadding: false);
+                @include breakpoints.media-breakpoint-up(md) {
+                    @include spacing($right: variables.$s-1, $asPadding: false);
                 }
             }
         }
 
-        @include media-breakpoint-down(md) {
+        @include breakpoints.media-breakpoint-down(md) {
             .collapsible {
                 label {
                     display: block;
@@ -88,14 +90,16 @@ header {
     }
 
     .app {
-        @include spacing($top: $s-1, $bottom: $s-1, $right: $s-3, $asPadding: false);
+        @include spacing($top: variables.$s-1, $bottom: variables.$s-1, $right: variables.$s-4, $asPadding: false);
+
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.25rem; // TODO mixin
+        font-size: variables.$font-size-lg;
+        text-decoration: none;
 
         &-icon {
-            @include spacing($right: $s-2, $asPadding: false);
+            @include spacing($right: variables.$s-2, $asPadding: false);
 
             svg {
                 color: var(--header-app-icon);
@@ -107,7 +111,7 @@ header {
 
         &-name {
             color: #fff;
-            transition: all .2s ease-in-out;
+            transition: variables.$transition-base;
         }
 
         &:hover {
@@ -116,7 +120,7 @@ header {
             }
         }
 
-        @include media-breakpoint-down(md) {
+        @include breakpoints.media-breakpoint-down(md) {
             width: 100%;
         }
     }
@@ -129,7 +133,7 @@ header {
 
     span {
         &:not(.hidden) {
-            @include media-breakpoint-up(md) {
+            @include breakpoints.media-breakpoint-up(md) {
                 display: block;
             }
         }
@@ -142,15 +146,15 @@ header {
         align-items: center;
         justify-content: start;
 
-        @include media-breakpoint-down(md) {
+        @include breakpoints.media-breakpoint-down(md) {
             justify-content: center;
         }
 
         svg {
-            @include spacing($right: $s-2, $asPadding: false);
+            @include spacing($right: variables.$s-2, $asPadding: false);
 
-            @include media-breakpoint-down(md) {
-                @include spacing($left: $s-0, $asPadding: false);
+            @include breakpoints.media-breakpoint-down(md) {
+                @include spacing($left: variables.$s-0, $asPadding: false);
             }
             width: 24px;
         }

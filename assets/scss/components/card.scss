@@ -1,0 +1,75 @@
+@use "../base/variables" as *;
+@use "../mixins/spacing" as *;
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background: var(--card-bg);
+    color: var(--card-text);
+    background-clip: border-box;
+    border: 1px solid var(--card-border);
+}
+
+.card-set {
+    .card + .card {
+        border-top: 0;
+    }
+}
+
+.card-header {
+    padding: .5rem 1rem;
+    margin-bottom: 0;
+    background-color: rgba(0, 0, 0, .03);
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
+}
+
+.card-body {
+    @include spacing($left: $s-4, $right: $s-4, $top: $s-4, $bottom: $s-4);
+
+    flex: 1 1 auto;
+}
+
+.card-footer {
+    color: var(--card-footer);
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    background: rgba(0, 0, 0, .03);
+    border-top: 1px solid var(--card-border);
+
+    ul {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    li {
+        &:not(:last-child) {
+            @include spacing($right: $s-2, $asPadding: false);
+        }
+    }
+}
+
+.card-title {
+    @include spacing($bottom: $s-2, $asPadding: false);
+}
+
+.card-linked {
+    text-decoration: none;
+    color: inherit;
+    transition: $transition-base;
+
+    &:not(.disabled) {
+        &:hover {
+            border-color: var(--card-linked-hover-border);
+            color: var(--card-text-hover);
+        }
+    }
+
+    &--padded {
+        @include spacing($horizontal: $s-2, $vertical: $s-2);
+    }
+}

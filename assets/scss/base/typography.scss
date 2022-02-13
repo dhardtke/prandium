@@ -1,0 +1,73 @@
+@use "variables" as *;
+@use "../mixins/spacing" as *;
+
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+input,
+select {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+// based on https://github.com/twbs/bootstrap/blob/45eb70e03c1905d247c6e012fff9e263d1326066/scss/_reboot.scss
+
+// Typography
+//
+// 1. Remove top margins from headings
+//    By default, `<h1>`-`<h6>` all receive top and bottom margins. We nuke the top
+//    margin for easier control within type scales as it avoids margin collapsing.
+
+%heading {
+    margin-top: 0; // 1
+    margin-bottom: $headings-margin-bottom;
+    font-weight: $headings-font-weight;
+    line-height: $headings-line-height;
+    color: var(--headings);
+}
+
+h1 {
+    @extend %heading;
+    font-size: $h1-font-size;
+}
+
+h2 {
+    @extend %heading;
+    font-size: $h2-font-size;
+}
+
+h3 {
+    @extend %heading;
+    font-size: $h3-font-size;
+}
+
+h4 {
+    @extend %heading;
+    font-size: $h4-font-size;
+}
+
+h5 {
+    @extend %heading;
+    font-size: $h5-font-size;
+}
+
+h6 {
+    @extend %heading;
+    font-size: $h6-font-size;
+}
+
+small {
+    font-size: $font-size-sm;
+}
+
+.lead {
+    @include spacing($vertical: $s-4, $asPadding: false);
+    @include spacing($vertical: $s-3, $asPadding: true);
+    @include spacing($left: $s-2, $asPadding: true);
+
+    border-left: 1px solid #ccc;
+}

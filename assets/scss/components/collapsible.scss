@@ -1,0 +1,48 @@
+.collapsible {
+    input[type='checkbox'] {
+        display: none;
+    }
+
+    label {
+        display: block;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    &--with-caret {
+        label {
+            &::after {
+                display: inline-block;
+                margin-left: .125rem;
+                vertical-align: .125rem;
+                content: "";
+                border-top: .3em solid;
+                border-right: .3em solid transparent;
+                border-bottom: 0;
+                border-left: .3em solid transparent;
+            }
+        }
+
+        &-right {
+            label {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+    }
+
+    .content {
+        display: none;
+        overflow: hidden;
+    }
+
+    input[type='checkbox']:checked + .content {
+        display: block;
+    }
+
+    //input[type='checkbox']:checked + label {
+    //    border-bottom-right-radius: 0;
+    //    border-bottom-left-radius: 0;
+    //}
+}

@@ -1,12 +1,24 @@
-@use "scss/reset";
-@use "scss/typography";
-@use "scss/structure";
-@use "scss/header";
-@use "scss/lists";
-@use "scss/links";
+@use "scss/base/reset";
+@use "scss/base/typography";
+@use "scss/base/structure";
+@use "scss/base/utilities";
+@use "scss/base/properties";
+@use "scss/base/grid";
+@use "scss/base/lists";
+@use "scss/base/links";
 
-@use "scss/breadcrumb";
-@use "scss/collapsible";
-@use "scss/dropdown";
-@use "scss/utilities";
-@use "scss/properties";
+@use "scss/components/badge";
+@use "scss/components/breadcrumb";
+@use "scss/components/buttons";
+@use "scss/components/card";
+@use "scss/components/collapsible";
+@use "scss/components/dropdown";
+@use "scss/components/forms";
+@use "scss/components/header";
+@use "scss/components/list-group";
+@use "scss/components/pagination";
+@use "scss/components/rating";
+@use "scss/components/table";
+
+@use "scss/pages/recipe-detail";
+@use "scss/pages/recipe-list";

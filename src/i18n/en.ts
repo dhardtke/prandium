@@ -124,6 +124,7 @@ export const en: Language = {
   darkMode: "Dark Mode",
   lightMode: "Light Mode",
   language: "Language",
+  nutritionalValue: "Nutritional Value",
   meta: {
     id: "en",
     flag:

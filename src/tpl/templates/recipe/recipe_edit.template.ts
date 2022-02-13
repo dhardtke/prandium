@@ -69,7 +69,7 @@ function arrayField<T>(
       </ul>
       <div class="card-footer">
         <button type="button" class="btn btn-sm btn-outline-primary" data-hook="create">
-          ${LabeledIcon(createBtnLabel, "plus-square", 2)}
+          ${LabeledIcon(createBtnLabel, "plus-square")}
         </button>
       </div>
     </div>
@@ -290,10 +290,10 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
     ${/*TODO edit tags, reviews, history, etc. -->*/""}
 
       <a class="btn btn-danger me-2" href="${recipe ? UrlGenerator.recipe(recipe) : UrlGenerator.home()}">
-        ${LabeledIcon(l.cancel, "arrow-left", 2)}
+        ${LabeledIcon(l.cancel, "arrow-left")}
       </a>
       <button type="submit" class="btn btn-primary">
-        ${LabeledIcon(l.save, "check-square-fill", 2)}
+        ${LabeledIcon(l.save, "check-square-fill")}
       </button>
     </form>
   `);

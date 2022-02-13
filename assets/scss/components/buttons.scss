@@ -1,0 +1,67 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables" as *;
+
+// TODO define variants as map
+
+.btn {
+    @include spacing($horizontal: $s-4, $vertical: $s-2);
+    border: 1px solid;
+    //padding: .375rem .75rem;
+    transition: $transition-base;
+    text-decoration: none;
+
+    &:focus,
+    .collapsible > input:active + & {
+        box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+    }
+
+    &:not(:disabled):hover {
+        cursor: pointer;
+    }
+
+    &--primary {
+        // color: #ced4da;
+        color: #fff;
+        background: #0d6efd;
+        //border-color: #0d6efd;
+        border-color: #515151;
+
+        &:hover {
+            color: #fff;
+            background: darken(#0d6efd, 10%);
+        }
+    }
+
+    &--secondary {
+        color: #fff;
+        background: #6c757d;
+        border-color: #4f4f4f;
+
+        &:hover {
+            color: #fff;
+            background: darken(#6c757d, 10%);
+        }
+    }
+
+    &--light {
+        color: #000;
+        background: #f8f9fa; // TODO vars
+        border-color: #f8f9fa;
+    }
+}
+
+.btn-group {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+
+    > .btn {
+        position: relative;
+        flex: 1 1 auto;
+    }
+
+    > .btn:not(:first-child),
+    > .btn-group:not(:first-child) {
+        margin-left: -1px;
+    }
+}
