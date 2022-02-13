@@ -1,4 +1,5 @@
-import { Oak, path } from "../../../deps.ts";
+import { path } from "../../../deps.ts";
+import { Oak } from "../../../deps_oak.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { importRecipes } from "../../data/parse/import/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";

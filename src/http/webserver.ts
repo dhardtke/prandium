@@ -1,4 +1,5 @@
-import { log, Oak } from "../../deps.ts";
+import { log } from "../../deps.ts";
+import { Oak } from "../../deps_oak.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { Settings } from "../data/settings.ts";

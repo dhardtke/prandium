@@ -3,7 +3,7 @@ import type {
   RouteParams,
   State,
 } from "https://deno.land/x/oak@v10.2.0/mod.ts";
-import { Oak } from "../../../../deps.ts";
+import { Oak } from "../../../../deps_oak.ts";
 
 declare module "https://deno.land/x/oak@v10.2.0/mod.ts" {
   interface Context {

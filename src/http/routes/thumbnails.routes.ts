@@ -1,4 +1,4 @@
-import { Oak } from "../../../deps.ts";
+import { Oak } from "../../../deps_oak.ts";
 import { getThumbnailDir } from "../../data/util/thumbnails.ts";
 import { AppState } from "../webserver.ts";
 

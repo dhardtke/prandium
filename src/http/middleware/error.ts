@@ -1,4 +1,5 @@
-import { log, Oak } from "../../../deps.ts";
+import { log } from "../../../deps.ts";
+import { Oak } from "../../../deps_oak.ts";
 import { Error404 } from "../../tpl/templates/error/error_404.template.ts";
 import { Error500 } from "../../tpl/templates/error/error_500.template.ts";
 import { AppState } from "../webserver.ts";
