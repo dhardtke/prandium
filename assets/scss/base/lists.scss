@@ -11,4 +11,16 @@ ul, ol {
 
         list-style: disc;
     }
+
+    &.dash {
+        @include spacing($left: variables.$s-4, $asPadding: false);
+
+        list-style: dash;
+    }
+}
+
+@counter-style dash {
+    system: cyclic;
+    symbols: "–";
+    suffix: " ";
 }

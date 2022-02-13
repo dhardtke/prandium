@@ -181,23 +181,6 @@ function Instructions(recipe: Recipe): string | undefined {
             caret: "right"
           })
         )}
-      ${""/*
-        <div class="accordion">
-          ${recipe.instructions.map((instruction, i) => html`
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="heading-instruction-${i}">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-instruction-${i}">
-                  ${e(l.recipe.ingredients.step(i + 1))}
-                </button>
-              </h2>
-              <div id="collapse-instruction-${i}" class="accordion-collapse collapse show">
-                <div class="accordion-body">
-                  ${e(instruction)}
-                </div>
-              </div>
-            </div>
-          `)}
-        </div>*/}
       </div>
     `;
   }
@@ -207,16 +190,14 @@ function Reviews(recipe: Recipe): string | undefined {
   if (recipe.reviews.length) {
     return html`
       <h3>${e(l.recipe.reviews)}</h3>
-      ${recipe.reviews.map((review, i) => html`
-        <figure${i < recipe.reviews.length - 1 && ` class="mbo"`}>
-          <blockquote class="blockquote">
-            <p>${e(review.text)}</p>
-          </blockquote>
-          <figcaption class="blockquote-footer mbo">
-            ${e(date.format(review.date))}
-          </figcaption>
-          </figure>
-      `)}
+      <ul class="dash">
+        ${recipe.reviews.map((review, i) => html`
+          <li${i < recipe.reviews.length - 1 && ` class="mb"`}>
+            <p class="mbo">${e(review.text)}</p>
+            <span class="text-muted">${e(date.format(review.date))}</span>
+            </figure>
+        `)}
+      </ul>
     `;
   }
 }
