@@ -2,10 +2,10 @@ import type {
   Context,
   RouteParams,
   State,
-} from "https://deno.land/x/oak@v10.1.0/mod.ts";
+} from "https://deno.land/x/oak@v10.2.0/mod.ts";
 import { OrderBy } from "../../../data/service/service.ts";
 
-declare module "https://deno.land/x/oak@v10.1.0/mod.ts" {
+declare module "https://deno.land/x/oak@v10.2.0/mod.ts" {
   interface Context {
     orderBy: (_default?: OrderBy) => OrderBy | undefined;
   }

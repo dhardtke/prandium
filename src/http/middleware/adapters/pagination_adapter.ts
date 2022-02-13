@@ -2,12 +2,12 @@ import type {
   Context,
   RouteParams,
   State,
-} from "https://deno.land/x/oak@v10.1.0/mod.ts";
+} from "https://deno.land/x/oak@v10.2.0/mod.ts";
 import { Pagination, PaginationBuilder } from "../../../data/pagination.ts";
 import { toNumber } from "../../../data/util/convert.ts";
 import { AppState } from "../../webserver.ts";
 
-declare module "https://deno.land/x/oak@v10.1.0/mod.ts" {
+declare module "https://deno.land/x/oak@v10.2.0/mod.ts" {
   interface Context {
     paginate: <T>(
       total: number,
