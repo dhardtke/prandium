@@ -1,13 +1,7 @@
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { pushAll, toCamelCase, toDate } from "../util/convert.ts";
-import {
-  buildFilters,
-  buildOrderBySql,
-  columns,
-  Filter,
-  placeholders,
-} from "../util/sql.ts";
+import { buildFilters, buildOrderBySql, columns, Filter, placeholders, } from "../util/sql.ts";
 import { OrderBy, Service } from "./service.ts";
 import { TagService } from "./tag.service.ts";
 
@@ -276,9 +270,7 @@ export class RecipeService implements Service<Recipe> {
     loadHistory?: boolean,
     loadReviews?: boolean,
   ): Recipe | undefined {
-    const result = this.db.single<
-      { ingredients: string; instructions: string }
-    >(
+    const result = this.db.single<{ ingredients: string; instructions: string }>(
       `SELECT ${columns(Recipe.columns, "r.")}
        FROM recipe r
        WHERE r.id = ?`,
@@ -307,12 +299,13 @@ export class RecipeService implements Service<Recipe> {
       if (loadHistory) {
         for (
           const row of this.db.query<{ timestamp: string }>(
-            `SELECT timestamp
+          `SELECT timestamp
            FROM recipe_history
-           WHERE recipe_id = ?`,
-            [recipe.id],
-          )
-        ) {
+           WHERE recipe_id = ?
+           ORDER BY timestamp DESC`,
+          [recipe.id],
+        )
+          ) {
           recipe.history.push(toDate(row.timestamp));
         }
       }
@@ -320,12 +313,13 @@ export class RecipeService implements Service<Recipe> {
       if (loadReviews) {
         for (
           const row of this.db.query(
-            `SELECT ${columns(Review.columns)}
+          `SELECT ${columns(Review.columns)}
            FROM recipe_review
-           WHERE recipe_id = ?`,
-            [recipe.id],
-          )
-        ) {
+           WHERE recipe_id = ?
+           ORDER BY date DESC`,
+          [recipe.id],
+        )
+          ) {
           recipe.reviews.push(new Review(toCamelCase(row)));
         }
       }
