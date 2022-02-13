@@ -115,14 +115,12 @@ function IngredientQuantity(ingredient: Ingredient): string | undefined {
 
 function YourRating(recipe: Recipe): string {
   return html`
-    <div class="col-12 col-lg-6">
+    <div class="col-12 col-lg-6" id="recipe-rating">
       <div class="side-by-side">
         <h5>${e(l.recipe.rating)}</h5>
         <small class="current ml">${e(number.format(recipe.rating, 1))}</small>
       </div>
-      <div id="recipe-rating">
-        ${Rating("rating", recipe.rating)}
-      </div>
+      ${Rating("rating", recipe.rating)}
     </div>`;
 }
 
