@@ -104,7 +104,7 @@ export const de: Language = {
     orderBy: "Sortiere nach",
     portions: "Portionen",
     prepTime: "Vorbereitungszeit",
-    rating: "Bewertung",
+    rating: "Deine Bewertung",
     reviews: "Rezensionen",
     source: "Quelle",
     time: {

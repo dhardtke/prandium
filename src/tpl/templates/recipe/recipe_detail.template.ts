@@ -28,8 +28,8 @@ function NutritionTable(recipe: Recipe): string | undefined {
   ].filter(([_, value]) => Boolean(value));
   if (fields.length) {
     return html`
-      <div class="col-lg-6">
-        <h4>${l.nutritionalValue}</h4>
+      <div class="col-12 col-lg-6">
+        <h5>${l.nutritionalValue}</h5>
         <div class="table-responsive">
           <table class="fw">
             <colgroup>
@@ -52,7 +52,7 @@ function NutritionTable(recipe: Recipe): string | undefined {
 
 function History(recipe: Recipe): string {
   return html`
-    <div class="col-lg-6">
+    <div class="col-12 col-lg-6">
       <h5>${e(l.recipe.history)}</h5>
       ${recipe.history.length ? html`
         <ul class="disc">
@@ -66,8 +66,8 @@ function History(recipe: Recipe): string {
 
 function Times(recipe: Recipe): string | undefined {
   return html`
-    <div class="col-lg-6">
-      <h4>${l.recipe.form.group.times}</h4>
+    <div class="col-12 col-lg-6">
+      <h5>${l.recipe.form.group.times}</h5>
       <div class="table-responsive">
         <table class="fw">
           <colgroup>
@@ -113,27 +113,15 @@ function IngredientQuantity(ingredient: Ingredient): string | undefined {
   }
 }
 
-function Ratings(recipe: Recipe): string {
+function YourRating(recipe: Recipe): string {
   return html`
-    <div class="grid" style="--gap: 0 1.5rem">
-      <div class="col-12 col-md-6 mb">
-        <div class="card">
-          <div class="card-body side-by-side" id="recipe-rating">
-            <span class="text-muted mra">${e(l.recipe.rating)}</span>
-            ${Rating("rating", recipe.rating)}
-            <small class="current ml">${e(number.format(recipe.rating, 1))}</small>
-          </div>
-        </div>
+    <div class="col-12 col-lg-6">
+      <div class="side-by-side">
+        <h5>${e(l.recipe.rating)}</h5>
+        <small class="current ml">${e(number.format(recipe.rating, 1))}</small>
       </div>
-
-      <div class="col-12 col-md-6 mb">
-        <div class="card">
-          <div class="card-body side-by-side">
-            <span class="text-muted mra">${e(l.recipe.aggregateRating)}</span>
-            ${Rating("aggregate_rating", recipe.aggregateRatingValue, true)}
-            <small class="current ml">${e(number.format(recipe.aggregateRatingValue, 2))}</small>
-          </div>
-        </div>
+      <div id="recipe-rating">
+        ${Rating("rating", recipe.rating)}
       </div>
     </div>`;
 }
@@ -229,11 +217,17 @@ export const RecipeDetailTemplate = (
       true,
       { title: recipe.title, url: UrlGenerator.recipe(recipe) },
     )}
-    ${recipe.source && html`
-      <a href="${e(recipe.source)}" target="_blank">
-        ${LabeledIcon(new URL(recipe.source).hostname, "link-45deg")}
-      </a>
-    `}
+    <div class="side-by-side">
+      ${recipe.source && html`
+        <a href="${e(recipe.source)}" target="_blank" class="spacer-r">
+          ${LabeledIcon(new URL(recipe.source).hostname, "link-45deg")}
+        </a>
+      `}
+      <div class="side-by-side" title="${e(l.recipe.aggregateRating)}">
+        ${Rating("aggregate_rating", recipe.aggregateRatingValue, true, true)}
+        <small class="current ml">${e(number.format(recipe.aggregateRatingValue, 2))}</small>
+      </div>
+    </div>
   </div>
 
   <div class="side-by-side mb">
@@ -278,10 +272,10 @@ export const RecipeDetailTemplate = (
     ${NutritionTable(recipe)}
     ${History(recipe)}
     ${Times(recipe)}
+    ${YourRating(recipe)}
   </div>
 
   ${recipe.description && html`<p class="lead">${e(recipe.description)}</p>`}
-  ${Ratings(recipe)}
 
   ${/*TODO show metadata like last cooked, etc.?*/""}
 

@@ -17,14 +17,23 @@
         display: none;
     }
 
-    label {
-        transition: variables.$transition-base;
-        color: var(--color-empty-star);
+    .small {
+        svg {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
 
+    &:not(.small) {
         svg {
             width: 2rem;
             height: 2rem;
         }
+    }
+
+    label {
+        transition: variables.$transition-base;
+        color: var(--color-empty-star);
 
         &.half {
             svg {
