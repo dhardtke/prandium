@@ -28,21 +28,23 @@ function NutritionTable(recipe: Recipe): string | undefined {
   ].filter(([_, value]) => Boolean(value));
   if (fields.length) {
     return html`
-      <h4>${l.nutritionalValue}</h4>
-      <div class="table-responsive">
-        <table class="fw">
-          <colgroup>
-            <col style="width: 50%"/>
-            <col style="width: 50%"/>
-          </colgroup>
-          ${fields
-            .map(([label, value]) => html`
-              <tr>
-                <th>${label}</th>
-                <td>${value}</td>
-              </tr>
-            `)}
-        </table>
+      <div class="col-lg-6">
+        <h4>${l.nutritionalValue}</h4>
+        <div class="table-responsive">
+          <table class="fw">
+            <colgroup>
+              <col style="width: 50%"/>
+              <col style="width: 50%"/>
+            </colgroup>
+            ${fields
+              .map(([label, value]) => html`
+                <tr>
+                  <th>${label}</th>
+                  <td>${value}</td>
+                </tr>
+              `)}
+          </table>
+        </div>
       </div>
     `;
   }
@@ -50,41 +52,45 @@ function NutritionTable(recipe: Recipe): string | undefined {
 
 function History(recipe: Recipe): string {
   return html`
-    <h5>${e(l.recipe.history)}</h5>
-    ${recipe.history.length ? html`
-      <ul class="disc">
-        ${recipe.history.map((d) => html`
-          <li title="${e(date.format(d))}">${e(date.formatRelative(d))}</li>
-        `)}
-      </ul>` : html`${e(l.recipe.notCookedYet)}`}
+    <div class="col-lg-6">
+      <h5>${e(l.recipe.history)}</h5>
+      ${recipe.history.length ? html`
+        <ul class="disc">
+          ${recipe.history.map((d) => html`
+            <li title="${e(date.format(d))}">${e(date.formatRelative(d))}</li>
+          `)}
+        </ul>` : html`${e(l.recipe.notCookedYet)}`}
+    </div>
   `;
 }
 
 function Times(recipe: Recipe): string | undefined {
   return html`
-    <h4>${l.recipe.form.group.times}</h4>
-    <div class="table-responsive">
-      <table class="fw">
-        <colgroup>
-          <col style="width: 50%"/>
-          <col style="width: 50%"/>
-        </colgroup>
-        ${recipe.prepTime && html`
-          <tr>
-            <th>${e(l.recipe.time.prep)}</th>
-            <td>${e(date.formatSeconds(recipe.prepTime))}</td>
-          </tr>`}
-        ${recipe.cookTime && html`
-          <tr>
-            <th>${e(l.recipe.time.cook)}</th>
-            <td>${e(date.formatSeconds(recipe.cookTime))}</td>
-          </tr>`}
-        ${recipe.prepTime && recipe.cookTime && html`
-          <tr>
-            <th>${e(l.recipe.time.total)}</th>
-            <td>${e(date.formatSeconds(recipe.prepTime + recipe.cookTime))}</td>
-          </tr>`}
-      </table>
+    <div class="col-lg-6">
+      <h4>${l.recipe.form.group.times}</h4>
+      <div class="table-responsive">
+        <table class="fw">
+          <colgroup>
+            <col style="width: 50%"/>
+            <col style="width: 50%"/>
+          </colgroup>
+          ${recipe.prepTime && html`
+            <tr>
+              <th>${e(l.recipe.time.prep)}</th>
+              <td>${e(date.formatSeconds(recipe.prepTime))}</td>
+            </tr>`}
+          ${recipe.cookTime && html`
+            <tr>
+              <th>${e(l.recipe.time.cook)}</th>
+              <td>${e(date.formatSeconds(recipe.cookTime))}</td>
+            </tr>`}
+          ${recipe.prepTime && recipe.cookTime && html`
+            <tr>
+              <th>${e(l.recipe.time.total)}</th>
+              <td>${e(date.formatSeconds(recipe.prepTime + recipe.cookTime))}</td>
+            </tr>`}
+        </table>
+      </div>
     </div>
   `;
 }
@@ -269,15 +275,9 @@ export const RecipeDetailTemplate = (
   `}
 
   <div class="grid">
-    <div class="col-lg-6">
-      ${NutritionTable(recipe)}
-    </div>
-    <div class="col-lg-6">
-      ${History(recipe)}
-    </div>
-    <div class="col-lg-6">
-      ${Times(recipe)}
-    </div>
+    ${NutritionTable(recipe)}
+    ${History(recipe)}
+    ${Times(recipe)}
   </div>
 
   ${recipe.description && html`<p class="lead">${e(recipe.description)}</p>`}
