@@ -38,6 +38,15 @@ html {
     --badge-bg: #212529;
     --badge-link-hover-bg: #0d6efd;
     --badge-link-hover: #fff;
+    --form-border: #ced4da;
+    --form-bg: #fff;
+    --form: #212529;
+    --form-focus: #212529;
+    --form-focus-border: #86b7fe;
+    --input-group: #212529;
+    --input-group-bg: #e9ecef;
+    --input-group-border: #ced4da;
+    --flagged-recipe-border: #0dcaf0;
 
     &.dark {
         --text-primary: #ced4da;
@@ -67,5 +76,12 @@ html {
         --page-link-hover-bg: #6c757d;
         --badge: #212529;
         --badge-bg: #adb5bd;
+        --form: #ced4da;
+        --form-focus: #ced4da;
+        --form-bg: #343a40;
+        --form-border: #6c757d;
+        --input-group: #ced4da;
+        --input-group-bg: transparent;
+        --input-group-border: #6c757d;
     }
 }

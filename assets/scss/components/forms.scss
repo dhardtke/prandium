@@ -2,23 +2,20 @@
 @use "../base/variables";
 
 input, select {
-    @include spacing($left: variables.$s-3, $right: variables.$s-3);
-
-    padding: .375rem .75rem;
+    @include spacing($horizontal: variables.$s-3, $vertical: .375rem);
 
     width: 100%;
-    border: 1px solid #ced4da; // TODO variable
-    background: #fff; // TODO variable
-    color: #212529; // TODO variable
+    border: 1px solid var(--form-border);
+    background: var(--form-bg);
+    color: var(--form);
     transition: variables.$transition-base;
     line-height: 1.5;
 
     &:focus {
-        color: #212529; // TODO variable
-        background-color: #fff;
-        border-color: #86b7fe;
+        color: var(--form-focus);
+        border-color: var(--form-focus-border);
         outline: 0;
-        box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+        box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
     }
 }
 
@@ -33,9 +30,13 @@ input, select {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #212529;
+    color: var(--input-group);
     text-align: center;
     white-space: nowrap;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
+    background: var(--input-group-bg);
+    border: 1px solid var(--input-group-border);
+
+    &:not(:last-child) {
+        border-right: 0;
+    }
 }

@@ -36,33 +36,10 @@
     &.flagged {
         .card {
             border-width: 2px;
-            border-color: #0dcaf0; // TODO var
+            border-color: var(--flagged-recipe-border);
         }
     }
 }
-
-/*
-#tag-filter {
-    .card-body {
-        padding-right: .75rem;
-        max-height: 300px;
-
-        @include media-breakpoint-down('md') {
-            max-height: 600px;
-        }
-    }
-
-    .active {
-        background: $primary;
-
-        &:hover {
-            color: #fff;
-        }
-    }
-}
- */
-
-// TODO: lazy loading of images does not work. Investigate..
 
 #recipe-list {
     --gap: #{variables.$s-3};

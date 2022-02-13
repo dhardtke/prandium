@@ -26,7 +26,8 @@
 }
 
 .img-thumbnail {
-    padding: .25rem; // TODO use spacing mixin
+    @include spacing($top: variables.$s-1, $left: variables.$s-1, $right: variables.$s-1, $bottom: variables.$s-1);
+
     background-color: #fff;
     border: 1px solid #dee2e6;
     max-width: 100%;
