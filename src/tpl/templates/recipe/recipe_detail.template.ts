@@ -195,7 +195,7 @@ function Reviews(recipe: Recipe): string | undefined {
           <li${i < recipe.reviews.length - 1 && ` class="mb"`}>
             <p class="mbo">${e(review.text)}</p>
             <span class="text-muted">${e(date.format(review.date))}</span>
-            </figure>
+          </li>
         `)}
       </ul>
     `;
