@@ -118,7 +118,7 @@ function YourRating(recipe: Recipe): string {
     <div class="col-12 col-lg-6" id="recipe-rating">
       <div class="side-by-side">
         <h5>${e(l.recipe.rating)}</h5>
-        <small class="current ml">${e(number.format(recipe.rating, 1))}</small>
+        <small class="current text-muted">${e(number.format(recipe.rating, 1))}</small>
       </div>
       ${Rating("rating", recipe.rating)}
     </div>`;
