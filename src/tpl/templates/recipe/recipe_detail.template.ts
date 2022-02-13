@@ -48,6 +48,18 @@ function NutritionTable(recipe: Recipe): string | undefined {
   }
 }
 
+function History(recipe: Recipe): string {
+  return html`
+    <h5>${e(l.recipe.history)}</h5>
+    ${recipe.history.length ? html`
+      <ul class="disc">
+        ${recipe.history.map((d) => html`
+          <li title="${e(date.format(d))}">${e(date.formatRelative(d))}</li>
+        `)}
+      </ul>` : html`${e(l.recipe.notCookedYet)}`}
+  `;
+}
+
 function Times(recipe: Recipe): string | undefined {
   return html`
     <h4>${l.recipe.form.group.times}</h4>
@@ -195,7 +207,7 @@ function Reviews(recipe: Recipe): string | undefined {
           <li${i < recipe.reviews.length - 1 && ` class="mb"`}>
             <p class="mbo">${e(review.text)}</p>
             <span class="text-muted">${e(date.format(review.date))}</span>
-          </li>
+            </li>
         `)}
       </ul>
     `;
@@ -261,13 +273,7 @@ export const RecipeDetailTemplate = (
       ${NutritionTable(recipe)}
     </div>
     <div class="col-lg-6">
-      <h5>${e(l.recipe.history)}</h5>
-      ${recipe.history.length ? html`
-        <ul class="disc">
-          ${recipe.history.map((d) => html`
-            <li title="${e(date.format(d))}">${e(date.formatRelative(d))}</li>
-          `)}
-        </ul>` : html`${e(l.recipe.notCookedYet)}`}
+      ${History(recipe)}
     </div>
     <div class="col-lg-6">
       ${Times(recipe)}
