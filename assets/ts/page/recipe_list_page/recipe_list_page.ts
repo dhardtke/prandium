@@ -33,7 +33,7 @@ function registerInfiniteScrolling($recipeList: HTMLElement) {
     if (!$pagination || $pagination.dataset[Data.PaginationHasMore] !== "true") {
       return;
     }
-    const url = new URL(window.location.href);
+    const url = new URL(globalThis.location.href);
     url.searchParams.set(pageParam, String((parseInt(url.searchParams.get(pageParam) || "", 10) || 1) + 1));
     const response = await request(url.toString());
     if (response.status === 200) {
@@ -45,7 +45,7 @@ function registerInfiniteScrolling($recipeList: HTMLElement) {
       }
       moveChildren($newRecipeList, $recipeList);
       $pagination.parentNode?.replaceChild($newPagination, $pagination);
-      window.history.pushState({}, document.title, url.toString());
+      globalThis.history.pushState({}, document.title, url.toString());
 
       bootComponents();
     }

@@ -66,7 +66,7 @@ function ArrayField($arrayField: HTMLDivElement) {
       $list.insertBefore($fragment, $template);
       updateMoveButtons();
       const $items = $list.querySelectorAll(Selectors.ListItem);
-      window.dispatchEvent(new CustomEvent(Events.Create, { detail: $items[$items.length - 1] }));
+      globalThis.dispatchEvent(new CustomEvent(Events.Create, { detail: $items[$items.length - 1] }));
     });
     onClick($parent, Selectors.BtnDelete, (e: MouseEvent) => {
       const $item = (e.target as HTMLButtonElement).closest(Selectors.ListItem);

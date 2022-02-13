@@ -12,7 +12,7 @@ export class Observer extends BaseComponent {
     super(ctx);
     this.observer = new IntersectionObserver(([entry]) => {
       if (entry && entry.isIntersecting) {
-        window.dispatchEvent(new CustomEvent(Events.Intersecting));
+        globalThis.dispatchEvent(new CustomEvent(Events.Intersecting));
         this.destructor();
       }
     });

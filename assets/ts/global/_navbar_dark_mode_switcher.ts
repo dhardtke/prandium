@@ -25,7 +25,7 @@ export function NavbarDarkModeSwitcher() {
 
   let storage = getCookie(DarkModeCookie);
   if (storage === null) {
-    const wantsDark = "" + window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const wantsDark = "" + globalThis.matchMedia("(prefers-color-scheme: dark)").matches;
     setCookie(DarkModeCookie, wantsDark);
     toggleDarkMode();
   }
