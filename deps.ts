@@ -16,7 +16,7 @@ export type {
   NutritionInformation as SchemaNutritionInformation,
   Recipe as SchemaRecipe,
   Review as SchemaReview,
-} from "https://esm.sh/schema-dts@1.0.0";
+} from "https://esm.sh/schema-dts@1.0.0?pin=v66";
 
 // tests
 export {

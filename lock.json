@@ -1,6 +1,6 @@
 {
-  "https://cdn.esm.sh/v53/schema-dts@1.0.0/deno/schema-dts.js": "579761e9e60f388a6dbafb0e2c472eb358104a3180d4dbfdbdb3fc56fdad0ce1",
-  "https://cdn.esm.sh/v53/schema-dts@1.0.0/dist/schema.d.ts": "3643716eb82014cf3a3a63f3ee014d74c97d18c7b638d438e00375b330ab8656",
+  "https://cdn.esm.sh/v66/schema-dts@1.0.0/deno/schema-dts.js": "d919bec9818dfb8a2aab0dbb53194b4113cab16c451a7165c74e1d653d71a2ba",
+  "https://cdn.esm.sh/v66/schema-dts@1.0.0/dist/schema.d.ts": "3643716eb82014cf3a3a63f3ee014d74c97d18c7b638d438e00375b330ab8656",
   "https://deno.land/std@0.123.0/_util/assert.ts": "2f868145a042a11d5ad0a3c748dcf580add8a0dbc0e876eaa0026303a5488f58",
   "https://deno.land/std@0.123.0/_util/os.ts": "dfb186cc4e968c770ab6cc3288bd65f4871be03b93beecae57d657232ecffcac",
   "https://deno.land/std@0.123.0/bytes/bytes_list.ts": "3bff6a09c72b2e0b1e92e29bd3b135053894196cca07a2bba842901073efe5cb",
@@ -112,5 +112,5 @@
   "https://deno.land/x/sqlite@v3.2.1/src/error.ts": "abf9df169951faf8c21a68d99ef9efd257c788c19784f27dd147507fbdfe5fe7",
   "https://deno.land/x/sqlite@v3.2.1/src/query.ts": "df4d3d6b23d52b36243dd47c07ed6ed7cd23f7834a0f6a2f2c6dbffba63d4c28",
   "https://deno.land/x/sqlite@v3.2.1/src/wasm.ts": "e79d0baa6e42423257fb3c7cc98091c54399254867e0f34a09b5bdef37bd9487",
-  "https://esm.sh/schema-dts@1.0.0": "d612b7b52596fa39a8698ed4cd432123e2b9d6b85a6b71dba731f9a517dc78a4"
+  "https://esm.sh/schema-dts@1.0.0?pin=v66": "41a3fa1bacdaf2fb959962e6f08275c4ffadc8bf276cdae6e7fc0998483abf8a"
 }
