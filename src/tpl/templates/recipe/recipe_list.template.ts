@@ -142,7 +142,6 @@ export const RecipeListTemplate = (
   recipes: Pagination<Recipe>,
   tags: Tag[],
   showTagFilter: boolean,
-  infiniteScrolling: boolean,
 ) => {
   const tagFilter = Collapsible({
     content: html`${TagFilter(tags, showTagFilter)}`,
@@ -178,7 +177,7 @@ export const RecipeListTemplate = (
     ${Page.currentUrl.searchParams.get("flash") === "deleteSuccessful" && Alert("success", l.info, l.recipe.deleteSuccessful)}
     ${recipes.totalItems
       ? html`
-        <div class="grid mb" id="recipe-list" data-infinite-scrolling="${infiniteScrolling + ""}">
+        <div class="grid mb" id="recipe-list">
           ${recipes.items.map((recipe) => html`
             <div class="col-12 col-md-6 col-lg-4 recipe${recipe.flagged && ` flagged`}">
               ${Dropdown({
@@ -236,8 +235,6 @@ export const RecipeListTemplate = (
               </a>
             </div>
           `)}
-          ${infiniteScrolling && html`
-            <div data-cmp="Observer" class="observer"></div>`}
         </div>
       ` : Alert("info", l.info, l.recipe.noRecipesFound, "mb")
     }

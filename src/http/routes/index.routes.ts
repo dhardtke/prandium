@@ -44,7 +44,6 @@ router.get("/", (ctx: Oak.Context<AppState>) => {
     recipes,
     tags,
     ctx.request.url.searchParams.has("tagFilter"),
-    ctx.state.settings.infiniteScrolling,
   );
 });
 

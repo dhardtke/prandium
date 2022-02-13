@@ -108,6 +108,5 @@ Deno.test(
       actual.addHistoryEntryWhenRating,
       DefaultSettings.addHistoryEntryWhenRating,
     );
-    assertEquals(actual.infiniteScrolling, DefaultSettings.infiniteScrolling);
   }),
 );
