@@ -10,7 +10,8 @@ export type DropdownItem = ItemWithHtml | typeof DIVIDER;
 
 function Item(item: DropdownItem) {
   if (item === DIVIDER) {
-    return html`<li class="divider"></li>`;
+    return html`
+      <li class="divider"></li>`;
   }
   return html`
     <li>
@@ -24,7 +25,7 @@ export function Dropdown(
     label: string;
     labelClass?: string;
     spacing?: boolean;
-    caret?: boolean;
+    caret?: boolean | "right";
     items: DropdownItem[];
   },
 ) {
@@ -34,9 +35,9 @@ export function Dropdown(
       labelClass: options.labelClass,
       caret: options.caret,
       content: html`
-      <ul class="dropdown${options.spacing && " dropdown--with-spacing"}">
-        ${options.items.map((item) => Item(item))}
-      </ul>`,
+        <ul class="dropdown${options.spacing && " dropdown--with-spacing"}">
+          ${options.items.map((item) => Item(item))}
+        </ul>`,
     })
   }`;
 }

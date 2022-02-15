@@ -22,7 +22,7 @@ function TagControls(tags: Tag[], tagFilter: CollapsibleHtml) {
     <div class="col-6 col-lg-2">
       <div class="btn-group">
         <div class="btn-group">
-          <label class="btn secondary${tags.length === 0 && " disabled"}" for="${tagFilter.labelId}">
+          <label class="btn secondary caret right${tags.length === 0 && " disabled"}" for="${tagFilter.labelId}">
             ${e(l.navigation.tags)}
           </label>
         </div>
