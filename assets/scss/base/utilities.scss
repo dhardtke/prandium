@@ -16,7 +16,7 @@
     }
 
     &.labeled {
-        @include spacing($right: variables.$s-1, $asPadding: false);
+        @include spacing($right: variables.$s-2, $asPadding: false);
     }
 }
 

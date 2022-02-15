@@ -1,7 +1,7 @@
 @use "../mixins/spacing" as *;
 @use "../base/variables";
 
-input, select {
+input, select, textarea {
     @include spacing($horizontal: variables.$s-3, $vertical: .375rem);
 
     width: 100%;
@@ -10,6 +10,7 @@ input, select {
     color: var(--form);
     transition: variables.$transition-base;
     line-height: 1.5;
+    font-family: inherit;
 
     &:focus {
         color: var(--form-focus);
@@ -17,6 +18,10 @@ input, select {
         outline: 0;
         box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
     }
+}
+
+textarea {
+    resize: vertical;
 }
 
 .input-group {
@@ -38,5 +43,21 @@ input, select {
 
     &:not(:last-child) {
         border-right: 0;
+    }
+}
+
+.form-text {
+    @include spacing($top: variables.$s-1, $asPadding: false);
+
+    font-size: variables.$font-size-sm;
+    color: #6c757d;
+}
+
+.datetime {
+    display: flex;
+    border: 1px solid #dee2e6;
+
+    input {
+        border: 0;
     }
 }

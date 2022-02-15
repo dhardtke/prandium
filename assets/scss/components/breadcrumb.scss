@@ -9,15 +9,15 @@
 
         &:not(:last-child) {
             &:after {
-                @include spacing($horizontal: variables.$s-1);
+                @include spacing($horizontal: variables.$s-2);
 
                 content: "/";
-                color: var(--text-primary);
+                color: var(--breadcrumb);
             }
         }
 
         &.active {
-            color: var(--text-primary);
+            color: var(--breadcrumb);
         }
     }
 }

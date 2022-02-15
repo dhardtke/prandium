@@ -19,7 +19,7 @@ export const Breadcrumb = (
   ...items: { title: string; url?: string }[]
 ) =>
   html`
-    <ol class="breadcrumb${noMargin && " mb-0"}">
+    <ol class="breadcrumb${!noMargin && " mb"}">
       ${Item(e(l.recipes), !items?.length, "/")}
       ${items && items.map((item, i) =>
         Item(e(item.title), i === items.length - 1, item.url)

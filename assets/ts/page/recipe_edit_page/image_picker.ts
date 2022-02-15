@@ -6,7 +6,7 @@ const Selectors = {
   InputDelete: "input[name='deleteThumbnail']"
 } as const;
 
-const DisplayNone = "d-none";
+const DisplayNone = "hidden";
 const ClassWhileDragging = "dragging";
 
 export function ImagePicker() {

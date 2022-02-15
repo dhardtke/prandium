@@ -1,0 +1,13 @@
+.array-field {
+    .list-group {
+        border-bottom: 0;
+    }
+}
+
+#image-picker {
+    &.dragging {
+        border-color: var(--link-hover);
+    }
+
+    cursor: pointer;
+}

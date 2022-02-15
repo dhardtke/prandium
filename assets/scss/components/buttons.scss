@@ -36,6 +36,18 @@ $variants: (primary, secondary, light, danger, info);
             }
         }
     }
+
+    &:disabled,
+    &.disabled {
+        pointer-events: none;
+        opacity: .65;
+    }
+
+    &.sm {
+        @include spacing($vertical: variables.$s-1, $horizontal: variables.$s-2);
+
+        font-size: variables.$font-size-sm;
+    }
 }
 
 .btn-group {
