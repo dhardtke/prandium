@@ -25,6 +25,10 @@
             opacity: 0;
             transition: variables.$transition-base;
         }
+
+        a {
+            align-items: center;
+        }
     }
 
     &:hover {

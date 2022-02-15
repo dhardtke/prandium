@@ -19,14 +19,14 @@ function TagControls(tags: Tag[], tagFilter: CollapsibleHtml) {
   const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
-    <div class="col-lg-2">
+    <div class="col-6 col-lg-2">
       <div class="btn-group">
         <div class="btn-group">
-          <label class="btn btn-outline-secondary dropdown-toggle${tags.length === 0 && " disabled"}" for="${tagFilter.labelId}">
+          <label class="btn secondary${tags.length === 0 && " disabled"}" for="${tagFilter.labelId}">
             ${e(l.navigation.tags)}
           </label>
         </div>
-        <a class="btn btn-outline-danger${!currentTagIds.length && " disabled"}"
+        <a class="btn danger${!currentTagIds.length && " disabled"}"
            href="${e(parameters(Page.currentUrl).remove("tagId", "page"))}"
            title="${e(l.recipe.clearAllTags)}">
           ${Icon("trash")}
@@ -50,7 +50,7 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
                  placeholder="${e(l.navigation.filterPlaceholder)}">
         </div>
       </div>
-      <div class="card-body overflow-auto">
+      <div class="card-body">
         <div class="grid">
           ${tags.map((tag) => {
             const active = currentTagIds.includes(tag.id + "");
@@ -97,7 +97,7 @@ function OrderBy() {
   const otherOrderLabel = otherOrder === "ASC" ? l.orderBy.asc : l.orderBy.desc;
 
   return html`
-    <form class="col-lg-4" id="orderBy">
+    <form class="col-6 col-lg-4" id="orderBy">
       ${[...Page.currentUrl.searchParams.entries()]
         .filter(([name]) => !["orderBy", "order", "flash", "page"].includes(name))
         .map(([name, value]) => html`<input type="hidden" name="${name}" value="${value}">`)}
@@ -112,7 +112,7 @@ function OrderBy() {
             </option>`)}
         </select>
 
-        <button class="btn btn-outline-secondary" type="submit" name="order" value="${otherOrder}"
+        <button class="btn secondary" type="submit" name="order" value="${otherOrder}"
                 title="${otherOrderLabel}">
           ${Icon(order === "ASC" ? "arrow-down" : "arrow-up")}
         </button>
@@ -122,11 +122,11 @@ function OrderBy() {
 
 const ActionButtons = (recipeCount: number) => html`
   <div class="action-bar action-bar--right">
-    <a class="btn btn--primary me-2" href="${UrlGenerator.recipeCreate()}">
+    <a class="btn primary" href="${UrlGenerator.recipeCreate()}">
       ${LabeledIcon(l.create, "plus-square")}
     </a>
 
-    <a class="btn btn--secondary me-2" href="${UrlGenerator.recipeImport()}">
+    <a class="btn secondary" href="${UrlGenerator.recipeImport()}">
       ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill")}
     </a>
 
@@ -156,11 +156,11 @@ export const RecipeListTemplate = (
     </div>
 
     <div class="grid mb" id="recipe-filter">
-      <form class="d-flex col-lg-6" action="${UrlGenerator.home()}">
+      <form class="col-12 col-lg-6" action="${UrlGenerator.home()}">
         <div class="input-group">
           <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
                  value="${parameters(Page.currentUrl).get("title")}">
-          <button class="btn btn-outline-secondary" type="submit">
+          <button class="btn secondary" type="submit">
             ${Icon("search")}
           </button>
         </div>
@@ -182,10 +182,10 @@ export const RecipeListTemplate = (
             <div class="col-12 col-md-6 col-lg-4 recipe${recipe.flagged && ` flagged`}">
               ${Dropdown({
                 label: Icon("three-dots"),
-                labelClass: "btn btn--light",
+                labelClass: "btn light",
                 items: [
                   {
-                    html: html`<a class="text-primary" href="${UrlGenerator.recipeEdit(recipe)}">
+                    html: html`<a href="${UrlGenerator.recipeEdit(recipe)}">
                       ${LabeledIcon(l.edit, "pencil")}
                     </a>`
                   },
@@ -239,7 +239,7 @@ export const RecipeListTemplate = (
       ` : Alert("info", l.info, l.recipe.noRecipesFound, "mb")
     }
 
-    ${PaginationComponent(recipes)}
+    ${PaginationComponent(recipes, "mb")}
 
     ${ActionButtons(recipes.totalItems)}
   `);

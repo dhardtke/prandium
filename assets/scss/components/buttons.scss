@@ -1,13 +1,18 @@
 @use "../mixins/spacing" as *;
-@use "../base/variables" as *;
+@use "../base/variables";
 
-// TODO define variants as map
+$variants: (primary, secondary, light, danger, info);
 
 .btn {
-    @include spacing($horizontal: $s-4, $vertical: $s-2);
+    @include spacing($horizontal: variables.$s-4, $vertical: variables.$s-2);
+
+    display: inline-flex;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+
     border: 1px solid;
-    //padding: .375rem .75rem;
-    transition: $transition-base;
+    transition: variables.$transition-base;
     text-decoration: none;
 
     &:focus,
@@ -19,34 +24,17 @@
         cursor: pointer;
     }
 
-    &--primary {
-        // color: #ced4da;
-        color: #fff;
-        background: #0d6efd;
-        //border-color: #0d6efd;
-        border-color: #515151;
+    @each $variant in $variants {
+        &.#{$variant} {
+            color: var(--btn-#{$variant});
+            background: var(--btn-#{$variant}-bg);
+            border-color: var(--btn-#{$variant}-border);
 
-        &:hover {
-            color: #fff;
-            background: darken(#0d6efd, 10%);
+            &:hover {
+                color: var(--btn-#{$variant}-hover);
+                background: var(--btn-#{$variant}-hover-bg);
+            }
         }
-    }
-
-    &--secondary {
-        color: #fff;
-        background: #6c757d;
-        border-color: #4f4f4f;
-
-        &:hover {
-            color: #fff;
-            background: darken(#6c757d, 10%);
-        }
-    }
-
-    &--light {
-        color: #000;
-        background: #f8f9fa; // TODO vars
-        border-color: #f8f9fa;
     }
 }
 
@@ -63,5 +51,17 @@
     > .btn:not(:first-child),
     > .btn-group:not(:first-child) {
         margin-left: -1px;
+    }
+}
+
+.btn-bar {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+
+    & > .btn {
+        &:not(:last-child) {
+            @include spacing($right: variables.$s-3, $asPadding: false);
+        }
     }
 }

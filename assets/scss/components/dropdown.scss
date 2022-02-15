@@ -1,11 +1,12 @@
 @use "../mixins/spacing" as *;
 @use "../mixins/breakpoints";
 @use "../mixins/z-index" as *;
-@use "../base/variables" as *;
+@use "../base/variables";
 
 .dropdown {
-    @include spacing($vertical: $s-1);
+    @include spacing($vertical: variables.$s-1);
     @include z-index(dropdown);
+
     position: absolute;
     border: 1px solid;
     border-color: var(--dropdown-border);
@@ -13,7 +14,7 @@
     min-width: 10rem;
 
     &--with-spacing {
-        @include spacing($top: $s-4, $asPadding: false);
+        @include spacing($top: variables.$s-4, $asPadding: false);
     }
 
     @include breakpoints.media-breakpoint-down(md) {
@@ -25,11 +26,11 @@
     }
 
     @include breakpoints.media-breakpoint-down(lg) {
-        right: $s-4;
+        right: variables.$s-4;
     }
 
     .item {
-        @include spacing($vertical: $s-1, $horizontal: $s-4);
+        @include spacing($vertical: variables.$s-1, $horizontal: variables.$s-4);
 
         display: flex;
         justify-content: center;
@@ -64,7 +65,8 @@
     }
 
     .divider {
-        @include spacing($vertical: $s-2, $asPadding: false);
+        @include spacing($vertical: variables.$s-2, $asPadding: false);
+
         height: 1px;
         overflow: hidden;
         color: inherit;

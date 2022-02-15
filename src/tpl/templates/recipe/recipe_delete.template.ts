@@ -18,11 +18,13 @@ export const RecipeDeleteTemplate = (recipe: Recipe) => Page(recipe.title)(html`
     <h1>${e(l.confirmation)}</h1>
     <p>${e(l.recipe.deleteConfirmation)}</p>
 
-    <a class="btn btn-primary me-2" href="${UrlGenerator.recipe(recipe)}">
-      ${LabeledIcon(l.no, "arrow-left")}
-    </a>
-    <button type="submit" class="btn btn-danger">
-      ${LabeledIcon(l.yes, "trash")}
-    </button>
+    <div class="btn-bar">
+      <a class="btn primary col-12 col-lg-4" href="${UrlGenerator.recipe(recipe)}">
+        ${LabeledIcon(l.no, "arrow-left")}
+      </a>
+      <button type="submit" class="btn danger col-12 col-lg-4">
+        ${LabeledIcon(l.yes, "trash")}
+      </button>
+    </div>
   </form>
 `);

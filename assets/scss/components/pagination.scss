@@ -1,10 +1,11 @@
 @use "../mixins/spacing" as *;
-@use "../base/variables" as *;
+@use "../base/variables";
 
 .pagination {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+    gap: variables.$s-4 0;
 
     li {
         .page-link {
@@ -15,7 +16,7 @@
             text-decoration: none;
             background: var(--page-link-bg);
             border: 1px solid var(--page-link-border);
-            transition: $transition-base;
+            transition: variables.$transition-base;
 
             &:hover {
                 z-index: 2;

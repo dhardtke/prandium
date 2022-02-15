@@ -4,8 +4,8 @@ import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
 import { Icon } from "./icon.ts";
 
-export const Pagination = <T>(pagination: _Pagination<T>) => pagination.hasPages && html`
-  <ul class="pagination" data-pagination-has-more="${!pagination.isLastPage + ""}">
+export const Pagination = <T>(pagination: _Pagination<T>, wrapperClass?: string) => pagination.hasPages && html`
+  <ul class="pagination${wrapperClass && ` ${wrapperClass}`}">
     ${
       pagination.isFirstPage
         ? html`

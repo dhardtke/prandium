@@ -134,19 +134,21 @@ function Ingredients(recipe: Recipe, portions?: number): string | undefined {
             <h5>
               ${e(l.recipe.ingredients.title)}
             </h5>
-            <form class="d-flex" id="ingredients-form" action="#ingredients">
+            <form id="ingredients-form" action="#ingredients">
               <div class="input-group input-group-sm w-auto">
                 <input type="number" class="form-control portions" name="portions" value="${e(portions)}" min="1" max="99"
                        title="${e(l.recipe.portions)}">
                 <div class="input-group-text">
                   ${e(l.recipe.portions)}
                 </div>
-                <button class="btn btn-sm btn-outline-secondary d-flex justify-content-center plus" type="button">
-                  +
-                </button>
-                <button class="btn btn-sm btn-outline-secondary d-flex justify-content-center minus" type="button">
-                  -
-                </button>
+                <div class="btn-group">
+                  <button class="btn secondary plus" type="button">
+                    +
+                  </button>
+                  <button class="btn secondary minus" type="button">
+                    -
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -237,14 +239,14 @@ export const RecipeDetailTemplate = (
       `}
       ${e(recipe.title)}
     </h1>
-    <div class="d-flex pt-2">
-      <a href="${UrlGenerator.recipeFlag(recipe)}" class="btn btn-info btn-sm me-2">
+    <div class="action-bar">
+      <a href="${UrlGenerator.recipeFlag(recipe)}" class="btn info">
         ${LabeledIcon(recipe.flagged ? l.recipe.unflag : l.recipe.flag, "flag")}
       </a>
-      <a href="${UrlGenerator.recipeEdit(recipe)}" class="btn btn-secondary btn-sm me-2">
+      <a href="${UrlGenerator.recipeEdit(recipe)}" class="btn secondary">
         ${LabeledIcon(l.edit, "pencil")}
       </a>
-      <a href="${UrlGenerator.recipeDelete(recipe)}" class="btn btn-danger btn-sm">
+      <a href="${UrlGenerator.recipeDelete(recipe)}" class="btn danger">
         ${LabeledIcon(l.delete, "trash")}
       </a>
     </div>
