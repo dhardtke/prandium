@@ -25,6 +25,14 @@ self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
   );
 };
 
+function parseInstructions(
+  instructions: (string | { text?: string; name?: string })[],
+): string[] {
+  return instructions.flatMap((i) =>
+    typeof i === "string" ? i.split("\n") : [i.text || i.name]
+  );
+}
+
 export async function importRecipe(
   url: string,
   configDir: string,
@@ -70,7 +78,7 @@ export async function importRecipe(
     );
   return new Recipe({
     title: first(schemaRecipe.name)!.toString(),
-    description: first(schemaRecipe.description)!.toString(),
+    description: first(schemaRecipe.description)?.toString(),
     tags,
     source: url,
     thumbnail: await downloadThumbnail(
@@ -103,9 +111,9 @@ export async function importRecipe(
     nutritionSugar: first(nutrition?.sugarContent) as string,
     nutritionTransFat: first(nutrition?.transFatContent) as string,
     nutritionUnsaturatedFat: first(nutrition?.unsaturatedFatContent) as string,
-    instructions: ensureArray(schemaRecipe.recipeInstructions).map((i) =>
-      i + ""
-    ).flatMap((i) => i.split("\n"))
+    instructions: parseInstructions(
+      ensureArray(schemaRecipe.recipeInstructions),
+    )
       .map((i) => i.trim()).filter((i) => Boolean(i)),
     reviews,
   });
