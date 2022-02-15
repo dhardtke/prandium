@@ -56,7 +56,7 @@ export class SchemaParser {
     for (const json of this.collectJsons()) {
       try {
         const parsed = JSON.parse(json);
-        const candidates = Array.isArray(parsed) ? parsed : [parsed];
+        const candidates = SchemaParser.getObjects(parsed);
         for (const candidate of candidates) {
           if ("@type" in candidate && candidate["@type"] === type) {
             delete candidate["@context"];
@@ -67,6 +67,18 @@ export class SchemaParser {
         log.warning(`Skipping invalid JSON ${json}`, e);
       }
     }
+
     return null;
+  }
+
+  // deno-lint-ignore no-explicit-any
+  private static getObjects(parsed: any): unknown[] {
+    if (Array.isArray(parsed) === "array") {
+      return parsed;
+    }
+    if ("@graph" in parsed && Array.isArray(parsed["@graph"])) {
+      return parsed["@graph"];
+    }
+    return [parsed];
   }
 }
