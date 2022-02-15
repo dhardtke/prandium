@@ -20,13 +20,21 @@
     @include breakpoints.media-breakpoint-down(md) {
         @include spacing($horizontal: auto, $asPadding: false);
 
-        width: 75%;
-        left: 0;
         right: 0;
     }
 
-    @include breakpoints.media-breakpoint-down(lg) {
-        right: variables.$s-4;
+    &--full-width-mobile {
+        @include breakpoints.media-breakpoint-down(md) {
+            @include spacing($horizontal: auto, $asPadding: false);
+
+            width: 75%;
+            left: 0;
+            right: 0;
+        }
+
+        @include breakpoints.media-breakpoint-down(lg) {
+            right: variables.$s-4;
+        }
     }
 
     .item {

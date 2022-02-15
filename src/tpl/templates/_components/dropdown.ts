@@ -25,6 +25,7 @@ export function Dropdown(
     label: string;
     labelClass?: string;
     spacing?: boolean;
+    fullWidthMobile?: boolean;
     caret?: boolean | "right";
     items: DropdownItem[];
   },
@@ -35,7 +36,9 @@ export function Dropdown(
       labelClass: options.labelClass,
       caret: options.caret,
       content: html`
-        <ul class="dropdown${options.spacing && " dropdown--with-spacing"}">
+        <ul class="dropdown${options.spacing && " dropdown--with-spacing"}${
+        options.fullWidthMobile && " dropdown--full-width-mobile"
+      }">
           ${options.items.map((item) => Item(item))}
         </ul>`,
     })

@@ -14,6 +14,7 @@ const LanguageDropdown = () => html`
   ${Dropdown({
     label: html`${Icon("globe")}${l.language}`,
     spacing: true,
+    fullWidthMobile: true,
     caret: true,
     items: Object.entries(LANGUAGES)
       .map(([id, lang]) => ({ lang, active: l.meta.id === id }))
