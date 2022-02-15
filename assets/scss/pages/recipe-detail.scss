@@ -1,0 +1,18 @@
+.ingredient-quantity {
+    min-width: 6rem;
+    text-align: center;
+}
+
+#ingredients-form {
+    .btn {
+        width: 30px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.form-control.portions {
+    width: 5rem;
+}

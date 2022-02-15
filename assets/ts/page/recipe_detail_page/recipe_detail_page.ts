@@ -20,7 +20,7 @@ function registerPortionsControls() {
       const oldValue = $input.value;
       $input.value = (parseInt($input.value) + increment).toString();
       if (timeout) {
-        window.clearTimeout(timeout);
+        globalThis.clearTimeout(timeout);
       }
       if ($form.checkValidity()) {
         timeout = setTimeout(() => {
@@ -40,7 +40,7 @@ function initializeRating() {
   const $currentValue = $rating.querySelector(Selectors.CurrentValue)!;
   $rating.querySelectorAll<HTMLInputElement>("input").forEach(($radio) => {
     $radio.addEventListener("change", async () => {
-      await fetch(`${new URL(window.location.href).pathname}/rate`, {
+      await fetch(`${new URL(globalThis.location.href).pathname}/rate`, {
         method: "POST",
         body: new URLSearchParams({ rating: $radio.value }),
       });

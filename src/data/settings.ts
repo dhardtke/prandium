@@ -30,12 +30,6 @@ export interface Settings {
   minifyHtml: boolean;
 
   /**
-   * Whether infinite scrolling should be enabled for the recipe list page.
-   * @default false
-   */
-  infiniteScrolling: boolean;
-
-  /**
    * The default number of recipes per page.
    * @default 24
    */
@@ -50,7 +44,6 @@ export const DefaultSettings: Settings = {
   userAgent: DefaultUserAgent,
   addHistoryEntryWhenRating: true,
   minifyHtml: false,
-  infiniteScrolling: false,
   pageSize: 24,
 };
 
@@ -72,7 +65,6 @@ function validate(settings: any): Settings {
     userAgent: "string",
     addHistoryEntryWhenRating: "boolean",
     minifyHtml: "boolean",
-    infiniteScrolling: "boolean",
     pageSize: "number",
   };
   for (const [property, type] of Object.entries(types)) {

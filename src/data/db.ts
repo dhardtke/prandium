@@ -8,7 +8,6 @@ export type RowObject = Record<string, unknown>;
 export class Database {
   private readonly db: sqlite.DB;
   private readonly migrations: Migration[];
-  private inTransaction = false;
 
   public constructor(dbPath: string, migrations: Migration[] = MIGRATIONS) {
     log.debug(() => `[DB] Using database ${Colors.cyan(dbPath)}`);
@@ -79,30 +78,7 @@ export class Database {
   public transaction<ReturnValue = void>(
     fn: () => ReturnValue,
   ): ReturnValue | undefined {
-    let rVal: ReturnValue | undefined = undefined;
-    if (this.inTransaction) {
-      rVal = fn();
-    } else {
-      this.inTransaction = true;
-      this.db.query("begin");
-      let success = true;
-      try {
-        rVal = fn();
-      } catch (e) {
-        success = false;
-        log.error(() => `Error executing transaction`);
-        throw e;
-      } finally {
-        if (success) {
-          this.db.query("commit");
-          this.inTransaction = false;
-        } else {
-          this.db.query("rollback");
-          this.inTransaction = false;
-        }
-      }
-    }
-    return rVal;
+    return this.db.transaction(fn);
   }
 
   public migrate() {

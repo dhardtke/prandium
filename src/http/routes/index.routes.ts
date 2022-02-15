@@ -1,4 +1,4 @@
-import { Oak } from "../../../deps.ts";
+import { Oak } from "../../../deps_oak.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { services } from "../../data/service/services.ts";
 import { TagService } from "../../data/service/tag.service.ts";
@@ -44,7 +44,6 @@ router.get("/", (ctx: Oak.Context<AppState>) => {
     recipes,
     tags,
     ctx.request.url.searchParams.has("tagFilter"),
-    ctx.state.settings.infiniteScrolling,
   );
 });
 

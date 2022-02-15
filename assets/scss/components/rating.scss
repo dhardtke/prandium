@@ -1,10 +1,13 @@
-@use "_bootstrap";
+@use "../base/variables";
 
 // based on https://codepen.io/anefzaoui/pen/NWPZzMa
 .rating {
-    --color-star-hover: #{bootstrap.$gray-700};
-    --color-filled-star: #{bootstrap.$gray-900};
-    --color-empty-star: #{bootstrap.$gray-200};
+    //--color-star-hover: #{bootstrap.$gray-700};
+    //--color-filled-star: #{bootstrap.$gray-900};
+    //--color-empty-star: #{bootstrap.$gray-200};
+    --color-star-hover: #495057;
+    --color-filled-star: #212529;
+    --color-empty-star: #e9ecef;
 
     display: flex;
     flex-direction: row-reverse;
@@ -14,14 +17,23 @@
         display: none;
     }
 
-    label {
-        transition: bootstrap.$transition-base;
-        color: var(--color-empty-star);
+    .small {
+        svg {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
 
+    &:not(.small) {
         svg {
             width: 2rem;
             height: 2rem;
         }
+    }
+
+    label {
+        transition: variables.$transition-base;
+        color: var(--color-empty-star);
 
         &.half {
             svg {
@@ -39,7 +51,8 @@
     }
 
     /* Click + hover color */
-    input:checked ~ label, /* color current and previous stars on checked */{
+    input:checked ~ label, /* color current and previous stars on checked */
+    {
         color: var(--color-star-hover);
     }
 

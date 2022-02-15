@@ -1,13 +1,22 @@
-import type { Context } from "https://deno.land/x/oak@v9.0.1/mod.ts";
+import type {
+  Context,
+  RouteParams,
+  State,
+} from "https://deno.land/x/oak@v10.2.0/mod.ts";
 import { OrderBy } from "../../../data/service/service.ts";
 
-declare module "https://deno.land/x/oak@v9.0.1/mod.ts" {
+declare module "https://deno.land/x/oak@v10.2.0/mod.ts" {
   interface Context {
     orderBy: (_default?: OrderBy) => OrderBy | undefined;
   }
 
   // noinspection JSUnusedGlobalSymbols
-  interface RouterContext {
+  interface RouterContext<
+    R extends string,
+    P extends RouteParams<R> = RouteParams<R>,
+    // deno-lint-ignore no-explicit-any
+    S extends State = Record<string, any>,
+  > {
     orderBy: (_default?: OrderBy) => OrderBy | undefined;
   }
 }

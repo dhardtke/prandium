@@ -1,0 +1,16 @@
+$variants: (primary, secondary, success, warning, danger, dark, info);
+
+.alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+}
+
+@each $variant in $variants {
+    .alert-#{$variant} {
+        color: var(--alert-#{$variant});
+        background-color: var(--alert-#{$variant}-bg);
+        border-color: var(--alert-#{$variant}-border);
+    }
+}

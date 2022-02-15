@@ -309,7 +309,8 @@ export class RecipeService implements Service<Recipe> {
           const row of this.db.query<{ timestamp: string }>(
             `SELECT timestamp
            FROM recipe_history
-           WHERE recipe_id = ?`,
+           WHERE recipe_id = ?
+           ORDER BY timestamp DESC`,
             [recipe.id],
           )
         ) {
@@ -322,7 +323,8 @@ export class RecipeService implements Service<Recipe> {
           const row of this.db.query(
             `SELECT ${columns(Review.columns)}
            FROM recipe_review
-           WHERE recipe_id = ?`,
+           WHERE recipe_id = ?
+           ORDER BY date DESC`,
             [recipe.id],
           )
         ) {

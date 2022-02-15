@@ -1,4 +1,4 @@
-import { Oak } from "../../../deps.ts";
+import { Oak } from "../../../deps_oak.ts";
 import { root } from "../../shared/util.ts";
 
 const CompiledAssetsDir = root("assets");

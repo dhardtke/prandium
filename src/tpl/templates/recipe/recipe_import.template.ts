@@ -45,7 +45,7 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
                               <span class="text-success me-1">${
                                 Icon("check")
                               }</span>
-                              <a class="btn btn-success btn-sm" href="${
+                              <a class="btn success sm" href="${
                                 e(UrlGenerator.recipe(result.recipe!))
                               }" target="_blank">
                                 ${e(l.recipe.open)}
@@ -75,8 +75,8 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
                 ${e(l.recipe.import.urlInfo)}
               </div>
             </div>
-            <button type="submit" class="btn btn-primary">
-              ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill", 2)}
+            <button type="submit" class="btn primary">
+              ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill")}
             </button>
           </form>
         `

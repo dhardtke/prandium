@@ -1,0 +1,63 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables";
+
+input, select, textarea {
+    @include spacing($horizontal: variables.$s-3, $vertical: .375rem);
+
+    width: 100%;
+    border: 1px solid var(--form-border);
+    background: var(--form-bg);
+    color: var(--form);
+    transition: variables.$transition-base;
+    line-height: 1.5;
+    font-family: inherit;
+
+    &:focus {
+        color: var(--form-focus);
+        border-color: var(--form-focus-border);
+        outline: 0;
+        box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+    }
+}
+
+textarea {
+    resize: vertical;
+}
+
+.input-group {
+    display: flex;
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--input-group);
+    text-align: center;
+    white-space: nowrap;
+    background: var(--input-group-bg);
+    border: 1px solid var(--input-group-border);
+
+    &:not(:last-child) {
+        border-right: 0;
+    }
+}
+
+.form-text {
+    @include spacing($top: variables.$s-1, $asPadding: false);
+
+    font-size: variables.$font-size-sm;
+    color: #6c757d;
+}
+
+.datetime {
+    display: flex;
+    border: 1px solid #dee2e6;
+
+    input {
+        border: 0;
+    }
+}

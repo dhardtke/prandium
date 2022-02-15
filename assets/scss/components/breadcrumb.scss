@@ -1,0 +1,23 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables";
+
+.breadcrumb {
+    display: flex;
+
+    li {
+        display: flex;
+
+        &:not(:last-child) {
+            &:after {
+                @include spacing($horizontal: variables.$s-2);
+
+                content: "/";
+                color: var(--breadcrumb);
+            }
+        }
+
+        &.active {
+            color: var(--breadcrumb);
+        }
+    }
+}

@@ -1,0 +1,79 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables";
+
+$variants: (primary, secondary, light, danger, info);
+
+.btn {
+    @include spacing($horizontal: variables.$s-4, $vertical: variables.$s-2);
+
+    display: inline-flex;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid;
+    transition: variables.$transition-base;
+    text-decoration: none;
+
+    &:focus,
+    .collapsible > input:active + & {
+        box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+    }
+
+    &:not(:disabled):hover {
+        cursor: pointer;
+    }
+
+    @each $variant in $variants {
+        &.#{$variant} {
+            color: var(--btn-#{$variant});
+            background: var(--btn-#{$variant}-bg);
+            border-color: var(--btn-#{$variant}-border);
+
+            &:hover {
+                color: var(--btn-#{$variant}-hover);
+                background: var(--btn-#{$variant}-hover-bg);
+            }
+        }
+    }
+
+    &:disabled,
+    &.disabled {
+        pointer-events: none;
+        opacity: .65;
+    }
+
+    &.sm {
+        @include spacing($vertical: variables.$s-1, $horizontal: variables.$s-2);
+
+        font-size: variables.$font-size-sm;
+    }
+}
+
+.btn-group {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+
+    > .btn {
+        position: relative;
+        flex: 1 1 auto;
+    }
+
+    > .btn:not(:first-child),
+    > .btn-group:not(:first-child) {
+        margin-left: -1px;
+    }
+}
+
+.btn-bar {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+
+    & > .btn {
+        &:not(:last-child) {
+            @include spacing($right: variables.$s-3, $asPadding: false);
+        }
+    }
+}

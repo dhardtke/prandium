@@ -19,7 +19,7 @@ export const Alert = (
   escapeDescription = true,
 ) =>
   html`
-    <div class="alert alert-${type}${className && ` ${className}`}" role="alert">
+    <div class="alert alert-${type}${className && ` ${className}`}">
       <h4 class="alert-heading">${e(title)}</h4>
       ${escapeDescription ? e(description) : description}
     </div>

@@ -9,6 +9,6 @@ export async function replaceMain(url: string) {
     document.querySelector("main")!.innerHTML = $document.querySelector("main")!.innerHTML;
     bootComponents();
 
-    window.history.pushState({}, "", url);
+    globalThis.history.pushState({}, "", url);
   }
 }

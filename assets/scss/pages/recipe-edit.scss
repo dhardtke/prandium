@@ -1,5 +1,3 @@
-@use "_bootstrap";
-
 .array-field {
     .list-group {
         border-bottom: 0;
@@ -8,7 +6,7 @@
 
 #image-picker {
     &.dragging {
-        border-color: bootstrap.$primary;
+        border-color: var(--link-hover);
     }
 
     cursor: pointer;

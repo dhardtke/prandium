@@ -1,19 +1,27 @@
-@use "scss/_bootstrap";
+@use "scss/base/reset";
+@use "scss/base/typography";
+@use "scss/base/structure";
+@use "scss/base/utilities";
+@use "scss/base/properties";
+@use "scss/base/grid";
+@use "scss/base/lists";
+@use "scss/base/links";
 
-@use "scss/_structure";
-@use "scss/_text";
-@use "scss/_icons";
-@use "scss/_navbar";
-@use "scss/_dark_mode";
+@use "scss/components/alert";
+@use "scss/components/badge";
+@use "scss/components/breadcrumb";
+@use "scss/components/buttons";
+@use "scss/components/card";
+@use "scss/components/collapsible";
+@use "scss/components/dropdown";
+@use "scss/components/forms";
+@use "scss/components/header";
+@use "scss/components/list-group";
+@use "scss/components/pagination";
+@use "scss/components/rating";
+@use "scss/components/spacer";
+@use "scss/components/table";
 
-// content components
-@use "scss/_dropdown";
-@use "scss/_linked_badge";
-@use "scss/_linked_cards";
-@use "scss/_anchor";
-@use "scss/rating";
-@use "scss/observer";
-
-@use "scss/recipe_detail";
-@use "scss/recipe_edit";
-@use "scss/recipe_list";
+@use "scss/pages/recipe-detail";
+@use "scss/pages/recipe-edit";
+@use "scss/pages/recipe-list";

@@ -1,8 +1,10 @@
-import { log, Oak } from "../../deps.ts";
+import { log } from "../../deps.ts";
+import { Oak } from "../../deps_oak.ts";
 import { Database } from "../data/db.ts";
 import { services } from "../data/service/services.ts";
 import { Settings } from "../data/settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";
+import { Events } from "../tpl/events.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
 import { orderByAdapter } from "./middleware/adapters/order_by_adapter.ts";
 import { paginationAdapter } from "./middleware/adapters/pagination_adapter.ts";
@@ -57,6 +59,8 @@ export async function spawnServer(
     Page.currentUrl = ctx.request.url;
     Page.authorization = ctx.request.headers.get("Authorization");
     Page.dark = await ctx.cookies.get(DarkModeCookie) === "true";
+    const event = new Event(Events.PageLoaded);
+    globalThis.dispatchEvent(event);
     await next();
   });
 

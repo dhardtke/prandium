@@ -103,7 +103,7 @@ export const en: Language = {
     orderBy: "Order by",
     portions: "Portions",
     prepTime: "Prep time",
-    rating: "Rating",
+    rating: "Your Rating",
     reviews: "Reviews",
     source: "Source",
     time: {
@@ -124,6 +124,7 @@ export const en: Language = {
   darkMode: "Dark Mode",
   lightMode: "Light Mode",
   language: "Language",
+  nutritionalValue: "Nutritional Value",
   meta: {
     id: "en",
     flag:

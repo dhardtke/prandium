@@ -152,6 +152,7 @@ export interface Language {
   darkMode: string;
   lightMode: string;
   language: string;
+  nutritionalValue: string;
   meta: {
     id: LanguageId;
     flag: string;

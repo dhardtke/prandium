@@ -1,0 +1,12 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables";
+
+.spacer-r {
+    @include spacing($right: variables.$s-2);
+
+    border-right: 1px solid #ccc;
+
+    & + * {
+        @include spacing($left: variables.$s-2);
+    }
+}

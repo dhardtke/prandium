@@ -1,0 +1,30 @@
+@use "../mixins/spacing" as *;
+@use "variables" as *;
+
+html {
+    display: block;
+    overflow-y: scroll;
+}
+
+.container {
+    @include spacing($horizontal: $s-4);
+    max-width: $container-max-width;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+main {
+    margin: 0 auto;
+
+    @include spacing($top: $s-5, $bottom: $s-6);
+}
+
+body {
+    background: var(--page-bg);
+    color: var(--text-primary);
+}
+
+img, svg {
+    vertical-align: middle
+}

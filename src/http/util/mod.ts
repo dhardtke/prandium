@@ -1,4 +1,4 @@
-import { Oak } from "../../../deps.ts";
+import { Oak } from "../../../deps_oak.ts";
 
 export function urlWithParams(
   url: string | URL,

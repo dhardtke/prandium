@@ -13,7 +13,7 @@ const Selectors = {
 const Classes = {
   Active: "active",
   Disabled: "disabled",
-  Hidden: "d-none"
+  Hidden: "hidden"
 } as const;
 
 @Component("TagFilter")

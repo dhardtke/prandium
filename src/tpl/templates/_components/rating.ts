@@ -2,7 +2,7 @@
 import { html } from "../../mod.ts";
 import { Icon, IconName } from "./icon.ts";
 
-export function Rating(name: string, value = 0, readonly = false) {
+export function Rating(name: string, value = 0, readonly = false, small = false) {
   const comparisonValue = Math.round(value * 2) / 2;
 
   let stars = "";
@@ -19,7 +19,7 @@ export function Rating(name: string, value = 0, readonly = false) {
   }
 
   return html`
-    <div class="rating${readonly && " disabled"}">
+    <div class="rating${readonly && " disabled"}${small && " small"}">
       ${stars}
     </div>
   `;

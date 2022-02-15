@@ -1,5 +1,5 @@
 export function registerOnPopstateListener() {
-  window.addEventListener("popstate", () => {
-    window.location.reload();
+  globalThis.addEventListener("popstate", () => {
+    globalThis.location.reload();
   });
 }

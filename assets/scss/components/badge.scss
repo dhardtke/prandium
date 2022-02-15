@@ -1,0 +1,26 @@
+@use "../base/variables";
+@use "../mixins/spacing" as *;
+
+.badge {
+    @include spacing($vertical: variables.$s-1, $horizontal: variables.$s-3);
+
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--badge);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: var(--badge-bg);
+
+    @at-root a#{&} {
+        text-decoration: none;
+        transition: variables.$transition-base;
+
+        &:hover {
+            background-color: var(--badge-link-hover-bg);
+            color: var(--badge-link-hover);
+        }
+    }
+}

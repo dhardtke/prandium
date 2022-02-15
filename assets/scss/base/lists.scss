@@ -1,0 +1,26 @@
+@use "../mixins/spacing" as *;
+@use "../base/variables";
+
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &.disc {
+        @include spacing($left: variables.$s-4, $asPadding: false);
+
+        list-style: disc;
+    }
+
+    &.dash {
+        @include spacing($left: variables.$s-4, $asPadding: false);
+
+        list-style: dash;
+    }
+}
+
+@counter-style dash {
+    system: cyclic;
+    symbols: "–";
+    suffix: " ";
+}

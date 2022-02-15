@@ -12,5 +12,5 @@ export function History() {
       $time.value = new Date().toLocaleTimeString("en-GB");
     }
   }) as EventListener;
-  window.addEventListener(Events.Create, setCurrentTime);
+  globalThis.addEventListener(Events.Create, setCurrentTime);
 }
