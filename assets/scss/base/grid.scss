@@ -14,7 +14,7 @@ $grid-gutter-width: 1.5rem;
             @if $columns > 0 {
                 @for $i from 1 through $columns {
                     .col#{$infix}-#{$i} {
-                        grid-column: auto / span $i !important;
+                        grid-column: auto / span $i;
                     }
                 }
             }
