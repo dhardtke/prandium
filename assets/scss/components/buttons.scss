@@ -14,6 +14,7 @@ $variants: (primary, secondary, light, danger, info);
     border: 1px solid;
     transition: variables.$transition-base;
     text-decoration: none;
+    font-family: inherit;
 
     &:focus,
     .collapsible > input:active + & {
