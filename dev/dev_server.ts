@@ -243,7 +243,7 @@ if (import.meta.main) {
           "src/main.ts",
           `--host=${options.host}`,
           `--port=${options.port}`,
-          `--debug=${(typeof options.debug === "undefined")}`,
+          `--debug=${(typeof options.debug !== "undefined")}`,
           `--secure=${options.secure}`,
           options.key && `--key=${options.key || "-"}`,
           options.cert && `--cert=${options.cert || "-"}`,
