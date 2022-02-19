@@ -2,10 +2,10 @@ import type {
   Context,
   RouteParams,
   State,
-} from "https://deno.land/x/oak@v10.2.0/mod.ts";
+} from "https://deno.land/x/oak@v10.2.1/mod.ts";
 import { Oak } from "../../../../deps_oak.ts";
 
-declare module "https://deno.land/x/oak@v10.2.0/mod.ts" {
+declare module "https://deno.land/x/oak@v10.2.1/mod.ts" {
   interface Context {
     _query: Record<string, string>;
     parameter: (name: string) => string | undefined;
