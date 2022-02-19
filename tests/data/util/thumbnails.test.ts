@@ -8,7 +8,7 @@ Deno.test(`downloadThumbnail should use UTF8 filenames`, async () => {
       { arrayBuffer: () => new ArrayBuffer(0) },
     );
 
-  withTemp(async (tmpDir) => {
+  await withTemp(async (tmpDir) => {
     const expectedFilename = "Gemüsereis.jpg";
     const actualFilename = await downloadThumbnail(
       tmpDir,
