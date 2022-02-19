@@ -1,3 +1,4 @@
+import { log } from "../../../../deps.ts";
 import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
@@ -36,6 +37,7 @@ export function importRecipes(
       worker: Worker,
     ) => {
       pending--;
+      log.debug(() => `Received import result: ${JSON.stringify(e.data)}`);
       results.push(e.data);
       if (!maybePostJob(worker)) {
         workers.splice(workers.indexOf(worker), 1);

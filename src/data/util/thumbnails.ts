@@ -19,6 +19,7 @@ export async function downloadThumbnail(
   configDir: string,
   userAgent: string,
   url?: string,
+  fetchFn = fetchCustom
 ): Promise<string | undefined> {
   if (!url) {
     return undefined;
@@ -26,10 +27,10 @@ export async function downloadThumbnail(
   const thumbnailDir = getThumbnailDir(configDir);
   const filename = getUniqueFilename(
     thumbnailDir,
-    path.basename(new URL(url).pathname),
+    path.basename(decodeURIComponent(new URL(url).pathname)),
   );
   log.debug(() => `[Thumbnail] Downloading ${url} as ${filename}`);
-  const response = await fetchCustom(url, userAgent);
+  const response = await fetchFn(url, userAgent);
   await Deno.writeFile(
     path.join(thumbnailDir, filename),
     new Uint8Array(await response.arrayBuffer()),
@@ -68,6 +69,7 @@ export function fetchCustom(
       {
         headers: {
           "User-Agent": userAgent,
+          "Accept-Encoding": "UTF-8",
         },
       },
     ),

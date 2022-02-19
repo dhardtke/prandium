@@ -6,19 +6,7 @@ import {
   SettingsFilename,
 } from "../../src/data/settings.ts";
 import { getCpuCores } from "../../src/shared/util.ts";
-
-function withTemp(
-  test: (tmpDir: string) => Promise<void>,
-): () => Promise<void> {
-  return async () => {
-    const tmpDir = await Deno.makeTempDir();
-    try {
-      await test(tmpDir);
-    } finally {
-      await Deno.remove(tmpDir, { recursive: true });
-    }
-  };
-}
+import { withTemp } from "../_internal/with-temp.function.ts";
 
 Deno.test(
   `readFromDisk should throw`,
