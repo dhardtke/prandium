@@ -22,7 +22,7 @@ html {
     --card-border: #0000001f;
     --link: #0dcaf0;
     --link-hover: #0a58ca;
-    --card-text-hover: var(--link-hover);
+    --card-linked-hover: var(--link-hover);
     --card-linked-hover-border: #0d6efd;
     --card-footer: var(--text-muted);
     --card-header-bg: rgba(0, 0, 0, .03);
@@ -116,7 +116,7 @@ html {
         --card-bg: var(--page-bg);
         --card-text: var(--text-primary);
         --card-border: #6c757d;
-        --card-text-hover: #fff;
+        --card-linked-hover: var(--link-hover);
         --card-header-bg: #343a40;
         --text-muted: #ced4da;
         --page-link: #ced4da;

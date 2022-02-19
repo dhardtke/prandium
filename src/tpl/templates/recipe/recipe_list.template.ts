@@ -59,10 +59,10 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
             href = href.set("tagFilter", "").remove("page");
 
             return html`
-              <div class="col col-lg-2 tag${active && " text-white"}">
-                <a class="card card-linked card-linked--padded${active && " active"}${disabled && " disabled"}" ${!disabled && ` href="${href}"`}>
+              <div class="col col-lg-2 tag">
+                <a class="card padded${disabled && " disabled"}${active && " active"}" ${!disabled && ` href="${href}"`}>
                   <div class="side-by-side">
-                    <small class="${tag.recipeCount === 0 && `text-muted`}" title="${tag.description}">${tag.title}</small>
+                    <small class="title${tag.recipeCount === 0 && ` text-muted`}" title="${tag.description}">${tag.title}</small>
                     ${tag.recipeCount! > 0 && html`<span class="badge">${tag.recipeCount}</span>`}
                   </div>
                 </a>
@@ -197,7 +197,7 @@ export const RecipeListTemplate = (
                   }
                 ]
               })}
-              <a class="card card-linked" href="${UrlGenerator.recipe(recipe)}">
+              <a class="card" href="${UrlGenerator.recipe(recipe)}">
                 <img src="${UrlGenerator.thumbnail(recipe.thumbnail)}" class="img-responsive" alt="" loading="lazy">
                 <div class="card-body">
                   <h5 class="card-title text-clamp">${e(recipe.title)}</h5>

@@ -11,6 +11,33 @@
     color: var(--card-text);
     background-clip: border-box;
     border: 1px solid var(--card-border);
+
+    @at-root a#{&} {
+        text-decoration: none;
+        color: inherit;
+        transition: variables.$transition-base;
+
+        &:not(.disabled) {
+            &:hover {
+                border-color: var(--card-linked-hover-border);
+                color: var(--card-linked-hover);
+            }
+        }
+    }
+
+    &.padded {
+        @include spacing($horizontal: variables.$s-2, $vertical: variables.$s-2);
+    }
+
+    &.active {
+        color: #000;
+        --card-bg: #e5e5e5;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        opacity: .65;
+    }
 }
 
 .card-set {
@@ -56,21 +83,4 @@
 
 .card-title {
     @include spacing($bottom: variables.$s-2, $asPadding: false);
-}
-
-.card-linked {
-    text-decoration: none;
-    color: inherit;
-    transition: variables.$transition-base;
-
-    &:not(.disabled) {
-        &:hover {
-            border-color: var(--card-linked-hover-border);
-            color: var(--card-text-hover);
-        }
-    }
-
-    &--padded {
-        @include spacing($horizontal: variables.$s-2, $vertical: variables.$s-2);
-    }
 }
