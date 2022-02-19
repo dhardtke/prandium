@@ -1,3 +1,5 @@
+// noinspection HttpUrlsUsage
+
 import { assertEquals, SchemaRecipe } from "../../../deps.ts";
 import { SchemaParser } from "../../../src/data/parse/schema_parser.ts";
 import { html } from "../../../src/tpl/mod.ts";
@@ -60,10 +62,32 @@ Deno.test(`findFirstRecipe should work with different HTML variations`, () => {
   ];
   const expected: SchemaRecipe = {
     "@type": "Recipe",
-    "recipeCategory": "K\u00e4se",
-    "name": "My awesome recipe",
+    recipeCategory: "K\u00e4se",
+    name: "My awesome recipe",
   };
   for (const test of tests) {
     assertEquals(new SchemaParser(test).findFirstRecipe(), expected);
   }
+});
+
+Deno.test(`findFirstRecipe should extract the Recipe from a @graph object`, () => {
+  const html = `<script type="application/ld+json" class="yoast-schema-graph">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            { "@type": "Organization", "name": "My Org", "url": "https://example.org/" },
+            { "@type": "WebSite" },
+            { "@type": "ImageObject" },
+            { "@type": "WebPage" },
+            { "@type": "BreadcrumbList" },
+            { "@context": "http://schema.org/", "@type": "Recipe", "name": "My Recipe" },
+            { "@type": "Article" }
+        ]
+    }
+    </script>`;
+  const expected: SchemaRecipe = {
+    "@type": "Recipe",
+    "name": "My Recipe"
+  };
+  assertEquals(new SchemaParser(html).findFirstRecipe(), expected);
 });
