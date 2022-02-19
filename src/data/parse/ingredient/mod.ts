@@ -9,6 +9,13 @@ export interface Ingredient {
   description: string;
 }
 
+function sortIngredients(ingredients: Ingredient[]): Ingredient[] {
+  // sort order: 1. those with quantity & unit, 2. those with only unit, 3. those with neither
+  const sortFn = (i: Ingredient) => i.quantity === null ? 3 : i.unit === null ? 2 : 1;
+  return ingredients.sort((i1, i2) => sortFn(i1) - sortFn(i2))
+    .sort((i1, i2) => i1.unit && i2.unit ? i1.unit.localeCompare(i2.unit) : 0);
+}
+
 export const ingredient = {
   /**
    * @param raw the raw ingredient string to parse
@@ -44,9 +51,6 @@ export const ingredient = {
   ): Ingredient[] => {
     const mapped = ingredients
       .map((i) => ingredient.parse(i, recipeYield, portions));
-    // sort order: 1. those with quantity & unit, 2. those with only unit, 3. those with neither
-    const sortFn = (i: Ingredient) =>
-      i.quantity === null ? 3 : i.unit === null ? 2 : 1;
-    return mapped.sort((i1, i2) => sortFn(i1) - sortFn(i2));
+    return sortIngredients(mapped);
   },
 };
