@@ -1,5 +1,8 @@
 import { assertEquals } from "../../../../deps.ts";
-import { Ingredient, ingredient, } from "../../../../src/data/parse/ingredient/mod.ts";
+import {
+  Ingredient,
+  ingredient,
+} from "../../../../src/data/parse/ingredient/mod.ts";
 
 Deno.test(`ingredient.parse`, () => {
   const tests: { input: string; output: Ingredient }[] = [
@@ -136,23 +139,34 @@ Deno.test(`ingredient.parseMany should calculate the correct quantities`, () => 
 Deno.test(`ingredient.parseMany should sort ingredients correctly`, () => {
   const tests: {
     input: string[];
-    expected: string[]
+    expected: string[];
   }[] = [
     {
-      input: ["Salz / Pfeffer", "4g Zucker", "1 Banane", "2 EL Olivenöl", "200g Nudeln", "3 Lorbeeren", "Zitronenschale"], expected: [
+      input: [
+        "Salz / Pfeffer",
+        "4g Zucker",
+        "1 Banane",
+        "2 EL Olivenöl",
+        "200g Nudeln",
+        "3 Lorbeeren",
+        "Zitronenschale",
+      ],
+      expected: [
         "2 EL Olivenöl",
         "4 g Zucker",
         "200 g Nudeln",
         "1 Banane",
         "3 Lorbeeren",
         "Salz / Pfeffer",
-        "Zitronenschale"
-      ]
+        "Zitronenschale",
+      ],
     },
   ];
   for (const { input, expected } of tests) {
     const ingredients = ingredient.parseMany(input);
-    const actual = ingredients.map(i => [i.quantity, i.unit, i.description].filter(Boolean).join(" "));
+    const actual = ingredients.map((i) =>
+      [i.quantity, i.unit, i.description].filter(Boolean).join(" ")
+    );
     assertEquals(actual, expected);
   }
 });

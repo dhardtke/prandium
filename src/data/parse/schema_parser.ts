@@ -18,7 +18,7 @@ export class SchemaParser {
     return this.findFirst<SchemaRecipe>("Recipe");
   }
 
-  private* collectJsons(): Generator<string> {
+  private *collectJsons(): Generator<string> {
     for (
       let pos = this.html.indexOf(ScriptOpen);
       pos !== -1;
@@ -36,7 +36,7 @@ export class SchemaParser {
             openingScriptEnd + AngleBracketClose.length,
           );
           if (
-            ["", "'", "\""].some((char) =>
+            ["", "'", '"'].some((char) =>
               scriptAttributes.includes(`type=${char}${LdJson}${char}`)
             )
           ) {

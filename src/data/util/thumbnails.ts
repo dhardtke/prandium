@@ -19,7 +19,7 @@ export async function downloadThumbnail(
   configDir: string,
   userAgent: string,
   url?: string,
-  fetchFn = fetchCustom
+  fetchFn = fetchCustom,
 ): Promise<string | undefined> {
   if (!url) {
     return undefined;

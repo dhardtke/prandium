@@ -87,7 +87,7 @@ Deno.test(`findFirstRecipe should extract the Recipe from a @graph object`, () =
     </script>`;
   const expected: SchemaRecipe = {
     "@type": "Recipe",
-    "name": "My Recipe"
+    "name": "My Recipe",
   };
   assertEquals(new SchemaParser(html).findFirstRecipe(), expected);
 });
