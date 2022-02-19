@@ -1,4 +1,4 @@
-import { NUMBERS } from "../util/constants.ts";
+import { NUMBERS_ONE_TO_TEN } from "../util/constants.ts";
 import { toNumber } from "../util/convert.ts";
 
 export interface Duration {
@@ -67,7 +67,7 @@ export function parseDuration(iso8601duration: string): Duration {
   };
   for (let i = 1; i < iso8601duration.length; i++) {
     const char = iso8601duration[i];
-    if (NUMBERS.includes(char) || char === "." || char === ",") {
+    if (NUMBERS_ONE_TO_TEN.includes(char) || char === "." || char === ",") {
       tmp.push(char);
     } else if (!sawTime && char === "T") {
       if (tmp.length) {

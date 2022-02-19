@@ -115,45 +115,21 @@ export class PaginationBuilder<T> {
 }
 
 export class Pagination<T> implements Iterable<T> {
-  public readonly pageSize: number;
-  public readonly currentPage: number;
-  public readonly totalItems: number;
-  public readonly totalPages: number;
-  public readonly firstPage: number;
-  public readonly lastPage: number;
-  public readonly startIndex: number;
-  public readonly endIndex: number;
-  public readonly previousPage?: Page;
-  public readonly nextPage?: Page;
-  public readonly pages: Page[];
-  public readonly items: T[];
-
+  // noinspection JSUnusedGlobalSymbols
   public constructor(
-    pageSize: number,
-    currentPage: number,
-    totalItems: number,
-    totalPages: number,
-    firstPage: number,
-    lastPage: number,
-    startIndex: number,
-    endIndex: number,
-    previousPage?: Page,
-    nextPage?: Page,
-    pages: Page[] = [],
-    items: T[] = [],
+    public readonly pageSize: number,
+    public readonly currentPage: number,
+    public readonly totalItems: number,
+    public readonly totalPages: number,
+    public readonly firstPage: number,
+    public readonly lastPage: number,
+    public readonly startIndex: number,
+    public readonly endIndex: number,
+    public readonly previousPage?: Page,
+    public readonly nextPage?: Page,
+    public readonly pages: Page[] = [],
+    public readonly items: T[] = [],
   ) {
-    this.pageSize = pageSize;
-    this.currentPage = currentPage;
-    this.totalItems = totalItems;
-    this.totalPages = totalPages;
-    this.firstPage = firstPage;
-    this.lastPage = lastPage;
-    this.startIndex = startIndex;
-    this.endIndex = endIndex;
-    this.previousPage = previousPage;
-    this.nextPage = nextPage;
-    this.pages = pages;
-    this.items = items;
   }
 
   public get isFirstPage(): boolean {

@@ -1,4 +1,4 @@
-import { NUMBERS } from "./constants.ts";
+import { NUMBERS_ONE_TO_TEN } from "./constants.ts";
 
 export function toNumber(s?: string, _default = 0): number {
   if (s === undefined) {
@@ -18,7 +18,9 @@ export function toDate(source?: Date | string, _default = new Date()): Date {
   if (source instanceof Date) {
     return source;
   }
-  const purelyNumeric = [...source].every((char) => NUMBERS.includes(char));
+  const purelyNumeric = [...source].every((char) =>
+    NUMBERS_ONE_TO_TEN.includes(char)
+  );
   const parsed = new Date(purelyNumeric ? toNumber(source, NaN) : source);
   if (isNaN(parsed.getTime())) {
     return _default;
