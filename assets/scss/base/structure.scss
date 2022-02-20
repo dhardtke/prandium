@@ -4,6 +4,10 @@
 html {
     display: block;
     overflow-y: scroll;
+
+    &.dark-toggling * {
+        transition: none !important;
+    }
 }
 
 .container {

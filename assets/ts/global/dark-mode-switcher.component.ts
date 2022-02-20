@@ -4,7 +4,10 @@ import { getCookie, setCookie } from "../_util/cookie_util.ts";
 import { BaseComponent, Component } from "../components/component.ts";
 
 const DocumentClassName = "dark";
-const HIDDEN_CLASS = "hidden";
+const Classes = {
+  HIDDEN: "hidden",
+  DARK_TOGGLING: "dark-toggling"
+}
 
 type State = "true" | "false" | null;
 
@@ -40,14 +43,18 @@ export class DarkModeSwitcher extends BaseComponent {
   };
 
   private toggle = () => {
-    this.$active?.classList.remove(HIDDEN_CLASS);
-    this.$inactive?.classList.remove(HIDDEN_CLASS);
+    document.documentElement.classList.add(Classes.DARK_TOGGLING);
+    this.$active?.classList.remove(Classes.HIDDEN);
+    this.$inactive?.classList.remove(Classes.HIDDEN);
 
     if (document.documentElement.classList.toggle(DocumentClassName)) {
-      this.$inactive?.classList.add(HIDDEN_CLASS);
+      this.$inactive?.classList.add(Classes.HIDDEN);
     } else {
-      this.$active?.classList.add(HIDDEN_CLASS);
+      this.$active?.classList.add(Classes.HIDDEN);
     }
+    setTimeout(() => {
+      document.documentElement.classList.remove(Classes.DARK_TOGGLING);
+    }, 500);
   };
 }
 
