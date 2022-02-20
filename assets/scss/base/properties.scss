@@ -1,7 +1,10 @@
 html {
     --text-primary: #212529;
     --text-secondary: #8cabd9;
+    --text-muted: #6c757d;
+
     --page-bg: #fff;
+
     --header-bg: #212529;
     --header-border: transparent;
     --header-active-nav-item: #fff;
@@ -9,7 +12,9 @@ html {
     --header-inactive-nav-item-hover: #0dcaf0;
     --header-app-icon: #0dcaf0;
     --header-app-name-hover: #0dcaf0;
+
     --dark-mode-switcher-icon: #808080;
+
     --dropdown-bg: #fff;
     --dropdown-border: #00000026;
     --dropdown-item: var(--text-primary);
@@ -17,17 +22,20 @@ html {
     --dropdown-item-hover-bg: #e9ecef;
     --dropdown-item-active: #fff;
     --dropdown-item-active-bg: #0d6efd;
+
     --card-bg: #fff;
     --card-text: var(--text-primary);
     --card-border: #0000001f;
+
     --link: #0dcaf0;
     --link-hover: #0a58ca;
+
     --card-linked-hover: var(--link-hover);
     --card-linked-hover-border: #0d6efd;
     --card-footer: var(--text-muted);
     --card-header-bg: rgba(0, 0, 0, .03);
     --card-header-border: rgba(0, 0, 0, .125);
-    --text-muted: #6c757d;
+
     --page-link: #0d6efd;
     --page-link-bg: #fff;
     --page-link-border: #dee2e6;
@@ -36,39 +44,48 @@ html {
     --page-link-hover: #0a58ca;
     --page-link-hover-bg: #e9ecef;
     --page-link-disabled: #6c757d;
+
     --badge: #fff;
     --badge-bg: #212529;
     --badge-link-hover-bg: #0d6efd;
     --badge-link-hover: #fff;
+
     --form-border: #ced4da;
     --form-bg: #fff;
     --form: #212529;
     --form-focus: #212529;
     --form-focus-border: #86b7fe;
+
     --input-group: #212529;
     --input-group-bg: #e9ecef;
     --input-group-border: #ced4da;
+
     --flagged-recipe-border: #0dcaf0;
+
     --btn-primary: #fff;
     --btn-primary-hover: #fff;
     --btn-primary-bg: #0d6efd;
     --btn-primary-border: #515151;
     --btn-primary-hover-bg: #{darken(#0d6efd, 10%)};
+
     --btn-secondary: #fff;
     --btn-secondary-hover: #fff;
     --btn-secondary-bg: #6c757d;
     --btn-secondary-border: #4f4f4f;
     --btn-secondary-hover-bg: #{darken(#6c757d, 10%)};
+
     --btn-light: #000;
     --btn-light-bg: #f8f9fa;
     --btn-light-border: #f8f9fa;
     --btn-light-hover: #fff;
     --btn-light-hover-bg: #212529;
+
     --btn-danger: #fff;
     --btn-danger-bg: #dc3545;
     --btn-danger-border: #dc3545;
     --btn-danger-hover: #fff;
     --btn-danger-hover-bg: #{darken(#dc3545, 10%)};
+
     --btn-info: #fff;
     --btn-info-bg: #0dcaf0;
     --btn-info-border: #25cff2;
@@ -78,21 +95,27 @@ html {
     --alert-primary: #084298;
     --alert-primary-bg: #cfe2ff;
     --alert-primary-border: #b6d4fe;
+
     --alert-secondary: #41464b;
     --alert-secondary-bg: #e2e3e5;
     --alert-secondary-border: #d3d6d8;
+
     --alert-success: #0f5132;
     --alert-success-bg: #d1e7dd;
     --alert-success-border: #badbcc;
+
     --alert-warning: #664d03;
     --alert-warning-bg: #fff3cd;
     --alert-warning-border: #ffecb5;
+
     --alert-danger: #842029;
     --alert-danger-bg: #f8d7da;
     --alert-danger-border: #f5c2c7;
+
     --alert-dark: #141619;
     --alert-dark-bg: #d3d3d4;
     --alert-dark-border: #bcbebf;
+
     --alert-info: #055160;
     --alert-info-bg: #cff4fc;
     --alert-info-border: #b6effb;
@@ -102,23 +125,29 @@ html {
     &.dark {
         --text-primary: #ced4da;
         --text-secondary: #000;
+        --text-muted: #ced4da;
+
         --page-bg: #212529;
+
         --header-bg: #343a40;
         --header-border: #ffffff19;
         --header-inactive-nav-item: #adb5bd;
+
         --dark-mode-switcher-icon: #ffff00;
+
         --dropdown-bg: #212529;
         --dropdown-border: #6c757d;
         --dropdown-item: #ced4da;
         --dropdown-item-hover: #dee2e6;
         --dropdown-item-hover-bg: #6c757d;
         --dropdown-item-active: #fff;
+
         --card-bg: var(--page-bg);
         --card-text: var(--text-primary);
         --card-border: #6c757d;
         --card-linked-hover: #0dcaf0;
         --card-header-bg: #343a40;
-        --text-muted: #ced4da;
+
         --page-link: #ced4da;
         --page-link-bg: transparent;
         --page-link-border: #6c757d;
@@ -126,27 +155,37 @@ html {
         --page-link-active-border: transparent;
         --page-link-hover: #ced4da;
         --page-link-hover-bg: #6c757d;
+
         --badge: #212529;
         --badge-bg: #adb5bd;
+
         --form: #ced4da;
         --form-focus: #ced4da;
         --form-bg: #343a40;
         --form-border: #6c757d;
+
         --input-group: #ced4da;
         --input-group-bg: transparent;
         --input-group-border: #6c757d;
+
         --alert-primary: #ced4da;
         --alert-primary-bg: #084298;
+
         --alert-secondary: #ced4da;
         --alert-secondary-bg: transparent;
+
         --alert-success: #ced4da;
         --alert-success-bg: #fff;
+
         --alert-warning: #ced4da;
         --alert-warning-bg: #997404;
+
         --alert-danger: #ced4da;
         --alert-danger-bg: #842029;
+
         --alert-dark: #ced4da;
         --alert-dark-bg: #000;
+
         --alert-info: #ced4da;
         --alert-info-bg: #087990;
     }
