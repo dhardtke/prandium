@@ -66,7 +66,7 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
         `
         : html`
           <form method="POST">
-            <div class="mb-3">
+            <div class="mb">
               <label for="urls" class="form-label">
                 ${e(l.recipe.import.urls)}
               </label>

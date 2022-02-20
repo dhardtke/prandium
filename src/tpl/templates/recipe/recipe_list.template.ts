@@ -40,7 +40,7 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
   const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
-    <div id="tag-filter" class="collapse${showTagFilter && " show"} card mb-3" data-cmp="TagFilter">
+    <div id="tag-filter" class="collapse${showTagFilter && " show"} card mb" data-cmp="TagFilter">
       <div class="card-header">
         <div class="input-group">
           <span class="input-group-text">

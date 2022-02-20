@@ -54,6 +54,11 @@
 }
 
 #tag-filter {
+    .card-body {
+        max-height: 300px;
+        overflow: auto;
+    }
+
     .tag {
         overflow: hidden;
         white-space: nowrap;
