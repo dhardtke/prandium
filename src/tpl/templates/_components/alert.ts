@@ -20,7 +20,7 @@ export const Alert = (
 ) =>
   html`
     <div class="alert alert-${type}${className && ` ${className}`}">
-      <h4 class="alert-heading">${e(title)}</h4>
+      <h4>${e(title)}</h4>
       ${escapeDescription ? e(description) : description}
     </div>
   `;
