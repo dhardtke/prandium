@@ -76,7 +76,7 @@ export const Header = () => html`
         ${Menu()}
       </ul>
       <ul class="nav">
-        <li class="nav-item" id="dark-mode-switcher">
+        <li class="nav-item" id="dark-mode-switcher" data-cmp="DarkModeSwitcher">
           <span class="active${!Page.dark && " hidden"}">
             ${Icon("sun-fill")}${l.lightMode}
           </span>
