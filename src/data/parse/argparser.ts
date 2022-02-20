@@ -29,7 +29,7 @@ function requiresValue(definition: ArgumentDefinition): boolean {
 
 type Help = [string, string, string];
 
-export class Argparser<Options> { // TODO find alternative to any
+export class Argparser<Options> {
   static readonly ARGUMENT_PATTERN = /^--([\w-]+)(?:=(.*))?$/;
 
   private readonly definitions: ArgumentDefinition[];

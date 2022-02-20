@@ -68,7 +68,3 @@ Deno.test("database", async (t) => {
 
   db.close();
 });
-
-// TODO missing tests:
-// TODO - migrations
-// TODO - transaction
