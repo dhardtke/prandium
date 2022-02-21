@@ -1,5 +1,5 @@
-import { ICONS } from "../src/tpl/templates/_components/icon.ts";
 import { root } from "../src/shared/util.ts";
+import { ICONS } from "../src/tpl/templates/_components/icon.ts";
 
 const icons = new Set(ICONS);
 
@@ -31,7 +31,13 @@ for (const icon of icons) {
   if (!glyph) {
     throw new Error(`Can't find glyph for icon ${icon}`);
   }
-  glyphs.push(glyph.replace(' xmlns="http://www.w3.org/2000/svg"', ""));
+
+  glyphs.push(
+    glyph
+      .replace(` xmlns="http://www.w3.org/2000/svg"`, "")
+      .replace(/ class=["'].+?["']/, "")
+      .replace("<symbol", `<symbol fill="currentColor"`),
+  );
 }
 
 await Deno.writeTextFile(
