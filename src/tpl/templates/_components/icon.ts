@@ -1,6 +1,5 @@
 // deno-fmt-ignore-file
 import { e, html } from "../../mod.ts";
-import { asset } from "../../util/asset.ts";
 
 export const ICONS = [
   "arrow-left-short",
