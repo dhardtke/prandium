@@ -10,13 +10,4 @@ export const asset = {
     }
     return _default;
   },
-  modificationTimestamp: (filename: string): number | undefined => {
-    try {
-      const maybeMs = Deno.statSync(path.join(AssetsDir, filename)).mtime
-        ?.getTime();
-      return maybeMs && Math.trunc(maybeMs / 1000);
-    } catch {
-      return undefined;
-    }
-  },
 };

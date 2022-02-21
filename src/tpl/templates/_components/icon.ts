@@ -40,12 +40,10 @@ export const ICONS = [
 
 export type IconName = typeof ICONS[number];
 
-const modificationTimestamp = asset.modificationTimestamp("icons.svg");
-
 export const Icon = (name: IconName, className?: string) =>
   html`
     <svg class="bi${className && ` ${className}`}">
-      <use xlink:href="/assets/icons.svg?${modificationTimestamp}#${name}"/>
+      <use xlink:href="/assets/icons.svg#${name}"/>
     </svg>
   `;
 

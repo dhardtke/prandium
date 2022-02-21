@@ -40,8 +40,8 @@ const Page: PageType = (title?: string) =>
 
       <title>${e(title) ?? e(l.appName)}</title>
 
-      <link rel="stylesheet" href="/assets/${stylesheet}?${asset.modificationTimestamp(stylesheet)}">
-      <script src="/assets/${javascript}?${asset.modificationTimestamp(javascript)}" async type="module"></script>
+      <link rel="stylesheet" href="/assets/${stylesheet}">
+      <script src="/assets/${javascript}" async type="module"></script>
 
       ${Header()}
 
