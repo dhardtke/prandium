@@ -233,8 +233,8 @@ export const RecipeDetailTemplate = (
   <div class="side-by-side mb">
     <h1 class="mbo">
       ${recipe.flagged && html`
-        <span class="me-2">
-          ${Icon("flag-fill", "text-info w-32")}
+        <span class="mr">
+          ${Icon("flag-fill", "flagged-icon")}
         </span>
       `}
       ${e(recipe.title)}
