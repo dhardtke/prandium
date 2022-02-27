@@ -68,3 +68,9 @@
         --gap: #{variables.$s-3};
     }
 }
+
+.recipe-count {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}

@@ -38,7 +38,7 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
                           ${e(result.url)}
                         </a>
                       </td>
-                      <td class="d-flex align-items-center">
+                      <td>
                         ${
                           result.success
                             ? html`

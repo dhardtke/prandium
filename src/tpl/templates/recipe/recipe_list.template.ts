@@ -130,10 +130,8 @@ const ActionButtons = (recipeCount: number) => html`
       ${LabeledIcon(l.recipe.import.title, "cloud-arrow-down-fill")}
     </a>
 
-    <div class="badge">
-      <div class="d-flex align-items-center h-100">
-        ${e(l.recipe.count(recipeCount))}
-      </div>
+    <div class="badge recipe-count">
+      ${e(l.recipe.count(recipeCount))}
     </div>
   </div>
 `;
