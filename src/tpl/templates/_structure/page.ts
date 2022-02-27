@@ -32,6 +32,9 @@ const Page: PageType = (title?: string) =>
         }</style>
       <script>
         document.documentElement.classList.remove("preload");
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register("/assets/sw.js");
+        }
       </script>
       <meta charset="utf-8">
       <meta name="color-scheme" content="dark light">
