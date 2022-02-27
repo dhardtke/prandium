@@ -19,19 +19,17 @@ function TagControls(tags: Tag[], tagFilter: CollapsibleHtml) {
   const currentTagIds = parameters(Page.currentUrl).getAll("tagId");
 
   return html`
-    <div class="col-6 col-lg-2">
-      <div class="btn-group">
-        <div class="btn-group">
-          <label class="btn secondary caret right${tags.length === 0 && " disabled"}" for="${tagFilter.labelId}">
-            ${e(l.navigation.tags)}
-          </label>
-        </div>
-        <a class="btn danger${!currentTagIds.length && " disabled"}"
-           href="${e(parameters(Page.currentUrl).remove("tagId", "page"))}"
-           title="${e(l.recipe.clearAllTags)}">
-          ${Icon("trash")}
-        </a>
+    <div class="btn-group w-100">
+      <div class="btn-group" id="tag-btn">
+        <label class="btn secondary caret right${tags.length === 0 && " disabled"}" for="${tagFilter.labelId}">
+          ${e(l.navigation.tags)}
+        </label>
       </div>
+      <a class="btn danger${!currentTagIds.length && " disabled"}"
+         href="${e(parameters(Page.currentUrl).remove("tagId", "page"))}"
+         title="${e(l.recipe.clearAllTags)}">
+        ${Icon("trash")}
+      </a>
     </div>
   `;
 }
@@ -97,7 +95,7 @@ function OrderBy() {
   const otherOrderLabel = otherOrder === "ASC" ? l.orderBy.asc : l.orderBy.desc;
 
   return html`
-    <form class="col-6 col-lg-4" id="orderBy">
+    <form id="orderBy">
       ${[...Page.currentUrl.searchParams.entries()]
         .filter(([name]) => !["orderBy", "order", "flash", "page"].includes(name))
         .map(([name, value]) => html`<input type="hidden" name="${name}" value="${value}">`)}
@@ -154,19 +152,28 @@ export const RecipeListTemplate = (
     </div>
 
     <div class="grid mb" id="recipe-filter">
-      <form class="col-12 col-lg-6" action="${UrlGenerator.home()}">
-        <div class="input-group">
-          <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
-                 value="${parameters(Page.currentUrl).get("title")}">
-          <button class="btn secondary" type="submit">
-            ${Icon("search")}
-          </button>
+      <div class="col-12 col-lg-6">
+        <form action="${UrlGenerator.home()}">
+          <div class="input-group">
+            <input class="form-control" type="search" name="title" placeholder="${e(l.search)}" title="${e(l.search)}"
+                   value="${parameters(Page.currentUrl).get("title")}">
+            <button class="btn secondary" type="submit">
+              ${Icon("search")}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-12 col-lg-6">
+        <div class="grid">
+          <div class="col-12 col-lg-6">
+            ${OrderBy()}
+          </div>
+          <div class="col-12 col-lg-6">
+            ${TagControls(tags, tagFilter)}
+          </div>
         </div>
-      </form>
-
-      ${OrderBy()}
-
-      ${TagControls(tags, tagFilter)}
+      </div>
     </div>
 
     ${tagFilter}

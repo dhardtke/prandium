@@ -27,6 +27,12 @@ $grid-gutter-width: 1.5rem;
     grid-template-rows: repeat(var(-rows, 1), 1fr);
     grid-template-columns: repeat(var(--columns, #{$grid-columns}), 1fr);
     gap: var(--gap, #{$grid-gutter-width});
+
+    &.eq-c {
+        grid-auto-columns: minmax(0, 1fr);
+        grid-auto-flow: column;
+        grid-template-columns: unset;
+    }
 }
 
 .col {

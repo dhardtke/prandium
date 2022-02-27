@@ -93,6 +93,10 @@
     flex-wrap: wrap;
 }
 
+.w-100 {
+    width: 100%;
+}
+
 $variants: (primary, secondary, danger, muted, info);
 
 @each $variant in $variants {

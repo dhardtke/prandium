@@ -69,6 +69,14 @@
     }
 }
 
+#tag-btn {
+    width: 75%;
+
+    @include breakpoints.media-breakpoint-down('sm') {
+        width: 50%;
+    }
+}
+
 .recipe-count {
     display: flex;
     align-items: center;
