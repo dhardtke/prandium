@@ -101,6 +101,9 @@ server {
     location /assets {
         alias /home/prandium/repository/assets;
     }
+    location /sw.js {
+        alias /home/prandium/repository/assets/sw.js;
+    }
     location /thumbnails {
         alias /home/prandium/.config/prandium/thumbnails;
     }

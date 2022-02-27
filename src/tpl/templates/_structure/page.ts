@@ -34,7 +34,7 @@ const Page: PageType = (title?: string) =>
         document.documentElement.classList.remove("preload");
         window.addEventListener("load", function () {
           if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/assets/sw.js");
+            navigator.serviceWorker.register("/sw.js");
           }
         });
       </script>
