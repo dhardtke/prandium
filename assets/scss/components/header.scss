@@ -90,13 +90,17 @@ header {
     }
 
     .app {
-        @include spacing($top: variables.$s-1, $bottom: variables.$s-1, $right: variables.$s-4, $asPadding: false);
+        @include spacing($vertical: variables.$s-1, $right: variables.$s-4, $asPadding: false);
 
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: variables.$font-size-lg;
         text-decoration: none;
+
+        @include breakpoints.media-breakpoint-only('sm') {
+            @include spacing($vertical: variables.$s-4, $asPadding: false);
+        }
 
         &-icon {
             @include spacing($right: variables.$s-2, $asPadding: false);
