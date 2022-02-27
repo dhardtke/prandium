@@ -6,9 +6,6 @@ import { Settings } from "../data/settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";
 import { Events } from "../tpl/events.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
-import { orderByAdapter } from "./middleware/adapters/order_by_adapter.ts";
-import { paginationAdapter } from "./middleware/adapters/pagination_adapter.ts";
-import { parameterAdapter } from "./middleware/adapters/parameter_adapter.ts";
 import { handleNotFound, handleServerError } from "./middleware/error.ts";
 import { languageMiddleware } from "./middleware/language.ts";
 import { Routers } from "./routes/routers.ts";
@@ -50,11 +47,6 @@ export async function spawnServer(
     proxy: true,
     logErrors: false,
   });
-  app.use(
-    parameterAdapter(),
-    orderByAdapter(),
-    paginationAdapter(),
-  );
   app.use(async (ctx, next) => {
     Page.currentUrl = ctx.request.url;
     Page.authorization = ctx.request.headers.get("Authorization");

@@ -14,6 +14,7 @@ import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.t
 import { RecipeEditTemplate } from "../../tpl/templates/recipe/recipe_edit.template.ts";
 import { RecipeImportTemplate } from "../../tpl/templates/recipe/recipe_import.template.ts";
 import { collectFormData, urlWithParams } from "../util/mod.ts";
+import { parameters } from "../util/parameters.ts";
 import { UrlGenerator } from "../util/url_generator.ts";
 import { AppState } from "../webserver.ts";
 
@@ -138,10 +139,17 @@ router
   )
   .get(
     "/:id/:slug/edit",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+    async (
+      ctx: Oak.RouterContext<
+        "/:id/:slug/edit",
+        { id: string; slug: string },
+        AppState
+      >,
+      next: () => Promise<unknown>,
+    ) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
-        toNumber(ctx.parameter("id")),
+        toNumber(ctx.params.id),
         true,
         true,
         true,
@@ -155,10 +163,17 @@ router
   )
   .post(
     "/:id/:slug/edit",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+    async (
+      ctx: Oak.RouterContext<
+        "/:id/:slug/edit",
+        { id: string; slug: string },
+        AppState
+      >,
+      next: () => Promise<unknown>,
+    ) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
-        toNumber(ctx.parameter("id")),
+        toNumber(ctx.params.id),
         true,
         true,
         true,
@@ -181,11 +196,18 @@ router
   )
   .post(
     "/:id/:slug/rate",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+    async (
+      ctx: Oak.RouterContext<
+        "/:id/:slug/rate",
+        { id: string; slug: string },
+        AppState
+      >,
+      next: () => Promise<unknown>,
+    ) => {
       // TODO use update route and ensure only non-empty fields are set?
       const service = services.get(RecipeService);
       const recipe = service.find(
-        toNumber(ctx.parameter("id")),
+        toNumber(ctx.params.id),
         false,
         true,
       );
@@ -231,10 +253,17 @@ router
   )
   .get(
     "/:id/:slug/delete",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+    async (
+      ctx: Oak.RouterContext<
+        "/:id/:slug/delete",
+        { id: string; slug: string },
+        AppState
+      >,
+      next: () => Promise<unknown>,
+    ) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
-        toNumber(ctx.parameter("id")),
+        toNumber(ctx.params.id),
       );
       if (!recipe) {
         await next();
@@ -245,10 +274,17 @@ router
   )
   .post(
     "/:id/:slug/delete",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+    async (
+      ctx: Oak.RouterContext<
+        "/:id/:slug/delete",
+        { id: string; slug: string },
+        AppState
+      >,
+      next: () => Promise<unknown>,
+    ) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
-        toNumber(ctx.parameter("id")),
+        toNumber(ctx.params.id),
       );
       if (!recipe) {
         await next();
@@ -265,10 +301,17 @@ router
   )
   .get(
     "/:id/:slug/flag",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+    async (
+      ctx: Oak.RouterContext<
+        "/:id/:slug/flag",
+        { id: string; slug: string },
+        AppState
+      >,
+      next: () => Promise<unknown>,
+    ) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
-        toNumber(ctx.parameter("id")),
+        toNumber(ctx.params.id),
       );
       if (!recipe) {
         await next();
@@ -285,10 +328,17 @@ router
   )
   .get(
     "/:id/:slug",
-    async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+    async (
+      ctx: Oak.RouterContext<
+        "/:id/:slug",
+        { id: string; slug: string },
+        AppState
+      >,
+      next: () => Promise<unknown>,
+    ) => {
       const service = services.get(RecipeService);
       const recipe = service.find(
-        toNumber(ctx.parameter("id")),
+        toNumber(ctx.params.id),
         true,
         true,
         true,
@@ -298,7 +348,7 @@ router
       } else {
         ctx.response.body = RecipeDetailTemplate(
           recipe,
-          toNumber(ctx.parameter("portions"), recipe.yield),
+          toNumber(parameters(ctx).get("portions"), recipe.yield),
         );
       }
     },

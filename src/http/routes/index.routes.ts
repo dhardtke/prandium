@@ -4,6 +4,9 @@ import { services } from "../../data/service/services.ts";
 import { TagService } from "../../data/service/tag.service.ts";
 import { toNumber } from "../../data/util/convert.ts";
 import { RecipeListTemplate } from "../../tpl/templates/recipe/recipe_list.template.ts";
+import { orderByHelper } from "../middleware/helpers/order_by_helper.ts";
+import { paginationHelper } from "../middleware/helpers/pagination_helper.ts";
+import { parameters } from "../util/parameters.ts";
 import { AppState } from "../webserver.ts";
 
 const router: Oak.Router = new Oak.Router();
@@ -13,15 +16,16 @@ router.get("/", (ctx: Oak.Context<AppState>) => {
   const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
     toNumber(id, -1)
   ).filter((i) => i !== -1);
-  const title = ctx.parameter("title");
-  const recipes = ctx.paginate(
+  const title = parameters(ctx).get("title");
+  const recipes = paginationHelper(
+    ctx,
     service.count({ tagIds, title }),
     (limit, offset) =>
       service.list(
         {
           limit,
           offset,
-          orderBy: ctx.orderBy({ column: "title" }),
+          orderBy: orderByHelper(ctx, { column: "title" }),
           filters: {
             tagIds,
             title,
