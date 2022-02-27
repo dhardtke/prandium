@@ -72,7 +72,7 @@
 #tag-btn {
     width: 75%;
 
-    @include breakpoints.media-breakpoint-down('sm') {
+    @include breakpoints.media-breakpoint-only('sm') {
         width: 50%;
     }
 }
