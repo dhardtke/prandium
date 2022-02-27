@@ -39,9 +39,9 @@ export const ICONS = [
 
 export type IconName = typeof ICONS[number];
 
-export const Icon = (name: IconName, className?: string) =>
+export const Icon = (name: IconName, className?: string, large?: boolean) =>
   html`
-    <svg class="bi${className && ` ${className}`}">
+    <svg class="bi${className && ` ${className}`}${large && ` lg`}">
       <use xlink:href="/assets/icons.svg#${name}"/>
     </svg>
   `;

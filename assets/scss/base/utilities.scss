@@ -18,6 +18,11 @@
     &.labeled {
         @include spacing($right: variables.$s-2, $asPadding: false);
     }
+
+    &.lg {
+        width: 32px;
+        height: 32px;
+    }
 }
 
 .img-responsive {
@@ -39,10 +44,6 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     display: -webkit-box;
-}
-
-.text-muted {
-    color: var(--text-muted);
 }
 
 .action-bar {
@@ -90,4 +91,12 @@
 .flex {
     display: flex;
     flex-wrap: wrap;
+}
+
+$variants: (primary, secondary, danger, muted, info);
+
+@each $variant in $variants {
+    .c-#{$variant} {
+        color: var(--text-#{$variant});
+    }
 }

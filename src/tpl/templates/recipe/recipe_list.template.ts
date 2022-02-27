@@ -62,7 +62,7 @@ function TagFilter(tags: Tag[], showTagFilter: boolean) {
               <div class="col col-lg-2 tag">
                 <a class="card padded${disabled && " disabled"}${active && " active"}" ${!disabled && ` href="${href}"`}>
                   <div class="side-by-side">
-                    <small class="title${tag.recipeCount === 0 && ` text-muted`}" title="${tag.description}">${tag.title}</small>
+                    <small class="title${tag.recipeCount === 0 && ` c-muted`}" title="${tag.description}">${tag.title}</small>
                     ${tag.recipeCount! > 0 && html`<span class="badge">${tag.recipeCount}</span>`}
                   </div>
                 </a>
@@ -191,7 +191,7 @@ export const RecipeListTemplate = (
                   },
                   DIVIDER,
                   {
-                    html: html`<a class="text-danger" href="${UrlGenerator.recipeDelete(recipe)}">
+                    html: html`<a class="c-danger" href="${UrlGenerator.recipeDelete(recipe)}">
                       ${LabeledIcon(l.delete, "trash")}
                     </a>`
                   }
@@ -203,7 +203,7 @@ export const RecipeListTemplate = (
                   <h5 class="card-title text-clamp">${e(recipe.title)}</h5>
                   <p class="text-clamp">${e(recipe.description)}</p>
                   <p>
-                    <small class="text-muted" ${recipe.lastCookedAt && `title="${date.format(recipe.lastCookedAt)}"`}>
+                    <small class="c-muted" ${recipe.lastCookedAt && `title="${date.format(recipe.lastCookedAt)}"`}>
                       ${
                         recipe.lastCookedAt
                           ? e(l.recipe.lastCooked(date.formatRelative(recipe.lastCookedAt)))

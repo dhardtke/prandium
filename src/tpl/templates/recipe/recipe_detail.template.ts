@@ -118,7 +118,7 @@ function YourRating(recipe: Recipe): string {
     <div class="col-12 col-lg-6" id="recipe-rating">
       <div class="side-by-side">
         <h5>${e(l.recipe.rating)}</h5>
-        <small class="current text-muted">${e(number.format(recipe.rating, 1))}</small>
+        <small class="current c-muted">${e(number.format(recipe.rating, 1))}</small>
       </div>
       ${Rating("rating", recipe.rating)}
     </div>`;
@@ -200,7 +200,7 @@ function Reviews(recipe: Recipe): string | undefined {
         ${recipe.reviews.map((review, i) => html`
           <li${i < recipe.reviews.length - 1 && ` class="mb"`}>
             <p class="mbo">${e(review.text)}</p>
-            <span class="text-muted">${e(date.format(review.date))}</span>
+            <span class="c-muted">${e(date.format(review.date))}</span>
             </li>
         `)}
       </ul>
@@ -234,7 +234,7 @@ export const RecipeDetailTemplate = (
     <h1 class="mbo">
       ${recipe.flagged && html`
         <span class="mr">
-          ${Icon("flag-fill", "flagged-icon")}
+          ${Icon("flag-fill", "c-info", true)}
         </span>
       `}
       ${e(recipe.title)}

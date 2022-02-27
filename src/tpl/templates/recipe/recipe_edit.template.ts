@@ -131,7 +131,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
             </div>
             <div class="card-footer">
               <div class="d-flex justify-content-between flex-wrap align-items-center">
-                <small class="text-muted">
+                <small class="c-muted">
                   ${e(l.recipe.form.thumbnailHint)}
                 </small>
                 <button type="button" ${!recipe || !recipe.thumbnail ? " disabled" : ""} class="btn sm danger"

@@ -42,16 +42,14 @@ export const RecipeImportTemplate = (results?: ImportResult[]) =>
                         ${
                           result.success
                             ? html`
-                              <span class="text-success me-1">${
-                                Icon("check")
-                              }</span>
+                              ${Icon("check", "c-info me", true)}
                               <a class="btn success sm" href="${
                                 e(UrlGenerator.recipe(result.recipe!))
                               }" target="_blank">
                                 ${e(l.recipe.open)}
                               </a>
                             `
-                            : html`<span class="text-danger">${Icon("x")}${
+                            : html`<span class="c-danger">${Icon("x", undefined, true)}${
                               e(result.error)
                             }</span>`
                         }
