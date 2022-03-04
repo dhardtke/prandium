@@ -313,6 +313,7 @@ if (import.meta.main) {
             undefined,
             "deno",
             "bundle",
+            "--config=assets/tsconfig.json",
             "--lock=lock.json",
             "--unstable",
             "assets/index.ts",

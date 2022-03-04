@@ -1,8 +1,3 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom" />
-/// <reference lib="dom.iterable" />
-/// <reference lib="deno.ns" />
-
 import { bootComponents } from "./ts/components/component.ts";
 import { DarkModeSwitcher } from "./ts/global/dark-mode-switcher.component.ts";
 import { registerOnPopstateListener } from "./ts/global/_popstate_reload.ts";
