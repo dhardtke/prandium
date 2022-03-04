@@ -14,7 +14,7 @@ function argumentTypeConverter(type: ArgumentType): (arg0: string) => void {
     return (input) => input;
   } else if (type === "boolean") {
     return (input) => input === "true";
-  } else if (type == "number") {
+  } else if (type === "number") {
     return (input) => parseInt(input, 10);
   }
   return () => {
