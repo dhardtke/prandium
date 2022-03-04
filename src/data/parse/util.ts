@@ -37,13 +37,6 @@ export function isIdReference<T>(obj: T): boolean {
   return "id" in obj && Object.keys(obj).length === 1;
 }
 
-export function cast<T, U>(
-  obj: T,
-  guard: (t: NonNullable<T>) => boolean,
-): U | undefined {
-  return obj && guard(obj!) ? obj as unknown as U : undefined;
-}
-
 export type IdReference = { "@id": string };
 
 export function excludeIdReference<T extends IdReference>(
