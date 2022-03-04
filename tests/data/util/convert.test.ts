@@ -1,7 +1,9 @@
 import { assertEquals } from "../../../deps.ts";
-import { pushAll, toCamelCase, toDate, toInt } from "../../../src/data/util/convert.ts";
+import { pushAll, toCamelCase, toDate, toFloat, toInt } from "../../../src/data/util/convert.ts";
 
-Deno.test(`toNumber should return fallback value when unsuccessful`, () => {
+const { test } = Deno;
+
+test(`toInt should return fallback value when parsing fails`, () => {
   assertEquals(toInt("", -1), -1);
   assertEquals(toInt(undefined, -1), -1);
   assertEquals(toInt("undefined", -1), -1);
@@ -11,13 +13,30 @@ Deno.test(`toNumber should return fallback value when unsuccessful`, () => {
   assertEquals(toInt("+", -1), -1);
 });
 
-Deno.test(`toNumber should return parsed value`, () => {
+test(`When given valid number strings, then toInt should return the correctly parsed value`, () => {
   assertEquals(toInt("42", -1), 42);
   assertEquals(toInt("0", -1), 0);
   assertEquals(toInt("102341998323241321", -1), 102341998323241321);
 });
 
-Deno.test(`toDate should return fallback value when unsuccessful`, () => {
+test(`toFloat should return fallback value when parsing fails`, () => {
+  assertEquals(toFloat("", -1), -1);
+  assertEquals(toFloat(undefined, -1), -1);
+  assertEquals(toFloat("undefined", -1), -1);
+  assertEquals(toFloat("foo", -1), -1);
+  assertEquals(toFloat("bar", -1), -1);
+  assertEquals(toFloat("   ", -1), -1);
+  assertEquals(toFloat("+", -1), -1);
+});
+
+test(`When given valid number strings, then toFloat should return the correctly parsed value`, () => {
+  assertEquals(toFloat("42", -1), 42);
+  assertEquals(toFloat("0", -1), 0);
+  assertEquals(toFloat("102341998323241321", -1), 102341998323241321);
+  assertEquals(toFloat("432934294823942.20012", -1), 432934294823942.20012);
+});
+
+test(`toDate should return fallback value when parsing fails`, () => {
   const fallback = new Date(0);
   assertEquals(toDate("", fallback), fallback);
   assertEquals(toDate(undefined, fallback), fallback);
@@ -25,7 +44,7 @@ Deno.test(`toDate should return fallback value when unsuccessful`, () => {
   // assertEquals(toDate("-1", fallback), fallback); TODO this one shouldn't fail - maybe a bug in Deno?
 });
 
-Deno.test(`toDate should return parsed value`, () => {
+test(`toDate should return parsed value`, () => {
   assertEquals(toDate("0", undefined), new Date(0));
   assertEquals(toDate("1616804763", undefined), new Date(1616804763));
   assertEquals(
@@ -34,7 +53,7 @@ Deno.test(`toDate should return parsed value`, () => {
   );
 });
 
-Deno.test(`toCamelCase`, () => {
+test(`toCamelCase`, () => {
   assertEquals(toCamelCase({}), {});
   assertEquals(toCamelCase({ hello_world: true }), { helloWorld: true });
   assertEquals(toCamelCase({ bla: null }), { bla: null });
@@ -70,7 +89,7 @@ Deno.test(`toCamelCase`, () => {
   );
 });
 
-Deno.test(`pushAll`, () => {
+test(`pushAll`, () => {
   assertEquals(pushAll([1, 2, 3], []), [1, 2, 3]);
   assertEquals(pushAll([], [4, 5, 6]), [4, 5, 6]);
   assertEquals(pushAll([4, 5, 6], [1, 2, 3]), [1, 2, 3, 4, 5, 6]);
