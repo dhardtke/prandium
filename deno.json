@@ -1,0 +1,29 @@
+{
+    "lint": {
+        "rules": {
+            "tags": [
+                "recommended"
+            ],
+            "include": [
+                "default-param-last",
+                "eqeqeq",
+                "no-const-assign",
+                "no-eval",
+                "no-non-null-asserted-optional-chain",
+                "no-sparse-arrays",
+                "no-throw-literal",
+                "no-undef"
+            ],
+            "exclude": []
+        }
+    },
+    "fmt": {
+        "options": {
+            "useTabs": false,
+            "lineWidth": 160,
+            "indentWidth": 4,
+            "singleQuote": false,
+            "proseWrap": "preserve"
+        }
+    }
+}
