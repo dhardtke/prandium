@@ -14,9 +14,8 @@ const steps: Step[] = [
   {
     description: "Clean dist/ folder",
     process: {
-      // deno-lint-ignore require-await
-      async run() {
-        fs.emptyDir("assets/dist");
+      run() {
+        return fs.emptyDir("assets/dist");
       },
     },
   },
@@ -53,6 +52,7 @@ const steps: Step[] = [
       "assets",
       "deno",
       "bundle",
+      "--config=tsconfig.json",
       "index.ts",
       "dist/index.js",
     ),
