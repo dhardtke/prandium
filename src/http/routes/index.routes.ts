@@ -13,9 +13,7 @@ const router: Oak.Router = new Oak.Router();
 router.get("/", (ctx: Oak.Context<AppState>) => {
   const service: RecipeService = services.get(RecipeService);
 
-  const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) =>
-    toNumber(id, -1)
-  ).filter((i) => i !== -1);
+  const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) => toNumber(id, -1)).filter((i) => i !== -1);
   const title = parameters(ctx).get("title");
   const recipes = paginationHelper(
     ctx,

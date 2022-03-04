@@ -1,8 +1,5 @@
 import { assertEquals } from "../../../../deps.ts";
-import {
-  Ingredient,
-  ingredient,
-} from "../../../../src/data/parse/ingredient/mod.ts";
+import { Ingredient, ingredient } from "../../../../src/data/parse/ingredient/mod.ts";
 
 Deno.test(`ingredient.parse`, () => {
   const tests: { input: string; output: Ingredient }[] = [
@@ -164,9 +161,7 @@ Deno.test(`ingredient.parseMany should sort ingredients correctly`, () => {
   ];
   for (const { input, expected } of tests) {
     const ingredients = ingredient.parseMany(input);
-    const actual = ingredients.map((i) =>
-      [i.quantity, i.unit, i.description].filter(Boolean).join(" ")
-    );
+    const actual = ingredients.map((i) => [i.quantity, i.unit, i.description].filter(Boolean).join(" "));
     assertEquals(actual, expected);
   }
 });

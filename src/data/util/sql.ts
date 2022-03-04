@@ -38,9 +38,7 @@ export function buildOrderBySql(
 ): string {
   if (orderBy) {
     if (allowedColumns.includes(orderBy.column)) {
-      return `ORDER BY ${orderBy.column}${
-        orderBy.order?.toUpperCase() === "DESC" ? " DESC" : ""
-      }`;
+      return `ORDER BY ${orderBy.column}${orderBy.order?.toUpperCase() === "DESC" ? " DESC" : ""}`;
     }
   }
   return EmptyOrderBy;
@@ -53,9 +51,7 @@ export function columns(
 ): string {
   return names
     .filter((name) => Boolean(name))
-    .map((n) =>
-      `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`
-    )
+    .map((n) => `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`)
     .join(", ");
 }
 

@@ -5,10 +5,7 @@ import { importRecipes } from "../../data/parse/import/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { services } from "../../data/service/services.ts";
 import { toNumber } from "../../data/util/convert.ts";
-import {
-  getThumbnailDir,
-  getUniqueFilename,
-} from "../../data/util/thumbnails.ts";
+import { getThumbnailDir, getUniqueFilename } from "../../data/util/thumbnails.ts";
 import { RecipeDeleteTemplate } from "../../tpl/templates/recipe/recipe_delete.template.ts";
 import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.template.ts";
 import { RecipeEditTemplate } from "../../tpl/templates/recipe/recipe_edit.template.ts";

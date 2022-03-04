@@ -93,9 +93,7 @@ export function parseDuration(iso8601duration: string): Duration {
     throw new Error(`Unexpected end of input.`);
   }
 
-  const floatIdx = nonEmpty.findIndex((v) =>
-    v.includes(".") || v.includes(",")
-  );
+  const floatIdx = nonEmpty.findIndex((v) => v.includes(".") || v.includes(","));
   if (floatIdx > -1 && floatIdx !== nonEmpty.length - 1) {
     throw new Error(
       `Only the smallest provided designator is allowed to be a float`,

@@ -1,23 +1,14 @@
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { pushAll, toCamelCase, toDate } from "../util/convert.ts";
-import {
-  buildFilters,
-  buildOrderBySql,
-  columns,
-  Filter,
-  placeholders,
-} from "../util/sql.ts";
+import { buildFilters, buildOrderBySql, columns, Filter, placeholders } from "../util/sql.ts";
 import { OrderBy, Service } from "./service.ts";
 import { TagService } from "./tag.service.ts";
 
 function tagFilter(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
-    sql: () =>
-      tagIds!.map(() =>
-        `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`
-      ).join(" AND "),
+    sql: () => tagIds!.map(() => `EXISTS (SELECT TRUE FROM recipe_tag WHERE tag_id = ? AND recipe_id = recipe.id)`).join(" AND "),
     bindings: () => tagIds!,
   };
 }
@@ -79,14 +70,10 @@ export class RecipeService implements Service<Recipe> {
       "total_time",
     ];
     const totalTime = "(prep_time + cook_time) AS total_time";
-    const lastCookedAt =
-      "(SELECT MAX(timestamp) FROM recipe_history WHERE recipe_id = recipe.id) AS last_cooked_at";
-    const cookedCount =
-      "(SELECT COUNT(*) FROM recipe_history WHERE recipe_id = recipe.id) AS cooked_count";
+    const lastCookedAt = "(SELECT MAX(timestamp) FROM recipe_history WHERE recipe_id = recipe.id) AS last_cooked_at";
+    const cookedCount = "(SELECT COUNT(*) FROM recipe_history WHERE recipe_id = recipe.id) AS cooked_count";
     return this.db.query(
-      `SELECT ${
-        columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])
-      }
+      `SELECT ${columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])}
        FROM recipe
        WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, orderByColumns)}
        LIMIT ? OFFSET ?`,

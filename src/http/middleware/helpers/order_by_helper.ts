@@ -10,9 +10,7 @@ export function orderByHelper(
   if (column) {
     return {
       column,
-      order: parameters(ctx).get("order")?.toUpperCase() === "DESC"
-        ? "DESC"
-        : "ASC",
+      order: parameters(ctx).get("order")?.toUpperCase() === "DESC" ? "DESC" : "ASC",
     };
   }
   return _default;

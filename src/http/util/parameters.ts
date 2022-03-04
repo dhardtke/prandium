@@ -35,9 +35,7 @@ export const parameters = (
       name: string,
       _default: string[] = [],
     ): string[] {
-      return result.searchParams.has(name)
-        ? result.searchParams.getAll(name)
-        : _default;
+      return result.searchParams.has(name) ? result.searchParams.getAll(name) : _default;
     },
 
     set(
@@ -66,9 +64,7 @@ export const parameters = (
     removeSingleValue(name: string, value: unknown): ParametersBuilder {
       const all = result.searchParams.getAll(name);
       result.searchParams.delete(name);
-      all.filter((v) => v !== String(value)).forEach((val) =>
-        result.searchParams.append(name, val)
-      );
+      all.filter((v) => v !== String(value)).forEach((val) => result.searchParams.append(name, val));
       return builder;
     },
     toString(): string {

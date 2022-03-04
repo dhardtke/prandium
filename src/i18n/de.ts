@@ -66,8 +66,7 @@ export const de: Language = {
       timeHint: "Zeit in Sekunden.",
     },
     import: {
-      alert:
-        "Die URLs wurden verarbeitet und die Ergebnisse sind folgend zu entnehmen.",
+      alert: "Die URLs wurden verarbeitet und die Ergebnisse sind folgend zu entnehmen.",
       result: "Ergebnis",
       sourceUrl: "Quell-URL",
       title: "Import",
@@ -84,8 +83,7 @@ export const de: Language = {
     flagged: "Gekennzeichnet",
     flag: "Kennzeichnung hinzufügen",
     unflag: "Kennzeichnung entfernen",
-    noRecipesFound:
-      "Für den aktuell gewählten Filter wurden keine Rezepte gefunden. Bitte die Auswahl ändern oder neue Rezepte hinzufügen.",
+    noRecipesFound: "Für den aktuell gewählten Filter wurden keine Rezepte gefunden. Bitte die Auswahl ändern oder neue Rezepte hinzufügen.",
     notCookedYet: "Noch nicht gekocht.",
     nutrition: {
       calories: "Kalorien",

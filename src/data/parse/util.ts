@@ -49,7 +49,5 @@ export type IdReference = { "@id": string };
 export function excludeIdReference<T extends IdReference>(
   obj: T | IdReference | undefined,
 ): Exclude<T, IdReference> | undefined {
-  return !obj || isIdReference(obj)
-    ? undefined
-    : obj as Exclude<T, IdReference>;
+  return !obj || isIdReference(obj) ? undefined : obj as Exclude<T, IdReference>;
 }

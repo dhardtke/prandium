@@ -18,9 +18,7 @@ export function toDate(source?: Date | string, _default = new Date()): Date {
   if (source instanceof Date) {
     return source;
   }
-  const purelyNumeric = [...source].every((char) =>
-    NUMBERS_ONE_TO_TEN.includes(char)
-  );
+  const purelyNumeric = [...source].every((char) => NUMBERS_ONE_TO_TEN.includes(char));
   const parsed = new Date(purelyNumeric ? toNumber(source, NaN) : source);
   if (isNaN(parsed.getTime())) {
     return _default;
@@ -43,9 +41,7 @@ export function toCamelCase<T, O>(obj: O): T {
           SnakeCasePattern,
           (g) => g[1].toUpperCase(),
         );
-        const modifiedVal = typeof val === "object" && val !== null
-          ? toCamelCase(val as unknown)
-          : val;
+        const modifiedVal = typeof val === "object" && val !== null ? toCamelCase(val as unknown) : val;
         return {
           ...acc,
           ...{ [modifiedKey]: modifiedVal },

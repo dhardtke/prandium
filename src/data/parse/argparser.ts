@@ -85,11 +85,7 @@ export class Argparser<Options> {
     const help: Help = [`--${definition.name}`, "", ""];
     help[0] += `${definition.type === "void" ? "" : `=[${definition.type}]`}`;
     help[1] = `${definition.description ? `- ${definition.description}` : ""}`;
-    help[2] = `${
-      typeof definition.default === "undefined"
-        ? ""
-        : `(Default: ${JSON.stringify(definition.default)})`
-    }`;
+    help[2] = `${typeof definition.default === "undefined" ? "" : `(Default: ${JSON.stringify(definition.default)})`}`;
 
     return help;
   }
@@ -97,9 +93,7 @@ export class Argparser<Options> {
   help(): string {
     const options: Help[] = this.definitions.map(Argparser.definitionToHelp);
     const lengthMatrix = options.map((h) => h.map((s) => s.length));
-    const lengthMatrixByColumn = lengthMatrix[0].map((_ignored, i) =>
-      lengthMatrix.map((row) => row[i])
-    );
+    const lengthMatrixByColumn = lengthMatrix[0].map((_ignored, i) => lengthMatrix.map((row) => row[i]));
     const maxLengthPerColumn = lengthMatrixByColumn.map((m) => Math.max(...m));
 
     return `  Usage: COMMAND

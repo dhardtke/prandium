@@ -43,8 +43,7 @@ for (let i = 0; i < 50; i++) {
       title: `Blätterteig mit Gyrosfüllung und Feta-Käse ${i + 1}`,
       description:
         "Bl\u00e4tterteig mit Gyrosf\u00fcllung und Feta-K\u00e4se - eignen sich auch gut f\u00fcr ein Buffet. \u00dcber 105 Bewertungen und f\u00fcr lecker befunden. Mit \u25ba Portionsrechner \u25ba Kochbuch \u25ba Video-Tipps!",
-      source:
-        "https://www.chefkoch.de/rezepte/2788721431008084/Blaetterteig-mit-Gyrosfuellung-und-Feta-Kaese.html",
+      source: "https://www.chefkoch.de/rezepte/2788721431008084/Blaetterteig-mit-Gyrosfuellung-und-Feta-Kaese.html",
       thumbnail: thumbnail,
       yield: 4,
       nutritionCalories: "2795 kcal",
@@ -86,8 +85,7 @@ for (let i = 0; i < 50; i++) {
           date: "2020-05-12",
         }),
         new Review({
-          text:
-            "haben die Taschen auch schon oft gemacht und wir lieben sie! F\u00fcr meine Vegetarier f\u00fcllen wir mit Blattspinat und Feta. ",
+          text: "haben die Taschen auch schon oft gemacht und wir lieben sie! F\u00fcr meine Vegetarier f\u00fcllen wir mit Blattspinat und Feta. ",
           date: "2020-02-03",
         }),
         new Review({

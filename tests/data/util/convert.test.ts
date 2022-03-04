@@ -1,10 +1,5 @@
 import { assertEquals } from "../../../deps.ts";
-import {
-  pushAll,
-  toCamelCase,
-  toDate,
-  toNumber,
-} from "../../../src/data/util/convert.ts";
+import { pushAll, toCamelCase, toDate, toNumber } from "../../../src/data/util/convert.ts";
 
 Deno.test(`toNumber should return fallback value when unsuccessful`, () => {
   assertEquals(toNumber("", -1), -1);

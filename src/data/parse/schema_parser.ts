@@ -36,9 +36,7 @@ export class SchemaParser {
             openingScriptEnd + AngleBracketClose.length,
           );
           if (
-            ["", "'", '"'].some((char) =>
-              scriptAttributes.includes(`type=${char}${LdJson}${char}`)
-            )
+            ["", "'", '"'].some((char) => scriptAttributes.includes(`type=${char}${LdJson}${char}`))
           ) {
             yield this.html.substring(
               openingScriptEnd + AngleBracketClose.length,

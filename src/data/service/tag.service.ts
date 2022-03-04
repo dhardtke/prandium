@@ -22,9 +22,7 @@ function _sameRecipeIds(tagIds?: number[]): Filter {
   return {
     active: Boolean(tagIds?.length),
     sql: () => {
-      const joins = tagIds!.map((_, i) =>
-        `INNER JOIN recipe_tag rt${i} ON rt${i}.tag_id = ? AND rt${i}.recipe_id = rt.recipe_id`
-      ).join("\n");
+      const joins = tagIds!.map((_, i) => `INNER JOIN recipe_tag rt${i} ON rt${i}.tag_id = ? AND rt${i}.recipe_id = rt.recipe_id`).join("\n");
       return `recipe_id IN (SELECT rt.recipe_id FROM recipe_tag rt ${joins})`;
     },
     bindings: () => tagIds!,
@@ -37,8 +35,7 @@ function tagsWithSameRecipes(
   const internalFilter = _sameRecipeIds(tags?.ids);
   return {
     active: Boolean(tags && !tags.includeOthers),
-    sql: () =>
-      `id IN (SELECT tag_id FROM recipe_tag WHERE ${internalFilter.sql()})`,
+    sql: () => `id IN (SELECT tag_id FROM recipe_tag WHERE ${internalFilter.sql()})`,
     bindings: internalFilter.bindings,
   };
 }
@@ -61,8 +58,7 @@ function recipeCountColumn(
     _sameRecipeIds(tagIdsWithSameRecipes),
   );
   return {
-    column:
-      `(SELECT COUNT(*) FROM recipe_tag WHERE ${filter.sql}) AS recipeCount`,
+    column: `(SELECT COUNT(*) FROM recipe_tag WHERE ${filter.sql}) AS recipeCount`,
     bindings: filter.bindings,
   };
 }

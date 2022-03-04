@@ -90,12 +90,8 @@ export class PaginationBuilder<T> {
     )
       .map((i) => this.startPage + i)
       .map((number) => PaginationBuilder.buildPage(url, number));
-    const previousPage = this.currentPage === this.startPage
-      ? undefined
-      : PaginationBuilder.buildPage(url, this.currentPage - 1);
-    const nextPage = this.currentPage === this.endPage
-      ? undefined
-      : PaginationBuilder.buildPage(url, this.currentPage + 1);
+    const previousPage = this.currentPage === this.startPage ? undefined : PaginationBuilder.buildPage(url, this.currentPage - 1);
+    const nextPage = this.currentPage === this.endPage ? undefined : PaginationBuilder.buildPage(url, this.currentPage + 1);
 
     return new Pagination<T>(
       this.pageSize,

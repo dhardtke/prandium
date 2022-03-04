@@ -51,8 +51,7 @@ Deno.test(`findFirstRecipe should be empty if no Recipe can be found`, () => {
 });
 
 Deno.test(`findFirstRecipe should work with different HTML variations`, () => {
-  const json =
-    `{"@context": "http://schema.org", "@type": "Recipe", "recipeCategory": "K\u00e4se", "name": "My awesome recipe"}`;
+  const json = `{"@context": "http://schema.org", "@type": "Recipe", "recipeCategory": "K\u00e4se", "name": "My awesome recipe"}`;
   const tests = [
     `<script type=application/ld+json>${json}</script>`,
     `<script type="application/ld+json">${json}</script>`,

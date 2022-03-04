@@ -83,8 +83,7 @@ export const en: Language = {
     flagged: "Flagged",
     flag: "Flag",
     unflag: "Remove flag",
-    noRecipesFound:
-      "No recipes have been found for the current filter. Please change the filter options or add some more recipes.",
+    noRecipesFound: "No recipes have been found for the current filter. Please change the filter options or add some more recipes.",
     notCookedYet: "Not cooked yet.",
     nutrition: {
       calories: "Calories",

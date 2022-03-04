@@ -58,11 +58,9 @@ export class Database {
         const duration = performance.now();
         const result = query.allEntries(params);
         log.debug(() =>
-          `Executing prepared query${
-            params
-              ? ` with values ${Colors.brightCyan(JSON.stringify(params))}`
-              : ""
-          } took ${(performance.now() - duration).toFixed(2)}ms`
+          `Executing prepared query${params ? ` with values ${Colors.brightCyan(JSON.stringify(params))}` : ""} took ${
+            (performance.now() - duration).toFixed(2)
+          }ms`
         );
         return result;
       };
@@ -92,9 +90,7 @@ export class Database {
       log.debug(
         `[DB] Current database version is ${Colors.cyan("" + currentVersion)}`,
       );
-      log.debug(() =>
-        `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`
-      );
+      log.debug(() => `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`);
       for (const migration of migrations) {
         this.transaction(() => {
           migration.migrate(this);
@@ -103,11 +99,7 @@ export class Database {
           return [true, undefined];
         });
       }
-      log.debug(() =>
-        `[DB] Migrations executed. New database version is ${
-          Colors.cyan("" + currentVersion)
-        }`
-      );
+      log.debug(() => `[DB] Migrations executed. New database version is ${Colors.cyan("" + currentVersion)}`);
     }
   }
 
@@ -122,11 +114,9 @@ export class Database {
       // returning Record<string, unknown> does not really make sense as interfaces do not satisfy this constraint
       const result = this.db.queryEntries(sql, values) as O[];
       log.debug(() =>
-        `[DB] Executing ${Colors.cyan(sql)}${
-          values
-            ? ` with values ${Colors.brightCyan(JSON.stringify(values))}`
-            : ""
-        } took ${(performance.now() - duration).toFixed(2)}ms`
+        `[DB] Executing ${Colors.cyan(sql)}${values ? ` with values ${Colors.brightCyan(JSON.stringify(values))}` : ""} took ${
+          (performance.now() - duration).toFixed(2)
+        }ms`
       );
       return result;
     } catch (e) {

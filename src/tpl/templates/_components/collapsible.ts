@@ -34,21 +34,15 @@ export function Collapsible(
     toString: () =>
       html`
         <div
-          class="collapsible${
-        options.wrapperClass && ` ${options.wrapperClass}`
-      }">
+          class="collapsible${options.wrapperClass && ` ${options.wrapperClass}`}">
           ${
         options.label &&
         html`<label for="${labelId}" ${classes && ` class="${classes}"`}>
               ${options.label}
             </label>`
       }
-          <input id="${labelId}" type="checkbox" ${
-        options.opened && " checked"
-      } autocomplete="off">
-          <div class="content${
-        options.contentClass && ` ${options.contentClass}`
-      }">
+          <input id="${labelId}" type="checkbox" ${options.opened && " checked"} autocomplete="off">
+          <div class="content${options.contentClass && ` ${options.contentClass}`}">
             ${options.content}
           </div>
         </div>`,

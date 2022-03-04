@@ -1,10 +1,5 @@
 import { assertEquals, assertRejects, path } from "../../deps.ts";
-import {
-  DefaultSettings,
-  readFromDisk,
-  Settings,
-  SettingsFilename,
-} from "../../src/data/settings.ts";
+import { DefaultSettings, readFromDisk, Settings, SettingsFilename } from "../../src/data/settings.ts";
 import { getCpuCores } from "../../src/shared/util.ts";
 import { withTemp } from "../_internal/with-temp.function.ts";
 
@@ -17,39 +12,32 @@ Deno.test(
     }[] = [
       {
         data: "",
-        message:
-          `Error reading ${SettingsFilename}: SyntaxError: Unexpected end of JSON input`,
+        message: `Error reading ${SettingsFilename}: SyntaxError: Unexpected end of JSON input`,
       },
       {
         data: { importWorkerCount: "0" },
-        message:
-          `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
+        message: `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
       },
       {
         data: { importWorkerCount: -1 },
-        message:
-          `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
+        message: `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
       },
       {
         data: { importWorkerCount: getCpuCores() + 1 },
-        message:
-          `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
+        message: `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
       },
       {
         data: { userAgent: 42 },
-        message:
-          `Error reading ${SettingsFilename}: Error: userAgent must be of type string`,
+        message: `Error reading ${SettingsFilename}: Error: userAgent must be of type string`,
       },
       {
         data: { addHistoryEntryWhenRating: "false" },
-        message:
-          `Error reading ${SettingsFilename}: Error: addHistoryEntryWhenRating must be of type boolean`,
+        message: `Error reading ${SettingsFilename}: Error: addHistoryEntryWhenRating must be of type boolean`,
       },
       {
         // deno-lint-ignore no-explicit-any
         data: { lorem: false } as unknown as any,
-        message:
-          `Error reading ${SettingsFilename}: Error: Unknown property lorem`,
+        message: `Error reading ${SettingsFilename}: Error: Unknown property lorem`,
       },
     ];
     for await (const { data, message } of tests) {

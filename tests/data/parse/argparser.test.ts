@@ -9,8 +9,7 @@ Deno.test(`Argparser.parse should throw if unknown arguments are provided`, () =
     `Unknown argument: "--a"`,
   );
   assertThrows(
-    () =>
-      new Argparser([{ name: "a", type: "string" }]).parse(["--a=bla", "--b"]),
+    () => new Argparser([{ name: "a", type: "string" }]).parse(["--a=bla", "--b"]),
     undefined,
     `Unknown argument: "--b"`,
   );

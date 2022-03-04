@@ -1,9 +1,5 @@
 import { assertEquals, assertThrows } from "../../../deps.ts";
-import {
-  Duration,
-  durationToSeconds,
-  parseDuration,
-} from "../../../src/data/parse/duration.ts";
+import { Duration, durationToSeconds, parseDuration } from "../../../src/data/parse/duration.ts";
 
 Deno.test(`Parse duration datetime successful`, () => {
   const tests = new Map<string, Duration>([
@@ -109,9 +105,7 @@ Deno.test(`Parse duration datetime successful`, () => {
     assertEquals(
       actual,
       expected,
-      `parseDuration('${input}') should be equal to ${
-        JSON.stringify(expected)
-      } but was ${JSON.stringify(actual)}`,
+      `parseDuration('${input}') should be equal to ${JSON.stringify(expected)} but was ${JSON.stringify(actual)}`,
     );
   }
 });

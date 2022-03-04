@@ -75,8 +75,7 @@ export function importRecipes(
           },
         },
       );
-      worker.onmessage = (e: MessageEvent<ImportRecipeResponse>) =>
-        workerDone(e, worker);
+      worker.onmessage = (e: MessageEvent<ImportRecipeResponse>) => workerDone(e, worker);
       workers.push(worker);
       maybePostJob(worker);
     }

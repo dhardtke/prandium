@@ -131,9 +131,7 @@ export class Recipe extends Model {
 
     this.tags = args.tags || [];
     this.totalTime = args.totalTime;
-    this.lastCookedAt = args.lastCookedAt
-      ? toDate(args.lastCookedAt)
-      : undefined;
+    this.lastCookedAt = args.lastCookedAt ? toDate(args.lastCookedAt) : undefined;
     this.cookedCount = args.cookedCount;
   }
 }

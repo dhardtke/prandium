@@ -3,9 +3,7 @@ import { path } from "../../deps.ts";
 export function classNames(
   objects: { constructor: { name: string } }[],
 ): string {
-  return objects.length
-    ? objects.map((o) => o.constructor.name).join(", ")
-    : "[]";
+  return objects.length ? objects.map((o) => o.constructor.name).join(", ") : "[]";
 }
 
 export function getHome(): string | undefined {

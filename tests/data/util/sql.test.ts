@@ -1,12 +1,5 @@
 import { assertEquals } from "../../../deps.ts";
-import {
-  buildFilters,
-  buildOrderBySql,
-  columns,
-  EmptyFilter,
-  EmptyOrderBy,
-  placeholders,
-} from "../../../src/data/util/sql.ts";
+import { buildFilters, buildOrderBySql, columns, EmptyFilter, EmptyOrderBy, placeholders } from "../../../src/data/util/sql.ts";
 
 Deno.test(`buildFilters should return EMPTY_FILTER when no filter is active`, () => {
   assertEquals(buildFilters(), EmptyFilter);
@@ -38,9 +31,7 @@ Deno.test(`buildOrderBySql should return EMPTY_ORDER_BY if column is not allowed
 
 Deno.test(`buildOrderBySql should work with sane inputs`, () => {
   for (const order of [undefined, "asc", "desc"]) {
-    const expected = `ORDER BY title${
-      order && order !== "asc" ? ` ${order.toUpperCase()}` : ""
-    }`;
+    const expected = `ORDER BY title${order && order !== "asc" ? ` ${order.toUpperCase()}` : ""}`;
     assertEquals(
       buildOrderBySql({ column: "title", order: order as "asc" }, ["title"]),
       expected,

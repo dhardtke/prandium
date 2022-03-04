@@ -1,8 +1,4 @@
-import {
-  SchemaAggregateRating,
-  SchemaNutritionInformation,
-  SchemaReview,
-} from "../../../../deps.ts";
+import { SchemaAggregateRating, SchemaNutritionInformation, SchemaReview } from "../../../../deps.ts";
 import { Recipe, Review } from "../../model/recipe.ts";
 import { Tag } from "../../model/tag.ts";
 import { downloadThumbnail, fetchCustom } from "../../util/thumbnails.ts";
@@ -28,9 +24,7 @@ self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
 function parseInstructions(
   instructions: (string | { text?: string; name?: string })[],
 ): string[] {
-  return instructions.flatMap((i) =>
-    typeof i === "string" ? i.split("\n") : [i.text || i.name]
-  );
+  return instructions.flatMap((i) => typeof i === "string" ? i.split("\n") : [i.text || i.name]);
 }
 
 export async function importRecipe(
@@ -58,9 +52,7 @@ export async function importRecipe(
   if (keywords.length === 1) {
     keywords = (keywords[0] as string).split(", ");
   }
-  const tags: Tag[] | undefined = keywords.map((k) =>
-    new Tag({ title: k.toString() })
-  );
+  const tags: Tag[] | undefined = keywords.map((k) => new Tag({ title: k.toString() }));
   // TODO check for idreferences and throw
   // TODO type check? and warnings? (e.g. strings must be strings, etc.)
   const nutrition = first(schemaRecipe.nutrition) as SchemaNutritionInformation;
@@ -86,12 +78,8 @@ export async function importRecipe(
       userAgent,
       first(schemaRecipe.image as string),
     ),
-    prepTime: schemaRecipe.prepTime
-      ? durationToSeconds(parseDuration(schemaRecipe.prepTime.toString()))
-      : 0,
-    cookTime: schemaRecipe.cookTime
-      ? durationToSeconds(parseDuration(schemaRecipe.cookTime.toString()))
-      : 0,
+    prepTime: schemaRecipe.prepTime ? durationToSeconds(parseDuration(schemaRecipe.prepTime.toString())) : 0,
+    cookTime: schemaRecipe.cookTime ? durationToSeconds(parseDuration(schemaRecipe.cookTime.toString())) : 0,
     aggregateRatingValue: extractNumber(aggregateRating?.ratingValue as string),
     aggregateRatingCount: first(aggregateRating?.ratingCount),
     ingredients: ensureArray(

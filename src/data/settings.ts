@@ -1,8 +1,7 @@
 import { fs, log, path } from "../../deps.ts";
 import { getCpuCores } from "../shared/util.ts";
 
-const DefaultUserAgent =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0";
+const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0";
 
 export interface Settings {
   /**
@@ -91,10 +90,6 @@ export async function readFromDisk(configDir: string): Promise<Settings> {
       throw new Error(`Error reading ${SettingsFilename}: ${e}`);
     }
   }
-  log.debug(() =>
-    `Could not find settings file ${SettingsFilename}. Using default settings: ${
-      JSON.stringify(DefaultSettings)
-    }`
-  );
+  log.debug(() => `Could not find settings file ${SettingsFilename}. Using default settings: ${JSON.stringify(DefaultSettings)}`);
   return DefaultSettings;
 }

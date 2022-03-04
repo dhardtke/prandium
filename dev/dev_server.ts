@@ -1,13 +1,7 @@
 import { Colors, fs, path, slash } from "../deps.ts";
 import { Argparser } from "../src/data/parse/argparser.ts";
 import { DefaultConfigDir } from "../src/shared/util.ts";
-import {
-  call,
-  callAndWait,
-  combine,
-  isWindows,
-  ProcessLike,
-} from "./internal/util.ts";
+import { call, callAndWait, combine, isWindows, ProcessLike } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
@@ -70,9 +64,7 @@ class DevServer {
   async start() {
     const watcher = Deno.watchFs(this.config.watchPaths);
     await this.runActions(
-      this.config.actions.filter((a) =>
-        a.runOnStart === undefined || a.runOnStart
-      ),
+      this.config.actions.filter((a) => a.runOnStart === undefined || a.runOnStart),
     );
     DevServer.log("Watcher is up and running...");
 
@@ -98,9 +90,7 @@ class DevServer {
       const actions = this.filterMatchingActions(Array.from(paths));
       if (actions.length) {
         DevServer.log(
-          `Detected change. Restarting ${
-            actions.map((a) => a.id).join(", ")
-          }...`,
+          `Detected change. Restarting ${actions.map((a) => a.id).join(", ")}...`,
         );
         await this.runActions(actions);
       }
@@ -119,9 +109,7 @@ class DevServer {
   }
 
   private filterMatchingActions(paths: string[]): Action[] {
-    return this.config.actions.filter((c) =>
-      Boolean(paths.find((path) => slash(path).match(c.match)))
-    );
+    return this.config.actions.filter((c) => Boolean(paths.find((path) => slash(path).match(c.match))));
   }
 }
 
@@ -292,8 +280,7 @@ if (import.meta.main) {
               const text = await Deno.readTextFile(
                 "src/data/parse/ingredient/parser.js",
               );
-              const preamble =
-                `// deno-lint-ignore-file\n// deno-fmt-ignore-file`;
+              const preamble = `// deno-lint-ignore-file\n// deno-fmt-ignore-file`;
               await Deno.writeTextFile(
                 "src/data/parse/ingredient/parser.js",
                 `${preamble}\n${text}`,
