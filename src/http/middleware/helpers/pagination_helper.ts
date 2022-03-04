@@ -1,12 +1,12 @@
 import { Oak } from "../../../../deps_oak.ts";
 import { Pagination, PaginationBuilder } from "../../../data/pagination.ts";
-import { toNumber } from "../../../data/util/convert.ts";
+import { toInt } from "../../../data/util/convert.ts";
 import { parameters } from "../../util/parameters.ts";
 
 function extractParams(ctx: Oak.Context) {
   return {
-    page: toNumber(parameters(ctx).get("page"), 1),
-    pageSize: toNumber(
+    page: toInt(parameters(ctx).get("page"), 1),
+    pageSize: toInt(
       parameters(ctx).get("pageSize"),
       ctx.state.settings.pageSize,
     ),

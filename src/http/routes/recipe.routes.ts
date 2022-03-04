@@ -4,7 +4,7 @@ import { Recipe } from "../../data/model/recipe.ts";
 import { importRecipes } from "../../data/parse/import/import_recipe.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { services } from "../../data/service/services.ts";
-import { toNumber } from "../../data/util/convert.ts";
+import { toFloat, toInt } from "../../data/util/convert.ts";
 import { getThumbnailDir, getUniqueFilename } from "../../data/util/thumbnails.ts";
 import { RecipeDeleteTemplate } from "../../tpl/templates/recipe/recipe_delete.template.ts";
 import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.template.ts";
@@ -59,22 +59,22 @@ async function assignRecipeFields(
     recipe[field] = get(field) as never;
   }
   recipe.source = get("source");
-  recipe.yield = toNumber(get("yield"), undefined);
-  recipe.prepTime = toNumber(get("prepTime"));
-  recipe.cookTime = toNumber(get("cookTime"));
-  recipe.aggregateRatingValue = toNumber(get("aggregateRatingValue"));
-  recipe.aggregateRatingCount = toNumber(get("aggregateRatingCount"));
-  recipe.rating = toNumber(get("rating"));
+  recipe.yield = toInt(get("yield"), undefined);
+  recipe.prepTime = toInt(get("prepTime"));
+  recipe.cookTime = toInt(get("cookTime"));
+  recipe.aggregateRatingValue = toFloat(get("aggregateRatingValue"));
+  recipe.aggregateRatingCount = toInt(get("aggregateRatingCount"));
+  recipe.rating = toFloat(get("rating"));
   recipe.ingredients = data.ingredients as string[];
   recipe.instructions = data.instructions as string[];
   if (data.history?.length % 2 === 0) {
     recipe.history = [];
     for (let i = 0; i < data.history.length; i += 2) {
       const [year, month, day] = String(data.history[i]).split("-").map(
-        toNumber,
+        toInt,
       );
       const [hour, minute, second] = String(data.history[i + 1]).split(":").map(
-        toNumber,
+        toInt,
       );
       const date = new Date(year, month - 1, day); // JS months start at 0
       date.setHours(hour, minute, second);
@@ -137,16 +137,12 @@ router
   .get(
     "/:id/:slug/edit",
     async (
-      ctx: Oak.RouterContext<
-        "/:id/:slug/edit",
-        { id: string; slug: string },
-        AppState
-      >,
+      ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>,
       next: () => Promise<unknown>,
     ) => {
       const recipeService = services.get(RecipeService);
       const recipe = recipeService.find(
-        toNumber(ctx.params.id),
+        toInt(ctx.params.id),
         true,
         true,
         true,
@@ -161,16 +157,12 @@ router
   .post(
     "/:id/:slug/edit",
     async (
-      ctx: Oak.RouterContext<
-        "/:id/:slug/edit",
-        { id: string; slug: string },
-        AppState
-      >,
+      ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>,
       next: () => Promise<unknown>,
     ) => {
       const recipeService = services.get(RecipeService);
       const recipe = recipeService.find(
-        toNumber(ctx.params.id),
+        toInt(ctx.params.id),
         true,
         true,
         true,
@@ -182,6 +174,7 @@ router
           type: "form-data",
         }).value;
         await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
+        console.log(recipe.aggregateRatingValue);
         recipeService.update([recipe], true);
         ctx.response.redirect(
           urlWithParams(UrlGenerator.recipe(recipe), {
@@ -194,17 +187,13 @@ router
   .post(
     "/:id/:slug/rate",
     async (
-      ctx: Oak.RouterContext<
-        "/:id/:slug/rate",
-        { id: string; slug: string },
-        AppState
-      >,
+      ctx: Oak.RouterContext<"/:id/:slug/rate", { id: string; slug: string }, AppState>,
       next: () => Promise<unknown>,
     ) => {
       // TODO use update route and ensure only non-empty fields are set?
       const recipeService = services.get(RecipeService);
       const recipe = recipeService.find(
-        toNumber(ctx.params.id),
+        toInt(ctx.params.id),
         false,
         true,
       );
@@ -251,16 +240,12 @@ router
   .get(
     "/:id/:slug/delete",
     async (
-      ctx: Oak.RouterContext<
-        "/:id/:slug/delete",
-        { id: string; slug: string },
-        AppState
-      >,
+      ctx: Oak.RouterContext<"/:id/:slug/delete", { id: string; slug: string }, AppState>,
       next: () => Promise<unknown>,
     ) => {
       const recipeService = services.get(RecipeService);
       const recipe = recipeService.find(
-        toNumber(ctx.params.id),
+        toInt(ctx.params.id),
       );
       if (!recipe) {
         await next();
@@ -272,16 +257,12 @@ router
   .post(
     "/:id/:slug/delete",
     async (
-      ctx: Oak.RouterContext<
-        "/:id/:slug/delete",
-        { id: string; slug: string },
-        AppState
-      >,
+      ctx: Oak.RouterContext<"/:id/:slug/delete", { id: string; slug: string }, AppState>,
       next: () => Promise<unknown>,
     ) => {
       const recipeService = services.get(RecipeService);
       const recipe = recipeService.find(
-        toNumber(ctx.params.id),
+        toInt(ctx.params.id),
       );
       if (!recipe) {
         await next();
@@ -299,16 +280,12 @@ router
   .get(
     "/:id/:slug/flag",
     async (
-      ctx: Oak.RouterContext<
-        "/:id/:slug/flag",
-        { id: string; slug: string },
-        AppState
-      >,
+      ctx: Oak.RouterContext<"/:id/:slug/flag", { id: string; slug: string }, AppState>,
       next: () => Promise<unknown>,
     ) => {
       const recipeService = services.get(RecipeService);
       const recipe = recipeService.find(
-        toNumber(ctx.params.id),
+        toInt(ctx.params.id),
       );
       if (!recipe) {
         await next();
@@ -326,16 +303,12 @@ router
   .get(
     "/:id/:slug",
     async (
-      ctx: Oak.RouterContext<
-        "/:id/:slug",
-        { id: string; slug: string },
-        AppState
-      >,
+      ctx: Oak.RouterContext<"/:id/:slug", { id: string; slug: string }, AppState>,
       next: () => Promise<unknown>,
     ) => {
       const recipeService = services.get(RecipeService);
       const recipe = recipeService.find(
-        toNumber(ctx.params.id),
+        toInt(ctx.params.id),
         true,
         true,
         true,
@@ -345,7 +318,7 @@ router
       } else {
         ctx.response.body = RecipeDetailTemplate(
           recipe,
-          toNumber(parameters(ctx).get("portions"), recipe.yield),
+          toInt(parameters(ctx).get("portions"), recipe.yield),
         );
       }
     },

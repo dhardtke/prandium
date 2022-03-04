@@ -1,14 +1,24 @@
 import { NUMBERS_ONE_TO_TEN } from "./constants.ts";
 
-export function toNumber(s?: string, _default = 0): number {
-  if (s === undefined) {
+function toNumber(str: string | undefined, parseFn: (str: string) => number, _default = 0) {
+  if (str === null || str === undefined) {
     return _default;
+  } else {
+    const parsed = parseFn(str);
+    if (isNaN(parsed)) {
+      return _default;
+    } else {
+      return parsed;
+    }
   }
-  const parsed = parseInt(s, 10);
-  if (isNaN(parsed)) {
-    return _default;
-  }
-  return parsed;
+}
+
+export function toInt(str: string | undefined, _default = 0): number {
+  return toNumber(str, (n) => parseInt(n, 10), _default);
+}
+
+export function toFloat(str: string | undefined, _default = 0.0): number {
+  return toNumber(str, parseFloat, _default);
 }
 
 export function toDate(source?: Date | string, _default = new Date()): Date {
@@ -19,7 +29,7 @@ export function toDate(source?: Date | string, _default = new Date()): Date {
     return source;
   }
   const purelyNumeric = [...source].every((char) => NUMBERS_ONE_TO_TEN.includes(char));
-  const parsed = new Date(purelyNumeric ? toNumber(source, NaN) : source);
+  const parsed = new Date(purelyNumeric ? toInt(source, NaN) : source);
   if (isNaN(parsed.getTime())) {
     return _default;
   }

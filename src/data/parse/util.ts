@@ -1,4 +1,4 @@
-import { toNumber } from "../util/convert.ts";
+import { toInt } from "../util/convert.ts";
 
 export function first<T>(
   value?: /*SchemaValue<T>*/ readonly T[] | T,
@@ -27,7 +27,7 @@ export function extractNumber(source?: string | number): number | undefined {
     }
     const match = source.match(NUMBER);
     if (match) {
-      return toNumber(match[0], undefined);
+      return toInt(match[0], undefined);
     }
   }
   return undefined;

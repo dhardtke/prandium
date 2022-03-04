@@ -2,7 +2,7 @@ import { Oak } from "../../../deps_oak.ts";
 import { RecipeService } from "../../data/service/recipe.service.ts";
 import { services } from "../../data/service/services.ts";
 import { TagService } from "../../data/service/tag.service.ts";
-import { toNumber } from "../../data/util/convert.ts";
+import { toInt } from "../../data/util/convert.ts";
 import { RecipeListTemplate } from "../../tpl/templates/recipe/recipe_list.template.ts";
 import { orderByHelper } from "../middleware/helpers/order_by_helper.ts";
 import { paginationHelper } from "../middleware/helpers/pagination_helper.ts";
@@ -13,7 +13,7 @@ const router: Oak.Router = new Oak.Router();
 router.get("/", (ctx: Oak.Context<AppState>) => {
   const service: RecipeService = services.get(RecipeService);
 
-  const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) => toNumber(id, -1)).filter((i) => i !== -1);
+  const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) => toInt(id, -1)).filter((i) => i !== -1);
   const title = parameters(ctx).get("title");
   const recipes = paginationHelper(
     ctx,

@@ -1,5 +1,5 @@
 import { NUMBERS_ONE_TO_TEN } from "../util/constants.ts";
-import { toNumber } from "../util/convert.ts";
+import { toInt } from "../util/convert.ts";
 
 export interface Duration {
   years: number;
@@ -42,13 +42,13 @@ export function parseDuration(iso8601duration: string): Duration {
     dateTimeExtendedPattern.exec(iso8601duration);
   if (exec?.groups) {
     return {
-      years: toNumber(exec.groups.years),
-      months: toNumber(exec.groups.months),
-      weeks: toNumber(exec.groups.weeks),
-      days: toNumber(exec.groups.days),
-      hours: toNumber(exec.groups.hours),
-      minutes: toNumber(exec.groups.minutes),
-      seconds: toNumber(exec.groups.seconds),
+      years: toInt(exec.groups.years),
+      months: toInt(exec.groups.months),
+      weeks: toInt(exec.groups.weeks),
+      days: toInt(exec.groups.days),
+      hours: toInt(exec.groups.hours),
+      minutes: toInt(exec.groups.minutes),
+      seconds: toInt(exec.groups.seconds),
     };
   }
 
