@@ -129,8 +129,8 @@ router
         importWorkerCount: ctx.state.settings.importWorkerCount,
         userAgent: ctx.state.settings.userAgent,
       });
-      const service = services.get(RecipeService);
-      service.create(results.filter((r) => r.success).map((r) => r.recipe!));
+      const recipeService = services.get(RecipeService);
+      recipeService.create(results.filter((r) => r.success).map((r) => r.recipe!));
       ctx.response.body = RecipeImportTemplate(results);
     },
   )
@@ -144,8 +144,8 @@ router
       >,
       next: () => Promise<unknown>,
     ) => {
-      const service = services.get(RecipeService);
-      const recipe = service.find(
+      const recipeService = services.get(RecipeService);
+      const recipe = recipeService.find(
         toNumber(ctx.params.id),
         true,
         true,
@@ -168,8 +168,8 @@ router
       >,
       next: () => Promise<unknown>,
     ) => {
-      const service = services.get(RecipeService);
-      const recipe = service.find(
+      const recipeService = services.get(RecipeService);
+      const recipe = recipeService.find(
         toNumber(ctx.params.id),
         true,
         true,
@@ -182,7 +182,7 @@ router
           type: "form-data",
         }).value;
         await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
-        service.update([recipe], true);
+        recipeService.update([recipe], true);
         ctx.response.redirect(
           urlWithParams(UrlGenerator.recipe(recipe), {
             "flash": "editSuccessful",
@@ -202,8 +202,8 @@ router
       next: () => Promise<unknown>,
     ) => {
       // TODO use update route and ensure only non-empty fields are set?
-      const service = services.get(RecipeService);
-      const recipe = service.find(
+      const recipeService = services.get(RecipeService);
+      const recipe = recipeService.find(
         toNumber(ctx.params.id),
         false,
         true,
@@ -220,7 +220,7 @@ router
           }
         }
         recipe.rating = parseFloat(formData.get("rating") ?? "0");
-        service.update([recipe], true);
+        recipeService.update([recipe], true);
         ctx.response.body = "Ok";
       }
     },
@@ -234,13 +234,13 @@ router
   .post(
     "/create",
     async (ctx: Oak.Context<AppState>) => {
-      const service = services.get(RecipeService);
+      const recipeService = services.get(RecipeService);
       const recipe = new Recipe({});
       const formDataReader: Oak.FormDataReader = await ctx.request.body({
         type: "form-data",
       }).value;
       await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
-      service.create([recipe]);
+      recipeService.create([recipe]);
       ctx.response.redirect(
         urlWithParams(UrlGenerator.recipe(recipe), {
           "flash": "createSuccessful",
@@ -258,8 +258,8 @@ router
       >,
       next: () => Promise<unknown>,
     ) => {
-      const service = services.get(RecipeService);
-      const recipe = service.find(
+      const recipeService = services.get(RecipeService);
+      const recipe = recipeService.find(
         toNumber(ctx.params.id),
       );
       if (!recipe) {
@@ -279,15 +279,15 @@ router
       >,
       next: () => Promise<unknown>,
     ) => {
-      const service = services.get(RecipeService);
-      const recipe = service.find(
+      const recipeService = services.get(RecipeService);
+      const recipe = recipeService.find(
         toNumber(ctx.params.id),
       );
       if (!recipe) {
         await next();
       } else {
         await deleteThumbnail(recipe, ctx.state.configDir);
-        service.delete([recipe]);
+        recipeService.delete([recipe]);
         ctx.response.redirect(
           urlWithParams(UrlGenerator.home(), {
             "flash": "deleteSuccessful",
@@ -306,15 +306,15 @@ router
       >,
       next: () => Promise<unknown>,
     ) => {
-      const service = services.get(RecipeService);
-      const recipe = service.find(
+      const recipeService = services.get(RecipeService);
+      const recipe = recipeService.find(
         toNumber(ctx.params.id),
       );
       if (!recipe) {
         await next();
       } else {
         recipe.flagged = !recipe.flagged;
-        service.update([recipe]);
+        recipeService.update([recipe]);
         ctx.response.redirect(
           urlWithParams(UrlGenerator.recipe(recipe), {
             "flash": "editSuccessful",
@@ -333,8 +333,8 @@ router
       >,
       next: () => Promise<unknown>,
     ) => {
-      const service = services.get(RecipeService);
-      const recipe = service.find(
+      const recipeService = services.get(RecipeService);
+      const recipe = recipeService.find(
         toNumber(ctx.params.id),
         true,
         true,
