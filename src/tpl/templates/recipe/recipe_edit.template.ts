@@ -275,7 +275,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
               <label for="rating">
                 ${e(l.recipe.rating)}
               </label>
-              <input type="number" min="0" step=".5" id="rating" name="rating" value="${e(recipe?.rating ?? "")}">
+              <input type="number" min="0" max="5" step=".5" id="rating" name="rating" value="${e(recipe?.rating ?? "")}">
             </div>
           </div>
         </div>
