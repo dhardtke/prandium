@@ -1,7 +1,7 @@
 import { bootComponents } from "./ts/components/component.ts";
 import { DarkModeSwitcher } from "./ts/global/dark-mode-switcher.component.ts";
-import { registerOnPopstateListener } from "./ts/global/_popstate_reload.ts";
-import { removeUrlFlashParameter } from "./ts/global/_remove_url_flash_parameter.ts";
+import { registerOnPopstateListener } from "./ts/global/popstate-reload.ts";
+import { removeUrlFlashParameter } from "./ts/global/remove-url-flash-parameter.ts";
 import { RecipeDetailPage } from "./ts/page/recipe_detail_page/recipe_detail_page.ts";
 import { RecipeEditPage } from "./ts/page/recipe_edit_page/recipe_edit_page.ts";
 import { RecipeListPage } from "./ts/page/recipe_list_page/recipe_list_page.ts";

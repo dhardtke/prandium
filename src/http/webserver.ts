@@ -1,5 +1,5 @@
 import { log } from "../../deps.ts";
-import { Oak } from "../../deps_oak.ts";
+import { Oak } from "../../deps-oak.ts";
 import { Database } from "../data/db.ts";
 import { Settings } from "../data/settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";

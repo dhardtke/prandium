@@ -1,5 +1,5 @@
 import { container } from "../../../deps.ts";
-import { Oak } from "../../../deps_oak.ts";
+import { Oak } from "../../../deps-oak.ts";
 import { RecipeController } from "../../controllers/recipe.controller.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";

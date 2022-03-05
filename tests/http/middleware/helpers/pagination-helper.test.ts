@@ -1,7 +1,7 @@
 import { assertEquals } from "../../../../deps.ts";
-import { Oak } from "../../../../deps_oak.ts";
+import { Oak } from "../../../../deps-oak.ts";
 import { type Settings } from "../../../../src/data/settings.ts";
-import { PaginationHelper } from "../../../../src/http/middleware/helpers/pagination_helper.ts";
+import { PaginationHelper } from "../../../../src/http/middleware/helpers/pagination-helper.ts";
 
 Deno.test("PaginationHelper", async (t) => {
   const settings: Settings = {

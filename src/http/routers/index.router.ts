@@ -1,10 +1,10 @@
 import { container } from "../../../deps.ts";
-import { Oak } from "../../../deps_oak.ts";
+import { Oak } from "../../../deps-oak.ts";
 import { IndexController } from "../../controllers/index.controller.ts";
 import { OrderBy } from "../../data/service/util/order-by.ts";
 import { toInt } from "../../data/util/convert.ts";
-import { orderByHelper } from "../middleware/helpers/order_by_helper.ts";
-import { PaginationHelper } from "../middleware/helpers/pagination_helper.ts";
+import { orderByHelper } from "../middleware/helpers/order-by-helper.ts";
+import { PaginationHelper } from "../middleware/helpers/pagination-helper.ts";
 import { parameters } from "../util/parameters.ts";
 import { AppState } from "../webserver.ts";
 

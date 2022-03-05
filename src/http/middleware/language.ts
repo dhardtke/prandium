@@ -1,4 +1,4 @@
-import { Oak } from "../../../deps_oak.ts";
+import { Oak } from "../../../deps-oak.ts";
 import { en } from "../../i18n/en.ts";
 import { LanguageId, LANGUAGES, setLanguage } from "../../i18n/mod.ts";
 import { AppState } from "../webserver.ts";

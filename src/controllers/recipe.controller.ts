@@ -6,10 +6,10 @@ import { type Settings } from "../data/settings.ts";
 import { getThumbnailDir, getUniqueFilename } from "../data/util/thumbnails.ts";
 import { CONFIG_DIR, SETTINGS } from "../di.ts";
 import { NotFoundError } from "../http/middleware/error.ts";
-import { RecipeDeleteTemplate } from "../tpl/templates/recipe/recipe_delete.template.ts";
-import { RecipeDetailTemplate } from "../tpl/templates/recipe/recipe_detail.template.ts";
-import { RecipeEditTemplate } from "../tpl/templates/recipe/recipe_edit.template.ts";
-import { RecipeImportTemplate } from "../tpl/templates/recipe/recipe_import.template.ts";
+import { RecipeDeleteTemplate } from "../tpl/templates/recipe/recipe-delete.template.ts";
+import { RecipeDetailTemplate } from "../tpl/templates/recipe/recipe-detail.template.ts";
+import { RecipeEditTemplate } from "../tpl/templates/recipe/recipe-edit.template.ts";
+import { RecipeImportTemplate } from "../tpl/templates/recipe/recipe-import.template.ts";
 
 export interface SentFile {
   filename?: string;

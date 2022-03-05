@@ -1,5 +1,5 @@
 import { assertEquals, container } from "../../../deps.ts";
-import { Oak } from "../../../deps_oak.ts";
+import { Oak } from "../../../deps-oak.ts";
 import { IndexController } from "../../../src/controllers/index.controller.ts";
 import { PaginationParams } from "../../../src/data/pagination.ts";
 import { OrderBy } from "../../../src/data/service/util/order-by.ts";

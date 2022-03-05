@@ -1,5 +1,5 @@
 import { inject, singleton } from "../../../../deps.ts";
-import { Oak } from "../../../../deps_oak.ts";
+import { Oak } from "../../../../deps-oak.ts";
 import { PaginationParams } from "../../../data/pagination.ts";
 import { type Settings } from "../../../data/settings.ts";
 import { toInt } from "../../../data/util/convert.ts";
