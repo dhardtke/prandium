@@ -1,9 +1,9 @@
-import { assertEquals, container } from "../../../deps.ts";
 import { Oak } from "../../../deps-oak.ts";
+import { assertEquals } from "../../../deps.ts";
 import { IndexController } from "../../../src/controllers/index.controller.ts";
 import { PaginationParams } from "../../../src/data/pagination.ts";
 import { OrderBy } from "../../../src/data/service/util/order-by.ts";
-import { SETTINGS } from "../../../src/di.ts";
+import { PaginationHelper } from "../../../src/http/middleware/helpers/pagination-helper.ts";
 import { DEFAULT_ORDER_BY, IndexRouter } from "../../../src/http/routers/index.router.ts";
 
 Deno.test("IndexRouter", async (t) => {
@@ -17,21 +17,24 @@ Deno.test("IndexRouter", async (t) => {
     paginationParams: PaginationParams;
   } | undefined = undefined;
 
-  const mockIndexController: Partial<IndexController> = {
+  const mockIndexController: IndexController = {
     list(filters: { tagIds: number[]; title: string }, showTagFilter: boolean, orderBy: OrderBy | undefined, paginationParams: PaginationParams) {
       lastListInvocation = { filters, showTagFilter, orderBy, paginationParams };
       return "";
     },
-  };
-  container.register(IndexController, { useValue: mockIndexController });
+  } as unknown as IndexController;
 
   const pageSize = 25;
-  container.register(SETTINGS, { useValue: { pageSize } });
+  const mockPaginationHelper = {
+    buildPaginationParams(ctx: Oak.Context): PaginationParams {
+      return { page: 1, pageSize, currentUrl: ctx.request.url.toString() };
+    },
+  } as unknown as PaginationHelper;
 
   async function invokeRoute(path: string) {
     const ctx = Oak.testing.createMockContext({ method: "GET", path });
     const next = Oak.testing.createMockNext();
-    const mw = IndexRouter.routes();
+    const mw = new IndexRouter(mockPaginationHelper, mockIndexController).routes();
     await mw(ctx, next);
   }
 

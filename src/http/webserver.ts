@@ -1,5 +1,5 @@
-import { log } from "../../deps.ts";
 import { Oak } from "../../deps-oak.ts";
+import { log } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { Settings } from "../data/settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";
@@ -7,7 +7,7 @@ import { Events } from "../tpl/events.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
 import { handleNotFound, handleServerError } from "./middleware/error.ts";
 import { languageMiddleware } from "./middleware/language.ts";
-import { Routers } from "./routers/routers.ts";
+import { RouterRegistry } from "./routers/router-registry.ts";
 
 export interface AppState {
   settings: Settings;
@@ -56,7 +56,9 @@ export async function spawnServer(
 
   app.use(languageMiddleware);
   app.use(handleServerError);
-  for (const router of Routers) {
+
+  const routers = RouterRegistry.get();
+  for (const router of routers) {
     app.use(router.routes(), router.allowedMethods());
   }
   app.use(handleNotFound);
