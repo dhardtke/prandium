@@ -7,7 +7,7 @@ import { Events } from "../tpl/events.ts";
 import { Page } from "../tpl/templates/_structure/page.ts";
 import { handleNotFound, handleServerError } from "./middleware/error.ts";
 import { languageMiddleware } from "./middleware/language.ts";
-import { Routers } from "./routes/routers.ts";
+import { Routers } from "./routers/routers.ts";
 
 export interface AppState {
   settings: Settings;
