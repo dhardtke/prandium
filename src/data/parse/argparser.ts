@@ -18,7 +18,7 @@ function argumentTypeConverter(type: ArgumentType): (arg0: string) => void {
     return (input) => parseInt(input, 10);
   }
   return () => {
-    throw new Error("Not calleable.");
+    throw new Error("Not callable.");
   };
 }
 
