@@ -1,8 +1,8 @@
 import { singleton } from "../../deps.ts";
+import { buildPagination, PaginationParams } from "../data/pagination.ts";
 import { RecipeService } from "../data/service/recipe.service.ts";
 import { TagService } from "../data/service/tag.service.ts";
 import { OrderBy } from "../data/service/util/order-by.ts";
-import { paginationHelper, PaginationParams } from "../http/middleware/helpers/pagination_helper.ts";
 import { RecipeListTemplate } from "../tpl/templates/recipe/recipe_list.template.ts";
 
 @singleton()
@@ -11,7 +11,7 @@ export class IndexController {
   }
 
   list(filters: { tagIds: number[]; title: string }, showTagFilter: boolean, orderBy: OrderBy | undefined, paginationParams: PaginationParams) {
-    const recipes = paginationHelper(
+    const recipes = buildPagination(
       paginationParams,
       this.recipeService.count(filters),
       (limit, offset) =>

@@ -2,7 +2,7 @@
 export * as sqlite from "https://deno.land/x/sqlite@v3.2.1/mod.ts";
 import * as Reflect from "https://esm.sh/@abraham/reflection@0.9.1?pin=v66&no-check";
 console.assert(Boolean(Reflect));
-export { container, injectable, singleton, inject, Lifecycle } from "https://esm.sh/tsyringe@4.4.0?pin=v66&no-check";
+export { container, injectable, singleton, inject, Lifecycle } from "https://esm.sh/tsyringe@4.4.0?pin=v66";
 
 // utils
 export * as path from "https://deno.land/std@0.127.0/path/mod.ts";

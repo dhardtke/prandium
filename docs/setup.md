@@ -65,7 +65,7 @@ After=network.target
 Type=simple
 User=prandium
 WorkingDirectory=/home/prandium
-ExecStart=/home/prandium/.deno/bin/deno run --no-check --allow-net --allow-env --lock=/home/prandium/repository/lock.json --allow-read=/home/prandium/.config/prandium,/home/prandium/repository,/tmp --allow-write=/home/prandium/.config/prandium,/tmp --unstable /home/prandium/repository/src/main.ts
+ExecStart=/home/prandium/.deno/bin/deno run --no-check --allow-net --allow-env --config=/home/prandium/repository/tsconfig.json --lock=/home/prandium/repository/lock.json --allow-read=/home/prandium/.config/prandium,/home/prandium/repository,/tmp --allow-write=/home/prandium/.config/prandium,/tmp --unstable /home/prandium/repository/src/main.ts
 Restart=on-failure
 RestartSec=5
 

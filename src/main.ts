@@ -1,9 +1,9 @@
-import { Colors, container, fs, Lifecycle, log, LogRecord, path } from "../deps.ts";
+import { Colors, container, fs, log, LogRecord, path } from "../deps.ts";
 import { Database } from "./data/db.ts";
 import { Argparser } from "./data/parse/argparser.ts";
 import { readFromDisk, Settings } from "./data/settings.ts";
 import { buildDbPath } from "./data/util/build_db_path.ts";
-import { CONFIG_DIR, SETTINGS } from "./di.ts";
+import { CONFIG_DIR, Disposable, SETTINGS } from "./di.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { DefaultConfigDir, defaultConfigDir } from "./shared/util.ts";
 
@@ -137,9 +137,9 @@ async function main(): Promise<number> {
   // Dependency Injection registration
   const database = new Database(buildDbPath(options.configDir));
   database.migrate();
-  container.register(Database, { useValue: database }, { lifeCycle: Lifecycle.Singleton });
-  container.register(SETTINGS, { useValue: settings }, { lifeCycle: Lifecycle.Singleton });
-  container.register(CONFIG_DIR, { useValue: options.configDir }, { lifeCycle: Lifecycle.Singleton });
+  container.register(Database, { useValue: database });
+  container.register(SETTINGS, { useValue: settings });
+  container.register(CONFIG_DIR, { useValue: options.configDir });
 
   await spawnServer({
     ...options,
@@ -147,7 +147,7 @@ async function main(): Promise<number> {
     settings,
   });
 
-  await container.dispose();
+  await (container as unknown as Disposable).dispose();
 
   return 0;
 }

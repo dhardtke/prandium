@@ -78,7 +78,7 @@ export class PaginationBuilder<T> {
 
   public build(
     items: (limit: number, offset: number) => T[],
-    currentUrl: URL,
+    currentUrl: URL | string,
   ): Pagination<T> {
     const url = new URL(currentUrl.toString());
     const pages = Array.from(
@@ -143,4 +143,21 @@ export class Pagination<T> implements Iterable<T> {
   [Symbol.iterator](): Iterator<T> {
     return this.items.values();
   }
+}
+
+export interface PaginationParams {
+  page: number;
+  pageSize: number;
+  currentUrl: string;
+}
+
+export function buildPagination<T>(
+  paginationParams: PaginationParams,
+  total: number,
+  listSupplier: (limit: number, offset: number) => T[],
+): Pagination<T> {
+  const { page, pageSize, currentUrl } = paginationParams;
+
+  return new PaginationBuilder<T>(total, page, pageSize)
+    .build(listSupplier, currentUrl);
 }

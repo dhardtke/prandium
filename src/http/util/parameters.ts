@@ -1,5 +1,3 @@
-import { Oak } from "../../../deps_oak.ts";
-
 export interface ParametersBuilder {
   get(name: string, _default?: string): string;
 
@@ -17,11 +15,10 @@ export interface ParametersBuilder {
 }
 
 export const parameters = (
-  url: URL | string | Oak.Context,
+  urlLike: URL | string | { request: { url: URL } },
 ): ParametersBuilder => {
-  const result = new URL(
-    (url instanceof Oak.Context ? url.request.url : url).toString(),
-  );
+  const originalUrl = (urlLike as { request: { url: URL } })?.request?.url || urlLike;
+  const result = new URL(originalUrl.toString());
 
   const builder = {
     get(

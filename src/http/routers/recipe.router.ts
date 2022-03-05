@@ -41,7 +41,7 @@ export const RecipeRouter = new Oak.Router({ prefix: "/recipe" })
       const rawUrls = formData.get("urls");
       const urls = rawUrls?.split("\n");
 
-      ctx.response.body = await container.resolve(RecipeController).postImport(ctx.state.configDir, urls);
+      ctx.response.body = await container.resolve(RecipeController).postImport(urls);
     },
   )
   .get("/:id/:slug/edit", (ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>) => {
@@ -53,7 +53,7 @@ export const RecipeRouter = new Oak.Router({ prefix: "/recipe" })
       ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>,
     ) => {
       const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
-      const recipe = await container.resolve(RecipeController).postEdit(toInt(ctx.params.id), ctx.state.configDir, payload, thumbnail, shouldDeleteThumbnail);
+      const recipe = await container.resolve(RecipeController).postEdit(toInt(ctx.params.id), payload, thumbnail, shouldDeleteThumbnail);
       ctx.response.redirect(
         urlWithParams(UrlGenerator.recipe(recipe), {
           "flash": "editSuccessful",
@@ -78,7 +78,7 @@ export const RecipeRouter = new Oak.Router({ prefix: "/recipe" })
     "/create",
     async (ctx: Oak.Context<AppState>) => {
       const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
-      const recipe = await container.resolve(RecipeController).postCreate(payload, ctx.state.configDir, thumbnail, shouldDeleteThumbnail);
+      const recipe = await container.resolve(RecipeController).postCreate(payload, thumbnail, shouldDeleteThumbnail);
       ctx.response.redirect(
         urlWithParams(UrlGenerator.recipe(recipe), {
           "flash": "createSuccessful",
@@ -99,7 +99,7 @@ export const RecipeRouter = new Oak.Router({ prefix: "/recipe" })
     async (
       ctx: Oak.RouterContext<"/:id/:slug/delete", { id: string; slug: string }, AppState>,
     ) => {
-      await container.resolve(RecipeController).postDelete(toInt(ctx.params.id), ctx.state.configDir);
+      await container.resolve(RecipeController).postDelete(toInt(ctx.params.id));
       ctx.response.redirect(
         urlWithParams(UrlGenerator.home(), {
           "flash": "deleteSuccessful",

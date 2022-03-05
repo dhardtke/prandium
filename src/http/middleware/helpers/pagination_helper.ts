@@ -1,33 +1,25 @@
+import { inject, singleton } from "../../../../deps.ts";
 import { Oak } from "../../../../deps_oak.ts";
-import { Pagination, PaginationBuilder } from "../../../data/pagination.ts";
+import { PaginationParams } from "../../../data/pagination.ts";
+import { type Settings } from "../../../data/settings.ts";
 import { toInt } from "../../../data/util/convert.ts";
+import { SETTINGS } from "../../../di.ts";
 import { parameters } from "../../util/parameters.ts";
 import { copyUrlAndDo } from "../../util/url.ts";
 
-export interface PaginationParams {
-  page: number;
-  pageSize: number;
-  currentUrl: URL;
-}
+@singleton()
+export class PaginationHelper {
+  constructor(@inject(SETTINGS) private settings: Settings) {
+  }
 
-export function buildPaginationParams(ctx: Oak.Context): PaginationParams {
-  return {
-    page: toInt(parameters(ctx).get("page"), 1),
-    pageSize: toInt(
-      parameters(ctx).get("pageSize"),
-      ctx.state.settings.pageSize,
-    ),
-    currentUrl: copyUrlAndDo(ctx.request.url, (url) => url.searchParams.delete("flash")),
-  };
-}
-
-export function paginationHelper<T>(
-  paginationParams: PaginationParams,
-  total: number,
-  listSupplier: (limit: number, offset: number) => T[],
-): Pagination<T> {
-  const { page, pageSize, currentUrl } = paginationParams;
-
-  return new PaginationBuilder<T>(total, page, pageSize)
-    .build(listSupplier, currentUrl);
+  buildPaginationParams(ctx: Oak.Context): PaginationParams {
+    return {
+      page: toInt(parameters(ctx).get("page"), 1),
+      pageSize: toInt(
+        parameters(ctx).get("pageSize"),
+        this.settings.pageSize,
+      ),
+      currentUrl: copyUrlAndDo(ctx.request.url, (url) => url.searchParams.delete("flash")).toString(),
+    };
+  }
 }
