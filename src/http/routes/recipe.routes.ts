@@ -1,116 +1,34 @@
-import { path } from "../../../deps.ts";
+import { container } from "../../../deps.ts";
 import { Oak } from "../../../deps_oak.ts";
+import { RecipeController } from "../../controllers/recipe.controller.ts";
 import { Recipe } from "../../data/model/recipe.ts";
-import { importRecipes } from "../../data/parse/import/import_recipe.ts";
-import { RecipeService } from "../../data/service/recipe.service.ts";
-import { services } from "../../data/service/services.ts";
-import { toFloat, toInt } from "../../data/util/convert.ts";
-import { getThumbnailDir, getUniqueFilename } from "../../data/util/thumbnails.ts";
-import { RecipeDeleteTemplate } from "../../tpl/templates/recipe/recipe_delete.template.ts";
-import { RecipeDetailTemplate } from "../../tpl/templates/recipe/recipe_detail.template.ts";
-import { RecipeEditTemplate } from "../../tpl/templates/recipe/recipe_edit.template.ts";
-import { RecipeImportTemplate } from "../../tpl/templates/recipe/recipe_import.template.ts";
-import { collectFormData, urlWithParams } from "../util/mod.ts";
+import { toInt } from "../../data/util/convert.ts";
+import { collectFormData, type FormData, urlWithParams } from "../util/mod.ts";
 import { parameters } from "../util/parameters.ts";
 import { UrlGenerator } from "../util/url_generator.ts";
 import { AppState } from "../webserver.ts";
 
-async function deleteThumbnail(recipe: Recipe, configDir: string) {
-  // delete old thumbnail
-  if (recipe.thumbnail) {
-    const thumbnailDir = getThumbnailDir(configDir);
-    try {
-      await Deno.remove(path.join(thumbnailDir, recipe.thumbnail));
-    } catch {
-      // ignore
-    }
-  }
-}
-
-async function assignRecipeFields(
-  formDataReader: Oak.FormDataReader,
-  recipe: Recipe,
-  configDir: string,
-) {
-  type RecipeKey = keyof Recipe;
-  const data = await collectFormData<RecipeKey | "deleteThumbnail">(
+async function extractPostData(ctx: Oak.Context<AppState>) {
+  const formDataReader: Oak.FormDataReader = await ctx.request.body({
+    type: "form-data",
+  }).value;
+  const payload = await collectFormData<keyof Recipe>(
     formDataReader,
   );
-  const get = (name: RecipeKey) => {
-    return (data[name] as string[])[0];
-  };
-  const stringFields: RecipeKey[] = [
-    "title",
-    "description",
-    "source",
-    "nutritionCalories",
-    "nutritionCarbohydrate",
-    "nutritionCholesterol",
-    "nutritionFat",
-    "nutritionFiber",
-    "nutritionProtein",
-    "nutritionSaturatedFat",
-    "nutritionSodium",
-    "nutritionSugar",
-    "nutritionTransFat",
-    "nutritionUnsaturatedFat",
-  ];
-  for (const field of stringFields) {
-    recipe[field] = get(field) as never;
-  }
-  recipe.source = get("source");
-  recipe.yield = toInt(get("yield"), undefined);
-  recipe.prepTime = toInt(get("prepTime"));
-  recipe.cookTime = toInt(get("cookTime"));
-  recipe.aggregateRatingValue = toFloat(get("aggregateRatingValue"));
-  recipe.aggregateRatingCount = toInt(get("aggregateRatingCount"));
-  recipe.rating = toFloat(get("rating"));
-  recipe.ingredients = data.ingredients as string[];
-  recipe.instructions = data.instructions as string[];
-  if (data.history?.length % 2 === 0) {
-    recipe.history = [];
-    for (let i = 0; i < data.history.length; i += 2) {
-      const [year, month, day] = String(data.history[i]).split("-").map(
-        toInt,
-      );
-      const [hour, minute, second] = String(data.history[i + 1]).split(":").map(
-        toInt,
-      );
-      const date = new Date(year, month - 1, day); // JS months start at 0
-      date.setHours(hour, minute, second);
-      recipe.history.push(date);
-    }
-  }
+  const thumbnail = payload.thumbnail?.[0] as Oak.FormDataFile;
+  const payloadDeleteThumbnail = payload as unknown as FormData<"shouldDeleteThumbnail">;
+  const shouldDeleteThumbnail = typeof payloadDeleteThumbnail.shouldDeleteThumbnail?.[0] !== "undefined";
 
-  if (data.deleteThumbnail) {
-    await deleteThumbnail(recipe, configDir);
-    recipe.thumbnail = undefined;
-  }
-  if (data.thumbnail) {
-    const [newThumbnail] = data.thumbnail as [Oak.FormDataFile];
-    if (newThumbnail.filename) {
-      // TODO server-side type validation?
-      const thumbnailDir = getThumbnailDir(configDir);
-      const filename = getUniqueFilename(
-        thumbnailDir,
-        newThumbnail.originalName,
-      );
-      await Deno.copyFile(
-        newThumbnail.filename,
-        path.join(thumbnailDir, filename),
-      );
-      await Deno.remove(newThumbnail.filename);
-      await deleteThumbnail(recipe, configDir);
-      recipe.thumbnail = filename;
-    }
-  }
-  recipe.updatedAt = new Date();
+  return {
+    payload: payload as Record<keyof Recipe, string[]>,
+    thumbnail,
+    shouldDeleteThumbnail,
+  };
 }
 
-const router: Oak.Router = new Oak.Router({ prefix: "/recipe" });
-router
+export const RecipeRouter = new Oak.Router({ prefix: "/recipe" })
   .get("/import", (ctx: Oak.Context<AppState>) => {
-    ctx.response.body = RecipeImportTemplate();
+    ctx.response.body = container.resolve(RecipeController).getImport();
   })
   .post(
     "/import",
@@ -118,118 +36,49 @@ router
       if (!ctx.request.hasBody) {
         return await next();
       }
+
       const formData = await ctx.request.body({ type: "form" }).value;
-      const urls = formData.get("urls");
-      if (!urls) {
-        return await next();
-      }
-      const results = await importRecipes({
-        urls: urls!.split("\n"),
-        configDir: ctx.state.configDir,
-        importWorkerCount: ctx.state.settings.importWorkerCount,
-        userAgent: ctx.state.settings.userAgent,
-      });
-      const recipeService = services.get(RecipeService);
-      recipeService.create(results.filter((r) => r.success).map((r) => r.recipe!));
-      ctx.response.body = RecipeImportTemplate(results);
+      const rawUrls = formData.get("urls");
+      const urls = rawUrls?.split("\n");
+
+      ctx.response.body = await container.resolve(RecipeController).postImport(ctx.state.configDir, urls);
     },
   )
-  .get(
-    "/:id/:slug/edit",
-    async (
-      ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>,
-      next: () => Promise<unknown>,
-    ) => {
-      const recipeService = services.get(RecipeService);
-      const recipe = recipeService.find(
-        toInt(ctx.params.id),
-        true,
-        true,
-        true,
-      );
-      if (!recipe) {
-        await next();
-      } else {
-        ctx.response.body = RecipeEditTemplate(recipe);
-      }
-    },
-  )
+  .get("/:id/:slug/edit", (ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>) => {
+    ctx.response.body = container.resolve(RecipeController).getEdit(toInt(ctx.params.id));
+  })
   .post(
     "/:id/:slug/edit",
     async (
       ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>,
-      next: () => Promise<unknown>,
     ) => {
-      const recipeService = services.get(RecipeService);
-      const recipe = recipeService.find(
-        toInt(ctx.params.id),
-        true,
-        true,
-        true,
+      const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
+      const recipe = await container.resolve(RecipeController).postEdit(toInt(ctx.params.id), ctx.state.configDir, payload, thumbnail, shouldDeleteThumbnail);
+      ctx.response.redirect(
+        urlWithParams(UrlGenerator.recipe(recipe), {
+          "flash": "editSuccessful",
+        }, ctx.request.url),
       );
-      if (!recipe) {
-        await next();
-      } else {
-        const formDataReader: Oak.FormDataReader = await ctx.request.body({
-          type: "form-data",
-        }).value;
-        await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
-        console.log(recipe.aggregateRatingValue);
-        recipeService.update([recipe], true);
-        ctx.response.redirect(
-          urlWithParams(UrlGenerator.recipe(recipe), {
-            "flash": "editSuccessful",
-          }, ctx.request.url),
-        );
-      }
     },
   )
-  .post(
-    "/:id/:slug/rate",
-    async (
-      ctx: Oak.RouterContext<"/:id/:slug/rate", { id: string; slug: string }, AppState>,
-      next: () => Promise<unknown>,
-    ) => {
-      // TODO use update route and ensure only non-empty fields are set?
-      const recipeService = services.get(RecipeService);
-      const recipe = recipeService.find(
-        toInt(ctx.params.id),
-        false,
-        true,
-      );
-      if (!recipe) {
-        await next();
-      } else {
-        const formData: URLSearchParams = await ctx.request.body({
-          type: "form",
-        }).value;
-        if (ctx.state.settings.addHistoryEntryWhenRating) {
-          if (!recipe.rating) {
-            recipe.history.push(new Date());
-          }
-        }
-        recipe.rating = parseFloat(formData.get("rating") ?? "0");
-        recipeService.update([recipe], true);
-        ctx.response.body = "Ok";
-      }
-    },
-  )
+  .post("/:id/:slug/rate", async (ctx: Oak.RouterContext<"/:id/:slug/rate", { id: string; slug: string }, AppState>) => {
+    const formData: URLSearchParams = await ctx.request.body({
+      type: "form",
+    }).value;
+    const rating = parseFloat(formData.get("rating") ?? "0");
+    ctx.response.body = container.resolve(RecipeController).rate(toInt(ctx.params.id), rating);
+  })
   .get(
     "/create",
     (ctx: Oak.Context<AppState>) => {
-      ctx.response.body = RecipeEditTemplate();
+      ctx.response.body = container.resolve(RecipeController).createGet();
     },
   )
   .post(
     "/create",
     async (ctx: Oak.Context<AppState>) => {
-      const recipeService = services.get(RecipeService);
-      const recipe = new Recipe({});
-      const formDataReader: Oak.FormDataReader = await ctx.request.body({
-        type: "form-data",
-      }).value;
-      await assignRecipeFields(formDataReader, recipe, ctx.state.configDir);
-      recipeService.create([recipe]);
+      const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
+      const recipe = await container.resolve(RecipeController).postCreate(payload, ctx.state.configDir, thumbnail, shouldDeleteThumbnail);
       ctx.response.redirect(
         urlWithParams(UrlGenerator.recipe(recipe), {
           "flash": "createSuccessful",
@@ -239,89 +88,39 @@ router
   )
   .get(
     "/:id/:slug/delete",
-    async (
+    (
       ctx: Oak.RouterContext<"/:id/:slug/delete", { id: string; slug: string }, AppState>,
-      next: () => Promise<unknown>,
     ) => {
-      const recipeService = services.get(RecipeService);
-      const recipe = recipeService.find(
-        toInt(ctx.params.id),
-      );
-      if (!recipe) {
-        await next();
-      } else {
-        ctx.response.body = RecipeDeleteTemplate(recipe);
-      }
+      ctx.response.body = container.resolve(RecipeController).getDelete(toInt(ctx.params.id));
     },
   )
   .post(
     "/:id/:slug/delete",
     async (
       ctx: Oak.RouterContext<"/:id/:slug/delete", { id: string; slug: string }, AppState>,
-      next: () => Promise<unknown>,
     ) => {
-      const recipeService = services.get(RecipeService);
-      const recipe = recipeService.find(
-        toInt(ctx.params.id),
+      await container.resolve(RecipeController).postDelete(toInt(ctx.params.id), ctx.state.configDir);
+      ctx.response.redirect(
+        urlWithParams(UrlGenerator.home(), {
+          "flash": "deleteSuccessful",
+        }, ctx.request.url),
       );
-      if (!recipe) {
-        await next();
-      } else {
-        await deleteThumbnail(recipe, ctx.state.configDir);
-        recipeService.delete([recipe]);
-        ctx.response.redirect(
-          urlWithParams(UrlGenerator.home(), {
-            "flash": "deleteSuccessful",
-          }, ctx.request.url),
-        );
-      }
     },
   )
-  .get(
-    "/:id/:slug/flag",
-    async (
-      ctx: Oak.RouterContext<"/:id/:slug/flag", { id: string; slug: string }, AppState>,
-      next: () => Promise<unknown>,
-    ) => {
-      const recipeService = services.get(RecipeService);
-      const recipe = recipeService.find(
-        toInt(ctx.params.id),
-      );
-      if (!recipe) {
-        await next();
-      } else {
-        recipe.flagged = !recipe.flagged;
-        recipeService.update([recipe]);
-        ctx.response.redirect(
-          urlWithParams(UrlGenerator.recipe(recipe), {
-            "flash": "editSuccessful",
-          }, ctx.request.url),
-        );
-      }
-    },
-  )
+  .get("/:id/:slug/flag", (ctx: Oak.RouterContext<"/:id/:slug/flag", { id: string; slug: string }, AppState>) => {
+    const recipe = container.resolve(RecipeController).flag(toInt(ctx.params.id));
+    ctx.response.redirect(
+      urlWithParams(UrlGenerator.recipe(recipe), {
+        "flash": "editSuccessful",
+      }, ctx.request.url),
+    );
+  })
   .get(
     "/:id/:slug",
-    async (
+    (
       ctx: Oak.RouterContext<"/:id/:slug", { id: string; slug: string }, AppState>,
-      next: () => Promise<unknown>,
     ) => {
-      const recipeService = services.get(RecipeService);
-      const recipe = recipeService.find(
-        toInt(ctx.params.id),
-        true,
-        true,
-        true,
-      );
-      if (!recipe) {
-        await next();
-      } else {
-        ctx.response.body = RecipeDetailTemplate(
-          recipe,
-          toInt(parameters(ctx).get("portions"), recipe.yield),
-        );
-      }
+      const portions = toInt(parameters(ctx).get("portions"));
+      ctx.response.body = container.resolve(RecipeController).get(toInt(ctx.params.id), portions);
     },
   );
-
-export { router as RecipeRouter };

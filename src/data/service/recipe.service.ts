@@ -1,9 +1,11 @@
+import { singleton } from "../../../deps.ts";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { pushAll, toCamelCase, toDate } from "../util/convert.ts";
 import { buildFilters, buildOrderBySql, columns, Filter, placeholders } from "../util/sql.ts";
-import { OrderBy, Service } from "./service.ts";
+import { Service } from "./service.ts";
 import { TagService } from "./tag.service.ts";
+import { OrderBy } from "./util/order-by.ts";
 
 function tagFilter(tagIds?: number[]): Filter {
   return {
@@ -21,11 +23,9 @@ function titleFilter(title?: string): Filter {
   };
 }
 
+@singleton()
 export class RecipeService implements Service<Recipe> {
-  private readonly db: Database;
-  private readonly tagService: TagService;
-
-  constructor(db: Database, tagService: TagService) {
+  constructor(private readonly db: Database, private readonly tagService: TagService) {
     this.db = db;
     this.tagService = tagService;
   }
@@ -263,9 +263,7 @@ export class RecipeService implements Service<Recipe> {
     loadHistory?: boolean,
     loadReviews?: boolean,
   ): Recipe | undefined {
-    const result = this.db.single<
-      { ingredients: string; instructions: string }
-    >(
+    const result = this.db.single<{ ingredients: string; instructions: string }>(
       `SELECT ${columns(Recipe.columns, "r.")}
        FROM recipe r
        WHERE r.id = ?`,

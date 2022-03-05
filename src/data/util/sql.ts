@@ -1,5 +1,5 @@
 import { sqlite } from "../../../deps.ts";
-import { OrderBy } from "../service/service.ts";
+import { OrderBy } from "../service/util/order-by.ts";
 
 export interface Filter {
   active: boolean;

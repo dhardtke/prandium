@@ -1,4 +1,4 @@
-import { toDate } from "../util/convert.ts";
+import { toDate, toFloat, toInt, tupleToDate } from "../util/convert.ts";
 import { Model, ModelArgs } from "./model.ts";
 import { Tag } from "./tag.ts";
 
@@ -133,6 +133,52 @@ export class Recipe extends Model {
     this.totalTime = args.totalTime;
     this.lastCookedAt = args.lastCookedAt ? toDate(args.lastCookedAt) : undefined;
     this.cookedCount = args.cookedCount;
+  }
+
+  updateFromRawData(data: Record<keyof this, string[]>): this {
+    const get = (key: keyof this) => {
+      return (data[key] as string[])[0];
+    };
+    const stringFields: (keyof this)[] = [
+      "title",
+      "description",
+      "source",
+      "nutritionCalories",
+      "nutritionCarbohydrate",
+      "nutritionCholesterol",
+      "nutritionFat",
+      "nutritionFiber",
+      "nutritionProtein",
+      "nutritionSaturatedFat",
+      "nutritionSodium",
+      "nutritionSugar",
+      "nutritionTransFat",
+      "nutritionUnsaturatedFat",
+      "source",
+    ];
+    for (const field of stringFields) {
+      this[field] = get(field) as never;
+    }
+    this.yield = toInt(get("yield"));
+    this.prepTime = toInt(get("prepTime"));
+    this.cookTime = toInt(get("cookTime"));
+    this.aggregateRatingValue = toFloat(get("aggregateRatingValue"));
+    this.aggregateRatingCount = toInt(get("aggregateRatingCount"));
+    this.rating = toFloat(get("rating"));
+    this.ingredients = data.ingredients as string[];
+    this.instructions = data.instructions as string[];
+    if (data.history?.length % 2 !== 0) {
+      throw new Error(`Can't proceed: History entries not passed as tuples.`);
+    }
+    this.history = [];
+    for (let i = 0; i < data.history.length; i += 2) {
+      const date = tupleToDate(data.history[i], data.history[i + 1]);
+      this.history.push(date);
+    }
+
+    this.updatedAt = new Date();
+
+    return this;
   }
 }
 

@@ -126,7 +126,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
             <img class="img-responsive" src="${e(UrlGenerator.thumbnail(recipe?.thumbnail ?? ""))}" alt="" loading="lazy">
             <div class="card-body hidden">
               <input class="hidden" type="file" accept="image/*" name="thumbnail">
-              <input type="hidden" name="deleteThumbnail" disabled>
+              <input type="hidden" name="shouldDeleteThumbnail" disabled>
               ${Alert("danger", l.error.title, l.recipe.form.imageError, "mb-0 mt-3")}
             </div>
             <div class="card-footer">

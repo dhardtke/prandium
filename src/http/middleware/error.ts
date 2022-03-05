@@ -11,15 +11,21 @@ export async function handleServerError(
   try {
     await next();
   } catch (e) {
-    log.error(e);
-    ctx.response.status = 500;
-    ctx.response.body = Error500();
+    if (e instanceof NotFoundError) {
+      log.debug(e);
+      ctx.response.status = 404;
+      ctx.response.body = Error404();
+    } else {
+      log.error(e);
+      ctx.response.status = 500;
+      ctx.response.body = Error500();
+    }
   }
 }
 
-export function handleNotFound(
-  ctx: Oak.Context<AppState>,
-) {
-  ctx.response.status = 404;
-  ctx.response.body = Error404();
+export function handleNotFound() {
+  throw new NotFoundError();
+}
+
+export class NotFoundError extends Error {
 }

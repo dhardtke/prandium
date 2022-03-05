@@ -1,5 +1,5 @@
 import { Oak } from "../../../../deps_oak.ts";
-import { OrderBy } from "../../../data/service/service.ts";
+import { OrderBy } from "../../../data/service/util/order-by.ts";
 import { parameters } from "../../util/parameters.ts";
 
 export function orderByHelper(

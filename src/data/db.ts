@@ -1,11 +1,13 @@
-import { Colors, log, sqlite } from "../../deps.ts";
+import { Colors, log, singleton, sqlite } from "../../deps.ts";
+import { Disposable } from "../di.ts";
 import { classNames } from "../shared/util.ts";
 import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
 export type RowObject = Record<string, unknown>;
 
-export class Database {
+@singleton()
+export class Database implements Disposable {
   private readonly db: sqlite.DB;
   private readonly migrations: Migration[];
 
@@ -127,5 +129,9 @@ export class Database {
 
   close() {
     this.db.close();
+  }
+
+  dispose(): Promise<void> | void {
+    this.close();
   }
 }

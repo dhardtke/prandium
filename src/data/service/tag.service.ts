@@ -1,11 +1,12 @@
-import { sqlite } from "../../../deps.ts";
+import { singleton, sqlite } from "../../../deps.ts";
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
 import { toCamelCase } from "../util/convert.ts";
 import { buildFilters, buildOrderBySql, columns, Filter } from "../util/sql.ts";
-import { OrderBy, Service } from "./service.ts";
+import { Service } from "./service.ts";
 import { idsFilter } from "./util/generic_filters.ts";
+import { OrderBy } from "./util/order-by.ts";
 
 function recipeFilter(recipeId?: number): Filter {
   return {
@@ -63,10 +64,9 @@ function recipeCountColumn(
   };
 }
 
+@singleton()
 export class TagService implements Service<Tag> {
-  private readonly db: Database;
-
-  constructor(db: Database) {
+  constructor(private readonly db: Database) {
     this.db = db;
   }
 

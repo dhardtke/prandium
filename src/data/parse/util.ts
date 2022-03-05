@@ -27,7 +27,7 @@ export function extractNumber(source?: string | number): number | undefined {
     }
     const match = source.match(NUMBER);
     if (match) {
-      return toInt(match[0], undefined);
+      return toInt(match[0]);
     }
   }
   return undefined;

@@ -29,16 +29,17 @@ export const ingredient = {
   ): Ingredient => {
     const parsed: Ingredient = parse(raw) as Ingredient;
     if (parsed.quantity) {
+      const sanitizedPortions = Math.max(1, portions);
       if (typeof parsed.quantity === "object") {
         parsed.quantity.from = roundUpToThreeDigits(
-          parsed.quantity.from * (portions / recipeYield),
+          parsed.quantity.from * (sanitizedPortions / recipeYield),
         );
         parsed.quantity.to = roundUpToThreeDigits(
-          parsed.quantity.to * (portions / recipeYield),
+          parsed.quantity.to * (sanitizedPortions / recipeYield),
         );
       } else {
         parsed.quantity = roundUpToThreeDigits(
-          parsed.quantity * (portions / recipeYield),
+          parsed.quantity * (sanitizedPortions / recipeYield),
         );
       }
     }

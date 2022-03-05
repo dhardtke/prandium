@@ -64,7 +64,7 @@ Please see [Development](docs/development.md) for information on how to set up y
 
 * [Deno: A secure runtime for JavaScript and TypeScript](https://deno.land/)
 * [TypeScript](https://www.typescriptlang.org/)
-* [Bootstrap](https://getbootstrap.com/)
+* [tsyringe](https://github.com/microsoft/tsyringe)
 * [ESBuild](https://esbuild.github.io/)
 * [Oak](https://oakserver.github.io/oak/)
 * [deno-sqlite](https://github.com/dyedgreen/deno-sqlite)

@@ -1,7 +1,6 @@
 import { log } from "../../deps.ts";
 import { Oak } from "../../deps_oak.ts";
 import { Database } from "../data/db.ts";
-import { services } from "../data/service/services.ts";
 import { Settings } from "../data/settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";
 import { Events } from "../tpl/events.ts";
@@ -39,7 +38,6 @@ export async function spawnServer(
     configDir: args.configDir,
   });
   // Global App State initialize
-  services.initialize(args.db);
   Page.minifying = args.settings.minifyHtml;
 
   const app = new Oak.Application<AppState>({

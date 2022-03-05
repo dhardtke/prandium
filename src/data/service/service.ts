@@ -1,7 +1,4 @@
-export interface OrderBy {
-  column: string;
-  order?: "ASC" | "DESC" | "asc" | "desc";
-}
+import { OrderBy } from "./util/order-by.ts";
 
 export interface Service<T> {
   count: () => number;

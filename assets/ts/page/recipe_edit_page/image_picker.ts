@@ -3,7 +3,7 @@ const Selectors = {
   AlertContainer: ".card-body",
   BtnDelete: ".btn[data-hook='delete']",
   InputFile: "input[type='file']",
-  InputDelete: "input[name='deleteThumbnail']"
+  InputDelete: "input[name='shouldDeleteThumbnail']"
 } as const;
 
 const DisplayNone = "hidden";

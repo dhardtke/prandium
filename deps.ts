@@ -1,5 +1,8 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v3.2.1/mod.ts";
+export { default as Reflect } from "https://esm.sh/core-js@3.21.1/features/reflect?pin=v66&no-check";
+console.assert(Boolean(Reflect));
+export { container, injectable, singleton, inject } from "https://esm.sh/tsyringe@4.4.0?pin=v66&no-check";
 
 // utils
 export * as path from "https://deno.land/std@0.127.0/path/mod.ts";

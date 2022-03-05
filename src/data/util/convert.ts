@@ -36,6 +36,14 @@ export function toDate(source?: Date | string, _default = new Date()): Date {
   return parsed;
 }
 
+export function tupleToDate(datePortion: string, timePortion: string): Date {
+  const [year, month, day] = String(datePortion).split("-").map(toInt);
+  const [hour, minute, second] = String(timePortion).split(":").map(toInt);
+  const date = new Date(year, month - 1, day);
+  date.setHours(hour, minute, second);
+  return date;
+}
+
 const SnakeCasePattern = /_([a-z])/g;
 
 export function toCamelCase<T, O>(obj: O): T {
