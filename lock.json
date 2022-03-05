@@ -1,5 +1,5 @@
 {
-  "https://cdn.esm.sh/v66/core-js@3.21.1/deno/features/reflect.js": "8fe2903d22932fec0248c56ce5be604bd17fe31c58bac8e55cac020828819fe8",
+  "https://cdn.esm.sh/v66/@abraham/reflection@0.9.1/deno/reflection.js": "3d066b04da384dbb17b8000edeb4a66e795410d346c2f25b8ee1f55e172522f1",
   "https://cdn.esm.sh/v66/schema-dts@1.0.0/deno/schema-dts.js": "d919bec9818dfb8a2aab0dbb53194b4113cab16c451a7165c74e1d653d71a2ba",
   "https://cdn.esm.sh/v66/schema-dts@1.0.0/dist/schema.d.ts": "3643716eb82014cf3a3a63f3ee014d74c97d18c7b638d438e00375b330ab8656",
   "https://cdn.esm.sh/v66/tslib@1.14.1/deno/tslib.js": "2a9240e861900c5c0a5dddf3e06cd519a9b4b5d3006d7699b8d035a386958156",
@@ -111,7 +111,7 @@
   "https://deno.land/x/sqlite@v3.2.1/src/error.ts": "abf9df169951faf8c21a68d99ef9efd257c788c19784f27dd147507fbdfe5fe7",
   "https://deno.land/x/sqlite@v3.2.1/src/query.ts": "df4d3d6b23d52b36243dd47c07ed6ed7cd23f7834a0f6a2f2c6dbffba63d4c28",
   "https://deno.land/x/sqlite@v3.2.1/src/wasm.ts": "e79d0baa6e42423257fb3c7cc98091c54399254867e0f34a09b5bdef37bd9487",
-  "https://esm.sh/core-js@3.21.1/features/reflect?pin=v66&no-check": "774405cb203d538a94d53689fa2d79def4d02154db3228e686cc78043dd27835",
+  "https://esm.sh/@abraham/reflection@0.9.1?pin=v66&no-check": "c1fc4a226fa840d0835e7db0a91b5fa40c538a99f083cb7c8f5351633b8f9a7c",
   "https://esm.sh/schema-dts@1.0.0?pin=v66": "41a3fa1bacdaf2fb959962e6f08275c4ffadc8bf276cdae6e7fc0998483abf8a",
   "https://esm.sh/tsyringe@4.4.0?pin=v66&no-check": "c1bbc59458b7cbe0d139847e72e64dcec5ffec2e07477e5b44660a10f6657c10"
 }
