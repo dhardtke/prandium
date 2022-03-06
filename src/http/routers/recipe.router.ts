@@ -3,7 +3,7 @@ import { singleton } from "../../../deps.ts";
 import { RecipeController } from "../../controllers/recipe.controller.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";
-import { collectFormData, type FormData, urlWithParams } from "../util/mod.ts";
+import { collectFormData, urlWithParams } from "../util/mod.ts";
 import { parameters } from "../util/parameters.ts";
 import { UrlGenerator } from "../util/url_generator.ts";
 import { AppState } from "../webserver.ts";
@@ -13,12 +13,11 @@ async function extractPostData(ctx: Oak.Context<AppState>) {
   const formDataReader: Oak.FormDataReader = await ctx.request.body({
     type: "form-data",
   }).value;
-  const payload = await collectFormData<keyof Recipe>(
+  const payload = await collectFormData<keyof Recipe | "shouldDeleteThumbnail">(
     formDataReader,
   );
   const thumbnail = payload.thumbnail?.[0] as Oak.FormDataFile;
-  const payloadDeleteThumbnail = payload as unknown as FormData<"shouldDeleteThumbnail">;
-  const shouldDeleteThumbnail = typeof payloadDeleteThumbnail.shouldDeleteThumbnail?.[0] !== "undefined";
+  const shouldDeleteThumbnail = typeof payload.shouldDeleteThumbnail?.[0] !== "undefined";
 
   return {
     payload: payload as Record<keyof Recipe, string[]>,
