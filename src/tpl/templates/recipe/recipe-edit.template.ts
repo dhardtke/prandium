@@ -281,7 +281,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
         </div>
       </div>
 
-      ${arrayField(l.recipe.history, l.recipe.form.addHistoryEntry, "history", arrayFieldDateTimeInput, recipe?.history, false)}
+      ${arrayField(l.recipe.history, l.recipe.form.addHistoryEntry, "history", arrayFieldDateTimeInput, recipe?.history.reverse(), false)}
 
       ${arrayField(l.recipe.ingredients.title, l.recipe.form.createIngredient, "ingredients", arrayFieldTextInput, recipe?.ingredients)}
       ${arrayField(l.recipe.instructions, l.recipe.form.createInstruction, "instructions", arrayFieldTextarea, recipe?.instructions)}
