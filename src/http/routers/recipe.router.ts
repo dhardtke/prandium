@@ -128,7 +128,7 @@ export class RecipeRouter extends Router {
   get = (
     ctx: Oak.RouterContext<"/:id/:slug", { id: string; slug: string }, AppState>,
   ) => {
-    const portions = toInt(parameters(ctx).get("portions"));
-    ctx.response.body = this.recipeController.get(toInt(ctx.params.id), portions);
+    const portions = toInt(parameters(ctx).get("portions"), 0);
+    ctx.response.body = this.recipeController.get(toInt(ctx.params.id), portions === 0 ? undefined : portions);
   };
 }
