@@ -9,7 +9,7 @@ on:
             - ".github/workflows/*"
             - "lock.json"
 env:
-    denoVersion: "v1.19.0"
+    denoVersion: "v1.19.3"
 jobs:
     lint:
         runs-on: ubuntu-latest
