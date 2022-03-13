@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Update lock file" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/deps.ts" programParameters="cache --unstable --lock=lock.json --lock-write deps.ts deps_oak.ts">
+  <configuration default="false" name="Update lock file" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/deps.ts" programParameters="cache --unstable --lock=lock.json --lock-write deps.ts deps-oak.ts">
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
