@@ -1,7 +1,7 @@
 import { Database } from "../db.ts";
 import { Migration } from "./migration.ts";
 
-export const ForeignKeyIndexes = new class InitialMigration extends Migration {
+export const ForeignKeyIndexes = new class ForeignKeyIndexes extends Migration {
   constructor() {
     super(3);
   }

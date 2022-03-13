@@ -78,17 +78,17 @@ function Times(recipe: Recipe): string | undefined {
             ${recipe.prepTime && html`
               <tr>
                 <th>${e(l.recipe.time.prep)}</th>
-                <td>${e(date.formatSeconds(recipe.prepTime))}</td>
+                <td>${e(date.formatMinutes(recipe.prepTime))}</td>
               </tr>`}
             ${recipe.cookTime && html`
               <tr>
                 <th>${e(l.recipe.time.cook)}</th>
-                <td>${e(date.formatSeconds(recipe.cookTime))}</td>
+                <td>${e(date.formatMinutes(recipe.cookTime))}</td>
               </tr>`}
-            ${recipe.prepTime && recipe.cookTime && html`
+            ${recipe.totalTime && html`
               <tr>
                 <th>${e(l.recipe.time.total)}</th>
-                <td>${e(date.formatSeconds(recipe.prepTime + recipe.cookTime))}</td>
+                <td>${e(date.formatMinutes(recipe.totalTime))}</td>
               </tr>`}
           </table>
         </div>

@@ -63,7 +63,7 @@ export const de: Language = {
       },
       imageError: "Es muss ein gültiges Bild ausgewählt werden.",
       thumbnailHint: "Hier kann geklickt oder ein Bild hineingezogen werden.",
-      timeHint: "Zeit in Sekunden.",
+      timeHint: "Zeit in Minuten.",
     },
     import: {
       alert: "Die URLs wurden verarbeitet und die Ergebnisse sind folgend zu entnehmen.",

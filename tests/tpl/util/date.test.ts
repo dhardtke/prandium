@@ -145,28 +145,26 @@ Deno.test(`date.relativeTimeFromElapsed`, () => {
 });
 
 Deno.test(`date.formatSeconds should accept undefined`, () => {
-  assertEquals(date.formatSeconds(undefined), "");
+  assertEquals(date.formatMinutes(undefined), "");
 });
 
-Deno.test(`date.formatSeconds`, () => {
+Deno.test(`date.formatMinutes`, () => {
   const tests: Test[] = [
     { language: en, value: 0, expected: "0 seconds" },
-    { language: en, value: 1, expected: "1 second" },
-    { language: en, value: 60, expected: "1 minute" },
-    { language: en, value: 60 * 60, expected: "1 hour" },
-    { language: en, value: 60 * 60 * 24, expected: "1 day" },
-    { language: en, value: 60 * 60 * 24 * 365, expected: "1 year" },
+    { language: en, value: 1, expected: "1 minute" },
+    { language: en, value: 60, expected: "1 hour" },
+    { language: en, value: 60 * 24, expected: "1 day" },
+    { language: en, value: 60 * 24 * 365, expected: "1 year" },
 
     { language: de, value: 0, expected: "0 Sekunden" },
-    { language: de, value: 1, expected: "1 Sekunde" },
-    { language: de, value: 60, expected: "1 Minute" },
-    { language: de, value: 60 * 60, expected: "1 Stunde" },
-    { language: de, value: 60 * 60 * 24, expected: "1 Tag" },
-    { language: de, value: 60 * 60 * 24 * 365, expected: "1 Jahr" },
+    { language: de, value: 1, expected: "1 Minute" },
+    { language: de, value: 60, expected: "1 Stunde" },
+    { language: de, value: 60 * 24, expected: "1 Tag" },
+    { language: de, value: 60 * 24 * 365, expected: "1 Jahr" },
   ];
   for (const test of tests) {
     setLanguage(test.language);
-    assertEquals(date.formatSeconds(test.value), test.expected);
+    assertEquals(date.formatMinutes(test.value), test.expected);
   }
 });
 

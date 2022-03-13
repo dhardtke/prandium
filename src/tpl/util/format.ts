@@ -1,6 +1,11 @@
 import { l } from "../../i18n/mod.ts";
 
-const units: { unit: Intl.RelativeTimeFormatUnit; ms: number }[] = [
+interface UnitWithTime {
+  unit: Intl.RelativeTimeFormatUnit;
+  ms: number;
+}
+
+const unitsWithTime: UnitWithTime[] = [
   { unit: "year", ms: 24 * 60 * 60 * 1000 * 365 },
   { unit: "month", ms: 24 * 60 * 60 * 1000 * 365 / 12 },
   { unit: "day", ms: 24 * 60 * 60 * 1000 },
@@ -11,13 +16,9 @@ const units: { unit: Intl.RelativeTimeFormatUnit; ms: number }[] = [
 
 function closestUnit(
   millis: number,
-): { unit: Intl.RelativeTimeFormatUnit; ms: number } {
-  for (const { unit, ms } of units) {
-    if (Math.abs(millis) >= ms || unit === "second") {
-      return { unit, ms: Math.round(millis / ms) };
-    }
-  }
-  throw new Error("Unreachable");
+): UnitWithTime {
+  const unitWithTime = unitsWithTime.find(({ ms }) => Math.abs(millis) >= ms) || unitsWithTime[unitsWithTime.length - 1];
+  return { unit: unitWithTime.unit, ms: Math.round(millis / unitWithTime.ms) };
 }
 
 export const date = {
@@ -60,12 +61,12 @@ export const date = {
   },
 
   /**
-   * Get language-sensitive formatted number for the given seconds.
-   * @param seconds the seconds
+   * Get language-sensitive formatted number for the given minutes.
+   * @param minutes the minutes
    */
-  formatSeconds: (seconds?: number): string => {
-    if (typeof seconds === "number") {
-      const { unit, ms } = closestUnit(seconds * 1000);
+  formatMinutes: (minutes?: number): string => {
+    if (typeof minutes === "number") {
+      const { unit, ms } = closestUnit(minutes * 1000 * 60);
       return new Intl.NumberFormat(l.meta.bcp47, {
         style: "unit",
         unit: unit,

@@ -233,7 +233,7 @@ export const RecipeListTemplate = (
                       </ul>
                     </li>
                     <li title="${e(l.recipe.time.total)}">
-                      ${LabeledIcon(date.formatSeconds(recipe.totalTime) || "-", "clock-fill")}
+                      ${LabeledIcon(date.formatMinutes(recipe.totalTime) || "-", "clock-fill")}
                     </li>
                   </ul>
                 </div>

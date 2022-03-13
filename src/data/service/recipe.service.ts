@@ -263,10 +263,11 @@ export class RecipeService implements Service<Recipe> {
     loadHistory?: boolean,
     loadReviews?: boolean,
   ): Recipe | undefined {
+    const totalTime = "(prep_time + cook_time) AS total_time";
     const result = this.db.single<{ ingredients: string; instructions: string }>(
-      `SELECT ${columns(Recipe.columns, "r.")}
-       FROM recipe r
-       WHERE r.id = ?`,
+      `SELECT ${columns([...Recipe.columns, totalTime])}
+       FROM recipe
+       WHERE id = ?`,
       [
         id,
       ],

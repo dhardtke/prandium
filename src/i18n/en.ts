@@ -63,7 +63,7 @@ export const en: Language = {
       },
       imageError: "Please make sure you select an image.",
       thumbnailHint: "You may click or drag and drop an image here.",
-      timeHint: "Time in seconds.",
+      timeHint: "Time in minutes.",
     },
     import: {
       alert: "The URLs have been processed. Please find the results below.",

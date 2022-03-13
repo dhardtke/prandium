@@ -227,12 +227,12 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
         </div>
         <div class="card-body">
         ${/*TODO use different widget */""}
-          <div class="grid" style="grid-template-columns: minmax(0, 1fr) minmax(0, 1fr)">
+          <div class="grid eq-c">
             <div class="col-sm">
               <label for="prepTime">
                 ${e(l.recipe.prepTime)}
               </label>
-              <input type="number" min="0" id="prepTime" name="prepTime" value="${e(recipe?.prepTime ?? "")}">
+              <input type="number" min="0" step="1" max="1440" id="prepTime" name="prepTime" value="${e(recipe?.prepTime ?? "")}">
               <div class="form-text">
                 ${e(l.recipe.form.timeHint)}
               </div>
@@ -241,7 +241,7 @@ export const RecipeEditTemplate = (recipe?: Recipe) =>
               <label for="cookTime">
                 ${e(l.recipe.cookTime)}
               </label>
-              <input type="number" min="0" id="cookTime" name="cookTime" value="${e(recipe?.cookTime ?? "")}">
+              <input type="number" min="0" step="1" max="1440" id="cookTime" name="cookTime" value="${e(recipe?.cookTime ?? "")}">
               <div class="form-text">
                 ${e(l.recipe.form.timeHint)}
               </div>
