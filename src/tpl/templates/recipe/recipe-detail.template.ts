@@ -68,29 +68,31 @@ function Times(recipe: Recipe): string | undefined {
   return html`
     <div class="col-12 col-lg-6">
       <h5>${l.recipe.form.group.times}</h5>
-      <div class="table-responsive">
-        <table class="fw">
-          <colgroup>
-            <col style="width: 50%"/>
-            <col style="width: 50%"/>
-          </colgroup>
-          ${recipe.prepTime && html`
-            <tr>
-              <th>${e(l.recipe.time.prep)}</th>
-              <td>${e(date.formatSeconds(recipe.prepTime))}</td>
-            </tr>`}
-          ${recipe.cookTime && html`
-            <tr>
-              <th>${e(l.recipe.time.cook)}</th>
-              <td>${e(date.formatSeconds(recipe.cookTime))}</td>
-            </tr>`}
-          ${recipe.prepTime && recipe.cookTime && html`
-            <tr>
-              <th>${e(l.recipe.time.total)}</th>
-              <td>${e(date.formatSeconds(recipe.prepTime + recipe.cookTime))}</td>
-            </tr>`}
-        </table>
-      </div>
+      ${recipe.prepTime || recipe.cookTime ? html`
+        <div class="table-responsive">
+          <table class="fw">
+            <colgroup>
+              <col style="width: 50%"/>
+              <col style="width: 50%"/>
+            </colgroup>
+            ${recipe.prepTime && html`
+              <tr>
+                <th>${e(l.recipe.time.prep)}</th>
+                <td>${e(date.formatSeconds(recipe.prepTime))}</td>
+              </tr>`}
+            ${recipe.cookTime && html`
+              <tr>
+                <th>${e(l.recipe.time.cook)}</th>
+                <td>${e(date.formatSeconds(recipe.cookTime))}</td>
+              </tr>`}
+            ${recipe.prepTime && recipe.cookTime && html`
+              <tr>
+                <th>${e(l.recipe.time.total)}</th>
+                <td>${e(date.formatSeconds(recipe.prepTime + recipe.cookTime))}</td>
+              </tr>`}
+          </table>
+        </div>
+      ` : html`${e(l.recipe.noTimes)}`}
     </div>
   `;
 }

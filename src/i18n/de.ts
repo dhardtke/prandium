@@ -85,6 +85,7 @@ export const de: Language = {
     unflag: "Kennzeichnung entfernen",
     noRecipesFound: "Für den aktuell gewählten Filter wurden keine Rezepte gefunden. Bitte die Auswahl ändern oder neue Rezepte hinzufügen.",
     notCookedYet: "Noch nicht gekocht.",
+    noTimes: "Es sind keine Zeiten hinterlegt.",
     nutrition: {
       calories: "Kalorien",
       carbohydrate: "Kohlenhydrate",

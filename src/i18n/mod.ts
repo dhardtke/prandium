@@ -94,6 +94,7 @@ interface Recipe {
   unflag: string;
   noRecipesFound: string;
   notCookedYet: string;
+  noTimes: string;
   nutrition: Nutrition;
   open: string;
   orderBy: string;
