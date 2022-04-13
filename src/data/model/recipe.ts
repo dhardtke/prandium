@@ -167,13 +167,15 @@ export class Recipe extends Model {
     this.rating = toFloat(get("rating"));
     this.ingredients = data.ingredients as string[];
     this.instructions = data.instructions as string[];
-    if (data.history?.length % 2 !== 0) {
-      throw new Error(`Can't proceed: History entries not passed as tuples.`);
-    }
     this.history = [];
-    for (let i = 0; i < data.history.length; i += 2) {
-      const date = tupleToDate(data.history[i], data.history[i + 1]);
-      this.history.push(date);
+    if (data.history) {
+      if (data.history.length % 2 !== 0) {
+        throw new Error(`Can't proceed: History entries not passed as tuples.`);
+      }
+      for (let i = 0; i < data.history.length; i += 2) {
+        const date = tupleToDate(data.history[i], data.history[i + 1]);
+        this.history.push(date);
+      }
     }
 
     this.updatedAt = new Date();
