@@ -38,7 +38,7 @@ Deno.test("RecipeService", async (t) => {
     db.exec("INSERT INTO recipe_tag (tag_id, recipe_id) VALUES (2, (SELECT id FROM recipe WHERE title='Bar'))");
     db.exec("INSERT INTO recipe_tag (tag_id, recipe_id) VALUES (3, (SELECT id FROM recipe WHERE title='Bar'))");
 
-    await t.step("When filtering by [tag1] Then only 'Foo' are returned", () => {
+    await t.step("When filtering by [tag1] Then only 'Foo' is returned", () => {
       assertEquals(recipeService.count({ tagIds: [1] }), 1);
       assertEquals(recipeService.list({ filters: { tagIds: [1] } }).map((r) => r.title), ["Foo"]);
     });
