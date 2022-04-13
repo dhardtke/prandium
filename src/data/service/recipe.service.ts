@@ -57,7 +57,7 @@ export class RecipeService implements Service<Recipe> {
         tagIds?: number[];
         title?: string;
       };
-    },
+    } = {},
   ): Recipe[] {
     const filter = buildFilters(
       tagFilter(args.filters?.tagIds),
