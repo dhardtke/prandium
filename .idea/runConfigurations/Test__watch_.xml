@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Test (watch)" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="test --lock=lock.json --allow-read --allow-write --unstable --allow-net --allow-env --fail-fast --jobs=8 --watch=./**/*.ts">
+  <configuration default="false" name="Test (watch)" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="test --lock=lock.json --allow-read --allow-write --unstable --allow-net --allow-env --fail-fast --jobs=8 --watch">
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
