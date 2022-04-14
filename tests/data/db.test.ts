@@ -137,4 +137,10 @@ Deno.test("Database migrations", async (t) => {
     assertEquals(db.single("SELECT name FROM sqlite_master WHERE type='table' AND name='bar'"), undefined);
     db.close();
   });
+
+  await t.step("All migrations run successfully", () => {
+    const db = new Database(":memory:");
+    db.migrate();
+    db.close();
+  });
 });
