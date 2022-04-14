@@ -8,6 +8,7 @@ on:
             - "dev/**"
             - ".github/workflows/*"
             - "lock.json"
+    workflow_dispatch:
 env:
     denoVersion: "v1.20.5"
 jobs:
