@@ -68,7 +68,7 @@ Deno.test("format", async (t) => {
 
     await t.step("date.formatRelative", async (t) => {
       const tests: Test<unknown, [number, number?]>[] = [
-        { language: en, value: [new Date()], expected: "now" },
+        { language: en, value: [new Date().getTime()], expected: "now" },
         { language: en, value: [0, 0], expected: "now" },
         { language: en, value: [0, 1000], expected: "1 second ago" },
         { language: en, value: [1000, 0], expected: "in 1 second" },
