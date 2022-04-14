@@ -2,6 +2,7 @@
 
 import { assertEquals, assertThrows, unreachable } from "../../deps.ts";
 import { Database } from "../../src/data/db.ts";
+import { Migration } from "../../src/data/migrations/migration.ts";
 import { disableLogging } from "../_internal/disable_logging.ts";
 import { flushAllTables } from "../_internal/flush_all_tables.ts";
 
@@ -63,4 +64,85 @@ Deno.test("database", async (t) => {
   flushAllTables(db);
 
   db.close();
+});
+
+Deno.test("Database migrations", async (t) => {
+  await disableLogging();
+
+  const executions: number[] = [];
+  const migration1 = new class Migration1 extends Migration {
+    constructor() {
+      super(1);
+    }
+
+    migrate() {
+      executions.push(1);
+    }
+  }();
+  const migration2 = new class Migration2 extends Migration {
+    constructor() {
+      super(2);
+    }
+
+    migrate() {
+      executions.push(2);
+    }
+  }();
+
+  await t.step("Given migration1, migration2", async (t) => {
+    const db = new Database(":memory:", [migration2, migration1]);
+    await t.step("Migrations are executed in order", () => {
+      db.migrate();
+
+      assertEquals(executions, [1, 2]);
+    });
+
+    await t.step("When migrating again Then no migrations are executed", () => {
+      db.migrate();
+      assertEquals(executions, [1, 2]);
+    });
+
+    db.close();
+  });
+  executions.length = 0;
+
+  await t.step("Given migration1, migration2", () => {
+    const db = new Database(":memory:", [migration2, migration1]);
+    db.exec("PRAGMA user_version = 1");
+    db.migrate();
+    assertEquals(executions, [2]);
+    db.close();
+  });
+  executions.length = 0;
+
+  await t.step("If one of multiple migrations fails successful operations within this failing migration are rolled back and an error is thrown", () => {
+    let executed = false;
+    const successfulMigration = new class SuccessfulMigration extends Migration {
+      constructor() {
+        super(1);
+      }
+
+      migrate(db: Database) {
+        db.exec("CREATE TABLE foo (id)");
+      }
+    }();
+    const failingMigration = new class FailingMigration extends Migration {
+      constructor() {
+        super(2);
+      }
+
+      migrate(db: Database) {
+        executed = true;
+        db.exec("CREATE TABLE bar (id)");
+        db.exec("FAIL");
+      }
+    }();
+
+    const db = new Database(":memory:", [successfulMigration, failingMigration]);
+    assertThrows(() => db.migrate());
+    assertEquals(executed, true);
+    assertEquals(db.single("SELECT name FROM sqlite_master WHERE type='table' AND name='foo'"), { name: "foo" });
+    assertEquals(db.single("SELECT name FROM sqlite_master WHERE type='table' AND name='bar'"), undefined);
+    db.close();
+  });
 });
