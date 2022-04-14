@@ -27,8 +27,6 @@ export class IndexRouter extends Router {
     const paginationParams = this.paginationHelper.buildPaginationParams(ctx);
 
     const showTagFilter = ctx.request.url.searchParams.has("tagFilter");
-    // ctx.response.body = this.indexController.list({ tagIds, title }, showTagFilter, orderBy, paginationParams);
-    // ctx.response.body = "Hello";
     ctx.response.body = this.indexController.list({ tagIds, title }, showTagFilter, orderBy, paginationParams);
   };
 }
