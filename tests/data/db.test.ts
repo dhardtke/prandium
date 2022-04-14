@@ -70,24 +70,20 @@ Deno.test("Database migrations", async (t) => {
   await disableLogging();
 
   const executions: number[] = [];
-  const migration1 = new class Migration1 extends Migration {
-    constructor() {
-      super(1);
-    }
-
+  const migration1: Migration = {
+    version: 1,
+    name: "migration1",
     migrate() {
       executions.push(1);
-    }
-  }();
-  const migration2 = new class Migration2 extends Migration {
-    constructor() {
-      super(2);
-    }
-
+    },
+  };
+  const migration2: Migration = {
+    version: 2,
+    name: "migration2",
     migrate() {
       executions.push(2);
-    }
-  }();
+    },
+  };
 
   await t.step("Given migration1, migration2", async (t) => {
     const db = new Database(":memory:", [migration2, migration1]);
@@ -117,26 +113,22 @@ Deno.test("Database migrations", async (t) => {
 
   await t.step("If one of multiple migrations fails successful operations within this failing migration are rolled back and an error is thrown", () => {
     let executed = false;
-    const successfulMigration = new class SuccessfulMigration extends Migration {
-      constructor() {
-        super(1);
-      }
-
+    const successfulMigration: Migration = {
+      version: 1,
+      name: "successfulMigration",
       migrate(db: Database) {
         db.exec("CREATE TABLE foo (id)");
-      }
-    }();
-    const failingMigration = new class FailingMigration extends Migration {
-      constructor() {
-        super(2);
-      }
-
+      },
+    };
+    const failingMigration: Migration = {
+      version: 2,
+      name: "failingMigration",
       migrate(db: Database) {
         executed = true;
         db.exec("CREATE TABLE bar (id)");
         db.exec("FAIL");
-      }
-    }();
+      },
+    };
 
     const db = new Database(":memory:", [successfulMigration, failingMigration]);
     assertThrows(() => db.migrate());

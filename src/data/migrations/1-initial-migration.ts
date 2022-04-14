@@ -1,10 +1,9 @@
 import { Database } from "../db.ts";
 import { Migration } from "./migration.ts";
 
-export const InitialMigration = new class InitialMigration extends Migration {
-  constructor() {
-    super(1);
-  }
+export const InitialMigration: Migration = {
+  version: 1,
+  name: "InitialMigration",
 
   migrate(db: Database) {
     const queries = [
@@ -67,5 +66,5 @@ export const InitialMigration = new class InitialMigration extends Migration {
     for (const sql of queries) {
       db.exec(sql);
     }
-  }
-}();
+  },
+};

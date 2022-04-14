@@ -1,6 +1,5 @@
 import { Colors, log, sqlite } from "../../deps.ts";
 import { Disposable } from "../di.ts";
-import { classNames } from "../shared/util.ts";
 import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
@@ -91,7 +90,7 @@ export class Database implements Disposable {
       log.debug(
         `[DB] Current database version is ${Colors.cyan("" + currentVersion)}`,
       );
-      log.debug(() => `[DB] Migrations to run: ${Colors.cyan(classNames(migrations))}`);
+      log.debug(() => `[DB] Migrations to run: ${Colors.cyan(migrations.map((m) => m.name).join(", "))}`);
       for (const migration of migrations) {
         this.transaction(() => {
           migration.migrate(this);

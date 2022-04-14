@@ -1,10 +1,9 @@
 import { Database } from "../db.ts";
 import { Migration } from "./migration.ts";
 
-export const ForeignKeyIndexes = new class ForeignKeyIndexes extends Migration {
-  constructor() {
-    super(3);
-  }
+export const ForeignKeyIndexes: Migration = {
+  version: 3,
+  name: "ForeignKeyIndexes",
 
   migrate(db: Database) {
     const queries = [
@@ -17,5 +16,5 @@ export const ForeignKeyIndexes = new class ForeignKeyIndexes extends Migration {
     for (const sql of queries) {
       db.exec(sql);
     }
-  }
-}();
+  },
+};

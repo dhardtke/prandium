@@ -1,10 +1,9 @@
 import { Database } from "../db.ts";
 import { Migration } from "./migration.ts";
 
-export const TimesSecondsToMinutes = new class TimesSecondsToMinutes extends Migration {
-  constructor() {
-    super(4);
-  }
+export const TimesSecondsToMinutes: Migration = {
+  version: 4,
+  name: "TimesSecondsToMinutes",
 
   migrate(db: Database) {
     const queries = [
@@ -16,5 +15,5 @@ export const TimesSecondsToMinutes = new class TimesSecondsToMinutes extends Mig
     for (const sql of queries) {
       db.exec(sql);
     }
-  }
-}();
+  },
+};

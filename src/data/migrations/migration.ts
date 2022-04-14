@@ -1,8 +1,8 @@
 import { Database } from "../db.ts";
 
-export abstract class Migration {
-  protected constructor(public readonly version: number) {
-  }
+export interface Migration {
+  version: number;
+  name: string;
 
-  abstract migrate(db: Database): void;
+  migrate(db: Database): void;
 }
