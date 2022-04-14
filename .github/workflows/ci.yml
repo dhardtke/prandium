@@ -66,11 +66,6 @@ jobs:
             -   name: Generate lcov
                 run: deno coverage --exclude=tests\.* --unstable --lcov ./cov --output=cov.lcov
 
-            -   uses: actions/upload-artifact@v3
-                with:
-                    name: my-artifact
-                    path: ./cov
-
             -   name: Upload coverage
                 uses: codecov/codecov-action@v3
                 with:
