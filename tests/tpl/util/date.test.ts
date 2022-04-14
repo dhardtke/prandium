@@ -202,7 +202,7 @@ Deno.test("format", async (t) => {
     ];
     for (const test of tests) {
       await t.step(
-        `When given num=${test.value}, options=${JSON.stringify(test.options)} with the language ${test.language.meta.id} Then it returns ${test.expected}`,
+        `When given num=${test.value}, decimals=${JSON.stringify(test.options)} with the language ${test.language.meta.id} Then it returns ${test.expected}`,
         () => {
           setLanguage(test.language);
           assertEquals(number.format(test.value, test.options), test.expected);
