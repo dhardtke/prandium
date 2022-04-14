@@ -1,5 +1,4 @@
 // noinspection SqlResolve
-
 import { assertEquals, assertThrows, unreachable } from "../../deps.ts";
 import { Database } from "../../src/data/db.ts";
 import { Migration } from "../../src/data/migrations/migration.ts";
