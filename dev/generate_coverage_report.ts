@@ -25,6 +25,7 @@ if (coverageStatus.success && coverageStatus.code === 0) {
     suffix: ".lcov",
   });
   await Deno.writeFileSync(tmpFile, output);
+  console.log(`Written ${tmpFile}`);
   const htmlStatus = await Deno.run({
     cmd: ["genhtml", "-o", OutputDir, tmpFile],
   }).status();
