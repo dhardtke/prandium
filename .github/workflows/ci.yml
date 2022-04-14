@@ -63,6 +63,9 @@ jobs:
             -   name: Run tests
                 run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all --fail-fast
 
+            -   name: Print lcov
+                run: deno coverage --exclude=tests\.* --unstable --lcov ./cov
+
             -   name: Generate lcov
                 run: deno coverage --exclude=tests\.* --unstable --lcov ./cov > cov.lcov
 
