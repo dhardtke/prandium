@@ -70,5 +70,7 @@ jobs:
                 with:
                     files: cov.lcov
                     token: ${{ secrets.CODECOV_TOKEN }}
+                    fail_ci_if_error: true
+                    verbose: true
 
 # TODO bundle jobs
