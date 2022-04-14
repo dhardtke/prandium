@@ -31,7 +31,7 @@ import { MockContextBuilder } from "../_internal/mock_context.ts";
 //   await listenPromise;
 // });
 
-Deno.test(`handleServerError should handle errors correctly`, async () => {
+Deno.test(`handleServerError handles errors correctly`, async () => {
   await disableLogging();
   const mockContextBuilder = new MockContextBuilder();
 
@@ -43,7 +43,7 @@ Deno.test(`handleServerError should handle errors correctly`, async () => {
   //assertEquals(mockContextBuilder.renderCalls, [[ServerErrorTemplate, null]]);
 });
 
-Deno.test(`handleServerError should not handle if no error was thrown`, async () => {
+Deno.test(`handleServerError does not handle if no error was thrown`, async () => {
   await disableLogging();
   const mockContextBuilder = new MockContextBuilder();
 
@@ -55,7 +55,7 @@ Deno.test(`handleServerError should not handle if no error was thrown`, async ()
   //assertEquals(mockContextBuilder.renderCalls, []);
 });
 
-Deno.test(`handleNotFound should handle not-found correctly`, async () => {
+Deno.test(`handleNotFound handles not-found correctly`, async () => {
   await disableLogging();
   //const mockContextBuilder = new MockContextBuilder();
 

@@ -4,7 +4,7 @@ import { en } from "../../../src/i18n/en.ts";
 import { Language, setLanguage } from "../../../src/i18n/mod.ts";
 import { date, number } from "../../../src/tpl/util/format.ts";
 
-Deno.test(`number.format should accept undefined`, () => {
+Deno.test(`number.format accepts undefined`, () => {
   assertEquals(number.format(undefined), "");
 });
 
@@ -53,7 +53,7 @@ Deno.test(`date.format`, () => {
   }
 });
 
-Deno.test(`date.formatRelative should accept undefined`, () => {
+Deno.test(`date.formatRelative accepts undefined`, () => {
   assertEquals(date.formatRelative(undefined), "");
 });
 
@@ -114,7 +114,7 @@ Deno.test(`date.formatRelative`, () => {
   assertEquals(date.formatRelative(new Date()), "now");
 });
 
-Deno.test(`date.relativeTimeFromElapsed should accept undefined`, () => {
+Deno.test(`date.relativeTimeFromElapsed accepts undefined`, () => {
   assertEquals(date.relativeTimeFromElapsed(undefined), "");
 });
 
@@ -144,7 +144,7 @@ Deno.test(`date.relativeTimeFromElapsed`, () => {
   }
 });
 
-Deno.test(`date.formatSeconds should accept undefined`, () => {
+Deno.test(`date.formatSeconds accepts undefined`, () => {
   assertEquals(date.formatMinutes(undefined), "");
 });
 

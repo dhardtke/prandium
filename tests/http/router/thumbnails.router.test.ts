@@ -7,7 +7,7 @@ import { withTemp } from "../../_internal/with-temp.function.ts";
 
 Deno.test("ThumbnailsRouter", async (t) => {
   await t.step(
-    "get should invoke next middleware if an error is thrown",
+    "get invokes next middleware if an error is thrown",
     withTemp(async (tmpDir) => {
       const ctx = Oak.testing.createMockContext<"/thumbnails/(.+)", { 0: string }, AppState>({ method: "GET", path: "/" });
       let invocationCount = 0;
@@ -22,7 +22,7 @@ Deno.test("ThumbnailsRouter", async (t) => {
   );
 
   await t.step(
-    "get should bla",
+    "get returns the thumbnail image data",
     withTemp(async (tmpDir) => {
       const thumbnailDir = path.join(tmpDir, "thumbnails");
       await fs.ensureDir(thumbnailDir);

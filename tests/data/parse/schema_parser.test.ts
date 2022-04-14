@@ -12,11 +12,11 @@ import { html } from "../../../src/tpl/mod.ts";
 //     assertNotEquals(actual, null);
 // });
 
-Deno.test(`An Error should be thrown if the HTML is not parseable`, () => {
+Deno.test(`An Error is thrown if the HTML is not parseable`, () => {
   new SchemaParser("<'><!DOCTYPE xml>").findFirstRecipe();
 });
 
-Deno.test(`findFirstRecipe should be empty if no Recipe can be found`, () => {
+Deno.test(`findFirstRecipe is empty if no Recipe can be found`, () => {
   const tests = [
     ``,
     html`<!DOCTYPE html>
@@ -50,7 +50,7 @@ Deno.test(`findFirstRecipe should be empty if no Recipe can be found`, () => {
   }
 });
 
-Deno.test(`findFirstRecipe should work with different HTML variations`, () => {
+Deno.test(`findFirstRecipe works with different HTML variations`, () => {
   const json = `{"@context": "http://schema.org", "@type": "Recipe", "recipeCategory": "K\u00e4se", "name": "My awesome recipe"}`;
   const tests = [
     `<script type=application/ld+json>${json}</script>`,
@@ -69,7 +69,7 @@ Deno.test(`findFirstRecipe should work with different HTML variations`, () => {
   }
 });
 
-Deno.test(`findFirstRecipe should extract the Recipe from a @graph object`, () => {
+Deno.test(`findFirstRecipe extracts the Recipe from a @graph object`, () => {
   const html = `<script type="application/ld+json" class="yoast-schema-graph">
     {
         "@context": "https://schema.org",

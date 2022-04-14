@@ -2,7 +2,7 @@ import { assertEquals } from "../../../deps.ts";
 import { downloadThumbnail } from "../../../src/data/util/thumbnails.ts";
 import { withTemp } from "../../_internal/with-temp.function.ts";
 
-Deno.test(`downloadThumbnail should use UTF8 filenames`, async () => {
+Deno.test(`downloadThumbnail uses UTF8 filenames`, async () => {
   const mockedFetchFn = (
     _input: RequestInfo,
     _userAgent: string,

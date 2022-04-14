@@ -1,7 +1,7 @@
 import { assertEquals } from "../../../deps.ts";
 import { buildFilters, buildOrderBySql, columns, EmptyFilter, EmptyOrderBy, placeholders } from "../../../src/data/util/sql.ts";
 
-Deno.test(`buildFilters should return EMPTY_FILTER when no filter is active`, () => {
+Deno.test(`buildFilters returns EMPTY_FILTER when no filter is active`, () => {
   assertEquals(buildFilters(), EmptyFilter);
   assertEquals(buildFilters({ active: false, sql: () => "" }), EmptyFilter);
 });
@@ -18,18 +18,18 @@ Deno.test(`buildFilters complex example`, () => {
   });
 });
 
-Deno.test(`buildOrderBySql should return EMPTY_ORDER_BY if arg is undefined`, () => {
+Deno.test(`buildOrderBySql returns EMPTY_ORDER_BY if arg is undefined`, () => {
   assertEquals(buildOrderBySql(undefined, []), EmptyOrderBy);
 });
 
-Deno.test(`buildOrderBySql should return EMPTY_ORDER_BY if column is not allowed`, () => {
+Deno.test(`buildOrderBySql returns EMPTY_ORDER_BY if column is not allowed`, () => {
   assertEquals(
     buildOrderBySql({ column: "title" }, ["id", "updated_at"]),
     EmptyOrderBy,
   );
 });
 
-Deno.test(`buildOrderBySql should work with sane inputs`, () => {
+Deno.test(`buildOrderBySql works with sane inputs`, () => {
   for (const order of [undefined, "asc", "desc"]) {
     const expected = `ORDER BY title${order && order !== "asc" ? ` ${order.toUpperCase()}` : ""}`;
     assertEquals(
@@ -46,7 +46,7 @@ Deno.test(`buildOrderBySql should work with sane inputs`, () => {
   }
 });
 
-Deno.test(`buildOrderBySql should sanitize invalid order identifiers`, () => {
+Deno.test(`buildOrderBySql sanitizes invalid order identifiers`, () => {
   assertEquals(
     buildOrderBySql({ column: "title", order: "" as "asc" }, ["title"]),
     "ORDER BY title",

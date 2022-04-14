@@ -38,7 +38,7 @@ Deno.test("IndexRouter", async (t) => {
     await mw(ctx, next);
   }
 
-  await t.step("when given no parameters, should use default parameters", async () => {
+  await t.step("when given no parameters, uses default parameters", async () => {
     await invokeRoute("/");
 
     assertEquals(lastListInvocation, {
@@ -49,7 +49,7 @@ Deno.test("IndexRouter", async (t) => {
     });
   });
 
-  await t.step("when given filters, should pass them to the controller", async () => {
+  await t.step("when given filters, passes them to the controller", async () => {
     const path = "/?tagId=1&tagId=2&tagId=3&tagId=4&tagId=5&tagId=6&tagId=9&title=lorem+ipsum";
     await invokeRoute(path);
 

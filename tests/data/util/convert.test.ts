@@ -3,7 +3,7 @@ import { pushAll, toCamelCase, toDate, toFloat, toInt } from "../../../src/data/
 
 const { test } = Deno;
 
-test(`toInt should return fallback value when parsing fails`, () => {
+test(`toInt returns fallback value when parsing fails`, () => {
   assertEquals(toInt("", -1), -1);
   assertEquals(toInt(undefined, -1), -1);
   assertEquals(toInt("undefined", -1), -1);
@@ -13,13 +13,13 @@ test(`toInt should return fallback value when parsing fails`, () => {
   assertEquals(toInt("+", -1), -1);
 });
 
-test(`When given valid number strings, then toInt should return the correctly parsed value`, () => {
+test(`When given valid number strings, then toInt returns the correctly parsed value`, () => {
   assertEquals(toInt("42", -1), 42);
   assertEquals(toInt("0", -1), 0);
   assertEquals(toInt("102341998323241321", -1), 102341998323241321);
 });
 
-test(`toFloat should return fallback value when parsing fails`, () => {
+test(`toFloat returns fallback value when parsing fails`, () => {
   assertEquals(toFloat("", -1), -1);
   assertEquals(toFloat(undefined, -1), -1);
   assertEquals(toFloat("undefined", -1), -1);
@@ -29,14 +29,14 @@ test(`toFloat should return fallback value when parsing fails`, () => {
   assertEquals(toFloat("+", -1), -1);
 });
 
-test(`When given valid number strings, then toFloat should return the correctly parsed value`, () => {
+test(`When given valid number strings, then toFloat returns the correctly parsed value`, () => {
   assertEquals(toFloat("42", -1), 42);
   assertEquals(toFloat("0", -1), 0);
   assertEquals(toFloat("102341998323241321", -1), 102341998323241321);
   assertEquals(toFloat("432934294823942.20012", -1), 432934294823942.20012);
 });
 
-test(`toDate should return fallback value when parsing fails`, () => {
+test(`toDate returns fallback value when parsing fails`, () => {
   const fallback = new Date(0);
   assertEquals(toDate("", fallback), fallback);
   assertEquals(toDate(undefined, fallback), fallback);
@@ -44,7 +44,7 @@ test(`toDate should return fallback value when parsing fails`, () => {
   // assertEquals(toDate("-1", fallback), fallback); TODO this one shouldn't fail - maybe a bug in Deno?
 });
 
-test(`toDate should return parsed value`, () => {
+test(`toDate returns parsed value`, () => {
   assertEquals(toDate("0", undefined), new Date(0));
   assertEquals(toDate("1616804763", undefined), new Date(1616804763));
   assertEquals(

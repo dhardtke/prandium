@@ -111,7 +111,7 @@ Deno.test(`ingredient.parse with invalid strings`, () => {
   ingredient.parse("1 /");
 });
 
-Deno.test(`ingredient.parseMany should calculate the correct quantities`, () => {
+Deno.test(`ingredient.parseMany calculates the correct quantities`, () => {
   const tests: {
     raw: string;
     recipeYield: number;
@@ -133,7 +133,7 @@ Deno.test(`ingredient.parseMany should calculate the correct quantities`, () => 
   }
 });
 
-Deno.test(`ingredient.parseMany should sort ingredients correctly`, () => {
+Deno.test(`ingredient.parseMany sorts ingredients correctly`, () => {
   const tests: {
     input: string[];
     expected: string[];

@@ -4,7 +4,7 @@ import { getCpuCores } from "../../src/shared/util.ts";
 import { withTemp } from "../_internal/with-temp.function.ts";
 
 Deno.test(
-  `readFromDisk should throw`,
+  `readFromDisk does throw`,
   withTemp(async (tmpDir) => {
     const tests: {
       data: string | Partial<Record<keyof Settings, unknown>>;
@@ -57,14 +57,14 @@ Deno.test(
 );
 
 Deno.test(
-  `readFromDisk should return default settings if settings unavailable`,
+  `readFromDisk returns default settings if settings unavailable`,
   withTemp(async (tmpDir) => {
     assertEquals(await readFromDisk(tmpDir), DefaultSettings);
   }),
 );
 
 Deno.test(
-  `readFromDisk should merge default with provided settings`,
+  `readFromDisk merges default with provided settings`,
   withTemp(async (tmpDir) => {
     const data: Partial<Settings> = {
       importWorkerCount: 1,

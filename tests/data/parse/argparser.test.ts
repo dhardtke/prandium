@@ -1,7 +1,7 @@
 import { assertEquals, assertThrows } from "../../../deps.ts";
 import { Argparser } from "../../../src/data/parse/argparser.ts";
 
-Deno.test(`Argparser.parse should throw if unknown arguments are provided`, () => {
+Deno.test(`Argparser.parse throws if unknown arguments are provided`, () => {
   assertThrows(
     () => new Argparser([]).parse(["--a", "--b"]),
     undefined,
@@ -15,7 +15,7 @@ Deno.test(`Argparser.parse should throw if unknown arguments are provided`, () =
   );
 });
 
-Deno.test(`Argparser.parse should throw if an argument does take a value but none is given`, () => {
+Deno.test(`Argparser.parse throws if an argument does take a value but none is given`, () => {
   assertThrows(
     () => new Argparser([{ name: "a", type: "string" }]).parse(["--a"]),
     undefined,
@@ -23,7 +23,7 @@ Deno.test(`Argparser.parse should throw if an argument does take a value but non
   );
 });
 
-Deno.test(`Argparser.parse should throw if an argument is not provided in the correct syntax`, () => {
+Deno.test(`Argparser.parse throws if an argument is not provided in the correct syntax`, () => {
   const args = [
     "-a",
     "-- a",
@@ -44,7 +44,7 @@ Deno.test(`Argparser.parse should throw if an argument is not provided in the co
   }
 });
 
-Deno.test(`Argparser.parse should return correct options`, () => {
+Deno.test(`Argparser.parse returns correct options`, () => {
   assertEquals(new Argparser([{ name: "a", type: "boolean" }]).parse(["--a"]), {
     a: true,
   });
@@ -76,7 +76,7 @@ Deno.test(`Argparser.parse should return correct options`, () => {
   );
 });
 
-Deno.test(`Argparser.parse should support booleans both with or without value`, () => {
+Deno.test(`Argparser.parse supports booleans both with or without value`, () => {
   assertEquals(
     new Argparser([{ name: "foo", type: "boolean" }]).parse(["--foo=false"]),
     { foo: false },
