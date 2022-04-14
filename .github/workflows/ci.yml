@@ -63,7 +63,7 @@ jobs:
                 run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all --fail-fast
 
             -   name: Generate lcov
-                run: deno coverage --unstable --lcov ./cov > cov.lcov
+                run: deno coverage --exclude=tests\.* --unstable --lcov ./cov > cov.lcov
 
             -   name: Upload coverage
                 uses: codecov/codecov-action@v3
