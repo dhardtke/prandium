@@ -1,0 +1,46 @@
+{
+    "fmt": {
+        "options": {
+            "useTabs": false,
+            "lineWidth": 160,
+            "indentWidth": 2,
+            "singleQuote": false,
+            "proseWrap": "preserve"
+        }
+    },
+    "lint": {
+        "rules": {
+            "tags": [
+                "recommended"
+            ],
+            "include": [
+                "default-param-last",
+                "eqeqeq",
+                "no-const-assign",
+                "no-eval",
+                "no-non-null-asserted-optional-chain",
+                "no-sparse-arrays",
+                "no-throw-literal",
+                "no-undef"
+            ],
+            "exclude": []
+        }
+    },
+    "tasks": {
+        "build": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=assets/dist dev/build.ts",
+        "coverage": "deno coverage --exclude=tests --unstable --lcov ./out/coverage --output=out/coverage.lcov",
+        "coverage:html": "genhtml -o out/coverage_html out/coverage.lcov",
+        "fmt": "deno fmt --config=deno.jsonc ./src ./dev",
+        "fmt:check": "deno task fmt -- --check",
+        "generate-icons": "deno run --no-check --allow-read --allow-write dev/generate_icons.ts",
+        "insert-example-data": "deno run --lock=lock.json --unstable --allow-all --no-check dev/insert_example_data.ts",
+        "lint": "deno lint --config=deno.jsonc --unstable ./src ./dev ./tests",
+        "run:debug": "deno run --allow-all --no-check --unstable --config=tsconfig.json src/main.ts",
+        "run:dev": "deno run --lock=lock.json --unstable --allow-read --allow-run --allow-write --no-check dev/dev-server.ts --debug",
+        "test": "deno test --config=deno.jsonc --lock=lock.json --unstable --allow-read --allow-net --allow-env --allow-write --fail-fast --jobs=8",
+        "test:coverage": "deno task test -- --coverage=out/coverage",
+        "test:no-check": "deno task test -- --no-check",
+        "test:watch": "deno task test -- --watch",
+        "update-lock-file": "deno cache --unstable --lock=lock.json --lock-write deps.ts deps-oak.ts"
+    }
+}
