@@ -45,11 +45,11 @@ export class RecipeRouter extends Router {
       .get("/:id/:slug", this.get);
   }
 
-  getImport = (ctx: Oak.Context<AppState>) => {
+  getImport: Oak.RouterMiddleware<"/import"> = (ctx) => {
     ctx.response.body = this.recipeController.getImport();
   };
 
-  postImport = async (ctx: Oak.Context<AppState>, next: () => Promise<unknown>) => {
+  postImport: Oak.RouterMiddleware<"/import"> = async (ctx, next) => {
     if (!ctx.request.hasBody) {
       return await next();
     }
@@ -61,13 +61,11 @@ export class RecipeRouter extends Router {
     ctx.response.body = await this.recipeController.postImport(urls);
   };
 
-  getEdit = (ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>) => {
+  getEdit: Oak.RouterMiddleware<"/:id/:slug/edit", { id: string; slug: string }> = (ctx) => {
     ctx.response.body = this.recipeController.getEdit(toInt(ctx.params.id));
   };
 
-  postEdit = async (
-    ctx: Oak.RouterContext<"/:id/:slug/edit", { id: string; slug: string }, AppState>,
-  ) => {
+  postEdit: Oak.RouterMiddleware<"/:id/:slug/edit", { id: string; slug: string }, AppState> = async (ctx) => {
     const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
     const recipe = await this.recipeController.postEdit(toInt(ctx.params.id), payload, thumbnail, shouldDeleteThumbnail);
     ctx.response.redirect(
@@ -77,7 +75,7 @@ export class RecipeRouter extends Router {
     );
   };
 
-  rate = async (ctx: Oak.RouterContext<"/:id/:slug/rate", { id: string; slug: string }, AppState>) => {
+  rate: Oak.RouterMiddleware<"/:id/:slug/rate", { id: string; slug: string }> = async (ctx) => {
     const formData: URLSearchParams = await ctx.request.body({
       type: "form",
     }).value;
@@ -85,11 +83,11 @@ export class RecipeRouter extends Router {
     ctx.response.body = this.recipeController.rate(toInt(ctx.params.id), rating);
   };
 
-  getCreate = (ctx: Oak.Context<AppState>) => {
+  getCreate: Oak.RouterMiddleware<"/create"> = (ctx) => {
     ctx.response.body = this.recipeController.createGet();
   };
 
-  postCreate = async (ctx: Oak.Context<AppState>) => {
+  postCreate: Oak.RouterMiddleware<"/create", Record<never, never>, AppState> = async (ctx) => {
     const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
     const recipe = await this.recipeController.postCreate(payload, thumbnail, shouldDeleteThumbnail);
     ctx.response.redirect(
@@ -99,15 +97,11 @@ export class RecipeRouter extends Router {
     );
   };
 
-  getDelete = (
-    ctx: Oak.RouterContext<"/:id/:slug/delete", { id: string; slug: string }, AppState>,
-  ) => {
+  getDelete: Oak.RouterMiddleware<"/:id/:slug/delete", { id: string; slug: string }> = (ctx) => {
     ctx.response.body = this.recipeController.getDelete(toInt(ctx.params.id));
   };
 
-  postDelete = async (
-    ctx: Oak.RouterContext<"/:id/:slug/delete", { id: string; slug: string }, AppState>,
-  ) => {
+  postDelete: Oak.RouterMiddleware<"/:id/:slug/delete", { id: string; slug: string }> = async (ctx) => {
     await this.recipeController.postDelete(toInt(ctx.params.id));
     ctx.response.redirect(
       urlWithParams(UrlGenerator.home(), {
@@ -116,7 +110,7 @@ export class RecipeRouter extends Router {
     );
   };
 
-  flag = (ctx: Oak.RouterContext<"/:id/:slug/flag", { id: string; slug: string }, AppState>) => {
+  flag: Oak.RouterMiddleware<"/:id/:slug/flag", { id: string; slug: string }> = (ctx) => {
     const recipe = this.recipeController.flag(toInt(ctx.params.id));
     ctx.response.redirect(
       urlWithParams(UrlGenerator.recipe(recipe), {
@@ -125,9 +119,7 @@ export class RecipeRouter extends Router {
     );
   };
 
-  get = (
-    ctx: Oak.RouterContext<"/:id/:slug", { id: string; slug: string }, AppState>,
-  ) => {
+  get: Oak.RouterMiddleware<"/:id/:slug", { id: string; slug: string }> = (ctx) => {
     const portions = toInt(parameters(ctx).get("portions"), 0);
     ctx.response.body = this.recipeController.get(toInt(ctx.params.id), portions === 0 ? undefined : portions);
   };

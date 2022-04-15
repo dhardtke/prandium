@@ -28,11 +28,11 @@ export class AssetsRouter extends Router {
       .get("/sw.js", this.getSw);
   }
 
-  get = async (ctx: Oak.RouterContext<"/assets/(.+)">, next: () => Promise<unknown>) => {
+  get: Oak.RouterMiddleware<"/assets/(.+)"> = async (ctx, next) => {
     await assetMiddleware(ctx, next, ctx.params[0]!);
   };
 
-  getSw = async (ctx: Oak.RouterContext<"/sw.js">, next: () => Promise<unknown>) => {
+  getSw: Oak.RouterMiddleware<"/sw.js"> = async (ctx, next) => {
     await assetMiddleware(ctx, next, "sw.js");
   };
 }
