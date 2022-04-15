@@ -3,7 +3,7 @@ import { Recipe } from "../../../data/model/recipe.ts";
 import { Tag } from "../../../data/model/tag.ts";
 import { Pagination } from "../../../data/pagination.ts";
 import { parameters } from "../../../http/util/parameters.ts";
-import { UrlGenerator } from "../../../http/util/url_generator.ts";
+import { UrlGenerator } from "../../../http/util/url-generator.ts";
 import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
 import { date, number } from "../../util/format.ts";

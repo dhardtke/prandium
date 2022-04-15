@@ -1,7 +1,7 @@
 import { assertEquals, assertThrows } from "../../deps.ts";
 import { handleNotFound, handleServerError, NotFoundError } from "../../src/http/middleware/error.ts";
-import { disableLogging } from "../_internal/disable_logging.ts";
-import { MockContextBuilder } from "../_internal/mock_context.ts";
+import { disableLogging } from "../_internal/disable-logging.ts";
+import { MockContextBuilder } from "../_internal/mock-context.ts";
 
 Deno.test("error", async (t) => {
   await t.step("handleServerError handles errors correctly", async () => {

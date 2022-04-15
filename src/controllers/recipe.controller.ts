@@ -1,6 +1,6 @@
 import { inject, path, singleton } from "../../deps.ts";
 import { Recipe } from "../data/model/recipe.ts";
-import { importRecipes } from "../data/parse/import/import_recipe.ts";
+import { importRecipes } from "../data/parse/import/import-recipe.ts";
 import { RecipeService } from "../data/service/recipe.service.ts";
 import { type Settings } from "../data/settings.ts";
 import { getThumbnailDir, getUniqueFilename } from "../data/util/thumbnails.ts";

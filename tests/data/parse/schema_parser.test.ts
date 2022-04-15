@@ -1,7 +1,7 @@
 // noinspection HttpUrlsUsage
 
 import { assertEquals, SchemaRecipe } from "../../../deps.ts";
-import { SchemaParser } from "../../../src/data/parse/schema_parser.ts";
+import { SchemaParser } from "../../../src/data/parse/schema-parser.ts";
 import { html } from "../../../src/tpl/mod.ts";
 
 Deno.test("SchemaParser", async (t) => {

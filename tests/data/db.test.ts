@@ -3,8 +3,8 @@
 import { assertEquals, assertThrows, unreachable } from "../../deps.ts";
 import { Database } from "../../src/data/db.ts";
 import { Migration } from "../../src/data/migrations/migration.ts";
-import { disableLogging } from "../_internal/disable_logging.ts";
-import { flushAllTables } from "../_internal/flush_all_tables.ts";
+import { disableLogging } from "../_internal/disable-logging.ts";
+import { flushAllTables } from "../_internal/flush-all-tables.ts";
 
 Deno.test("database", async (t) => {
   await disableLogging();

@@ -1,4 +1,4 @@
-import { TagFilter } from "./tag_filter.ts";
+import { TagFilter } from "./tag-filter.ts";
 
 const Selectors = {
   Pagination: ".pagination",

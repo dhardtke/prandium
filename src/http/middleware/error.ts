@@ -1,7 +1,7 @@
 import { log } from "../../../deps.ts";
 import { Oak } from "../../../deps-oak.ts";
-import { Error404 } from "../../tpl/templates/error/error_404.template.ts";
-import { Error500 } from "../../tpl/templates/error/error_500.template.ts";
+import { Error404 } from "../../tpl/templates/error/error-404.template.ts";
+import { Error500 } from "../../tpl/templates/error/error-500.template.ts";
 import { AppState } from "../webserver.ts";
 
 export async function handleServerError(

@@ -1,4 +1,4 @@
-import { requestWakeLock } from "./wake_lock.ts";
+import { requestWakeLock } from "./wake-lock.ts";
 
 const Selectors = {
   Rating: "#recipe-rating",

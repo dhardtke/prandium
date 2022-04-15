@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 import { DarkModeCookie } from "../../../src/shared/constants.ts";
-import { getCookie, setCookie } from "../_util/cookie_util.ts";
+import { getCookie, setCookie } from "../_util/cookie-util.ts";
 import { BaseComponent, Component } from "../components/component.ts";
 
 const DocumentClassName = "dark";

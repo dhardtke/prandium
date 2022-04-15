@@ -5,7 +5,7 @@ import { Tag } from "../model/tag.ts";
 import { toCamelCase } from "../util/convert.ts";
 import { buildFilters, buildOrderBySql, columns, Filter } from "../util/sql.ts";
 import { Service } from "./service.ts";
-import { idsFilter } from "./util/generic_filters.ts";
+import { idsFilter } from "./util/generic-filters.ts";
 import { OrderBy } from "./util/order-by.ts";
 
 function recipeFilter(recipeId?: number): Filter {

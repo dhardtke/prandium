@@ -1,5 +1,5 @@
-import { replaceMain } from "../../_util/ajax_util.ts";
-import { jaroWinklerDistance } from "../../_util/jaro_winkler.ts";
+import { replaceMain } from "../../_util/ajax-util.ts";
+import { jaroWinklerDistance } from "../../_util/jaro-winkler.ts";
 import { BaseComponent, Component } from "../../components/component.ts";
 
 const JaroWinklerSimilarityThreshold = .75;

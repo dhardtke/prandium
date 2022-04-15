@@ -3,7 +3,7 @@ import { IS_COMPILED } from "../../../shared/util.ts";
 import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
-const WORKER_URL = IS_COMPILED ? new URL("./import_worker.min.js", Deno.mainModule) : new URL("./import_worker.ts", import.meta.url);
+const WORKER_URL = IS_COMPILED ? new URL("./import-worker.min.js", Deno.mainModule) : new URL("./import-worker.ts", import.meta.url);
 
 export interface ImportResult {
   url: string;

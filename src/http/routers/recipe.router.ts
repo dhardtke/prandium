@@ -5,7 +5,7 @@ import { Recipe } from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";
 import { collectFormData, urlWithParams } from "../util/mod.ts";
 import { parameters } from "../util/parameters.ts";
-import { UrlGenerator } from "../util/url_generator.ts";
+import { UrlGenerator } from "../util/url-generator.ts";
 import { AppState } from "../webserver.ts";
 import { Router } from "./router.ts";
 

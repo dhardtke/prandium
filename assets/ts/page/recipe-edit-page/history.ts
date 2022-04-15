@@ -1,4 +1,4 @@
-import { Events } from "./array_field.ts";
+import { Events } from "./array-field.ts";
 
 const Selectors = {
   timeField: "input[type='time']",

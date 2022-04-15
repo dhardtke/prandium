@@ -3,7 +3,7 @@ import { Recipe, Review } from "../src/data/model/recipe.ts";
 import { Tag } from "../src/data/model/tag.ts";
 import { RecipeService } from "../src/data/service/recipe.service.ts";
 import { TagService } from "../src/data/service/tag.service.ts";
-import { buildDbPath } from "../src/data/util/build_db_path.ts";
+import { buildDbPath } from "../src/data/util/build-db-path.ts";
 import { downloadThumbnail } from "../src/data/util/thumbnails.ts";
 import { defaultConfigDir } from "../src/shared/util.ts";
 

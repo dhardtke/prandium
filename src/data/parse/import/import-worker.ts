@@ -3,7 +3,7 @@ import { Recipe, Review } from "../../model/recipe.ts";
 import { Tag } from "../../model/tag.ts";
 import { downloadThumbnail, fetchCustom } from "../../util/thumbnails.ts";
 import { durationToSeconds, parseDuration } from "../duration.ts";
-import { SchemaParser } from "../schema_parser.ts";
+import { SchemaParser } from "../schema-parser.ts";
 import { ensureArray, extractNumber, first } from "../util.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 

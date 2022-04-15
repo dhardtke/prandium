@@ -1,7 +1,7 @@
 // deno-fmt-ignore-file
 import { Recipe } from "../../../data/model/recipe.ts";
 import { Ingredient, ingredient as ingredientHelper } from "../../../data/parse/ingredient/mod.ts";
-import { UrlGenerator } from "../../../http/util/url_generator.ts";
+import { UrlGenerator } from "../../../http/util/url-generator.ts";
 import { l } from "../../../i18n/mod.ts";
 import { e, html } from "../../mod.ts";
 import { date, number } from "../../util/format.ts";

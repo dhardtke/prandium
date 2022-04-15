@@ -4,8 +4,8 @@ import { assertEquals } from "../../../deps.ts";
 import { Database } from "../../../src/data/db.ts";
 import { RecipeService } from "../../../src/data/service/recipe.service.ts";
 import { TagService } from "../../../src/data/service/tag.service.ts";
-import { disableLogging } from "../../_internal/disable_logging.ts";
-import { flushAllTables } from "../../_internal/flush_all_tables.ts";
+import { disableLogging } from "../../_internal/disable-logging.ts";
+import { flushAllTables } from "../../_internal/flush-all-tables.ts";
 
 Deno.test("RecipeService", async (t) => {
   await disableLogging();
