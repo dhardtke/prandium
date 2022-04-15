@@ -8,7 +8,7 @@ import { ensureArray, extractNumber, first } from "../util.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
 // TODO find a better way to do this, e.g. by referencing the "webworker" lib
-declare const self: { onmessage: (e: MessageEvent) => void, postMessage: (r: unknown) => void };
+declare const self: { onmessage: (e: MessageEvent) => void; postMessage: (r: unknown) => void };
 
 self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
   importRecipe(e.data.url, e.data.configDir, e.data.userAgent).then(
