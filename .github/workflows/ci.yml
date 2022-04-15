@@ -61,7 +61,7 @@ jobs:
                         ${{ runner.os }}-
 
             -   name: Run tests
-                run: deno task test -- `find src/ -name '*.ts' | xargs echo` tests/
+                run: deno task test:coverage -- `find src/ -name '*.ts' | xargs echo` tests/
 
             -   name: Generate lcov
                 run: deno task coverage
