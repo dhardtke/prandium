@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Server" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/src/main.ts" programParameters="run --allow-all --no-check --unstable --config=tsconfig.json">
-    <option name="applicationArguments" value="--debug" />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
-</component>

@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Format (apply)" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/tests" programParameters="fmt $PROJECT_DIR$/src $PROJECT_DIR$/dev">
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
-</component>

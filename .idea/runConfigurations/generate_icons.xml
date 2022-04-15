@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="generate-icons" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="task generate-icons">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

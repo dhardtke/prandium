@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="update-lock-file" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="task update-lock-file">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

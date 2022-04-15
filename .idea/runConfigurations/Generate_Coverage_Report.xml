@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Generate Coverage Report" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/generate_coverage_report.ts" programParameters="run --lock=lock.json --allow-all --unstable --no-check">
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
-</component>

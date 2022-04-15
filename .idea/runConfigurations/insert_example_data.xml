@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="insert-example-data" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="task insert-example-data">
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
