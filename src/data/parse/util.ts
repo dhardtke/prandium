@@ -32,15 +32,3 @@ export function extractNumber(source?: string | number): number | undefined {
   }
   return undefined;
 }
-
-export function isIdReference<T>(obj: T): boolean {
-  return "id" in obj && Object.keys(obj).length === 1;
-}
-
-export type IdReference = { "@id": string };
-
-export function excludeIdReference<T extends IdReference>(
-  obj: T | IdReference | undefined,
-): Exclude<T, IdReference> | undefined {
-  return !obj || isIdReference(obj) ? undefined : obj as Exclude<T, IdReference>;
-}
