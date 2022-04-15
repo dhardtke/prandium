@@ -100,6 +100,10 @@ server {
 
     location /assets {
         alias /home/prandium/repository/assets;
+        try_files $uri @compiledAssets;
+    }
+    location @compiledAssets {
+        root /home/prandium/repository/out;
     }
     location /sw.js {
         alias /home/prandium/repository/assets/sw.js;
