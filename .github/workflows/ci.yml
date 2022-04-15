@@ -27,10 +27,10 @@ jobs:
                     deno-version: "${{ env.denoVersion }}"
 
             -   name: Format
-                run: deno fmt --check src tests dev
+                run: deno task fmt:check
 
             -   name: Lint
-                run: deno lint --unstable src tests dev
+                run: deno task lint
 
     test:
         runs-on: ubuntu-latest
@@ -61,15 +61,15 @@ jobs:
                         ${{ runner.os }}-
 
             -   name: Run tests
-                run: deno test --lock=lock.json --coverage=./cov --unstable --allow-all --fail-fast --jobs=8 `find src/ -name '*.ts' | xargs echo` tests/
+                run: deno task test -- `find src/ -name '*.ts' | xargs echo` tests/
 
             -   name: Generate lcov
-                run: deno coverage --exclude=tests\.* --unstable --lcov ./cov --output=cov.lcov
+                run: deno task coverage
 
             -   name: Upload coverage
                 uses: codecov/codecov-action@v3
                 with:
-                    files: cov.lcov
+                    files: out/coverage.lcov
                     token: ${{ secrets.CODECOV_TOKEN }}
                     fail_ci_if_error: true
                     verbose: true
