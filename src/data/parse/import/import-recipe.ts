@@ -1,9 +1,9 @@
 import { log } from "../../../../deps.ts";
-import { IS_COMPILED } from "../../../shared/util.ts";
+import { IS_COMPILED, root } from "../../../shared/util.ts";
 import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
-const WORKER_URL = IS_COMPILED ? new URL("./import-worker.min.js", Deno.mainModule) : new URL("./import-worker.ts", import.meta.url);
+const WORKER_URL = IS_COMPILED ? new URL("./import-worker.min.js", Deno.mainModule) : new URL("./import-worker.ts", root("src", "data", "parse", "import"));
 
 export interface ImportResult {
   url: string;

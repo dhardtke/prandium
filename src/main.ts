@@ -154,6 +154,4 @@ async function main(): Promise<number> {
   return 0;
 }
 
-if (import.meta.main) {
-  await main();
-}
+await main();
