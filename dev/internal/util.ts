@@ -6,21 +6,6 @@ export interface ProcessLike {
   close?(): void;
 }
 
-export function combine(...processes: ProcessLike[]): ProcessLike {
-  return {
-    close() {
-      for (const process of processes) {
-        process.close && process.close();
-      }
-    },
-    async run() {
-      for (const process of processes) {
-        await process.run();
-      }
-    },
-  };
-}
-
 export function call(
   cwd?: string,
   ...cmd: (string | undefined)[]
