@@ -1,7 +1,7 @@
 import { Colors, fs, path, slash } from "../deps.ts";
 import { Argparser } from "../src/data/parse/argparser.ts";
 import { DefaultConfigDir } from "../src/shared/util.ts";
-import { call, callAndWait, combine, isWindows, ProcessLike } from "./internal/util.ts";
+import { call, ProcessLike } from "./internal/util.ts";
 
 Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
 Deno.chdir("..");
@@ -223,16 +223,11 @@ if (import.meta.main) {
         process: call(
           undefined,
           "deno",
-          "run",
-          "--config=tsconfig.json",
-          "--lock=lock.json",
-          "--no-check",
-          `--allow-all`,
-          "--unstable",
-          "src/main.ts",
+          "task",
+          "run:debug",
+          "--",
           `--host=${options.host}`,
           `--port=${options.port}`,
-          `--debug=${(typeof options.debug !== "undefined")}`,
           `--secure=${options.secure}`,
           options.key && `--key=${options.key || "-"}`,
           options.cert && `--cert=${options.cert || "-"}`,
@@ -244,50 +239,19 @@ if (import.meta.main) {
         process: call(
           undefined,
           "deno",
-          "run",
-          "--lock=lock.json",
-          "--no-check",
-          "--allow-read",
-          "--allow-write",
-          "dev/generate_icons.ts",
+          "task",
+          "generate-icons",
         ),
         runOnStart: false,
       },
       {
         id: "Ingredient parser",
         match: /parser\.pegjs/,
-        process: combine(
-          callAndWait(
-            undefined,
-            `peggy${isWindows() ? ".cmd" : ""}`,
-            "--format",
-            "es",
-            "--output",
-            "src/data/parse/ingredient/parser.js",
-            "src/data/parse/ingredient/parser.pegjs",
-          ),
-          callAndWait(
-            undefined,
-            `terser${isWindows() ? ".cmd" : ""}`,
-            "-c",
-            "-m",
-            "-o",
-            "src/data/parse/ingredient/parser.js",
-            "--",
-            "src/data/parse/ingredient/parser.js",
-          ),
-          {
-            async run() {
-              const text = await Deno.readTextFile(
-                "src/data/parse/ingredient/parser.js",
-              );
-              const preamble = `// deno-lint-ignore-file\n// deno-fmt-ignore-file`;
-              await Deno.writeTextFile(
-                "src/data/parse/ingredient/parser.js",
-                `${preamble}\n${text}`,
-              );
-            },
-          },
+        process: call(
+          undefined,
+          "deno",
+          "task",
+          "build:ingredient-parser",
         ),
         runOnStart: false,
       },
@@ -300,12 +264,8 @@ if (import.meta.main) {
           call(
             undefined,
             "deno",
-            "bundle",
-            "--config=assets/tsconfig.json",
-            "--lock=lock.json",
-            "--unstable",
-            "assets/index.ts",
-            "assets/dist/index.js",
+            "task",
+            "build:assets:js",
           ),
         ),
       },
@@ -317,11 +277,9 @@ if (import.meta.main) {
           "index*css*",
           call(
             undefined,
-            `sass${isWindows() ? ".cmd" : ""}`,
-            "-I",
-            "assets/node_modules",
-            "assets/index.scss",
-            "assets/dist/index.css",
+            "deno",
+            "task",
+            "build:assets:css",
           ),
         ),
       },

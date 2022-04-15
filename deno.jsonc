@@ -27,7 +27,10 @@
         }
     },
     "tasks": {
-        "build": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=assets/dist dev/build.ts",
+        "build:assets": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=assets/dist dev/build.ts",
+        "build:assets:js": "deno bundle --config=assets/tsconfig.json --lock=lock.json --unstable assets/index.ts assets/dist/index.js",
+        "build:assets:css": "sass.cmd -I assets/node_modules assets/index.scss assets/dist/index.css",
+        "build:ingredient-parser": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
         "coverage": "deno coverage --exclude=tests --unstable --lcov ./out/coverage --output=out/coverage.lcov",
         "coverage:html": "genhtml -o out/coverage_html out/coverage.lcov",
         "fmt": "deno fmt --config=deno.jsonc ./src ./dev",
