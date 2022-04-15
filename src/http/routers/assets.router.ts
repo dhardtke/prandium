@@ -3,7 +3,21 @@ import { singleton } from "../../../deps.ts";
 import { root } from "../../shared/util.ts";
 import { Router } from "./router.ts";
 
-const CompiledAssetsDir = root("assets");
+const AssetsDir = root("assets");
+const CompiledAssetsDir = root("out/assets");
+
+async function tryMultiple(ctx: Oak.RouterContext<P>, filename: string, dirs: string[]) {
+  for (const dir of dirs) {
+    try {
+      await Oak.send(ctx, filename, {
+        root: dir,
+      });
+      break;
+    } catch {
+      // ignored
+    }
+  }
+}
 
 async function assetMiddleware<P extends string>(
   ctx: Oak.RouterContext<P>,
@@ -11,9 +25,7 @@ async function assetMiddleware<P extends string>(
   filename: string,
 ) {
   try {
-    await Oak.send(ctx, filename, {
-      root: CompiledAssetsDir,
-    });
+    await tryMultiple(ctx, filename, [AssetsDir, CompiledAssetsDir]);
   } catch {
     await next();
   }

@@ -16,8 +16,8 @@ interface PageType {
 
 const Page: PageType = (title?: string) =>
   (body: string) => {
-    const stylesheet = asset.ifExists("dist/index.min.css", "dist/index.css");
-    const javascript = asset.ifExists("dist/index.min.js", "dist/index.js");
+    const stylesheet = asset.ifExists("index.min.css", "index.css");
+    const javascript = asset.ifExists("index.min.js", "index.js");
 
     const markup = html`
       <!DOCTYPE html>

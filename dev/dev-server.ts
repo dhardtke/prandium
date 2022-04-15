@@ -206,8 +206,7 @@ if (import.meta.main) {
     Deno.exit(0);
   }
 
-  // ensure assets/dist exists
-  fs.ensureDirSync("assets/dist");
+  fs.ensureDirSync("out/assets");
 
   const config: DevServerConfig = {
     watchPaths: [
@@ -260,7 +259,7 @@ if (import.meta.main) {
         id: "JS",
         match: /\/assets\/(.+)\.(ts)/,
         process: removeAndThen(
-          "assets/dist",
+          "out/assets",
           "index*js*",
           call(
             undefined,
@@ -274,7 +273,7 @@ if (import.meta.main) {
         id: "SCSS",
         match: /\/assets\/(.+)\.(scss)/,
         process: removeAndThen(
-          "assets/dist",
+          "out/assets",
           "index*css*",
           call(
             undefined,
