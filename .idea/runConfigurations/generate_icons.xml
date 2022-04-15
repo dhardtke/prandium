@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="generate-icons" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="task generate-icons">
+  <configuration default="false" name="generate-icons" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/intellij-deno.ts" programParameters="run --no-check --allow-all">
+    <option name="applicationArguments" value="task generate-icons" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="insert-example-data" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="task insert-example-data">
+  <configuration default="false" name="insert-example-data" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/intellij-deno.ts" programParameters="run --no-check --allow-all">
+    <option name="applicationArguments" value="task insert-example-data" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

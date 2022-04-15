@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="run:dev" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="task run:dev">
+  <configuration default="false" name="run:dev" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/intellij-deno.ts" programParameters="run --no-check --allow-all">
+    <option name="applicationArguments" value="task run:dev" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

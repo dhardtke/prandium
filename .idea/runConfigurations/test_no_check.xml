@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="test:no-check" type="DenoConfigurationType" inputPath="$PROJECT_DIR$" programParameters="task test:no-check">
+  <configuration default="false" name="test:no-check" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/intellij-deno.ts" programParameters="run --no-check --allow-all">
+    <option name="applicationArguments" value="task test:no-check" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
