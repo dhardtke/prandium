@@ -29,7 +29,7 @@
     "tasks": {
         "build": "deno task clean && deno task build:assets && deno task minify:assets && deno task compress",
         "build:assets": "deno task build:assets:js && deno task build:assets:css",
-        "build:assets:css": "sass.cmd -I assets/node_modules assets/index.scss out/assets/index.css",
+        "build:assets:css": "sass -I assets/node_modules assets/index.scss out/assets/index.css",
         "build:assets:js": "deno run --no-check --allow-read --allow-write dev/ensure-dir-exists.ts out/assets && deno bundle --config=assets/tsconfig.json --lock=lock.json --unstable assets/index.ts -- out/assets/index.js",
         "build:ingredient-parser": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
         "clean": "rm -rf out/",
@@ -45,7 +45,7 @@
         "lint": "deno lint --config=deno.jsonc --unstable ./src ./dev ./tests",
         "minify:assets": "deno task minify:assets:js && deno task minify:assets:css",
         "minify:assets:css": "parcel-css --minify --nesting --bundle --targets '>= 0.25%' --sourcemap out/assets/index.css -o out/assets/index.min.css",
-        "minify:assets:js": "esbuild.cmd --bundle --format=esm --minify out/assets/index.js --outfile=out/assets/index.min.js",
+        "minify:assets:js": "esbuild --bundle --format=esm --minify out/assets/index.js --outfile=out/assets/index.min.js",
         "run:debug": "deno run --allow-all --no-check --unstable --config=tsconfig.json src/main.ts",
         "run:dev": "deno run --lock=lock.json --unstable --allow-read --allow-run --allow-write --no-check dev/dev-server.ts --debug",
         "test": "deno test --config=deno.jsonc --lock=lock.json --unstable --allow-read --allow-net --allow-env --allow-write --fail-fast --jobs=8",
