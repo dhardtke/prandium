@@ -1,4 +1,18 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { path } from "../../deps.ts";
+
+declare global {
+  interface Window {
+    IS_COMPILED: boolean;
+  }
+}
+
+/**
+ * Whether the application is running from a single JavaScript file that has previously been built.
+ * This value is set during compile time (see dev/set-is-compiled.ts).
+ */
+export const IS_COMPILED = !!window["IS_COMPILED"];
 
 export function getHome(): string | undefined {
   if (Deno.build.os === "windows") {
@@ -17,10 +31,13 @@ export function defaultConfigDir(): string {
   return path.resolve(home, ".config", "prandium");
 }
 
-const ScriptDir = path.dirname(path.fromFileUrl(import.meta.url));
+let RootDir: string = path.dirname(path.fromFileUrl(Deno.mainModule));
+if (!IS_COMPILED) {
+  RootDir = path.resolve(RootDir, "..");
+}
 
 export function root(...parts: string[]): string {
-  return path.resolve(ScriptDir, "..", "..", ...parts);
+  return path.resolve(RootDir, ...parts);
 }
 
 export function roundUpToThreeDigits(n: number): number {

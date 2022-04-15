@@ -5,7 +5,7 @@ import { readFromDisk, Settings } from "./data/settings.ts";
 import { buildDbPath } from "./data/util/build_db_path.ts";
 import { CONFIG_DIR, Disposable, SETTINGS } from "./di.ts";
 import { spawnServer } from "./http/webserver.ts";
-import { DefaultConfigDir, defaultConfigDir } from "./shared/util.ts";
+import { DefaultConfigDir, defaultConfigDir, IS_COMPILED } from "./shared/util.ts";
 
 // workaround for https://github.com/dyedgreen/deno-sqlite/issues/174
 Deno.flockSync = () => {
@@ -140,6 +140,8 @@ async function main(): Promise<number> {
   container.register(Database, { useValue: database });
   container.register(SETTINGS, { useValue: settings });
   container.register(CONFIG_DIR, { useValue: options.configDir });
+
+  log.debug(() => `IS_COMPILED is initialized as ${IS_COMPILED}`);
 
   await spawnServer({
     ...options,

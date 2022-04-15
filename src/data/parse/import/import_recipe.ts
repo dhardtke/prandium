@@ -1,6 +1,9 @@
 import { log } from "../../../../deps.ts";
+import { IS_COMPILED } from "../../../shared/util.ts";
 import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
+
+const WORKER_URL = IS_COMPILED ? new URL("./import_worker.min.js", Deno.mainModule) : new URL("./import_worker.ts", import.meta.url);
 
 export interface ImportResult {
   url: string;
@@ -66,10 +69,9 @@ export function importRecipes(
 
     for (let i = 0; i < workerCount; i++) {
       const worker = new Worker(
-        new URL("./import_worker.ts", import.meta.url).href,
+        WORKER_URL.href,
         {
           type: "module",
-          // @ts-ignore IntelliJ hiccup
           deno: {
             namespace: true,
           },
