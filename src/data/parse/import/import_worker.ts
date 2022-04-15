@@ -7,6 +7,9 @@ import { SchemaParser } from "../schema_parser.ts";
 import { ensureArray, extractNumber, first } from "../util.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
+// TODO find a better way to do this, e.g. by referencing the "webworker" lib
+declare const self: { onmessage: (e: MessageEvent) => void, postMessage: (r: unknown) => void };
+
 self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
   importRecipe(e.data.url, e.data.configDir, e.data.userAgent).then(
     (result) => {
@@ -21,10 +24,12 @@ self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
   );
 };
 
+type Instruction = (string | { text?: string; name?: string });
+
 function parseInstructions(
-  instructions: (string | { text?: string; name?: string })[],
+  instructions: Instruction[],
 ): string[] {
-  return instructions.flatMap((i) => typeof i === "string" ? i.split("\n") : [i.text || i.name]);
+  return instructions.flatMap((i) => typeof i === "string" ? i.split("\n") : [i.text || i.name]).filter(Boolean) as string[];
 }
 
 export async function importRecipe(
@@ -64,7 +69,7 @@ export async function importRecipe(
   )
     .map((review) =>
       new Review({
-        date: first(review.datePublished)!,
+        date: first(review.datePublished) as string | Date,
         text: first(review.reviewBody) as string,
       })
     );
@@ -81,7 +86,7 @@ export async function importRecipe(
     prepTime: schemaRecipe.prepTime ? durationToSeconds(parseDuration(schemaRecipe.prepTime.toString())) : 0,
     cookTime: schemaRecipe.cookTime ? durationToSeconds(parseDuration(schemaRecipe.cookTime.toString())) : 0,
     aggregateRatingValue: extractNumber(aggregateRating?.ratingValue as string),
-    aggregateRatingCount: first(aggregateRating?.ratingCount),
+    aggregateRatingCount: first(aggregateRating?.ratingCount as number),
     ingredients: ensureArray(
       schemaRecipe.recipeIngredient || schemaRecipe.ingredients,
     ).map((i) => i + ""),
@@ -100,7 +105,7 @@ export async function importRecipe(
     nutritionTransFat: first(nutrition?.transFatContent) as string,
     nutritionUnsaturatedFat: first(nutrition?.unsaturatedFatContent) as string,
     instructions: parseInstructions(
-      ensureArray(schemaRecipe.recipeInstructions),
+      ensureArray(schemaRecipe.recipeInstructions) as Instruction[],
     )
       .map((i) => i.trim()).filter((i) => Boolean(i)),
     reviews,
