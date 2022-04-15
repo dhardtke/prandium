@@ -220,14 +220,20 @@ if (import.meta.main) {
       {
         id: "Server",
         match: /(deps\.ts|lock\.json|\/src\/(.+)\.(ts|html))/,
+        // TODO use deno task once https://github.com/denoland/deno/issues/14293 is fixed
         process: call(
           undefined,
           "deno",
-          "task",
-          "run:debug",
-          "--",
+          "run",
+          "--config=tsconfig.json",
+          "--lock=lock.json",
+          "--no-check",
+          `--allow-all`,
+          "--unstable",
+          "src/main.ts",
           `--host=${options.host}`,
           `--port=${options.port}`,
+          `--debug=${(typeof options.debug !== "undefined")}`,
           `--secure=${options.secure}`,
           options.key && `--key=${options.key || "-"}`,
           options.cert && `--cert=${options.cert || "-"}`,
