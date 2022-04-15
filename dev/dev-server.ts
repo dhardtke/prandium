@@ -214,6 +214,7 @@ if (import.meta.main) {
       "src",
       "assets",
       "deps.ts",
+      "deps-oak.ts",
       "lock.json",
     ],
     actions: [
