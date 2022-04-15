@@ -6,7 +6,7 @@ import { Router } from "./router.ts";
 const AssetsDir = root("assets");
 const CompiledAssetsDir = root("out/assets");
 
-async function tryMultiple(ctx: Oak.RouterContext<P>, filename: string, dirs: string[]) {
+async function tryMultiple<P extends string>(ctx: Oak.RouterContext<P>, filename: string, dirs: string[]) {
   for (const dir of dirs) {
     try {
       await Oak.send(ctx, filename, {
