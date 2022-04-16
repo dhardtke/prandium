@@ -4,6 +4,12 @@ inputs:
     denoVersion:
         required: true
         description: The version of Deno to use
+    cacheVersion:
+        required: true
+        description: The cache version to use (defined as a secret)
+    denoDir:
+        required: true
+        description: The path deno uses for caching
 runs:
     using: composite
     steps:
@@ -20,13 +26,9 @@ runs:
 
         -   name: Cache dependencies
             uses: actions/cache@v3
-            env:
-                cache-name: cache-deno
             with:
-                # deno cache files are stored in `~/.cache/deno` on Linux/macOS
-                path: ~/.cache/deno
-                key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lock.json') }}
-                restore-keys: |
-                    ${{ runner.os }}-build-${{ env.cache-name }}-
-                    ${{ runner.os }}-build-
-                    ${{ runner.os }}-
+                path: ${{ inputs.denoDir }}
+                key: ${{ inputs.cacheVersion }}-${{ hashFiles('lock.json') }}
+
+        -   shell: bash
+            run: deno cache deps.ts deps-oak.ts deps-test.ts

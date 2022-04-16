@@ -225,7 +225,7 @@ if (import.meta.main) {
           undefined,
           "deno",
           "run",
-          "--config=tsconfig.json",
+          "--config=deno.jsonc",
           "--lock=lock.json",
           "--no-check",
           `--allow-all`,
