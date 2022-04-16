@@ -2,7 +2,7 @@ import { Oak } from "../../../deps-oak.ts";
 import { assertEquals, fs, path } from "../../../deps.ts";
 import { ThumbnailsRouter } from "../../../src/http/routers/thumbnails.router.ts";
 import { AppState } from "../../../src/http/webserver.ts";
-import { root } from "../../../src/shared/util.ts";
+import { testRoot } from "../../_internal/test-root.ts";
 import { withTemp } from "../../_internal/with-temp.function.ts";
 
 Deno.test("ThumbnailsRouter", async (t) => {
@@ -26,7 +26,7 @@ Deno.test("ThumbnailsRouter", async (t) => {
     withTemp(async (tmpDir) => {
       const thumbnailDir = path.join(tmpDir, "thumbnails");
       await fs.ensureDir(thumbnailDir);
-      const sourceImage = root("tests", "http", "router", "1x1.png");
+      const sourceImage = testRoot("tests", "http", "router", "1x1.png");
       fs.copySync(sourceImage, path.join(thumbnailDir, "1x1.png"));
 
       const ctx = Oak.testing.createMockContext<"/thumbnails/(.+)", { 0: string }, AppState>({ method: "GET", path: "/", params: { 0: "1x1.png" } });

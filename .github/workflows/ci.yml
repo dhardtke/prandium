@@ -58,5 +58,26 @@ jobs:
                 with:
                     denoVersion: ${{ env.denoVersion }}
 
+            -   name: Setup build tools
+                run: |
+                    sudo apt-get install -y brotli gzip nodejs
+                    npm install -g esbuild @parcel/css-cli sass
+                    echo sass version
+                    sass --version
+                    echo esbuild version
+                    esbuild --version
+                    # echo parcel-css version
+                    # parcel-css --version
+                    echo gzip version
+                    gzip --version
+                    echo brotli version
+                    brotli --version
+
             -   name: Build
                 run: deno task build
+
+            -   name: Upload artifacts
+                uses: actions/upload-artifact@v3
+                with:
+                    name: artifacts
+                    path: out/
