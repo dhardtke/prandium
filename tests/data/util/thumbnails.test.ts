@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps.ts";
+import { assertEquals } from "../../../deps-test.ts";
 import { downloadThumbnail } from "../../../src/data/util/thumbnails.ts";
 import { withTemp } from "../../_internal/with-temp.function.ts";
 

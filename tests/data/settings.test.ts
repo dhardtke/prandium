@@ -1,4 +1,5 @@
-import { assertEquals, assertRejects, path } from "../../deps.ts";
+import { path } from "../../deps.ts";
+import { assertEquals, assertRejects } from "../../deps-test.ts";
 import { DefaultSettings, readFromDisk, Settings, SettingsFilename } from "../../src/data/settings.ts";
 import { getCpuCores } from "../../src/shared/util.ts";
 import { withTemp } from "../_internal/with-temp.function.ts";

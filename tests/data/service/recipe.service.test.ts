@@ -1,6 +1,6 @@
 // noinspection SqlResolve, SqlWithoutWhere
 
-import { assertEquals } from "../../../deps.ts";
+import { assertEquals } from "../../../deps-test.ts";
 import { Database } from "../../../src/data/db.ts";
 import { RecipeService } from "../../../src/data/service/recipe.service.ts";
 import { TagService } from "../../../src/data/service/tag.service.ts";

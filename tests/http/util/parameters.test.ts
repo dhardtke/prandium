@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps.ts";
+import { assertEquals } from "../../../deps-test.ts";
 import { parameters } from "../../../src/http/util/parameters.ts";
 
 Deno.test("parameters", async (t) => {

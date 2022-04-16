@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../../deps.ts";
+import { assertEquals } from "../../../../deps-test.ts";
 import { Oak } from "../../../../deps-oak.ts";
 import { type Settings } from "../../../../src/data/settings.ts";
 import { PaginationHelper } from "../../../../src/http/middleware/helpers/pagination-helper.ts";

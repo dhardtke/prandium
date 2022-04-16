@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps.ts";
+import { assertEquals } from "../../../deps-test.ts";
 import { de } from "../../../src/i18n/de.ts";
 import { en } from "../../../src/i18n/en.ts";
 import { Language, setLanguage } from "../../../src/i18n/mod.ts";

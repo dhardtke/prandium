@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../../deps.ts";
+import { assertEquals } from "../../../../deps-test.ts";
 import { Ingredient, ingredient } from "../../../../src/data/parse/ingredient/mod.ts";
 
 Deno.test("ingredient", async (t) => {

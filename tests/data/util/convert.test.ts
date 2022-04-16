@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps.ts";
+import { assertEquals } from "../../../deps-test.ts";
 import { pushAll, toCamelCase, toDate, toFloat, toInt } from "../../../src/data/util/convert.ts";
 
 const { test } = Deno;

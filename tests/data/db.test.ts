@@ -1,6 +1,6 @@
 // noinspection SqlResolve
 
-import { assertEquals, assertThrows, unreachable } from "../../deps.ts";
+import { assertEquals, assertThrows, unreachable } from "../../deps-test.ts";
 import { Database } from "../../src/data/db.ts";
 import { Migration } from "../../src/data/migrations/migration.ts";
 import { disableLogging } from "../_internal/disable-logging.ts";

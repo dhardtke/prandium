@@ -1,6 +1,7 @@
 // noinspection HttpUrlsUsage
 
-import { assertEquals, SchemaRecipe } from "../../../deps.ts";
+import { type SchemaRecipe } from "../../../deps.ts";
+import { assertEquals } from "../../../deps-test.ts";
 import { SchemaParser } from "../../../src/data/parse/schema-parser.ts";
 import { html } from "../../../src/tpl/mod.ts";
 

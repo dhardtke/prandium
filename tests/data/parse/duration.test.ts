@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "../../../deps.ts";
+import { assertEquals, assertThrows } from "../../../deps-test.ts";
 import { Duration, durationToSeconds, parseDuration } from "../../../src/data/parse/duration.ts";
 
 Deno.test("duration", async (t) => {

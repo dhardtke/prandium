@@ -19,13 +19,4 @@ export type {
   Recipe as SchemaRecipe,
   Review as SchemaReview,
 } from "https://esm.sh/schema-dts@1.1.0?pin=v66";
-
-// tests
-export {
-  assertEquals,
-  assertNotEquals,
-  assertThrows,
-  assertRejects,
-  unreachable,
-} from "https://deno.land/std@0.134.0/testing/asserts.ts";
 // @formatter:on

@@ -1,8 +1,9 @@
 name: Setup
+description: Setup
 inputs:
     denoVersion:
         required: true
-        type: string
+        description: The version of Deno to use
 runs:
     using: composite
     steps:

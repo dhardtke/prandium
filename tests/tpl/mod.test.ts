@@ -1,4 +1,4 @@
-import { assertEquals } from "../../deps.ts";
+import { assertEquals } from "../../deps-test.ts";
 import { e, html } from "../../src/tpl/mod.ts";
 
 Deno.test("tpl", async (t) => {

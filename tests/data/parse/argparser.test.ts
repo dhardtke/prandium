@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "../../../deps.ts";
+import { assertEquals, assertThrows } from "../../../deps-test.ts";
 import { Argparser } from "../../../src/data/parse/argparser.ts";
 
 Deno.test("Argparser", async (t) => {
