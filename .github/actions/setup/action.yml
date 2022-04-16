@@ -1,0 +1,31 @@
+name: Setup
+inputs:
+    denoVersion:
+        required: true
+        type: string
+runs:
+    using: composite
+    steps:
+        -   name: Clone repository
+            uses: actions/checkout@v3
+            with:
+                submodules: true
+                persist-credentials: false
+
+        -   name: Setup Deno
+            uses: denoland/setup-deno@main
+            with:
+                deno-version: "${{ inputs.denoVersion }}"
+
+        -   name: Cache dependencies
+            uses: actions/cache@v3
+            env:
+                cache-name: cache-deno
+            with:
+                # deno cache files are stored in `~/.cache/deno` on Linux/macOS
+                path: ~/.cache/deno
+                key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/lock.json') }}
+                restore-keys: |
+                    ${{ runner.os }}-build-${{ env.cache-name }}-
+                    ${{ runner.os }}-build-
+                    ${{ runner.os }}-
