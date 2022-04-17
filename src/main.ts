@@ -137,9 +137,9 @@ async function main(): Promise<number> {
   // Dependency Injection registration
   const database = new Database(buildDbPath(options.configDir));
   database.migrate();
-  container.register(Database, { useValue: database });
-  container.register(SETTINGS, { useValue: settings });
-  container.register(CONFIG_DIR, { useValue: options.configDir });
+  await container.register(Database, { useValue: database });
+  await container.register(SETTINGS, { useValue: settings });
+  await container.register(CONFIG_DIR, { useValue: options.configDir });
 
   log.debug(() => `IS_COMPILED is initialized as ${IS_COMPILED}`);
 
