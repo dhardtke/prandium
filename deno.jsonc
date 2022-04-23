@@ -34,7 +34,7 @@
     "tasks": {
         "build": "deno task clean && deno task ensure-out-exists && deno task copy:assets && deno task build:assets && deno task minify:assets && deno task compress && deno task build:server && deno task minify:server && deno task build:worker && deno task minify:worker",
         "build:assets": "deno task build:assets:js && deno task build:assets:css",
-        "build:assets:css": "sass -I assets/node_modules assets/index.scss out/assets/index.css",
+        "build:assets:css": "sass --no-source-map -I assets/node_modules assets/index.scss out/assets/index.css",
         "build:assets:js": "deno task ensure-out-exists && deno bundle --no-check --config=assets/tsconfig.json --lock=lock.json --unstable assets/index.ts -- out/assets/index.js",
         "build:ingredient-parser": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
         "build:server": "deno bundle --no-check --config=deno.jsonc --lock=lock.json --unstable src/main.ts -- out/server.js && deno run --allow-read --allow-write --no-check dev/set-is-compiled.ts",
@@ -53,7 +53,7 @@
         "insert-example-data": "deno run --lock=lock.json --unstable --allow-all --no-check dev/insert-example-data.ts",
         "lint": "deno lint --config=deno.jsonc --unstable ./src ./dev ./tests",
         "minify:assets": "deno task minify:assets:js && deno task minify:assets:css",
-        "minify:assets:css": "parcel-css --minify --nesting --bundle --targets '>= 0.25%' --sourcemap out/assets/index.css -o out/assets/index.min.css",
+        "minify:assets:css": "parcel-css --minify --nesting --bundle --targets '>= 0.25%' out/assets/index.css -o out/assets/index.min.css",
         "minify:assets:js": "esbuild --bundle --format=esm --minify out/assets/index.js --outfile=out/assets/index.min.js",
         "minify:server": "esbuild --bundle --format=esm --minify out/server.js --outfile=out/server.min.js",
         "minify:worker": "esbuild --bundle --format=esm --minify out/import-worker.js --outfile=out/import-worker.min.js",
