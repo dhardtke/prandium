@@ -4,12 +4,12 @@ export * as Reflect from "https://esm.sh/@abraham/reflection@0.10.0?pin=v66&no-c
 export { container, injectable, singleton, inject, Lifecycle, registry } from "https://esm.sh/tsyringe@4.6.0?pin=v66";
 
 // utils
-export * as path from "https://deno.land/std@0.134.0/path/mod.ts";
-export * as log from "https://deno.land/std@0.134.0/log/mod.ts";
-export { LogRecord } from "https://deno.land/std@0.134.0/log/logger.ts";
-export * as fs from "https://deno.land/std@0.134.0/fs/mod.ts";
-export * as Colors from "https://deno.land/std@0.134.0/fmt/colors.ts";
-export { sprintf } from "https://deno.land/std@0.134.0/fmt/printf.ts";
+export * as path from "https://deno.land/std@0.136.0/path/mod.ts";
+export * as log from "https://deno.land/std@0.136.0/log/mod.ts";
+export { LogRecord } from "https://deno.land/std@0.136.0/log/logger.ts";
+export * as fs from "https://deno.land/std@0.136.0/fs/mod.ts";
+export * as Colors from "https://deno.land/std@0.136.0/fmt/colors.ts";
+export { sprintf } from "https://deno.land/std@0.136.0/fmt/printf.ts";
 export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
 
 // types
