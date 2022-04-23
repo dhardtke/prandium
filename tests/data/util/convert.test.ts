@@ -1,5 +1,5 @@
 import { assertEquals } from "../../../deps-test.ts";
-import { pushAll, toCamelCase, toDate, toFloat, toInt } from "../../../src/data/util/convert.ts";
+import { toCamelCase, toDate, toFloat, toInt } from "../../../src/data/util/convert.ts";
 
 Deno.test("convert", async (t) => {
   await t.step("toInt", async (t) => {
@@ -92,11 +92,5 @@ Deno.test("convert", async (t) => {
         },
       },
     );
-  });
-
-  await t.step("pushAll", () => {
-    assertEquals(pushAll([1, 2, 3], []), [1, 2, 3]);
-    assertEquals(pushAll([], [4, 5, 6]), [4, 5, 6]);
-    assertEquals(pushAll([4, 5, 6], [1, 2, 3]), [1, 2, 3, 4, 5, 6]);
   });
 });
