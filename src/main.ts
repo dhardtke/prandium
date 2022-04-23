@@ -106,7 +106,7 @@ async function setupLogger(debug?: boolean) {
   });
 }
 
-async function main(): Promise<number> {
+export async function main(): Promise<number> {
   let options: Options;
   try {
     options = argparser.parse(Deno.args);

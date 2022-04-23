@@ -33,7 +33,14 @@ export function defaultConfigDir(): string {
 
 let RootDir: string = path.dirname(path.fromFileUrl(Deno.mainModule));
 if (!IS_COMPILED) {
-  RootDir = path.resolve(RootDir, "..");
+  if (Deno.mainModule.endsWith(".test.ts")) {
+    while (RootDir && path.basename(RootDir) !== "tests") {
+      RootDir = path.resolve(RootDir, "..");
+    }
+    RootDir = path.resolve(RootDir, "..");
+  } else {
+    RootDir = path.resolve(RootDir, "..");
+  }
 }
 
 export function root(...parts: string[]): string {

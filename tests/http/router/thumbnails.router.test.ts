@@ -1,16 +1,16 @@
 import { Oak } from "../../../deps-oak.ts";
-import { fs, path } from "../../../deps.ts";
 import { assertEquals } from "../../../deps-test.ts";
+import { fs, path } from "../../../deps.ts";
 import { ThumbnailsRouter } from "../../../src/http/routers/thumbnails.router.ts";
 import { AppState } from "../../../src/http/webserver.ts";
-import { testRoot } from "../../_internal/test-root.ts";
+import { root } from "../../../src/shared/util.ts";
 import { withTemp } from "../../_internal/with-temp.function.ts";
 
 Deno.test("ThumbnailsRouter", async (t) => {
   await t.step(
     "get invokes next middleware if an error is thrown",
     withTemp(async (tmpDir) => {
-      const ctx = Oak.testing.createMockContext<"/thumbnails/(.+)", { 0: string }, AppState>({ method: "GET", path: "/" });
+      const ctx = Oak.testing.createMockContext<"/thumbnails/(.+)", { 0: string }>({ method: "GET", path: "/" });
       let invocationCount = 0;
       const next: () => Promise<unknown> = () => {
         invocationCount++;
@@ -27,7 +27,7 @@ Deno.test("ThumbnailsRouter", async (t) => {
     withTemp(async (tmpDir) => {
       const thumbnailDir = path.join(tmpDir, "thumbnails");
       await fs.ensureDir(thumbnailDir);
-      const sourceImage = testRoot("tests", "http", "router", "1x1.png");
+      const sourceImage = root("tests", "http", "router", "1x1.png");
       fs.copySync(sourceImage, path.join(thumbnailDir, "1x1.png"));
 
       const ctx = Oak.testing.createMockContext<"/thumbnails/(.+)", { 0: string }, AppState>({ method: "GET", path: "/", params: { 0: "1x1.png" } });

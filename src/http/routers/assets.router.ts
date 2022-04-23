@@ -6,17 +6,23 @@ import { Router } from "./router.ts";
 const AssetsDir = root("assets");
 const CompiledAssetsDir = root("out/assets");
 
+export const GET_ROUTE = "/assets/(.+)" as const;
+export const SW_JS_ROUTE = "/sw.js" as const;
+
 async function tryMultiple<P extends string>(ctx: Oak.RouterContext<P>, filename: string, dirs: string[]) {
+  let lastError: unknown;
   for (const dir of dirs) {
     try {
       await Oak.send(ctx, filename, {
         root: dir,
       });
       break;
-    } catch {
+    } catch (e) {
       // ignored
+      lastError = e;
     }
   }
+  throw lastError;
 }
 
 async function assetMiddleware<P extends string>(
@@ -36,15 +42,15 @@ export class AssetsRouter extends Router {
   constructor() {
     super();
     this.router
-      .get("/assets/(.+)", this.get)
-      .get("/sw.js", this.getSw);
+      .get(GET_ROUTE, this.get)
+      .get(SW_JS_ROUTE, this.getSw);
   }
 
-  get: Oak.RouterMiddleware<"/assets/(.+)"> = async (ctx, next) => {
-    await assetMiddleware(ctx, next, ctx.params[0]!);
+  get: Oak.RouterMiddleware<typeof GET_ROUTE> = async (ctx, next) => {
+    await assetMiddleware(ctx, next, ctx.params && ctx.params[0]);
   };
 
-  getSw: Oak.RouterMiddleware<"/sw.js"> = async (ctx, next) => {
+  getSw: Oak.RouterMiddleware<typeof SW_JS_ROUTE> = async (ctx, next) => {
     await assetMiddleware(ctx, next, "sw.js");
   };
 }
