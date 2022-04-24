@@ -1,5 +1,6 @@
 // deno-fmt-ignore-file
 import { l } from "../../../i18n/mod.ts";
+import { BUILD_INFO } from "../../../shared/util.ts";
 import { e, html } from "../../mod.ts";
 import { asset } from "../../util/asset.ts";
 import { Favicons } from "./favicons.ts";
@@ -21,6 +22,7 @@ const Page: PageType = (title?: string) =>
 
     const markup = html`
       <!DOCTYPE html>
+      ${BUILD_INFO && `<!-- Build ${BUILD_INFO} -->`}
       <html lang="${l.meta.id}" data-authorization="${e(Page.authorization)}" class="preload${Page.dark && " dark"}">
       <style>
         html {

@@ -9,10 +9,14 @@ declare global {
 }
 
 /**
- * Whether the application is running from a single JavaScript file that has previously been built.
- * This value is set during compile time (see dev/set-is-compiled.ts).
+ * The build info that contains meta-information about when the server has been compiled. This value is set during compile-time (see dev/write-build-info.ts).
  */
-export const IS_COMPILED = !!window["IS_COMPILED"];
+export const BUILD_INFO = window["BUILD_INFO"];
+
+/**
+ * Whether the application is running from a single JavaScript file that has been built before.
+ */
+export const IS_COMPILED = typeof BUILD_INFO !== "undefined";
 
 export function getHome(): string | undefined {
   if (Deno.build.os === "windows") {
