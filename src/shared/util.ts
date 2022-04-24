@@ -4,7 +4,7 @@ import { path } from "../../deps.ts";
 
 declare global {
   interface Window {
-    IS_COMPILED: boolean;
+    BUILD_INFO: string;
   }
 }
 
