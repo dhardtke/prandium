@@ -113,7 +113,7 @@ jobs:
                     cd ../assets/
                     rm index.css* index.js
 
-            -   name: Create zip
+            -   name: Create release zip
                 run: |
                     cd out/
                     zip -r prandium-${{github.ref_name}}.zip * ../docs/* ../README.md ../LICENSE
