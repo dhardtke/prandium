@@ -16,7 +16,7 @@ async function tryMultiple<P extends string>(ctx: Oak.RouterContext<P>, filename
       await Oak.send(ctx, filename, {
         root: dir,
       });
-      break;
+      return;
     } catch (e) {
       // ignored
       lastError = e;
