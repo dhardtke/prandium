@@ -7,6 +7,8 @@ import { RecipeListTemplate } from "../tpl/templates/recipe/recipe-list.template
 
 @singleton()
 export class IndexController {
+  listTemplate = RecipeListTemplate;
+
   constructor(private recipeService: RecipeService, private tagService: TagService) {
   }
 
@@ -36,7 +38,7 @@ export class IndexController {
       },
     });
 
-    return RecipeListTemplate(
+    return this.listTemplate(
       recipes,
       tags,
       showTagFilter,
