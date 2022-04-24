@@ -22,7 +22,7 @@ const Page: PageType = (title?: string) =>
 
     const markup = html`
       <!DOCTYPE html>
-      ${BUILD_INFO && `<!-- Build ${BUILD_INFO} -->`}
+      ${BUILD_INFO && `<!-- ${BUILD_INFO} -->`}
       <html lang="${l.meta.id}" data-authorization="${e(Page.authorization)}" class="preload${Page.dark && " dark"}">
       <style>
         html {
