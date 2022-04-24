@@ -7,12 +7,6 @@ import { CONFIG_DIR, Disposable, SETTINGS } from "./di.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { DefaultConfigDir, defaultConfigDir, IS_COMPILED } from "./shared/util.ts";
 
-// workaround for https://github.com/dyedgreen/deno-sqlite/issues/174
-Deno.flockSync = () => {
-};
-Deno.funlockSync = () => {
-};
-
 interface Options {
   host: string;
   port: number;
