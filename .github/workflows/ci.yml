@@ -116,7 +116,7 @@ jobs:
             -   name: Create zip
                 run: |
                     cd out/
-                    zip -r prandium-${{github.ref_name}}.zip * ../docs/* ../README.md ../LICENSE ../deno.jsonc
+                    zip -r prandium-${{github.ref_name}}.zip * ../docs/* ../README.md ../LICENSE
 
             -   name: Build Changelog
                 id: github_release
