@@ -290,13 +290,13 @@ export class RecipeService implements Service<Recipe> {
       if (loadHistory) {
         for (
           const row of this.db.query<{ timestamp: string }>(
-          `SELECT timestamp
+            `SELECT timestamp
            FROM recipe_history
            WHERE recipe_id = ?
            ORDER BY timestamp DESC`,
-          [recipe.id],
-        )
-          ) {
+            [recipe.id],
+          )
+        ) {
           recipe.history.push(toDate(row.timestamp));
         }
       }
@@ -304,13 +304,13 @@ export class RecipeService implements Service<Recipe> {
       if (loadReviews) {
         for (
           const row of this.db.query(
-          `SELECT ${columns(Review.columns)}
+            `SELECT ${columns(Review.columns)}
            FROM recipe_review
            WHERE recipe_id = ?
            ORDER BY date DESC`,
-          [recipe.id],
-        )
-          ) {
+            [recipe.id],
+          )
+        ) {
           recipe.reviews.push(new Review(toCamelCase(row)));
         }
       }
