@@ -5,7 +5,7 @@ import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
 const WORKER_URL = IS_COMPILED
   ? new URL("./import-worker.min.js", Deno.mainModule)
-  : new URL("./import-worker.ts", path.toFileUrl(root("src", "data", "parse", "import")));
+  : path.toFileUrl(root("src", "data", "parse", "import", "import-worker.ts"));
 
 export interface ImportResult {
   url: string;
