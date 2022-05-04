@@ -23,12 +23,6 @@ export interface Settings {
   addHistoryEntryWhenRating: boolean;
 
   /**
-   * Whether the HTML should be minified.
-   * @default false
-   */
-  minifyHtml: boolean;
-
-  /**
    * The default number of recipes per page.
    * @default 24
    */
@@ -42,7 +36,6 @@ export const DefaultSettings: Settings = {
   importWorkerCount: CpuCores,
   userAgent: DefaultUserAgent,
   addHistoryEntryWhenRating: true,
-  minifyHtml: false,
   pageSize: 24,
 };
 
@@ -63,7 +56,6 @@ function validate(settings: any): Settings {
     importWorkerCount: "number",
     userAgent: "string",
     addHistoryEntryWhenRating: "boolean",
-    minifyHtml: "boolean",
     pageSize: "number",
   };
   for (const [property, type] of Object.entries(types)) {

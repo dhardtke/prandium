@@ -6,6 +6,7 @@ import { buildDbPath } from "./data/util/build-db-path.ts";
 import { CONFIG_DIR, Disposable, SETTINGS } from "./di.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { DefaultConfigDir, defaultConfigDir, IS_COMPILED } from "./shared/util.ts";
+import { shouldPrettifyTemplates } from "./tpl/util/render.ts";
 
 interface Options {
   host: string;
@@ -121,6 +122,8 @@ export async function main(): Promise<number> {
 
   await prepareConfigDir(options);
   await setupLogger(options.debug);
+  shouldPrettifyTemplates(options.debug);
+
   let settings: Settings;
   try {
     settings = await readFromDisk(options.configDir);

@@ -70,7 +70,6 @@ Deno.test("Settings", async (t) => {
     withTemp(async (tmpDir) => {
       const data: Partial<Settings> = {
         importWorkerCount: 1,
-        minifyHtml: !DefaultSettings.minifyHtml,
         pageSize: DefaultSettings.pageSize + 1,
       };
       await Deno.writeTextFile(
@@ -79,7 +78,6 @@ Deno.test("Settings", async (t) => {
       );
       const actual = await readFromDisk(tmpDir);
       assertEquals(actual.importWorkerCount, data.importWorkerCount);
-      assertEquals(actual.minifyHtml, data.minifyHtml);
       assertEquals(actual.pageSize, data.pageSize);
       assertEquals(actual.userAgent, DefaultSettings.userAgent);
       assertEquals(
