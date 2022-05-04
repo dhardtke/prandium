@@ -122,7 +122,7 @@ export async function main(): Promise<number> {
 
   await prepareConfigDir(options);
   await setupLogger(options.debug);
-  shouldPrettifyTemplates(options.debug);
+  shouldPrettifyTemplates(Boolean(options.debug));
 
   let settings: Settings;
   try {
