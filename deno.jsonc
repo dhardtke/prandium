@@ -2,7 +2,15 @@
     "compilerOptions": {
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "strict": true
+        "strict": true,
+        "jsx": "react-jsx",
+        "jsxImportSource": "https://esm.sh/preact@10.7.1?pin=v66",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "deno.ns",
+            "deno.unstable"
+        ],
     },
     "fmt": {
         "options": {
@@ -63,6 +71,6 @@
         "test:coverage": "deno task test -- --coverage=out/coverage",
         "test:no-check": "deno task test -- --no-check",
         "test:watch": "deno task test -- --watch",
-        "update-lock-file": "deno cache --unstable --lock=lock.json --lock-write deps.ts deps-oak.ts deps-test.ts"
+        "update-lock-file": "deno cache --no-check --unstable --lock=lock.json --lock-write deps.ts deps-oak.ts deps-test.ts"
     }
 }

@@ -3,8 +3,7 @@ import { log } from "../../deps.ts";
 import { Database } from "../data/db.ts";
 import { Settings } from "../data/settings.ts";
 import { DarkModeCookie } from "../shared/constants.ts";
-import { Events } from "../tpl/events.ts";
-import { Page } from "../tpl/templates/_structure/page.ts";
+import { Page } from "../tpl/templates/_structure/page.tsx";
 import { handleNotFound, handleServerError } from "./middleware/error.ts";
 import { languageMiddleware } from "./middleware/language.ts";
 import { RouterRegistry } from "./routers/router-registry.ts";
@@ -37,8 +36,6 @@ export async function spawnServer(
     settings: args.settings,
     configDir: args.configDir,
   });
-  // Global App State initialize
-  Page.minifying = args.settings.minifyHtml;
 
   const app = new Oak.Application<AppState>({
     state,
@@ -49,8 +46,6 @@ export async function spawnServer(
     Page.currentUrl = ctx.request.url;
     Page.authorization = ctx.request.headers.get("Authorization");
     Page.dark = await ctx.cookies.get(DarkModeCookie) === "true";
-    const event = new Event(Events.PageLoaded);
-    globalThis.dispatchEvent(event);
     await next();
   });
 

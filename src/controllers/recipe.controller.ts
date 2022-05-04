@@ -6,10 +6,11 @@ import { type Settings } from "../data/settings.ts";
 import { getThumbnailDir, getUniqueFilename } from "../data/util/thumbnails.ts";
 import { CONFIG_DIR, SETTINGS } from "../di.ts";
 import { NotFoundError } from "../http/middleware/error.ts";
-import { RecipeDeleteTemplate } from "../tpl/templates/recipe/recipe-delete.template.ts";
-import { RecipeDetailTemplate } from "../tpl/templates/recipe/recipe-detail.template.ts";
-import { RecipeEditTemplate } from "../tpl/templates/recipe/recipe-edit.template.ts";
-import { RecipeImportTemplate } from "../tpl/templates/recipe/recipe-import.template.ts";
+import { RecipeDeleteTemplate } from "../tpl/templates/recipe/recipe-delete.template.tsx";
+import { RecipeDetailTemplate } from "../tpl/templates/recipe/recipe-detail.template.tsx";
+import { RecipeEditTemplate } from "../tpl/templates/recipe/recipe-edit.template.tsx";
+import { RecipeImportTemplate } from "../tpl/templates/recipe/recipe-import.template.tsx";
+import { renderTemplate } from "../tpl/util/render.ts";
 
 export interface SentFile {
   filename?: string;
@@ -55,7 +56,7 @@ export class RecipeController {
   }
 
   createGet() {
-    return RecipeEditTemplate();
+    return renderTemplate(RecipeEditTemplate());
   }
 
   async postCreate(data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
@@ -66,7 +67,7 @@ export class RecipeController {
   }
 
   getImport() {
-    return RecipeImportTemplate();
+    return renderTemplate(RecipeImportTemplate());
   }
 
   async postImport(urls?: string[]) {
@@ -80,7 +81,7 @@ export class RecipeController {
       userAgent: this.settings.userAgent,
     });
     this.recipeService.create(results.filter((r) => r.success).map((r) => r.recipe!));
-    return RecipeImportTemplate(results);
+    return renderTemplate(RecipeImportTemplate({ results }));
   }
 
   getEdit(id: number) {
@@ -94,7 +95,7 @@ export class RecipeController {
       throw new NotFoundError(`Recipe not found: ${id}`);
     }
 
-    return RecipeEditTemplate(recipe);
+    return renderTemplate(RecipeEditTemplate({ recipe }));
   }
 
   async postEdit(id: number, data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
@@ -140,7 +141,7 @@ export class RecipeController {
     if (!recipe) {
       throw new NotFoundError(`Recipe not found: ${id}`);
     } else {
-      return RecipeDeleteTemplate(recipe);
+      return renderTemplate(RecipeDeleteTemplate({ recipe }));
     }
   }
 
@@ -179,10 +180,10 @@ export class RecipeController {
     if (!recipe) {
       throw new NotFoundError(`Recipe not found: ${id}`);
     } else {
-      return RecipeDetailTemplate(
+      return renderTemplate(RecipeDetailTemplate({
         recipe,
-        portions ?? recipe.yield,
-      );
+        portions: portions ?? recipe.yield,
+      }));
     }
   }
 }

@@ -6,7 +6,7 @@ import { Tag } from "../../src/data/model/tag.ts";
 import { Page } from "../../src/data/pagination.ts";
 import { RecipeService } from "../../src/data/service/recipe.service.ts";
 import { TagService } from "../../src/data/service/tag.service.ts";
-import { RecipeListTemplate } from "../../src/tpl/templates/recipe/recipe-list.template.ts";
+import { RecipeListTemplate } from "../../src/tpl/templates/recipe/recipe-list.template.tsx";
 
 Deno.test("IndexController", async (t) => {
   const db: Database = {} as Database;
@@ -59,9 +59,11 @@ Deno.test("IndexController", async (t) => {
       assertSpyCall(tagServiceList, 0);
       assertNotEquals(output, "");
 
-      assertSpyCallArg(listTemplate, 0, 1, []);
-      assertSpyCallArg(listTemplate, 0, 2, showTagFilter);
-      const paginationCallArg = listTemplate.calls[0].args[0];
+      const templateCallProps = listTemplate.calls[0].args[0];
+      assertEquals(templateCallProps.tags, []);
+      assertEquals(templateCallProps.showTagFilter, showTagFilter);
+
+      const paginationCallArg = templateCallProps.recipes;
       const pages: Page[] = [{number: 1, url: "http://localhost:8080/?page=1"}, {number: 2, url: "http://localhost:8080/?page=2"}, {number: 3, url: "http://localhost:8080/?page=3"}];
 
       assertEquals(paginationCallArg.pageSize, pageSize);
@@ -113,8 +115,9 @@ Deno.test("IndexController", async (t) => {
         },
       });
 
-      assertSpyCallArg(listTemplate, 0, 1, tagsInDatabase);
-      assertSpyCallArg(listTemplate, 0, 2, showTagFilter);
+      const templateCallProps = listTemplate.calls[0].args[0];
+      assertEquals(templateCallProps.tags,  tagsInDatabase);
+      assertEquals(templateCallProps.showTagFilter, showTagFilter);
     });
     restore();
   });

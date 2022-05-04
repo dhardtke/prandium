@@ -1,5 +1,5 @@
 import { root } from "../src/shared/util.ts";
-import { ICONS } from "../src/tpl/templates/_components/icon.ts";
+import { ICONS } from "../src/tpl/templates/_components/icon.tsx";
 
 const icons = new Set(ICONS);
 

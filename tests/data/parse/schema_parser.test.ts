@@ -3,7 +3,6 @@
 import { type SchemaRecipe } from "../../../deps.ts";
 import { assertEquals } from "../../../deps-test.ts";
 import { SchemaParser } from "../../../src/data/parse/schema-parser.ts";
-import { html } from "../../../src/tpl/mod.ts";
 
 Deno.test("SchemaParser", async (t) => {
   // await t.step("Complex example", () => {
@@ -21,7 +20,7 @@ Deno.test("SchemaParser", async (t) => {
   await t.step(`findFirstRecipe is empty if no Recipe can be found`, () => {
     const tests = [
       ``,
-      html`<!DOCTYPE html>
+      `<!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="utf8">
@@ -32,7 +31,7 @@ Deno.test("SchemaParser", async (t) => {
       <p>World</p>
       </body>
       </html>`,
-      html`<!DOCTYPE html>
+      `<!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="utf8">
