@@ -1,5 +1,5 @@
 /** @jsxImportSource https://esm.sh/preact@10.7.1?pin=v66 */
-import { type ComponentChildren, type VNode } from "../../../../deps.ts";
+import { classNames, type ComponentChildren, type VNode } from "../../../../deps.ts";
 import { l } from "../../../i18n/mod.ts";
 import { asset } from "../../util/asset.ts";
 import { Favicons } from "./favicons.tsx";
@@ -63,7 +63,7 @@ const Page: PageType = (props: { title?: string; children: ComponentChildren }) 
   const charset = <meta charset="utf-8" />;
 
   return (
-    <html lang={l.meta.id} data-authorization={Page.authorization} class={"preload"}>
+    <html lang={l.meta.id} data-authorization={Page.authorization} class={classNames("preload", { dark: Page.dark })}>
       <head>
         <PreventFOUC />
         <RegisterServiceWorker />
