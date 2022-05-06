@@ -28,7 +28,7 @@ const NutritionTable = (props: { recipe: Recipe }) => {
   ].filter(([_, value]) => Boolean(value));
   return (
     <>
-      {fields.length &&
+      {fields.length ?
         (
           <div class="col-12 col-lg-6">
             <h5>{l.nutritionalValue}</h5>
@@ -47,7 +47,7 @@ const NutritionTable = (props: { recipe: Recipe }) => {
               </table>
             </div>
           </div>
-        )}
+        ) : ""}
     </>
   );
 };
