@@ -56,7 +56,7 @@
         "coverage:html": "genhtml -o out/coverage-html out/coverage.lcov",
         "ensure-out-exists": "deno run --no-check --allow-read --allow-write dev/ensure-dir-exists.ts out/assets",
         "fmt": "deno fmt --config=deno.jsonc ./src ./dev",
-        "fmt:check": "deno task fmt -- --check",
+        "fmt:check": "deno task fmt --check",
         "generate-icons": "deno run --no-check --allow-read --allow-write dev/generate-icons.ts",
         "insert-example-data": "deno run --lock=lock.json --unstable --allow-all --no-check dev/insert-example-data.ts",
         "lint": "deno lint --config=deno.jsonc --unstable ./src ./dev ./tests",
@@ -68,9 +68,9 @@
         "run:debug": "deno run --allow-all --no-check --unstable --config=deno.jsonc src/main.ts",
         "run:dev": "deno run --lock=lock.json --unstable --allow-read --allow-run --allow-write --no-check dev/dev-server.ts --debug",
         "test": "deno test --config=deno.jsonc --lock=lock.json --unstable --allow-read --allow-net --allow-env --allow-write --fail-fast --jobs=8",
-        "test:coverage": "deno task test -- --coverage=out/coverage",
-        "test:no-check": "deno task test -- --no-check",
-        "test:watch": "deno task test -- --watch",
+        "test:coverage": "deno task test --coverage=out/coverage",
+        "test:no-check": "deno task test --no-check",
+        "test:watch": "deno task test --watch",
         "update-lock-file": "deno cache --no-check --unstable --lock=lock.json --lock-write deps.ts deps-oak.ts deps-test.ts"
     }
 }
