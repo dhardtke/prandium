@@ -1,4 +1,4 @@
-/** @jsxImportSource https://esm.sh/preact@10.7.1?pin=v66 */
+/** @jsxImportSource https://esm.sh/preact@10.7.3?pin=v66 */
 import { Recipe } from "../../../data/model/recipe.ts";
 import { UrlGenerator } from "../../../http/util/url-generator.ts";
 import { l } from "../../../i18n/mod.ts";

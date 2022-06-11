@@ -4,7 +4,7 @@ export {
   assertThrows,
   assertRejects,
   unreachable,
-} from "https://deno.land/std@0.140.0/testing/asserts.ts";
+} from "https://deno.land/std@0.143.0/testing/asserts.ts";
 
 export {
   assertSpyCall,
@@ -15,4 +15,4 @@ export {
   stub,
   spy,
   restore,
-} from "https://deno.land/std@0.140.0/testing/mock.ts";
+} from "https://deno.land/std@0.143.0/testing/mock.ts";

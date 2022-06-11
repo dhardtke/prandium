@@ -1,4 +1,4 @@
-/** @jsxImportSource https://esm.sh/preact@10.7.1?pin=v66 */
+/** @jsxImportSource https://esm.sh/preact@10.7.3?pin=v66 */
 import { classNames, ComponentChildren, VNode } from "../../../../deps.ts";
 import { Collapsible } from "./collapsible.tsx";
 
