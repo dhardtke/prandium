@@ -165,6 +165,7 @@ export class RecipeController {
       throw new NotFoundError(`Recipe not found: ${id}`);
     } else {
       recipe.flagged = !recipe.flagged;
+      recipe.updatedAt = new Date();
       this.recipeService.update([recipe]);
       return recipe;
     }

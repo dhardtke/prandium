@@ -91,8 +91,8 @@ export class RecipeService implements Service<Recipe> {
         `INSERT INTO recipe (created_at, updated_at, title, description, source, thumbnail, yield, nutrition_calories, nutrition_carbohydrate,
                              nutrition_cholesterol, nutrition_fat, nutrition_fiber, nutrition_protein, nutrition_saturated_fat, nutrition_sodium,
                              nutrition_sugar, nutrition_trans_fat, nutrition_unsaturated_fat, prep_time, cook_time, aggregate_rating_value,
-                             aggregate_rating_count, rating, ingredients, instructions)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?)) RETURNING id`,
+                             aggregate_rating_count, rating, ingredients, instructions, flagged)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, json(?), json(?), ?) RETURNING id`,
         (query) => {
           for (const recipe of recipes) {
             const rows = query([
@@ -121,6 +121,7 @@ export class RecipeService implements Service<Recipe> {
               recipe.rating,
               JSON.stringify(recipe.ingredients),
               JSON.stringify(recipe.instructions),
+              recipe.flagged,
             ]);
             recipe.id = rows[0].id;
           }
