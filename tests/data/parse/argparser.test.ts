@@ -5,13 +5,13 @@ Deno.test("Argparser", async (t) => {
   await t.step(`Argparser.parse throws if unknown arguments are provided`, () => {
     assertThrows(
       () => new Argparser([]).parse(["--a", "--b"]),
-      undefined,
+      Error,
       "",
       `Unknown argument: "--a"`,
     );
     assertThrows(
       () => new Argparser([{ name: "a", type: "string" }]).parse(["--a=bla", "--b"]),
-      undefined,
+      Error,
       `Unknown argument: "--b"`,
     );
   });
@@ -19,7 +19,7 @@ Deno.test("Argparser", async (t) => {
   await t.step(`Argparser.parse throws if an argument does take a value but none is given`, () => {
     assertThrows(
       () => new Argparser([{ name: "a", type: "string" }]).parse(["--a"]),
-      undefined,
+      Error,
       `Argument "a" must have a value`,
     );
   });
@@ -39,7 +39,7 @@ Deno.test("Argparser", async (t) => {
     for (const arg of args) {
       assertThrows(
         () => new Argparser([{ name: "a", type: "string" }]).parse([arg]),
-        undefined,
+        Error,
         `Illegal argument syntax: "${arg}"`,
       );
     }
