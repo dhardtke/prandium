@@ -16,6 +16,7 @@ export * as fs from "https://deno.land/std@0.143.0/fs/mod.ts";
 export * as Colors from "https://deno.land/std@0.143.0/fmt/colors.ts";
 export { sprintf } from "https://deno.land/std@0.143.0/fmt/printf.ts";
 export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
+export * as flags from "https://deno.land/std@0.143.0/flags/mod.ts";
 
 // types
 export type {

@@ -1,5 +1,4 @@
-import { Colors, fs, path, slash } from "../deps.ts";
-import { Argparser } from "../src/data/parse/argparser.ts";
+import { Colors, flags, fs, path, slash } from "../deps.ts";
 import { DefaultConfigDir } from "../src/shared/util.ts";
 import { call, ProcessLike } from "./internal/util.ts";
 
@@ -101,7 +100,7 @@ class DevServer {
   private async runActions(actions: Action[]) {
     for (const action of actions) {
       if (this.processes[action.id]) {
-        this.processes[action.id].close();
+        this.processes[action.id].close!();
       }
       this.processes[action.id] = action.process;
       await this.processes[action.id].run();
@@ -145,66 +144,53 @@ function removeAndThen(
       await process.run();
     },
     close() {
-      process.close();
+      process.close!();
     },
   };
 }
 
-if (import.meta.main) {
-  const argparser = new Argparser<Options>([
-    {
-      name: "help",
-      description: "Show help text",
-      type: "void",
-    },
-    {
-      name: "port",
-      description: "the port number",
-      default: 8000,
-      type: "number",
-    },
-    {
-      name: "host",
-      description: "the host name",
-      default: "127.0.0.1",
-      type: "string",
-    },
-    {
-      name: "debug",
-      description: "enable debug mode",
-      type: "boolean",
-      default: true,
-    },
-    {
-      name: "configDir",
-      description: "The config dir",
-      default: DefaultConfigDir,
-      type: "string",
-    },
-    {
-      name: "secure",
-      description: "enable HTTPS server",
-      type: "boolean",
-    },
-    {
-      name: "cert",
-      description: "path to a certificate file to use for the HTTPS server",
-      type: "string",
-      default: "",
-    },
-    {
-      name: "key",
-      description: "path to a key file to use for the HTTPS server",
-      type: "string",
-      default: "",
-    },
-  ]);
-  const options: Options = argparser.parse(Deno.args);
+const PARSE_OPTIONS: flags.ParseOptions = {
+  boolean: [
+    "debug",
+    "secure",
+  ],
+  default: {
+    port: 8000,
+    host: "127.0.0.1",
+    debug: true,
+    configDir: DefaultConfigDir,
+    secure: false,
+    cert: "",
+    key: "",
+  },
+};
+const HELP_TEXT = `
+  Usage: COMMAND
+
+  Options:
+    --help               - Show help text
+    --port=[number]      - the port number                                        (Default: ${PARSE_OPTIONS.default!.port})
+    --host=[string]      - the host name                                          (Default: "${PARSE_OPTIONS.default!.host}")
+    --debug=[boolean]    - enable debug mode                                      (Default: ${PARSE_OPTIONS.default!.debug})
+    --configDir=[string] - The config dir                                         (Default: "${PARSE_OPTIONS.default!.configDir}")
+    --secure=[boolean]   - enable HTTPS server                                    (Default: ${PARSE_OPTIONS.default!.secure})
+    --cert=[string]      - path to a certificate file to use for the HTTPS server (Default: "${PARSE_OPTIONS.default!.cert}")
+    --key=[string]       - path to a key file to use for the HTTPS server         (Default: "${PARSE_OPTIONS.default!.key}")
+`.trim();
+
+function parseOptions(args: string[]): Options {
+  const options = flags.parse(args, PARSE_OPTIONS) as unknown as Options;
 
   if ("help" in options) {
-    console.log(argparser.help());
+    console.log(HELP_TEXT);
     Deno.exit(0);
   }
+
+  return options;
+}
+
+if (import.meta.main) {
+  const options: Options = parseOptions(Deno.args);
 
   fs.ensureDirSync("out/assets");
 
