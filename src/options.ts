@@ -33,13 +33,13 @@ const HELP_TEXT = `
 
   Options:
     --help               - Show help text
-    --port=[number]      - the port number                                        (Default: ${PARSE_OPTIONS.default.port})
-    --host=[string]      - the host name                                          (Default: "${PARSE_OPTIONS.default.host}")
-    --debug=[boolean]    - enable debug mode                                      (Default: ${PARSE_OPTIONS.default.debug})
-    --configDir=[string] - The config dir                                         (Default: "${PARSE_OPTIONS.default.configDir}")
-    --secure=[boolean]   - enable HTTPS server                                    (Default: ${PARSE_OPTIONS.default.secure})
-    --cert=[string]      - path to a certificate file to use for the HTTPS server (Default: "${PARSE_OPTIONS.default.cert}")
-    --key=[string]       - path to a key file to use for the HTTPS server         (Default: "${PARSE_OPTIONS.default.key}")
+    --port=[number]      - the port number                                        (Default: ${PARSE_OPTIONS.default!.port})
+    --host=[string]      - the host name                                          (Default: "${PARSE_OPTIONS.default!.host}")
+    --debug=[boolean]    - enable debug mode                                      (Default: ${PARSE_OPTIONS.default!.debug})
+    --configDir=[string] - The config dir                                         (Default: "${PARSE_OPTIONS.default!.configDir}")
+    --secure=[boolean]   - enable HTTPS server                                    (Default: ${PARSE_OPTIONS.default!.secure})
+    --cert=[string]      - path to a certificate file to use for the HTTPS server (Default: "${PARSE_OPTIONS.default!.cert}")
+    --key=[string]       - path to a key file to use for the HTTPS server         (Default: "${PARSE_OPTIONS.default!.key}")
 `.trim();
 
 export function parseOptions(args: string[]): ResultWithErrorCode<Options> {
