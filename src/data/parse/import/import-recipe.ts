@@ -74,9 +74,6 @@ export function importRecipes(
         WORKER_URL.href,
         {
           type: "module",
-          deno: {
-            namespace: true,
-          },
         },
       );
       worker.onmessage = (e: MessageEvent<ImportRecipeResponse>) => workerDone(e, worker);

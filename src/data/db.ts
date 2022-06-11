@@ -1,5 +1,4 @@
-import { Colors, log, sqlite } from "../../deps.ts";
-import { Disposable } from "../di.ts";
+import { Colors, Disposable, log, sqlite } from "../../deps.ts";
 import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 

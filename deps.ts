@@ -1,11 +1,12 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v3.4.0/mod.ts";
 export * as Reflect from "https://esm.sh/@abraham/reflection@0.10.0?pin=v66&no-check";
-export { container, injectable, singleton, inject, Lifecycle, registry } from "https://esm.sh/tsyringe@4.6.0?pin=v66";
+export { container, injectable, singleton, inject, Lifecycle, registry, type Disposable } from "https://esm.sh/tsyringe@4.7.0?pin=v66";
 
 export type { ComponentChildren, VNode } from "https://esm.sh/preact@10.7.2?pin=v66";
 export { render } from "https://esm.sh/preact-render-to-string@5.2.0?pin=v66";
 export { default as classNames } from "https://cdn.esm.sh/classnames@2.3.1?pin=v66";
+export { satisfies } from "https://esm.sh/v82/compare-versions@4.1.3?pin=v66";
 
 // utils
 export * as path from "https://deno.land/std@0.140.0/path/mod.ts";
