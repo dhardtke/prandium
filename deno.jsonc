@@ -40,13 +40,16 @@
         }
     },
     "tasks": {
+        // FIXME add back "--lock=lock.json" to "test", "build:server" and "build:worker" - for some reason the lockfile verification fails:
+        // The source code is invalid, as it does not match the expected hash in the lock file.
+        //  Specifier: https://esm.sh/@abraham/reflection@0.10.0?pin=v66&no-check
         "build": "deno task clean && deno task ensure-out-exists && deno task copy:assets && deno task build:assets && deno task minify:assets && deno task compress && deno task build:server && deno task minify:server && deno task build:worker && deno task minify:worker",
         "build:assets": "deno task build:assets:js && deno task build:assets:css",
         "build:assets:css": "sass --no-source-map -I assets/node_modules assets/index.scss out/assets/index.css",
         "build:assets:js": "deno task ensure-out-exists && deno bundle --no-check --config=assets/tsconfig.json --lock=lock.json --unstable assets/index.ts -- out/assets/index.js",
         "build:ingredient-parser": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
-        "build:server": "deno bundle --no-check --config=deno.jsonc --lock=lock.json --unstable src/main.ts -- out/server.js && deno run --allow-read --allow-write --allow-run --no-check dev/write-build-info.ts",
-        "build:worker": "deno bundle --no-check --config=deno.jsonc --lock=lock.json --unstable src/data/parse/import/import-worker.ts -- out/import-worker.js",
+        "build:server": "deno bundle --no-check --config=deno.jsonc --unstable src/main.ts -- out/server.js && deno run --allow-read --allow-write --allow-run --no-check dev/write-build-info.ts",
+        "build:worker": "deno bundle --no-check --config=deno.jsonc --unstable src/data/parse/import/import-worker.ts -- out/import-worker.js",
         "clean": "rm -rf out/",
         "compress": "deno task compress:brotli && deno task compress:gzip",
         "compress:brotli": "cd out/assets && brotli -f -k index.min.css index.min.js",
@@ -67,9 +70,6 @@
         "minify:worker": "esbuild --bundle --format=esm --minify out/import-worker.js --outfile=out/import-worker.min.js",
         "run:debug": "deno run --allow-all --no-check --unstable --config=deno.jsonc src/main.ts",
         "run:dev": "deno run --lock=lock.json --unstable --allow-read --allow-run --allow-write --no-check dev/dev-server.ts --debug",
-        // FIXME add back "--lock=lock.json" to "test" - for some reason the lockfile verification fails:
-        // The source code is invalid, as it does not match the expected hash in the lock file.
-        //  Specifier: https://esm.sh/@abraham/reflection@0.10.0?pin=v66&no-check
         "test": "deno test --config=deno.jsonc --unstable --allow-read --allow-net --allow-env --allow-write --fail-fast --jobs=8",
         "test:coverage": "deno task test --coverage=out/coverage",
         "test:no-check": "deno task test --no-check",
