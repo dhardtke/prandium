@@ -4,8 +4,8 @@ import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
 const WORKER_URL = IS_COMPILED
-  ? new URL("./import-worker.min.js", Deno.mainModule)
-  : path.toFileUrl(root("src", "data", "parse", "import", "import-worker.ts"));
+  ? new URL("./import-worker.min.js", Deno.mainModule).href
+  : import.meta.resolve("./import-worker.ts");
 
 export interface ImportResult {
   url: string;
@@ -71,7 +71,7 @@ export function importRecipes(
 
     for (let i = 0; i < workerCount; i++) {
       const worker = new Worker(
-        WORKER_URL.href,
+        WORKER_URL,
         {
           type: "module",
         },
