@@ -24,7 +24,7 @@ self.onmessage = function (e: MessageEvent<ImportRecipeRequest>) {
   );
 };
 
-type Instruction = (string | { text?: string; name?: string });
+type Instruction = string | { text?: string; name?: string };
 
 function parseInstructions(
   instructions: Instruction[],
