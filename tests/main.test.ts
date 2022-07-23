@@ -36,7 +36,7 @@ Deno.test("main", async (t) => {
     }), 1);
     assertEquals(logCapture.records, [
       {
-        msg: "The installed version of Deno does not satisfy the required version range ~1.22.0. Please install a compatible Deno version and try again.",
+        msg: "The installed version of Deno does not satisfy the required version range ~1.24.0. Please install a compatible Deno version and try again.",
         level: log.LogLevels.ERROR,
         levelName: "ERROR",
         loggerName: "default"
