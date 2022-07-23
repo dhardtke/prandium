@@ -6,6 +6,7 @@ import { RecipeService } from "../../src/data/service/recipe.service.ts";
 import { TagService } from "../../src/data/service/tag.service.ts";
 import { Settings } from "../../src/data/settings.ts";
 import { NotFoundError } from "../../src/http/middleware/error.ts";
+import { sleep } from "../_internal/sleep.ts";
 
 Deno.test("RecipeController", async (t) => {
   const db: Database = new Database(":memory:");
@@ -19,13 +20,14 @@ Deno.test("RecipeController", async (t) => {
   await t.step("flag", async (t) => {
     for await (const flag of [false, true]) {
       await t.step(`Given a recipe with flagged="${flag}" When calling flag`
-        + ` Then both the one in the database and the returned one have flagged set to "${!flag}"`, () => {
+        + ` Then both the one in the database and the returned one have flagged set to "${!flag}"`, async () => {
         // Given
         const inputRecipe = new Recipe({ flagged: flag });
         recipeService.create([inputRecipe]);
         const inputRecipeUpdatedAt = inputRecipe.updatedAt;
 
         // When
+        await sleep(1); // sleep 1ms to see a difference in recipe.updatedAt
         const recipeReturnedByMethod = recipeController.flag(inputRecipe.id!);
 
         // Then
