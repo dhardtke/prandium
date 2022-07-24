@@ -72,7 +72,8 @@ export async function importRecipe(
         date: first(review.datePublished) as string | Date,
         text: first(review.reviewBody) as string,
       })
-    );
+    )
+    .filter((review) => Boolean(review.text));
   return new Recipe({
     title: first(schemaRecipe.name)!.toString(),
     description: first(schemaRecipe.description)?.toString(),
