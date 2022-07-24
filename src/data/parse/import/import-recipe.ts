@@ -1,5 +1,5 @@
-import { log, path } from "../../../../deps.ts";
-import { IS_COMPILED, root } from "../../../shared/util.ts";
+import { log } from "../../../../deps.ts";
+import { IS_COMPILED } from "../../../shared/util.ts";
 import { Recipe } from "../../model/recipe.ts";
 import { ImportRecipeRequest, ImportRecipeResponse } from "./types.ts";
 
