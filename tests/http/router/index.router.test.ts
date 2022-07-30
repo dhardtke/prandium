@@ -1,4 +1,4 @@
-import { Oak } from "../../../deps-oak.ts";
+import { Oak } from "../../../deps.ts";
 import { assertEquals } from "../../../deps-test.ts";
 import { IndexController } from "../../../src/controllers/index.controller.ts";
 import { PaginationParams } from "../../../src/data/pagination.ts";

@@ -1,5 +1,6 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v3.4.0/mod.ts";
+export * as Oak from "https://deno.land/x/oak@v10.6.0/mod.ts";
 export * as Reflect from "https://esm.sh/@abraham/reflection@0.10.0?pin=v66&no-check";
 export { container, injectable, singleton, inject, Lifecycle, registry, type Disposable } from "https://esm.sh/tsyringe@4.7.0?pin=v66";
 

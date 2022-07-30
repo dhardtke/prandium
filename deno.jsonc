@@ -72,6 +72,6 @@
         "test:coverage": "deno task test --coverage=out/coverage",
         "test:no-check": "deno task test --no-check",
         "test:watch": "deno task test --watch",
-        "update-lock-file": "deno cache --no-check --unstable --lock=lock.json --lock-write deps.ts deps-oak.ts deps-test.ts"
+        "update-lock-file": "deno cache --no-check --unstable --lock=lock.json --lock-write deps.ts deps-test.ts"
     }
 }

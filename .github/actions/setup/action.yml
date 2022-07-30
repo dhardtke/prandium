@@ -31,4 +31,4 @@ runs:
                 key: ${{ inputs.cacheVersion }}-${{ hashFiles('lock.json') }}
 
         -   shell: bash
-            run: deno cache deps.ts deps-oak.ts deps-test.ts
+            run: deno cache deps.ts deps-test.ts

@@ -1,5 +1,4 @@
-import { Oak } from "../../../deps-oak.ts";
-import { inject, singleton } from "../../../deps.ts";
+import { inject, Oak, singleton } from "../../../deps.ts";
 import { getThumbnailDir } from "../../data/util/thumbnails.ts";
 import { CONFIG_DIR } from "../../di.ts";
 import { Router } from "./router.ts";

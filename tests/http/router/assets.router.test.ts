@@ -1,6 +1,5 @@
-import { Oak } from "../../../deps-oak.ts";
 import { assertEquals } from "../../../deps-test.ts";
-import { path } from "../../../deps.ts";
+import { path, Oak } from "../../../deps.ts";
 import { AssetsRouter, GET_ROUTE, SW_JS_ROUTE } from "../../../src/http/routers/assets.router.ts";
 import { root } from "../../../src/shared/util.ts";
 

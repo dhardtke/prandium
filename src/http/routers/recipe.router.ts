@@ -1,5 +1,4 @@
-import { Oak } from "../../../deps-oak.ts";
-import { singleton } from "../../../deps.ts";
+import { Oak, singleton } from "../../../deps.ts";
 import { RecipeController } from "../../controllers/recipe.controller.ts";
 import { Recipe } from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";

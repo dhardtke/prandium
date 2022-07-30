@@ -1,4 +1,4 @@
-import { Oak } from "../../../deps-oak.ts";
+import { Oak } from "../../../deps.ts";
 
 export abstract class Router {
   protected router: Oak.Router;

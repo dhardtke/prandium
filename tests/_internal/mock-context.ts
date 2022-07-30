@@ -1,4 +1,4 @@
-import { Oak } from "../../deps-oak.ts";
+import { Oak } from "../../deps.ts";
 import { AppState } from "../../src/http/webserver.ts";
 
 export class MockContextBuilder {

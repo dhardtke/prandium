@@ -1,6 +1,5 @@
-import { Oak } from "../../../deps-oak.ts";
 import { assertEquals } from "../../../deps-test.ts";
-import { fs, path } from "../../../deps.ts";
+import { Oak, fs, path } from "../../../deps.ts";
 import { ThumbnailsRouter } from "../../../src/http/routers/thumbnails.router.ts";
 import { AppState } from "../../../src/http/webserver.ts";
 import { root } from "../../../src/shared/util.ts";

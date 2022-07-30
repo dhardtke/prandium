@@ -1,4 +1,4 @@
-import { Oak } from "../../../../deps-oak.ts";
+import { Oak } from "../../../../deps.ts";
 import { OrderBy } from "../../../data/service/util/order-by.ts";
 import { parameters } from "../../util/parameters.ts";
 

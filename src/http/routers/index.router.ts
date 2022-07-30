@@ -1,5 +1,4 @@
-import { Oak } from "../../../deps-oak.ts";
-import { singleton } from "../../../deps.ts";
+import { Oak, singleton } from "../../../deps.ts";
 import { IndexController } from "../../controllers/index.controller.ts";
 import { OrderBy } from "../../data/service/util/order-by.ts";
 import { toInt } from "../../data/util/convert.ts";
