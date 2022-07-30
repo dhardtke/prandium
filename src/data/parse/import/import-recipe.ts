@@ -19,7 +19,73 @@ type Instruction = string | { text?: string; name?: string };
 function parseInstructions(
     instructions: Instruction[],
 ): string[] {
-    return instructions.flatMap((i) => typeof i === "string" ? i.split("\n") : [i.text || i.name]).filter(Boolean) as string[];
+    return instructions
+        .flatMap((i) => typeof i === "string" ? i.split("\n") : [i.text || i.name])
+        .map((i) => i?.trim())
+        .filter(Boolean) as string[];
+}
+
+function parseKeywordsToTags(schemaRecipe: SchemaRecipe): Tag[] {
+    let keywords = ensureArray<string>(
+        schemaRecipe.keywords || schemaRecipe.recipeCategory,
+    );
+    if (keywords.length === 1) {
+        keywords = keywords[0].split(/, ?/);
+    }
+    return keywords
+        .map((t) => t?.trim())
+        .filter(Boolean)
+        .map((k) => new Tag({ title: k.toString() }));
+}
+
+function parseReviews(schemaRecipe: SchemaRecipe): Review[] {
+    return ensureArray<SchemaReview>(schemaRecipe.review || schemaRecipe.reviews)
+        .filter((r) => Boolean(r.reviewBody))
+        .map((review) =>
+            new Review({
+                date: first<string | Date>(review.datePublished),
+                text: first<string>(review.reviewBody)!.trim(),
+            })
+        );
+}
+
+async function mapSchemaRecipe(schemaRecipe: SchemaRecipe, url: string, configDir: string, userAgent: string, fetchFn?: FetchFn): Promise<Recipe> {
+    const tags = parseKeywordsToTags(schemaRecipe);
+    const nutrition = first<SchemaNutritionInformation>(schemaRecipe.nutrition);
+    const aggregateRating = first<SchemaAggregateRating>(schemaRecipe.aggregateRating);
+    const reviews = parseReviews(schemaRecipe);
+
+    return new Recipe({
+        tags,
+        reviews,
+        thumbnail: await downloadThumbnail(
+            configDir,
+            userAgent,
+            first(schemaRecipe.image as string),
+            fetchFn,
+        ),
+        title: first<string>(schemaRecipe.name),
+        description: first<string>(schemaRecipe.description),
+        source: url,
+        prepTime: schemaRecipe.prepTime ? durationToSeconds(parseDuration(schemaRecipe.prepTime.toString())) : 0,
+        cookTime: schemaRecipe.cookTime ? durationToSeconds(parseDuration(schemaRecipe.cookTime.toString())) : 0,
+        aggregateRatingValue: extractNumber(aggregateRating?.ratingValue as string),
+        aggregateRatingCount: first<number>(aggregateRating?.ratingCount),
+        ingredients: ensureArray<string>(schemaRecipe.recipeIngredient || schemaRecipe.ingredients).map((i) => i.toString()),
+        yield: extractNumber(first<number>(schemaRecipe?.recipeYield || schemaRecipe?.yield)?.toString()),
+        nutritionCalories: first<string>(nutrition?.calories),
+        nutritionCarbohydrate: first<string>(nutrition?.carbohydrateContent),
+        nutritionCholesterol: first<string>(nutrition?.cholesterolContent),
+        nutritionFat: first<string>(nutrition?.fatContent),
+        nutritionFiber: first<string>(nutrition?.fiberContent),
+        nutritionProtein: first<string>(nutrition?.proteinContent),
+        nutritionSaturatedFat: first<string>(nutrition?.saturatedFatContent),
+        nutritionSodium: first<string>(nutrition?.sodiumContent),
+        nutritionSugar: first<string>(nutrition?.sugarContent),
+        nutritionTransFat: first<string>(nutrition?.transFatContent),
+        nutritionUnsaturatedFat: first<string>(nutrition?.unsaturatedFatContent),
+        instructions: parseInstructions(ensureArray<Instruction>(schemaRecipe.recipeInstructions)),
+    });
 }
 
 async function fetchHtml(url: string, userAgent: string, fetchFn = fetchCustom): Promise<string> {
@@ -27,71 +93,6 @@ async function fetchHtml(url: string, userAgent: string, fetchFn = fetchCustom):
     return new TextDecoder().decode(
         new Uint8Array(await response.arrayBuffer()),
     );
-}
-
-async function mapSchemaRecipe(schemaRecipe: SchemaRecipe, url: string, configDir: string, userAgent: string, fetchFn?: FetchFn): Promise<Recipe> {
-    let keywords = ensureArray(
-        schemaRecipe.keywords || schemaRecipe.recipeCategory,
-    );
-    if (keywords.length === 1) {
-        keywords = (keywords[0] as string).split(", ");
-    }
-    const tags: Tag[] | undefined = keywords.map((k) => new Tag({ title: k.toString() }));
-    // TODO check for idreferences and throw
-    // TODO type check? and warnings? (e.g. strings must be strings, etc.)
-    const nutrition = first(schemaRecipe.nutrition) as SchemaNutritionInformation;
-    const aggregateRating = first(
-        schemaRecipe.aggregateRating,
-    ) as SchemaAggregateRating;
-    const reviews = ensureArray(
-        schemaRecipe.review as SchemaReview || schemaRecipe.reviews,
-    )
-        .map((review) =>
-            new Review({
-                date: first(review.datePublished) as string | Date,
-                text: first(review.reviewBody) as string,
-            })
-        )
-        .filter((review) => Boolean(review.text));
-
-    return new Recipe({
-        title: first(schemaRecipe.name)?.toString(),
-        description: first(schemaRecipe.description)?.toString(),
-        tags,
-        source: url,
-        thumbnail: await downloadThumbnail(
-            configDir,
-            userAgent,
-            first(schemaRecipe.image as string),
-            fetchFn,
-        ),
-        prepTime: schemaRecipe.prepTime ? durationToSeconds(parseDuration(schemaRecipe.prepTime.toString())) : 0,
-        cookTime: schemaRecipe.cookTime ? durationToSeconds(parseDuration(schemaRecipe.cookTime.toString())) : 0,
-        aggregateRatingValue: extractNumber(aggregateRating?.ratingValue as string),
-        aggregateRatingCount: first(aggregateRating?.ratingCount as number),
-        ingredients: ensureArray(
-            schemaRecipe.recipeIngredient || schemaRecipe.ingredients,
-        ).map((i) => i + ""),
-        yield: extractNumber(
-            first(schemaRecipe?.recipeYield || schemaRecipe?.yield)?.toString(),
-        ),
-        nutritionCalories: first(nutrition?.calories) as string,
-        nutritionCarbohydrate: first(nutrition?.carbohydrateContent) as string,
-        nutritionCholesterol: first(nutrition?.cholesterolContent) as string,
-        nutritionFat: first(nutrition?.fatContent) as string,
-        nutritionFiber: first(nutrition?.fiberContent) as string,
-        nutritionProtein: first(nutrition?.proteinContent) as string,
-        nutritionSaturatedFat: first(nutrition?.saturatedFatContent) as string,
-        nutritionSodium: first(nutrition?.sodiumContent) as string,
-        nutritionSugar: first(nutrition?.sugarContent) as string,
-        nutritionTransFat: first(nutrition?.transFatContent) as string,
-        nutritionUnsaturatedFat: first(nutrition?.unsaturatedFatContent) as string,
-        instructions: parseInstructions(
-            ensureArray(schemaRecipe.recipeInstructions) as Instruction[],
-        )
-            .map((i) => i.trim()).filter((i) => Boolean(i)),
-        reviews,
-    });
 }
 
 async function importRecipe(
@@ -103,7 +104,6 @@ async function importRecipe(
 ): Promise<Recipe> {
     const html = await fetchHtml(url, userAgent, fetchFn);
     const parser = parserFactory(html);
-    // TODO treat every field as if it was undefined
     const schemaRecipe = parser.findFirstRecipe()!;
     if (!schemaRecipe) {
         throw new Error("Recipe metadata not found in HTML.");

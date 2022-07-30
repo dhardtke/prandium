@@ -196,7 +196,7 @@ export class Review {
     public text: string;
 
     constructor(
-        args: { id?: number; date: Date | string; text: string },
+        args: { id?: number; date?: Date | string; text: string },
     ) {
         this.id = args.id;
         this.date = toDate(args.date);
