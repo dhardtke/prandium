@@ -13,178 +13,178 @@ import { RecipeImportTemplate } from "../tpl/templates/recipe/recipe-import.temp
 import { renderTemplate } from "../tpl/util/render.ts";
 
 export interface SentFile {
-  filename?: string;
-  originalName: string;
+    filename?: string;
+    originalName: string;
 }
 
 async function deleteThumbnail(recipe: Recipe, configDir: string) {
-  if (recipe.thumbnail) {
-    const thumbnailDir = getThumbnailDir(configDir);
-    try {
-      await Deno.remove(path.join(thumbnailDir, recipe.thumbnail));
-    } catch {
-      // ignore
+    if (recipe.thumbnail) {
+        const thumbnailDir = getThumbnailDir(configDir);
+        try {
+            await Deno.remove(path.join(thumbnailDir, recipe.thumbnail));
+        } catch {
+            // ignore
+        }
     }
-  }
 }
 
 async function handleThumbnail(recipe: Recipe, configDir: string, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
-  if (shouldDeleteThumbnail) {
-    await deleteThumbnail(recipe, configDir);
-    recipe.thumbnail = undefined;
-  }
-  if (thumbnail?.filename) {
-    // TODO server-side type validation?
-    const thumbnailDir = getThumbnailDir(configDir);
-    const filename = getUniqueFilename(
-      thumbnailDir,
-      thumbnail.originalName,
-    );
-    await Deno.copyFile(
-      thumbnail.filename,
-      path.join(thumbnailDir, filename),
-    );
-    await Deno.remove(thumbnail.filename);
-    await deleteThumbnail(recipe, configDir);
-    recipe.thumbnail = filename;
-  }
+    if (shouldDeleteThumbnail) {
+        await deleteThumbnail(recipe, configDir);
+        recipe.thumbnail = undefined;
+    }
+    if (thumbnail?.filename) {
+        // TODO server-side type validation?
+        const thumbnailDir = getThumbnailDir(configDir);
+        const filename = getUniqueFilename(
+            thumbnailDir,
+            thumbnail.originalName,
+        );
+        await Deno.copyFile(
+            thumbnail.filename,
+            path.join(thumbnailDir, filename),
+        );
+        await Deno.remove(thumbnail.filename);
+        await deleteThumbnail(recipe, configDir);
+        recipe.thumbnail = filename;
+    }
 }
 
 @singleton()
 export class RecipeController {
-  constructor(private recipeService: RecipeService, @inject(SETTINGS) private settings: Settings, @inject(CONFIG_DIR) private configDir: string) {
-  }
-
-  createGet() {
-    return renderTemplate(RecipeEditTemplate());
-  }
-
-  async postCreate(data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
-    const recipe = new Recipe({}).updateFromRawData(data);
-    await handleThumbnail(recipe, this.configDir, thumbnail, shouldDeleteThumbnail);
-    this.recipeService.create([recipe]);
-    return recipe;
-  }
-
-  getImport() {
-    return renderTemplate(RecipeImportTemplate());
-  }
-
-  async postImport(urls?: string[]) {
-    if (!urls) {
-      return;
-    }
-    const results = await importRecipes({
-      urls,
-      configDir: this.configDir,
-      importConcurrency: this.settings.importConcurrency,
-      userAgent: this.settings.userAgent,
-    });
-    this.recipeService.create(results.filter((r) => r.success).map((r) => r.recipe!));
-    return renderTemplate(RecipeImportTemplate({ results }));
-  }
-
-  getEdit(id: number) {
-    const recipe = this.recipeService.find(
-      id,
-      true,
-      true,
-      true,
-    );
-    if (!recipe) {
-      throw new NotFoundError(`Recipe not found: ${id}`);
+    constructor(private recipeService: RecipeService, @inject(SETTINGS) private settings: Settings, @inject(CONFIG_DIR) private configDir: string) {
     }
 
-    return renderTemplate(RecipeEditTemplate({ recipe }));
-  }
-
-  async postEdit(id: number, data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
-    const recipe = this.recipeService.find(
-      id,
-      true,
-      true,
-      true,
-    );
-    if (!recipe) {
-      throw new NotFoundError(`Recipe not found: ${id}`);
-    } else {
-      recipe.updateFromRawData(data);
-      await handleThumbnail(recipe, this.configDir, thumbnail, shouldDeleteThumbnail);
-      this.recipeService.update([recipe], true);
-      return recipe;
+    createGet() {
+        return renderTemplate(RecipeEditTemplate());
     }
-  }
 
-  rate(id: number, rating: number) {
-    // TODO use update route and ensure only non-empty fields are set?
-    const recipe = this.recipeService.find(
-      id,
-      false,
-      true,
-    );
-    if (!recipe) {
-      throw new NotFoundError(`Recipe not found: ${id}`);
-    } else {
-      if (this.settings.addHistoryEntryWhenRating && !recipe.rating) {
-        recipe.history.push(new Date());
-      }
-      recipe.rating = rating;
-      this.recipeService.update([recipe], true);
-      return "Ok";
+    async postCreate(data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
+        const recipe = new Recipe({}).updateFromRawData(data);
+        await handleThumbnail(recipe, this.configDir, thumbnail, shouldDeleteThumbnail);
+        this.recipeService.create([recipe]);
+        return recipe;
     }
-  }
 
-  getDelete(id: number) {
-    const recipe = this.recipeService.find(
-      id,
-    );
-    if (!recipe) {
-      throw new NotFoundError(`Recipe not found: ${id}`);
-    } else {
-      return renderTemplate(RecipeDeleteTemplate({ recipe }));
+    getImport() {
+        return renderTemplate(RecipeImportTemplate());
     }
-  }
 
-  async postDelete(id: number) {
-    const recipe = this.recipeService.find(
-      id,
-    );
-    if (!recipe) {
-      throw new NotFoundError(`Recipe not found: ${id}`);
-    } else {
-      await deleteThumbnail(recipe, this.configDir);
-      this.recipeService.delete([recipe]);
+    async postImport(urls?: string[]) {
+        if (!urls) {
+            return;
+        }
+        const results = await importRecipes({
+            urls,
+            configDir: this.configDir,
+            importConcurrency: this.settings.importConcurrency,
+            userAgent: this.settings.userAgent,
+        });
+        this.recipeService.create(results.filter((r) => r.success).map((r) => r.recipe!));
+        return renderTemplate(RecipeImportTemplate({ results }));
     }
-  }
 
-  flag(id: number) {
-    const recipe = this.recipeService.find(
-      id,
-    );
-    if (!recipe) {
-      throw new NotFoundError(`Recipe not found: ${id}`);
-    } else {
-      recipe.flagged = !recipe.flagged;
-      recipe.updatedAt = new Date();
-      this.recipeService.update([recipe]);
-      return recipe;
-    }
-  }
+    getEdit(id: number) {
+        const recipe = this.recipeService.find(
+            id,
+            true,
+            true,
+            true,
+        );
+        if (!recipe) {
+            throw new NotFoundError(`Recipe not found: ${id}`);
+        }
 
-  get(id: number, portions?: number) {
-    const recipe = this.recipeService.find(
-      id,
-      true,
-      true,
-      true,
-    );
-    if (!recipe) {
-      throw new NotFoundError(`Recipe not found: ${id}`);
-    } else {
-      return renderTemplate(RecipeDetailTemplate({
-        recipe,
-        portions: portions ?? recipe.yield,
-      }));
+        return renderTemplate(RecipeEditTemplate({ recipe }));
     }
-  }
+
+    async postEdit(id: number, data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
+        const recipe = this.recipeService.find(
+            id,
+            true,
+            true,
+            true,
+        );
+        if (!recipe) {
+            throw new NotFoundError(`Recipe not found: ${id}`);
+        } else {
+            recipe.updateFromRawData(data);
+            await handleThumbnail(recipe, this.configDir, thumbnail, shouldDeleteThumbnail);
+            this.recipeService.update([recipe], true);
+            return recipe;
+        }
+    }
+
+    rate(id: number, rating: number) {
+        // TODO use update route and ensure only non-empty fields are set?
+        const recipe = this.recipeService.find(
+            id,
+            false,
+            true,
+        );
+        if (!recipe) {
+            throw new NotFoundError(`Recipe not found: ${id}`);
+        } else {
+            if (this.settings.addHistoryEntryWhenRating && !recipe.rating) {
+                recipe.history.push(new Date());
+            }
+            recipe.rating = rating;
+            this.recipeService.update([recipe], true);
+            return "Ok";
+        }
+    }
+
+    getDelete(id: number) {
+        const recipe = this.recipeService.find(
+            id,
+        );
+        if (!recipe) {
+            throw new NotFoundError(`Recipe not found: ${id}`);
+        } else {
+            return renderTemplate(RecipeDeleteTemplate({ recipe }));
+        }
+    }
+
+    async postDelete(id: number) {
+        const recipe = this.recipeService.find(
+            id,
+        );
+        if (!recipe) {
+            throw new NotFoundError(`Recipe not found: ${id}`);
+        } else {
+            await deleteThumbnail(recipe, this.configDir);
+            this.recipeService.delete([recipe]);
+        }
+    }
+
+    flag(id: number) {
+        const recipe = this.recipeService.find(
+            id,
+        );
+        if (!recipe) {
+            throw new NotFoundError(`Recipe not found: ${id}`);
+        } else {
+            recipe.flagged = !recipe.flagged;
+            recipe.updatedAt = new Date();
+            this.recipeService.update([recipe]);
+            return recipe;
+        }
+    }
+
+    get(id: number, portions?: number) {
+        const recipe = this.recipeService.find(
+            id,
+            true,
+            true,
+            true,
+        );
+        if (!recipe) {
+            throw new NotFoundError(`Recipe not found: ${id}`);
+        } else {
+            return renderTemplate(RecipeDetailTemplate({
+                recipe,
+                portions: portions ?? recipe.yield,
+            }));
+        }
+    }
 }

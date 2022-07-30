@@ -55,7 +55,7 @@ ij_scss_use_double_quotes = true
 ij_scss_value_alignment = 0
 
 [{*.ats, *.ts}]
-indent_size = 2
+indent_size = 4
 ij_typescript_align_imports = false
 ij_typescript_align_multiline_array_initializer_expression = false
 ij_typescript_align_multiline_binary_operation = false

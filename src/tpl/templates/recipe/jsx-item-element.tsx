@@ -3,7 +3,7 @@
 import type { ComponentChildren } from "../../../../deps.ts";
 
 export const Template = (props: { children: ComponentChildren }) => (
-  <template>
-    {props.children}
-  </template>
+    <template>
+        {props.children}
+    </template>
 );

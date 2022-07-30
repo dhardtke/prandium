@@ -8,41 +8,41 @@ import { renderTemplate } from "../tpl/util/render.ts";
 
 @singleton()
 export class IndexController {
-  listTemplate = RecipeListTemplate;
+    listTemplate = RecipeListTemplate;
 
-  constructor(private recipeService: RecipeService, private tagService: TagService) {
-  }
+    constructor(private recipeService: RecipeService, private tagService: TagService) {
+    }
 
-  list(filters: { tagIds: number[]; title: string }, showTagFilter: boolean, orderBy: OrderBy | undefined, paginationParams: PaginationParams) {
-    const recipes = buildPagination(
-      paginationParams,
-      this.recipeService.count(filters),
-      (limit, offset) =>
-        this.recipeService.list(
-          {
-            limit,
-            offset,
-            orderBy,
-            filters,
-          },
-        ),
-    );
+    list(filters: { tagIds: number[]; title: string }, showTagFilter: boolean, orderBy: OrderBy | undefined, paginationParams: PaginationParams) {
+        const recipes = buildPagination(
+            paginationParams,
+            this.recipeService.count(filters),
+            (limit, offset) =>
+                this.recipeService.list(
+                    {
+                        limit,
+                        offset,
+                        orderBy,
+                        filters,
+                    },
+                ),
+        );
 
-    const tags = this.tagService.list({
-      orderBy: { column: "title" },
-      loadRecipeCount: true,
-      filters: {
-        tagsWithSameRecipes: {
-          ids: filters.tagIds,
-          includeOthers: true,
-        },
-      },
-    });
+        const tags = this.tagService.list({
+            orderBy: { column: "title" },
+            loadRecipeCount: true,
+            filters: {
+                tagsWithSameRecipes: {
+                    ids: filters.tagIds,
+                    includeOthers: true,
+                },
+            },
+        });
 
-    return renderTemplate(this.listTemplate({
-      recipes,
-      tags,
-      showTagFilter,
-    }));
-  }
+        return renderTemplate(this.listTemplate({
+            recipes,
+            tags,
+            showTagFilter,
+        }));
+    }
 }

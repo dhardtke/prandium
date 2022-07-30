@@ -5,12 +5,12 @@ import { RecipeRouter } from "./recipe.router.ts";
 import { ThumbnailsRouter } from "./thumbnails.router.ts";
 
 export class RouterRegistry {
-  static get() {
-    return [
-      container.resolve(AssetsRouter),
-      container.resolve(IndexRouter),
-      container.resolve(RecipeRouter),
-      container.resolve(ThumbnailsRouter),
-    ];
-  }
+    static get() {
+        return [
+            container.resolve(AssetsRouter),
+            container.resolve(IndexRouter),
+            container.resolve(RecipeRouter),
+            container.resolve(ThumbnailsRouter),
+        ];
+    }
 }

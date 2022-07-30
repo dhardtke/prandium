@@ -1,27 +1,27 @@
 export interface FetchFn {
-  (input: RequestInfo, userAgent: string, init?: RequestInit): Promise<Response>;
+    (input: RequestInfo, userAgent: string, init?: RequestInit): Promise<Response>;
 }
 
 /**
  * A custom wrapper around fetch to make sure requests use the configured User Agent.
  */
 export const fetchCustom: FetchFn = (
-  input: RequestInfo,
-  userAgent: string,
-  init?: RequestInit,
+    input: RequestInfo,
+    userAgent: string,
+    init?: RequestInit,
 ): Promise<Response> => {
-  return fetch(
-    input,
-    merge(
-      init ?? {},
-      {
-        headers: {
-          "User-Agent": userAgent,
-          "Accept-Encoding": "UTF-8",
-        },
-      },
-    ),
-  );
+    return fetch(
+        input,
+        merge(
+            init ?? {},
+            {
+                headers: {
+                    "User-Agent": userAgent,
+                    "Accept-Encoding": "UTF-8",
+                },
+            },
+        ),
+    );
 };
 
 /**
@@ -31,11 +31,11 @@ export const fetchCustom: FetchFn = (
  */
 // deno-lint-ignore no-explicit-any
 const merge = (target: any, source: any) => {
-  for (const key of Object.keys(source)) {
-    if (source[key] instanceof Object) {
-      Object.assign(source[key], merge(target[key], source[key]));
+    for (const key of Object.keys(source)) {
+        if (source[key] instanceof Object) {
+            Object.assign(source[key], merge(target[key], source[key]));
+        }
     }
-  }
 
-  return Object.assign(target || {}, source);
+    return Object.assign(target || {}, source);
 };

@@ -2,12 +2,12 @@ import { Database } from "../db.ts";
 import { Migration } from "./migration.ts";
 
 export const InitialMigration: Migration = {
-  version: 1,
-  name: "InitialMigration",
+    version: 1,
+    name: "InitialMigration",
 
-  migrate(db: Database) {
-    const queries = [
-      `CREATE TABLE tag
+    migrate(db: Database) {
+        const queries = [
+            `CREATE TABLE tag
        (
          id          INTEGER PRIMARY KEY,
          created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -15,7 +15,7 @@ export const InitialMigration: Migration = {
          title       TEXT UNIQUE,
          description TEXT
        )`,
-      `CREATE TABLE recipe
+            `CREATE TABLE recipe
        (
          id                        INTEGER PRIMARY KEY,
          created_at                TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -44,27 +44,27 @@ export const InitialMigration: Migration = {
          ingredients               TEXT,
          instructions              TEXT
        )`,
-      `CREATE TABLE recipe_tag
+            `CREATE TABLE recipe_tag
        (
          tag_id    INTEGER NOT NULL REFERENCES tag (id) ON DELETE CASCADE,
          recipe_id INTEGER NOT NULL REFERENCES recipe (id) ON DELETE CASCADE
        )`,
-      `CREATE TABLE recipe_history
+            `CREATE TABLE recipe_history
        (
          recipe_id INTEGER   NOT NULL REFERENCES recipe (id) ON DELETE CASCADE,
          timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
          PRIMARY KEY (recipe_id, timestamp)
        )`,
-      `CREATE TABLE recipe_review
+            `CREATE TABLE recipe_review
        (
          id        INTEGER PRIMARY KEY,
          recipe_id INTEGER   NOT NULL REFERENCES recipe (id) ON DELETE CASCADE,
          date      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
          text      TEXT      NOT NULL
        )`,
-    ];
-    for (const sql of queries) {
-      db.exec(sql);
-    }
-  },
+        ];
+        for (const sql of queries) {
+            db.exec(sql);
+        }
+    },
 };

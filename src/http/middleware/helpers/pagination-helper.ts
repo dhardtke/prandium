@@ -8,17 +8,17 @@ import { copyUrlAndDo } from "../../util/url.ts";
 
 @singleton()
 export class PaginationHelper {
-  constructor(@inject(SETTINGS) private settings: Settings) {
-  }
+    constructor(@inject(SETTINGS) private settings: Settings) {
+    }
 
-  buildPaginationParams(ctx: Oak.Context): PaginationParams {
-    return {
-      page: toInt(parameters(ctx).get("page"), 1),
-      pageSize: toInt(
-        parameters(ctx).get("pageSize"),
-        this.settings.pageSize,
-      ),
-      currentUrl: copyUrlAndDo(ctx.request.url, (url) => url.searchParams.delete("flash")).toString(),
-    };
-  }
+    buildPaginationParams(ctx: Oak.Context): PaginationParams {
+        return {
+            page: toInt(parameters(ctx).get("page"), 1),
+            pageSize: toInt(
+                parameters(ctx).get("pageSize"),
+                this.settings.pageSize,
+            ),
+            currentUrl: copyUrlAndDo(ctx.request.url, (url) => url.searchParams.delete("flash")).toString(),
+        };
+    }
 }

@@ -3,30 +3,30 @@ import { ResultWithErrorCode } from "./main.ts";
 import { DefaultConfigDir, defaultConfigDir } from "./shared/util.ts";
 
 export interface Options {
-  host: string;
-  port: number;
-  configDir: string;
-  debug?: boolean;
-  /** @deprecated */
-  secure?: boolean;
-  cert?: string;
-  key?: string;
+    host: string;
+    port: number;
+    configDir: string;
+    debug?: boolean;
+    /** @deprecated */
+    secure?: boolean;
+    cert?: string;
+    key?: string;
 }
 
 const PARSE_OPTIONS: flags.ParseOptions = {
-  boolean: [
-    "secure",
-    "debug",
-  ],
-  default: {
-    port: 8000,
-    host: "127.0.0.1",
-    debug: false,
-    configDir: DefaultConfigDir,
-    secure: false,
-    cert: "",
-    key: "",
-  },
+    boolean: [
+        "secure",
+        "debug",
+    ],
+    default: {
+        port: 8000,
+        host: "127.0.0.1",
+        debug: false,
+        configDir: DefaultConfigDir,
+        secure: false,
+        cert: "",
+        key: "",
+    },
 };
 const HELP_TEXT = `
   Usage: COMMAND
@@ -43,15 +43,15 @@ const HELP_TEXT = `
 `.trim();
 
 export function parseOptions(args: string[]): ResultWithErrorCode<Options> {
-  const options = flags.parse(args, PARSE_OPTIONS) as unknown as Options;
+    const options = flags.parse(args, PARSE_OPTIONS) as unknown as Options;
 
-  if ("help" in options) {
-    log.info(HELP_TEXT);
-    return 0;
-  }
+    if ("help" in options) {
+        log.info(HELP_TEXT);
+        return 0;
+    }
 
-  if (options.configDir === DefaultConfigDir) {
-    options.configDir = defaultConfigDir();
-  }
-  return options;
+    if (options.configDir === DefaultConfigDir) {
+        options.configDir = defaultConfigDir();
+    }
+    return options;
 }

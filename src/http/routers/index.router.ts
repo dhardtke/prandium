@@ -11,21 +11,21 @@ export const DEFAULT_ORDER_BY: OrderBy = { column: "title" } as const;
 
 @singleton()
 export class IndexRouter extends Router {
-  constructor(
-    private paginationHelper: PaginationHelper,
-    private indexController: IndexController,
-  ) {
-    super();
-    this.router.get("/", this.get);
-  }
+    constructor(
+        private paginationHelper: PaginationHelper,
+        private indexController: IndexController,
+    ) {
+        super();
+        this.router.get("/", this.get);
+    }
 
-  get: Oak.RouterMiddleware<"/"> = (ctx) => {
-    const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) => toInt(id, -1)).filter((i) => i !== -1);
-    const title = parameters(ctx).get("title");
-    const orderBy = orderByHelper(ctx, DEFAULT_ORDER_BY);
-    const paginationParams = this.paginationHelper.buildPaginationParams(ctx);
+    get: Oak.RouterMiddleware<"/"> = (ctx) => {
+        const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) => toInt(id, -1)).filter((i) => i !== -1);
+        const title = parameters(ctx).get("title");
+        const orderBy = orderByHelper(ctx, DEFAULT_ORDER_BY);
+        const paginationParams = this.paginationHelper.buildPaginationParams(ctx);
 
-    const showTagFilter = ctx.request.url.searchParams.has("tagFilter");
-    ctx.response.body = this.indexController.list({ tagIds, title }, showTagFilter, orderBy, paginationParams);
-  };
+        const showTagFilter = ctx.request.url.searchParams.has("tagFilter");
+        ctx.response.body = this.indexController.list({ tagIds, title }, showTagFilter, orderBy, paginationParams);
+    };
 }

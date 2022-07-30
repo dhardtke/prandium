@@ -5,8 +5,8 @@ import { TimesSecondsToMinutes } from "./4-times-seconds-to-minutes.ts";
 import { Migration } from "./migration.ts";
 
 export const MIGRATIONS: Migration[] = [
-  InitialMigration,
-  AddFlagColumn,
-  ForeignKeyIndexes,
-  TimesSecondsToMinutes,
+    InitialMigration,
+    AddFlagColumn,
+    ForeignKeyIndexes,
+    TimesSecondsToMinutes,
 ];
