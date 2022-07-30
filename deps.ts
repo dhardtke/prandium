@@ -6,7 +6,8 @@ export { container, injectable, singleton, inject, Lifecycle, registry, type Dis
 
 export type { ComponentChildren, VNode } from "https://esm.sh/preact@10.10.0?pin=v66";
 export { render } from "https://esm.sh/preact-render-to-string@5.2.1?pin=v66";
-export { default as classNames } from "https://cdn.esm.sh/classnames@2.3.1?pin=v66";
+// export { default as classNames } from "https://cdn.esm.sh/classnames@2.3.1?pin=v66";
+export {default as classNames } from "http://cdn.esm.sh/v66/classnames@2.3.1/es2022/classnames.js";
 
 // utils
 export * as path from "https://deno.land/std@0.149.0/path/mod.ts";
