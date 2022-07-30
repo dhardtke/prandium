@@ -6,13 +6,29 @@ const ScriptClose = "</script>";
 const ScriptOpen = "<script";
 const AngleBracketClose = ">";
 
-export class SchemaParser {
+export interface ParseHtmlToSchema {
+  findFirstRecipe(): SchemaRecipe | null;
+}
+
+// deno-lint-ignore no-undef
+export class SchemaParser implements ParseHtmlToSchema {
   constructor(private readonly html: string) {
     this.html = html;
   }
 
+  // deno-lint-ignore no-explicit-any
+  private static getObjects(parsed: any): { [k: string]: unknown }[] {
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+    if ("@graph" in parsed && Array.isArray(parsed["@graph"])) {
+      return parsed["@graph"];
+    }
+    return [parsed];
+  }
+
   /**
-   * Returns the first {@link Recipe} in the given HTML.
+   * Returns the first {@link SchemaRecipe} in the given HTML.
    */
   public findFirstRecipe(): SchemaRecipe | null {
     return this.findFirst<SchemaRecipe>("Recipe");
@@ -65,16 +81,5 @@ export class SchemaParser {
     }
 
     return null;
-  }
-
-  // deno-lint-ignore no-explicit-any
-  private static getObjects(parsed: any): { [k: string]: unknown }[] {
-    if (Array.isArray(parsed)) {
-      return parsed;
-    }
-    if ("@graph" in parsed && Array.isArray(parsed["@graph"])) {
-      return parsed["@graph"];
-    }
-    return [parsed];
   }
 }

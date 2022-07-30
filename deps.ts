@@ -17,6 +17,7 @@ export { sprintf } from "https://deno.land/std@0.149.0/fmt/printf.ts";
 export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
 export * as flags from "https://deno.land/std@0.149.0/flags/mod.ts";
 export { satisfies } from "https://deno.land/std@0.149.0/semver/mod.ts";
+export { pooledMap } from "https://deno.land/std@0.149.0/async/mod.ts";
 
 // types
 export type {

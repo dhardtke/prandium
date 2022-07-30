@@ -17,16 +17,16 @@ Deno.test("Settings", async (t) => {
           message: `Error reading ${SettingsFilename}: SyntaxError: Unexpected end of JSON input`,
         },
         {
-          data: { importWorkerCount: "0" },
-          message: `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
+          data: { importConcurrency: "0" },
+          message: `Error reading ${SettingsFilename}: Error: importConcurrency must be between 1 and ${getCpuCores()}`,
         },
         {
-          data: { importWorkerCount: -1 },
-          message: `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
+          data: { importConcurrency: -1 },
+          message: `Error reading ${SettingsFilename}: Error: importConcurrency must be between 1 and ${getCpuCores()}`,
         },
         {
-          data: { importWorkerCount: getCpuCores() + 1 },
-          message: `Error reading ${SettingsFilename}: Error: importWorkerCount must be between 1 and ${getCpuCores()}`,
+          data: { importConcurrency: getCpuCores() + 1 },
+          message: `Error reading ${SettingsFilename}: Error: importConcurrency must be between 1 and ${getCpuCores()}`,
         },
         {
           data: { userAgent: 42 },
@@ -69,7 +69,7 @@ Deno.test("Settings", async (t) => {
     `readFromDisk merges default with provided settings`,
     withTemp(async (tmpDir) => {
       const data: Partial<Settings> = {
-        importWorkerCount: 1,
+        importConcurrency: 1,
         pageSize: DefaultSettings.pageSize + 1,
       };
       await Deno.writeTextFile(
@@ -77,7 +77,7 @@ Deno.test("Settings", async (t) => {
         JSON.stringify(data),
       );
       const actual = await readFromDisk(tmpDir);
-      assertEquals(actual.importWorkerCount, data.importWorkerCount);
+      assertEquals(actual.importConcurrency, data.importConcurrency);
       assertEquals(actual.pageSize, data.pageSize);
       assertEquals(actual.userAgent, DefaultSettings.userAgent);
       assertEquals(

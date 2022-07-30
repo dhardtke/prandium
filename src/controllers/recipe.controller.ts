@@ -77,7 +77,7 @@ export class RecipeController {
     const results = await importRecipes({
       urls,
       configDir: this.configDir,
-      importWorkerCount: this.settings.importWorkerCount,
+      importConcurrency: this.settings.importConcurrency,
       userAgent: this.settings.userAgent,
     });
     this.recipeService.create(results.filter((r) => r.success).map((r) => r.recipe!));

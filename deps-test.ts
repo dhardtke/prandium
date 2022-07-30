@@ -1,5 +1,6 @@
 export {
   assertEquals,
+  assertObjectMatch,
   assertNotEquals,
   assertThrows,
   assertRejects,

@@ -5,10 +5,10 @@ const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gec
 
 export interface Settings {
   /**
-   * The number of workers to spawn concurrently when importing Recipes.
+   * The number of recipes that can be imported concurrently.
    * @default number of CPU cores on the system
    */
-  importWorkerCount: number;
+  importConcurrency: number;
 
   /**
    * The User Agent to use when doing HTTP Requests.
@@ -33,7 +33,7 @@ export const SettingsFilename = "settings.json";
 
 const CpuCores = getCpuCores();
 export const DefaultSettings: Settings = {
-  importWorkerCount: CpuCores,
+  importConcurrency: CpuCores,
   userAgent: DefaultUserAgent,
   addHistoryEntryWhenRating: true,
   pageSize: 24,
@@ -47,13 +47,13 @@ function validate(settings: any): Settings {
     settings,
   );
   if (
-    typeof validate.importWorkerCount !== "number" ||
-    validate.importWorkerCount <= 0 || validate.importWorkerCount > CpuCores
+    typeof validate.importConcurrency !== "number" ||
+    validate.importConcurrency <= 0 || validate.importConcurrency > CpuCores
   ) {
-    throw new Error(`importWorkerCount must be between 1 and ${CpuCores}`);
+    throw new Error(`importConcurrency must be between 1 and ${CpuCores}`);
   }
   const types: Record<keyof Settings, "boolean" | "string" | "number"> = {
-    importWorkerCount: "number",
+    importConcurrency: "number",
     userAgent: "string",
     addHistoryEntryWhenRating: "boolean",
     pageSize: "number",

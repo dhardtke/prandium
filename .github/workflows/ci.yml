@@ -109,7 +109,7 @@ jobs:
             -   name: Remove non-minified files
                 run: |
                     cd out/
-                    rm import-worker.js server.js
+                    rm server.js
                     cd ../assets/
                     rm index.css* index.js
 
