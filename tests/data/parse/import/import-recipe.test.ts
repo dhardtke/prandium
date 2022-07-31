@@ -44,7 +44,7 @@ Deno.test("importRecipes", async (t) => {
 
     async function simpleTest(t: TestContext, given: unknown, then: unknown, schemaField: string, recipeField: string): Promise<void> {
         beforeEach();
-        await t.step(`Given ${JSON.stringify(given)} Then it is parsed as ${JSON.stringify(then)}`, withTemp(async (tmpDir) => {
+        await t.step(`Given ${JSON.stringify(given)} Then Recipe#${recipeField}=${JSON.stringify(then)}`, withTemp(async (tmpDir) => {
             // Given
             parsedRecipes.url = {
                 [schemaField]: given
@@ -234,7 +234,27 @@ Deno.test("importRecipes", async (t) => {
         }
     });
 
-    // TODO test nutrition fields altogether
+    await t.step("parsing nutritional values", async (t) => {
+        for (const [schemaField, recipeField] of [
+            ["calories", "nutritionCalories"],
+            ["carbohydrateContent", "nutritionCarbohydrate"],
+            ["cholesterolContent", "nutritionCholesterol"],
+            ["fatContent", "nutritionFat"],
+            ["fiberContent", "nutritionFiber"],
+            ["proteinContent", "nutritionProtein"],
+            ["saturatedFatContent", "nutritionSaturatedFat"],
+            ["sodiumContent", "nutritionSodium"],
+            ["sugarContent", "nutritionSugar"],
+            ["transFatContent", "nutritionTransFat"],
+            ["unsaturatedFatContent", "nutritionUnsaturatedFat"],
+        ]) {
+            await simpleTest(t, { [schemaField]: "my nutritional value" }, "my nutritional value",
+                "nutrition",
+                recipeField
+            );
+        }
+    });
+
     // TODO test yield
     // TODO test rating
     // TODO test prepTime / cookTime
