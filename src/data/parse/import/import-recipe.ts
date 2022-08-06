@@ -3,7 +3,7 @@ import { Recipe, Review } from "../../model/recipe.ts";
 import { Tag } from "../../model/tag.ts";
 import { fetchCustom, FetchFn } from "../../util/fetch.ts";
 import { downloadThumbnail } from "../../util/thumbnails.ts";
-import { durationToSeconds, parseDuration } from "../duration.ts";
+import { durationToMinutes, parseDuration } from "../duration.ts";
 import { ParseHtmlToSchema, SchemaParser } from "../schema-parser.ts";
 import { ensureArray, extractNumber, first } from "../util.ts";
 
@@ -67,8 +67,8 @@ async function mapSchemaRecipe(schemaRecipe: SchemaRecipe, url: string, configDi
         title: first<string>(schemaRecipe.name),
         description: first<string>(schemaRecipe.description),
         source: url,
-        prepTime: schemaRecipe.prepTime ? durationToSeconds(parseDuration(schemaRecipe.prepTime.toString())) : 0,
-        cookTime: schemaRecipe.cookTime ? durationToSeconds(parseDuration(schemaRecipe.cookTime.toString())) : 0,
+        prepTime: schemaRecipe.prepTime ? durationToMinutes(parseDuration(schemaRecipe.prepTime.toString())) : 0,
+        cookTime: schemaRecipe.cookTime ? durationToMinutes(parseDuration(schemaRecipe.cookTime.toString())) : 0,
         aggregateRatingValue: extractNumber(aggregateRating?.ratingValue as string),
         aggregateRatingCount: first<number>(aggregateRating?.ratingCount),
         ingredients: ensureArray<string>(schemaRecipe.recipeIngredient || schemaRecipe.ingredients).map((i) => i.toString()),

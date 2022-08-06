@@ -115,10 +115,15 @@ export function parseDuration(iso8601duration: string): Duration {
     };
 }
 
-export function durationToSeconds(duration: Duration): number {
-    const HOUR = 60 * 60;
-    const DAY = HOUR * 24;
-    return duration.years * 365 * DAY + duration.weeks * 7 * DAY +
-        duration.months * 31 * DAY + duration.days * DAY +
-        duration.hours * HOUR + duration.minutes * 60 + duration.seconds;
+const HOUR = 60;
+const DAY = HOUR * 24;
+
+export function durationToMinutes(duration: Duration): number {
+    return duration.years * 365 * DAY +
+        duration.weeks * 7 * DAY +
+        duration.months * 31 * DAY +
+        duration.days * DAY +
+        duration.hours * HOUR +
+        duration.minutes +
+        Math.round(duration.seconds / 60);
 }

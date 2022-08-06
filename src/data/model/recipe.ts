@@ -50,8 +50,8 @@ export class Recipe extends Model {
     public nutritionSugar?: string;
     public nutritionTransFat?: string;
     public nutritionUnsaturatedFat?: string;
-    public prepTime: number;
-    public cookTime: number;
+    public prepTime: number; // in minutes
+    public cookTime: number; // in minutes
     public aggregateRatingValue?: number;
     public aggregateRatingCount?: number;
     public rating: number;

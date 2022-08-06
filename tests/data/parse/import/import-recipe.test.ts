@@ -255,9 +255,16 @@ Deno.test("importRecipes", async (t) => {
         }
     });
 
+    await t.step("parsing prepTime", async (t) => {
+        await simpleTest(t, "PT20M", 20, "prepTime", "prepTime");
+    });
+
+    await t.step("parsing cookTime", async (t) => {
+        await simpleTest(t, "PT25M", 25, "cookTime", "cookTime");
+    });
+
     // TODO test yield
     // TODO test rating
-    // TODO test prepTime / cookTime
     // TODO test thumbnail
     // TODO test title / description
 });
