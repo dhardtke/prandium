@@ -10,7 +10,7 @@ on:
             - "lock.json"
     workflow_dispatch:
 env:
-    denoVersion: "v1.24.1"
+    denoVersion: "v1.25.0"
     DENO_DIR: deno
 jobs:
     lint:
