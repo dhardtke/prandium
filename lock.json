@@ -131,8 +131,9 @@
   "https://esm.sh/@abraham/reflection@0.10.0?pin=v66&no-check": "9ccf2c3c3c681bc4487b33c8523973e5a6d58e2f7f2cff167e2dc40d0639e465",
   "https://esm.sh/preact-render-to-string@5.2.2?pin=v66": "9dac243f8e401869382b712cc41bdf2c40b75104411b51b788d959d093f43584",
   "https://esm.sh/preact@10.10.6?pin=v67": "3797eacd827278d2601acc8c9da07da1df226113a5e0f5ff54055ffb9dcf4bf4",
-  "https://esm.sh/preact@10.10.6?pin=v67/jsx-runtime": "ed7787258f7e903f77a6d1c5ba68b0205a2268b1de4a6e06ebaab486c6d82a0c",
+  "https://esm.sh/preact@10.10.6?pin=v67/jsx-runtime": "cb34e30f437a2d80b0605b192f581d5a559b577fed4d4ccef77f035e6f50077a",
   "https://esm.sh/schema-dts@1.1.0?pin=v66": "f3656f3ebd21c7a60bd1191ee8ff19fe70bd6bf1eda99608c563fb63c286a43d",
+  "https://esm.sh/stable/preact@10.10.6/deno/jsx-runtime.js": "4c65a8d13d49d059914b625814138804ca2814bcdd35e3fd4cd7f66091236bbc",
   "https://esm.sh/stable/preact@10.10.6/deno/preact.js": "e0d155b4926e5b1f4dce9b9efea9f8c65edb7587b3b7a4ebd5d339474cf61e20",
   "https://esm.sh/tsyringe@4.7.0?pin=v66": "ee253802ef21ac0d6b98faab1ab6bf6da16df2a69fa7ef7654ebaaa6f8a22f0b",
   "https://esm.sh/v66/@abraham/reflection@0.10.0/deno/reflection.js": "e9b8f7a88eb5b1783d32afd6674ae68bdef5359908322128c5e568f6d24ef2e4",
@@ -179,6 +180,7 @@
   "https://esm.sh/v66/tsyringe@4.7.0/dist/typings/types/lifecycle.d.ts": "c442590ef92fcb502f7762f61913c0db9027839a63f04b12fcd687996853e2f0",
   "https://esm.sh/v66/tsyringe@4.7.0/dist/typings/types/registration-options.d.ts": "b07eadb87aa3accb097690adce5575b3e0efa66d2e8d893b5a913c8a44f97ba3",
   "https://esm.sh/v66/tsyringe@4.7.0/dist/typings/types/transform.d.ts": "0bce4a5303f795de76667a9f1a1f27eea3ac35cb373ff2fb5447b6c83017192c",
+  "https://esm.sh/v92/preact@10.10.6/jsx-runtime/src/index.d.ts": "e153460ed2b3fe2ad8b93696ecd48fbf73cd628b0b0ea6692b71804a3af69dfd",
   "https://esm.sh/v92/preact@10.10.6/src/index.d.ts": "d3e2e5125321d592d2458226f311de66411f2fa949e546cbaaefa533c4fb89e3",
   "https://esm.sh/v92/preact@10.10.6/src/jsx.d.ts": "1bb7de31d64cc39b3b07613dc39bff42199ffec4b97ac9168a86f4747a3ec669"
 }
