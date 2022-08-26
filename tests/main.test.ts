@@ -1,6 +1,6 @@
 import { assertEquals } from "../deps-test.ts";
 import { log } from "../deps.ts";
-import { denoVersionIsSatified, main } from "../src/main.ts";
+import { denoVersionIsSatified, main, REQUIRED_DENO_VERSION_RANGE } from "../src/main.ts";
 import { LogCapture2 } from "./_internal/disable-logging.ts";
 
 Deno.test("main", async (t) => {
@@ -39,7 +39,8 @@ Deno.test("main", async (t) => {
         );
         assertEquals(logCapture.records, [
             {
-                msg: "The installed version of Deno does not satisfy the required version range ~1.24.0. Please install a compatible Deno version and try again.",
+                msg: `The installed version of Deno does not satisfy the required version range ${REQUIRED_DENO_VERSION_RANGE}.`
+                    + ` Please install a compatible Deno version and try again.`,
                 level: log.LogLevels.ERROR,
                 levelName: "ERROR",
                 loggerName: "default",

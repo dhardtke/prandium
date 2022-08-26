@@ -9,7 +9,7 @@ import { Options, parseOptions } from "./options.ts";
 import { IS_COMPILED } from "./shared/util.ts";
 import { shouldPrettifyTemplates } from "./tpl/util/render.ts";
 
-const REQUIRED_DENO_VERSION_RANGE = "^1.25.0";
+export const REQUIRED_DENO_VERSION_RANGE = "^1.25.0";
 
 export type ResultWithErrorCode<T> = T | 0 | 1;
 
