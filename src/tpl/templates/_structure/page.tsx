@@ -1,4 +1,4 @@
-/** @jsxImportSource https://esm.sh/preact@10.10.6?pin=v67 */
+/** @jsxImportSource https://esm.sh/preact@10.11.0?pin=v67 */
 import { classNames, type ComponentChildren, type VNode } from "../../../../deps.ts";
 import { l } from "../../../i18n/mod.ts";
 import { asset } from "../../util/asset.ts";
