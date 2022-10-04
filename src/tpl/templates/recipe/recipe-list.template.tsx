@@ -20,7 +20,7 @@ const TagControls = (props: { tags: Tag[]; tagFilterId: string }) => {
     return (
         <div class="btn-group w-100">
             <div class="btn-group" id="tag-btn">
-                <label class={classNames("btn", "secondary", "caret", "right", { disabled: props.tags.length === 0 })} for={props.tagFilterId}>
+                <label class={classNames("btn", "secondary", "caret", "right", { disabled: props.tags.length === 0 })} htmlFor={props.tagFilterId}>
                     {l.navigation.tags}
                 </label>
             </div>
