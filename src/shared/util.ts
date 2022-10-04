@@ -41,10 +41,8 @@ if (!IS_COMPILED) {
         while (RootDir && path.basename(RootDir) !== "tests") {
             RootDir = path.resolve(RootDir, "..");
         }
-        RootDir = path.resolve(RootDir, "..");
-    } else {
-        RootDir = path.resolve(RootDir, "..");
     }
+    RootDir = path.resolve(RootDir, "..");
 }
 
 export function root(...parts: string[]): string {
