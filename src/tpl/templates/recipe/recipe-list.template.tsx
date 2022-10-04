@@ -94,7 +94,7 @@ function OrderBy() {
         }[];
     }
 
-    const options: Optgroup[] = [
+    const optgroups: Optgroup[] = [
         {
             label: l.recipe.form.group.basic,
             options: [{
@@ -199,7 +199,7 @@ function OrderBy() {
                     {l.orderBy.title}
                 </span>
                 <select class="form-select" title={l.recipe.orderBy} autocomplete="off" name="orderBy">
-                    {options.map(({ label, options }) => (
+                    {optgroups.map(({ label, options }) => (
                         <optgroup label={label}>
                             {options.map(({ value, label }) => (
                                 <option value={value} selected={orderBy === value}>
