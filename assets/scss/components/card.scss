@@ -58,6 +58,7 @@
     @include spacing($horizontal: variables.$s-4, $vertical: variables.$s-4);
 
     flex: 1 1 auto;
+    overflow: auto;
 }
 
 .card-footer {
