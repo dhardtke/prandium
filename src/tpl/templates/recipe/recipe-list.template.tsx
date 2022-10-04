@@ -140,6 +140,43 @@ function OrderBy() {
                 label: l.recipe.time.total,
             }],
         },
+        {
+            label: l.recipe.form.group.nutrition,
+            options: [{
+                value: "nutrition_calories",
+                label: l.recipe.nutrition.calories,
+            }, {
+                value: "nutrition_carbohydrate",
+                label: l.recipe.nutrition.carbohydrate,
+            }, {
+                value: "nutrition_cholesterol",
+                label: l.recipe.nutrition.cholesterol,
+            }, {
+                value: "nutrition_fat",
+                label: l.recipe.nutrition.fat,
+            }, {
+                value: "nutrition_fiber",
+                label: l.recipe.nutrition.fiber,
+            }, {
+                value: "nutrition_protein",
+                label: l.recipe.nutrition.protein,
+            }, {
+                value: "nutrition_saturatedFat",
+                label: l.recipe.nutrition.saturatedFat,
+            }, {
+                value: "nutrition_sodium",
+                label: l.recipe.nutrition.sodium,
+            }, {
+                value: "nutrition_sugar",
+                label: l.recipe.nutrition.sugar,
+            }, {
+                value: "nutrition_trans_fat",
+                label: l.recipe.nutrition.transFat,
+            }, {
+                value: "nutrition_unsaturated_fat",
+                label: l.recipe.nutrition.unsaturatedFat,
+            }],
+        },
     ];
 
     const order = parameters(Page.currentUrl).get("order", "ASC")?.toUpperCase();
