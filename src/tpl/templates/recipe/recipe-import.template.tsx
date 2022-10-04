@@ -60,7 +60,7 @@ export const RecipeImportTemplate = (props?: { results?: ImportResult[] }) => (
             : (
                 <form method="POST">
                     <div class="mb">
-                        <label for="urls" class="form-label">
+                        <label htmlFor="urls" class="form-label">
                             {l.recipe.import.urls}
                         </label>
                         <textarea rows={10} class="form-control" id="urls" name="urls" required></textarea>

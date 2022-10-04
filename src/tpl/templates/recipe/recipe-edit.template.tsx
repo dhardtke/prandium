@@ -94,25 +94,25 @@ export const RecipeEditTemplate = (props: { recipe?: Recipe } = {}) => (
                         </div>
                         <div class="card-body">
                             <div class="mb">
-                                <label for="title">
+                                <label htmlFor="title">
                                     {l.title} *
                                 </label>
                                 <input id="title" name="title" required value={props.recipe?.title ?? ""} />
                             </div>
                             <div class="mb">
-                                <label for="description">
+                                <label htmlFor="description">
                                     {l.description}
                                 </label>
                                 <textarea id="description" name="description">{props.recipe?.description ?? ""}</textarea>
                             </div>
                             <div class="mb">
-                                <label for="source">
+                                <label htmlFor="source">
                                     {l.recipe.source}
                                 </label>
                                 <input id="source" name="source" value={props.recipe?.source ?? ""} />
                             </div>
                             <div>
-                                <label for="yield">
+                                <label htmlFor="yield">
                                     {l.recipe.yield}
                                 </label>
                                 <input type="number" min="1" id="yield" name="yield" value={props.recipe?.yield ?? ""} />
@@ -157,67 +157,67 @@ export const RecipeEditTemplate = (props: { recipe?: Recipe } = {}) => (
                 <div class="card-body">
                     <div class="grid gy-3">
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionCalories">
+                            <label htmlFor="nutritionCalories">
                                 {l.recipe.nutrition.calories}
                             </label>
                             <input id="nutritionCalories" name="nutritionCalories" value={props.recipe?.nutritionCalories ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionCarbohydrate">
+                            <label htmlFor="nutritionCarbohydrate">
                                 {l.recipe.nutrition.carbohydrate}
                             </label>
                             <input id="nutritionCarbohydrate" name="nutritionCarbohydrate" value={props.recipe?.nutritionCarbohydrate ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionCholesterol">
+                            <label htmlFor="nutritionCholesterol">
                                 {l.recipe.nutrition.cholesterol}
                             </label>
                             <input id="nutritionCholesterol" name="nutritionCholesterol" value={props.recipe?.nutritionCholesterol ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionFat">
+                            <label htmlFor="nutritionFat">
                                 {l.recipe.nutrition.fat}
                             </label>
                             <input id="nutritionFat" name="nutritionFat" value={props.recipe?.nutritionFat ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionFiber">
+                            <label htmlFor="nutritionFiber">
                                 {l.recipe.nutrition.fiber}
                             </label>
                             <input id="nutritionFiber" name="nutritionFiber" value={props.recipe?.nutritionFiber ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionProtein">
+                            <label htmlFor="nutritionProtein">
                                 {l.recipe.nutrition.protein}
                             </label>
                             <input id="nutritionProtein" name="nutritionProtein" value={props.recipe?.nutritionProtein ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionSaturatedFat">
+                            <label htmlFor="nutritionSaturatedFat">
                                 {l.recipe.nutrition.saturatedFat}
                             </label>
                             <input id="nutritionSaturatedFat" name="nutritionSaturatedFat" value={props.recipe?.nutritionSaturatedFat ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionSodium">
+                            <label htmlFor="nutritionSodium">
                                 {l.recipe.nutrition.sodium}
                             </label>
                             <input id="nutritionSodium" name="nutritionSodium" value={props.recipe?.nutritionSodium ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionSugar">
+                            <label htmlFor="nutritionSugar">
                                 {l.recipe.nutrition.sugar}
                             </label>
                             <input id="nutritionSugar" name="nutritionSugar" value={props.recipe?.nutritionSugar ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionTransFat">
+                            <label htmlFor="nutritionTransFat">
                                 {l.recipe.nutrition.transFat}
                             </label>
                             <input id="nutritionTransFat" name="nutritionTransFat" value={props.recipe?.nutritionTransFat ?? ""} />
                         </div>
                         <div class="col-lg-2 col-md-2 col-4">
-                            <label for="nutritionUnsaturatedFat">
+                            <label htmlFor="nutritionUnsaturatedFat">
                                 {l.recipe.nutrition.unsaturatedFat}
                             </label>
                             <input id="nutritionUnsaturatedFat" name="nutritionUnsaturatedFat" value={props.recipe?.nutritionUnsaturatedFat ?? ""} />
@@ -234,7 +234,7 @@ export const RecipeEditTemplate = (props: { recipe?: Recipe } = {}) => (
                     {/*TODO use different widget */ ""}
                     <div class="grid eq-c">
                         <div class="col-sm">
-                            <label for="prepTime">
+                            <label htmlFor="prepTime">
                                 {l.recipe.prepTime}
                             </label>
                             <input type="number" min="0" step="1" max="1440" id="prepTime" name="prepTime" value={props.recipe?.prepTime ?? ""} />
@@ -243,7 +243,7 @@ export const RecipeEditTemplate = (props: { recipe?: Recipe } = {}) => (
                             </div>
                         </div>
                         <div class="col-sm">
-                            <label for="cookTime">
+                            <label htmlFor="cookTime">
                                 {l.recipe.cookTime}
                             </label>
                             <input type="number" min="0" step="1" max="1440" id="cookTime" name="cookTime" value={props.recipe?.cookTime ?? ""} />
@@ -262,7 +262,7 @@ export const RecipeEditTemplate = (props: { recipe?: Recipe } = {}) => (
                 <div class="card-body">
                     <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
                         <div class="col-sm">
-                            <label for="aggregateRatingValue">
+                            <label htmlFor="aggregateRatingValue">
                                 {l.recipe.aggregateRatingValue}
                             </label>
                             <input
@@ -276,7 +276,7 @@ export const RecipeEditTemplate = (props: { recipe?: Recipe } = {}) => (
                         </div>
 
                         <div class="col-sm">
-                            <label for="aggregateRatingCount">
+                            <label htmlFor="aggregateRatingCount">
                                 {l.recipe.aggregateRatingCount}
                             </label>
                             <input
@@ -288,7 +288,7 @@ export const RecipeEditTemplate = (props: { recipe?: Recipe } = {}) => (
                             />
                         </div>
                         <div class="col-sm">
-                            <label for="rating">
+                            <label htmlFor="rating">
                                 {l.recipe.rating}
                             </label>
                             <input type="number" min="0" max="5" step=".5" id="rating" name="rating" value={props.recipe?.rating ?? ""} />
