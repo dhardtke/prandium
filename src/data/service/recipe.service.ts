@@ -65,9 +65,7 @@ export class RecipeService implements Service<Recipe> {
         );
         const orderByColumns = [
             ...Recipe.columns,
-            "last_cooked_at",
-            "cooked_count",
-            "total_time",
+            ...Recipe.syntheticColumns,
         ];
         const totalTime = "(prep_time + cook_time) AS total_time";
         const lastCookedAt = "(SELECT MAX(timestamp) FROM recipe_history WHERE recipe_id = recipe.id) AS last_cooked_at";

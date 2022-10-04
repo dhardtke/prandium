@@ -33,6 +33,8 @@ export class Recipe extends Model {
         "instructions",
     ];
 
+    static readonly syntheticColumns = ["last_cooked_at", "cooked_count", "total_time"];
+
     public title!: string;
     public flagged: boolean;
     public description?: string;
