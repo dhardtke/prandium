@@ -53,7 +53,7 @@ export function toCamelCase<T, O>(obj: O): T {
             return obj.map(toCamelCase) as unknown as T;
         }
         return Object
-            .entries(obj)
+            .entries(obj as Record<string, unknown>)
             .reduce((acc, [key, val]) => {
                 const modifiedKey = key.replace(
                     SnakeCasePattern,
