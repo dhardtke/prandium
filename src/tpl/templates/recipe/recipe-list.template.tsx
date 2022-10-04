@@ -86,20 +86,62 @@ const TagFilter = (props: { tags: Tag[]; showTagFilter: boolean }) => {
 function OrderBy() {
     const orderBy = parameters(Page.currentUrl).get("orderBy", "title");
 
-    const options = [
-        ["id", l.id],
-        ["created_at", l.createdAt],
-        ["updated_at", l.updatedAt],
-        ["title", l.title],
-        ["flagged", l.recipe.flagged],
-        ["last_cooked_at", l.recipe.lastCookedAt],
-        ["cooked_count", l.recipe.cookedCount],
-        ["aggregate_rating_value", l.recipe.aggregateRatingValue],
-        ["rating", l.recipe.rating],
-        ["prep_time", l.recipe.prepTime],
-        ["cook_time", l.recipe.cookTime],
-        ["total_time", l.recipe.time.total],
+    interface Optgroup {
+        label: string;
+        options: {
+            value: string;
+            label: string;
+        }[];
+    }
+
+    const options: Optgroup[] = [
+        {
+            label: l.recipe.form.group.basic,
+            options: [{
+                value: "id",
+                label: l.id,
+            }, {
+                value: "title",
+                label: l.title,
+            }, {
+                value: "cooked_count",
+                label: l.recipe.cookedCount,
+            }],
+        },
+        {
+            label: l.recipe.form.group.ratings,
+            options: [{
+                value: "aggregate_rating_value",
+                label: l.recipe.aggregateRatingValue,
+            }, {
+                value: "rating",
+                label: l.recipe.rating,
+            }],
+        },
+        {
+            label: l.recipe.form.group.times,
+            options: [{
+                value: "created_at",
+                label: l.createdAt,
+            }, {
+                value: "updated_at",
+                label: l.updatedAt,
+            }, {
+                value: "last_cooked_at",
+                label: l.recipe.lastCookedAt,
+            }, {
+                value: "prep_time",
+                label: l.recipe.prepTime,
+            }, {
+                value: "cook_time",
+                label: l.recipe.cookTime,
+            }, {
+                value: "total_time",
+                label: l.recipe.time.total,
+            }],
+        },
     ];
+
     const order = parameters(Page.currentUrl).get("order", "ASC")?.toUpperCase();
     const otherOrder = order === "ASC" ? "DESC" : "ASC";
     const otherOrderLabel = otherOrder === "ASC" ? l.orderBy.asc : l.orderBy.desc;
@@ -120,10 +162,14 @@ function OrderBy() {
                     {l.orderBy.title}
                 </span>
                 <select class="form-select" title={l.recipe.orderBy} autocomplete="off" name="orderBy">
-                    {options.map(([optionValue, optionLabel]) => (
-                        <option value={optionValue} selected={orderBy === optionValue}>
-                            {optionLabel}
-                        </option>
+                    {options.map(({ label, options }) => (
+                        <optgroup label={label}>
+                            {options.map(({ value, label }) => (
+                                <option value={value} selected={orderBy === value}>
+                                    {label}
+                                </option>
+                            ))}
+                        </optgroup>
                     ))}
                 </select>
 
