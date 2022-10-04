@@ -1,5 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact@10.11.0?pin=v67 */
-
 export const Favicons = () => (
     <>
         <link rel="shortcut icon" href="/assets/favicons/favicon.ico" />

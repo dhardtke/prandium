@@ -1,4 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact@10.11.0?pin=v67 */
 import { classNames } from "../../../../deps.ts";
 import { parameters } from "../../../http/util/parameters.ts";
 import { l, Language, LANGUAGES } from "../../../i18n/mod.ts";

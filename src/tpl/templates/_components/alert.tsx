@@ -1,4 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact@10.11.0?pin=v67 */
 import { classNames, ComponentChildren } from "../../../../deps.ts";
 
 export type AlertType =

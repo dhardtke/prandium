@@ -1,4 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact@10.11.0?pin=v67 */
 import { classNames } from "../../../../deps.ts";
 import { Recipe } from "../../../data/model/recipe.ts";
 import { Ingredient, ingredient as ingredientHelper } from "../../../data/parse/ingredient/mod.ts";

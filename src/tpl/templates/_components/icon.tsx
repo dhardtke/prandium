@@ -1,4 +1,3 @@
-/** @jsxImportSource https://esm.sh/preact@10.11.0?pin=v67 */
 import { classNames, VNode } from "../../../../deps.ts";
 
 export const ICONS = [
