@@ -293,7 +293,6 @@ export const RecipeDetailTemplate = (props: { recipe: Recipe; portions?: number 
                     <div class="flex">
                         {props.recipe.tags.map((tag, i) => (
                             <a
-                                title={tag.description}
                                 href={UrlGenerator.home({ tagIds: [tag.id!], tagFilter: true })}
                                 class={classNames("badge", "mb", { mr: i < props.recipe.tags.length - 1 })}
                             >

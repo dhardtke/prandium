@@ -68,7 +68,7 @@ const TagFilter = (props: { tags: Tag[]; showTagFilter: boolean }) => {
                             <div class="col col-lg-2 tag">
                                 <a class={classNames("card", "padded", { disabled: disabled, active: active })} href={disabled ? undefined : href.toString()}>
                                     <div class="side-by-side">
-                                        <small class={classNames("title", { "c-muted": tag.recipeCount === 0 })} title={tag.description || undefined}>
+                                        <small class={classNames("title", { "c-muted": tag.recipeCount === 0 })}>
                                             {tag.title}
                                         </small>
                                         {tag.recipeCount! > 0 ? <span class="badge">{tag.recipeCount}</span> : ""}

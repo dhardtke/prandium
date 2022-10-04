@@ -125,15 +125,13 @@ export class TagService implements Service<Tag> {
     create(tags: Tag[]): void {
         this.db.transaction(() => {
             this.db.prepare<{ id: number }>(
-                `INSERT INTO tag (created_at, updated_at, title, description)
-         VALUES (?, ?, ?, ?) RETURNING id`,
+                `INSERT INTO tag (created_at, updated_at, title) VALUES (?, ?, ?) RETURNING id`,
                 (query) => {
                     for (const tag of tags) {
                         const rows = query([
                             tag.createdAt,
                             tag.updatedAt,
                             tag.title,
-                            tag.description || "",
                         ]);
                         tag.id = rows[0].id;
                     }
@@ -156,10 +154,10 @@ export class TagService implements Service<Tag> {
 
     update(tags: Tag[]): void {
         this.db.prepare(
-            "UPDATE tag SET updated_at = ?, title = ?, description = ? WHERE id = ?",
+            "UPDATE tag SET updated_at = ?, title = ? WHERE id = ?",
             (query) => {
                 for (const tag of tags) {
-                    query([tag.updatedAt, tag.title, tag.description, tag.id]);
+                    query([tag.updatedAt, tag.title, tag.id]);
                 }
             },
         );

@@ -2,10 +2,9 @@ import { Model, ModelArgs } from "./model.ts";
 import { Recipe } from "./recipe.ts";
 
 export class Tag extends Model {
-    static readonly columns = [...Model.columns, "title", "description"];
+    static readonly columns = [...Model.columns, "title"];
 
     public readonly title: string;
-    public readonly description?: string;
     public readonly recipes: Iterable<Recipe>;
 
     // synthetic columns
@@ -21,7 +20,6 @@ export class Tag extends Model {
     ) {
         super(args);
         this.title = args.title;
-        this.description = args.description;
         this.recipes = args.recipes || [];
         this.recipeCount = args.recipeCount;
     }
