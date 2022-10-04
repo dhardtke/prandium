@@ -68,8 +68,3 @@ export function toCamelCase<T, O>(obj: O): T {
     }
     return obj as unknown as T;
 }
-
-export function pushAll<T>(source: T[], target: T[]): T[] {
-    source.forEach((el) => target.push(el));
-    return target;
-}
