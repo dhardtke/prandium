@@ -60,6 +60,10 @@ Deno.test("sql", async (t) => {
             buildOrderBySql({ column: "title", order: "bar" as "asc" }, ["title"]),
             "ORDER BY title",
         );
+        assertEquals(
+            buildOrderBySql({ column: "foo", order: "asc" }, ["title"]),
+            "ORDER BY TRUE",
+        );
     });
 
     await t.step(`columns`, () => {
