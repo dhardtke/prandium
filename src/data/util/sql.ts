@@ -36,10 +36,8 @@ export function buildOrderBySql(
     orderBy: OrderBy | undefined,
     allowedColumns: string[],
 ): string {
-    if (orderBy) {
-        if (allowedColumns.includes(orderBy.column)) {
-            return `ORDER BY ${orderBy.column}${orderBy.order?.toUpperCase() === "DESC" ? " DESC" : ""}`;
-        }
+    if (orderBy && allowedColumns.includes(orderBy.column)) {
+        return `ORDER BY ${orderBy.column}${orderBy.order?.toUpperCase() === "DESC" ? " DESC" : ""}`;
     }
     return EmptyOrderBy;
 }
