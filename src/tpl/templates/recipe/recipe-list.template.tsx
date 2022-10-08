@@ -106,6 +106,9 @@ function OrderBy() {
             }, {
                 value: "cooked_count",
                 label: l.recipe.cookedCount,
+            }, {
+                value: "flagged",
+                label: l.recipe.flagged,
             }],
         },
         {
