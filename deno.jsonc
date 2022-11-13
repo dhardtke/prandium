@@ -67,7 +67,7 @@
         "minify:server": "esbuild --bundle --format=esm --minify out/server.js --outfile=out/server.min.js",
         "run:debug": "deno run --allow-all --no-check --unstable --config=deno.jsonc src/main.ts",
         "run:dev": "deno run --lock=lock.json --unstable --allow-read --allow-run --allow-write --no-check dev/dev-server.ts --debug",
-        "test": "deno test --config=deno.jsonc --unstable --allow-read --allow-net --allow-env --allow-write --fail-fast --parallel --trace-ops .",
+        "test": "deno test --config=deno.jsonc --unstable --allow-read --allow-net --allow-env --allow-write --fail-fast --parallel .",
         "test:coverage": "deno task test --coverage=out/coverage",
         "test:no-check": "deno task test --no-check",
         "test:watch": "deno task test --watch",
