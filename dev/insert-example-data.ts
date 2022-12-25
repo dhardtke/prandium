@@ -17,7 +17,6 @@ const thumbnail = await downloadThumbnail(
     "https://img.chefkoch-cdn.de/rezepte/2788721431008084/bilder/949592/crop-960x540/blaetterteig-mit-gyrosfuellung-und-feta-kaese.jpg",
 );
 
-// TODO find a nice way to integrate this into the dev-server
 const tags = Tag.createMany(
     "Fleisch",
     "Hauptspeise",
