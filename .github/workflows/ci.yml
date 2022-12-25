@@ -7,7 +7,7 @@ on:
             - "tests/**"
             - "dev/**"
             - ".github/workflows/*"
-            - "lock.json"
+            - "deno.lock"
     workflow_dispatch:
 env:
     denoVersion: "v1.27.2"

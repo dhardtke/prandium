@@ -28,7 +28,7 @@ runs:
             uses: actions/cache@v3
             with:
                 path: ${{ inputs.denoDir }}
-                key: ${{ inputs.cacheVersion }}-${{ hashFiles('lock.json') }}
+                key: ${{ inputs.cacheVersion }}-${{ hashFiles('deno.lock') }}
 
         -   shell: bash
             run: deno cache deps.ts deps-test.ts

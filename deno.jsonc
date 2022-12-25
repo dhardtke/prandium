@@ -39,14 +39,14 @@
         }
     },
     "tasks": {
-        // FIXME add back "--lock=lock.json" to "test" and "build:server" - for some reason the lockfile verification fails:
+        // FIXME add back "--lock=deno.lock" to "test" and "build:server" - for some reason the lockfile verification fails:
         // The source code is invalid, as it does not match the expected hash in the lock file.
         //  Specifier: https://esm.sh/@abraham/reflection@0.10.0?pin=v66&no-check
         "build": "deno task clean && deno task ensure-out-exists && deno task copy:assets && deno task build:assets && deno task minify:assets && deno task compress && deno task build:server && deno task minify:server",
         "build:assets": "deno task build:assets:js && deno task build:assets:css",
         "build:assets:css": "sass --no-source-map -I assets/node_modules assets/index.scss out/assets/index.css",
-        "build:assets:js": "deno task ensure-out-exists && deno bundle --no-check --config=assets/tsconfig.json --lock=lock.json --unstable assets/index.ts -- out/assets/index.js",
-        "build:ingredient-parser": "deno run --lock=lock.json --unstable --no-check --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
+        "build:assets:js": "deno task ensure-out-exists && deno bundle --no-check --config=assets/tsconfig.json --lock=deno.lock --unstable assets/index.ts -- out/assets/index.js",
+        "build:ingredient-parser": "deno run --lock=deno.lock --unstable --no-check --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
         "build:server": "deno bundle --no-check --config=deno.jsonc --unstable src/main.ts -- out/server.js && deno run --allow-read --allow-write --allow-run --no-check dev/write-build-info.ts",
         "clean": "rm -rf out/",
         "compress": "deno task compress:brotli && deno task compress:gzip",
@@ -59,18 +59,18 @@
         "fmt": "deno fmt --config=deno.jsonc ./dev ./src ./tests",
         "fmt:check": "deno task fmt --check",
         "generate-icons": "deno run --no-check --allow-read --allow-write dev/generate-icons.ts",
-        "insert-example-data": "deno run --lock=lock.json --unstable --allow-all --no-check dev/insert-example-data.ts",
+        "insert-example-data": "deno run --lock=deno.lock --unstable --allow-all --no-check dev/insert-example-data.ts",
         "lint": "deno lint --config=deno.jsonc --unstable ./dev ./src ./tests",
         "minify:assets": "deno task minify:assets:js && deno task minify:assets:css",
         "minify:assets:css": "parcel-css --minify --nesting --bundle --targets '>= 0.25%' out/assets/index.css -o out/assets/index.min.css",
         "minify:assets:js": "esbuild --bundle --format=esm --minify out/assets/index.js --outfile=out/assets/index.min.js",
         "minify:server": "esbuild --bundle --format=esm --minify out/server.js --outfile=out/server.min.js",
         "run:debug": "deno run --allow-all --no-check --unstable --config=deno.jsonc src/main.ts",
-        "run:dev": "deno run --lock=lock.json --unstable --allow-read --allow-run --allow-write --no-check dev/dev-server.ts --debug",
+        "run:dev": "deno run --lock=deno.lock --unstable --allow-read --allow-run --allow-write --no-check dev/dev-server.ts --debug",
         "test": "deno test --config=deno.jsonc --unstable --allow-read --allow-net --allow-env --allow-write --fail-fast --parallel .",
         "test:coverage": "deno task test --coverage=out/coverage",
         "test:no-check": "deno task test --no-check",
         "test:watch": "deno task test --watch",
-        "update-lock-file": "deno cache --no-check --unstable --lock=lock.json --lock-write deps.ts deps-test.ts"
+        "update-lock-file": "deno cache --no-check --unstable --lock=deno.lock --lock-write deps.ts deps-test.ts"
     }
 }

@@ -199,7 +199,7 @@ if (import.meta.main) {
             "src",
             "assets",
             "deps.ts",
-            "lock.json",
+            "deno.lock",
         ],
         actions: [
             {
@@ -211,7 +211,7 @@ if (import.meta.main) {
                     "deno",
                     "run",
                     "--config=deno.jsonc",
-                    "--lock=lock.json",
+                    "--lock=deno.lock",
                     "--no-check",
                     `--allow-all`,
                     "--unstable",

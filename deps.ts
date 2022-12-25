@@ -8,7 +8,7 @@ export type { ComponentChildren, VNode } from "https://esm.sh/preact@10.11.2?pin
 export { render } from "https://esm.sh/preact-render-to-string@5.2.6?pin=v66";
 // export { default as classNames } from "https://cdn.esm.sh/classnames@2.3.2?pin=v66";
 export { default as classNames } from "http://cdn.esm.sh/v66/classnames@2.3.2/es2022/classnames.js";
-// FIXME this is a nasty workaround to ensure Deno adds jsx-runtime files to lock.json - remove maybe once https://github.com/denoland/deno/issues/14723 is fixed
+// FIXME this is a nasty workaround to ensure Deno adds jsx-runtime files to deno.lock - remove maybe once https://github.com/denoland/deno/issues/14723 is fixed
 import "https://esm.sh/preact@10.11.2?pin=v67/jsx-runtime";
 
 // utils
