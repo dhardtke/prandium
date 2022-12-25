@@ -145,7 +145,7 @@
     "https://esm.sh/v66/preact-render-to-string@5.2.6/src/index.d.ts": "c63aa227a1956827d2d2733cf9473e1061fae5cabe2c6dbca45e2b8e37e2e6c8",
     "https://esm.sh/v66/preact@10.11.2/src/index.d.ts": "76842a9d103548261ee001f2aee5fa5cacc8b1b4b4032af537ed84603c8f4a31",
     "https://esm.sh/v66/preact@10.11.2/src/jsx.d.ts": "77ce5bd7324455c9f6dc85bfc3c94b733acb92cc98fdf82e4b1059c8bca7866d",
-    "https://esm.sh/v66/schema-dts@1.1.0/deno/schema-dts.js": "c27e14528e1cba6285b2d12bf2fd0a66a3d4a668f90c6d050de7066cd9d8ba0b",
+    "https://esm.sh/v66/schema-dts@1.1.0/deno/schema-dts.js": "ca5ad818a2c861ce4d080b9ac1e1c189750f598d9c43e90489e81f27b852a828",
     "https://esm.sh/v66/schema-dts@1.1.0/dist/schema.d.ts": "cd82a75144ebdfffaaa8454e0d1dd8c2ed76e34b4e5ab7c0177134c6bfced707",
     "https://esm.sh/v66/tslib@1.14.1/deno/tslib.js": "2a9240e861900c5c0a5dddf3e06cd519a9b4b5d3006d7699b8d035a386958156",
     "https://esm.sh/v66/tsyringe@4.7.0/deno/tsyringe.js": "1ac86de7290f14f29287e241b71025ccb9a1576748501bbbdbbc61d261bfa6fe",
