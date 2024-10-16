@@ -15,5 +15,5 @@ We recommend using JetBrain's termins
 ```shell
 # execute beforehand
 # openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 --nodes
-deno run --allow-all --no-check dev/dev_server.ts --secure=true --key=key.pem --cert=cert.pem
+deno run --allow-all dev/dev_server.ts --secure=true --key=key.pem --cert=cert.pem
 ```

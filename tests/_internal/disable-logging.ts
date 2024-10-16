@@ -19,7 +19,7 @@ class CapturingLogHandler extends log.handlers.BaseHandler {
         super("INFO");
     }
 
-    handle(logRecord: LogRecord) {
+    override handle(logRecord: LogRecord) {
         this.records.push({ ...logRecord });
     }
 }

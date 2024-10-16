@@ -3,15 +3,14 @@
 import { path } from "../../deps.ts";
 
 declare global {
-    interface Window {
-        BUILD_INFO: string;
-    }
+    // deno-lint-ignore no-var
+    var BUILD_INFO: string;
 }
 
 /**
  * The build info that contains meta-information about when the server has been compiled. This value is set during compile-time (see dev/write-build-info.ts).
  */
-export const BUILD_INFO = window["BUILD_INFO"];
+export const BUILD_INFO = globalThis["BUILD_INFO"];
 
 /**
  * Whether the application is running from a single JavaScript file that has been built before.

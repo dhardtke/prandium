@@ -131,7 +131,7 @@ async function importFromUrl(
         response = {
             url: url,
             success: false,
-            error: error instanceof Error ? error.message : error.toString(),
+            error: error instanceof Error ? error.message : `${error}`,
         };
     }
     return response;

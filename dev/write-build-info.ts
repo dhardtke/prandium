@@ -1,5 +1,5 @@
 const PATH = "out/server.js";
-const SEARCH_STRING = `window["BUILD_INFO"]`;
+const SEARCH_STRING = `globalThis["BUILD_INFO"]`;
 
 async function execute(cmd: string[], fallback?: string): Promise<string | undefined> {
     const p = Deno.run({

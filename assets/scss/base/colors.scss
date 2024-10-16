@@ -1,3 +1,5 @@
+@use "sass:color";
+
 html {
     --text-primary: #212529;
     --text-secondary: #8cabd9;
@@ -68,13 +70,13 @@ html {
     --btn-primary-hover: #fff;
     --btn-primary-bg: #0d6efd;
     --btn-primary-border: #515151;
-    --btn-primary-hover-bg: #{darken(#0d6efd, 10%)};
+    --btn-primary-hover-bg: #{color.adjust(#0d6efd, $lightness: -10%)};
 
     --btn-secondary: #fff;
     --btn-secondary-hover: #fff;
     --btn-secondary-bg: #6c757d;
     --btn-secondary-border: #4f4f4f;
-    --btn-secondary-hover-bg: #{darken(#6c757d, 10%)};
+    --btn-secondary-hover-bg: #{color.adjust(#6c757d, $lightness: -10%)};
 
     --btn-light: #000;
     --btn-light-bg: #f8f9fa;
@@ -86,13 +88,13 @@ html {
     --btn-danger-bg: #dc3545;
     --btn-danger-border: #dc3545;
     --btn-danger-hover: #fff;
-    --btn-danger-hover-bg: #{darken(#dc3545, 10%)};
+    --btn-danger-hover-bg: #{color.adjust(#dc3545, $lightness: -10%)};
 
     --btn-info: #fff;
     --btn-info-bg: #0dcaf0;
     --btn-info-border: #25cff2;
     --btn-info-hover: #fff;
-    --btn-info-hover-bg: #{darken(#0dcaf0, 10%)};
+    --btn-info-hover-bg: #{color.adjust(#0dcaf0, $lightness: -10%)};
 
     --alert-primary: #084298;
     --alert-primary-bg: #cfe2ff;

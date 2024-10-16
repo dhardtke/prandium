@@ -3,7 +3,7 @@ import { Model, ModelArgs } from "./model.ts";
 import { Tag } from "./tag.ts";
 
 export class Recipe extends Model {
-    static readonly columns = [
+    static override readonly columns = [
         ...Model.columns,
         "title",
         "flagged",

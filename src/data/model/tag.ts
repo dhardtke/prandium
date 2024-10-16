@@ -2,7 +2,7 @@ import { Model, ModelArgs } from "./model.ts";
 import { Recipe } from "./recipe.ts";
 
 export class Tag extends Model {
-    static readonly columns = [...Model.columns, "title"];
+    static override readonly columns = [...Model.columns, "title"];
 
     public readonly title: string;
     public readonly recipes: Iterable<Recipe>;
