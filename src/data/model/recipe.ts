@@ -2,6 +2,62 @@ import { toDate, toFloat, toInt, tupleToDate } from "../util/convert.ts";
 import { Model, ModelArgs } from "./model.ts";
 import { Tag } from "./tag.ts";
 
+export function translateFormDataToThumbnail(data: FormData): {thumbnail: File | undefined, shouldDeleteThumbnail: boolean} {
+    const maybeThumbnail = data.get("thumbnail");
+    const thumbnail = maybeThumbnail instanceof File ? maybeThumbnail : undefined;
+    const shouldDeleteThumbnail = data.get("shouldDeleteThumbnail") === "true";
+
+    return { thumbnail, shouldDeleteThumbnail };
+}
+
+export function translateFormDataToRecipe(data: FormData): Recipe {
+    const recipe = new Recipe({});
+    const stringFields: (keyof Recipe)[] = [
+        "title",
+        "description",
+        "source",
+        "nutritionCalories",
+        "nutritionCarbohydrate",
+        "nutritionCholesterol",
+        "nutritionFat",
+        "nutritionFiber",
+        "nutritionProtein",
+        "nutritionSaturatedFat",
+        "nutritionSodium",
+        "nutritionSugar",
+        "nutritionTransFat",
+        "nutritionUnsaturatedFat",
+        "source",
+    ];
+
+    for (const field of stringFields) {
+        recipe[field] = data.get(field)?.toString() as never;
+    }
+    recipe.yield = toInt(data.get("yield")?.toString());
+    recipe.prepTime = toInt(data.get("prepTime")?.toString());
+    recipe.cookTime = toInt(data.get("cookTime")?.toString());
+    recipe.aggregateRatingValue = toFloat(data.get("aggregateRatingValue")?.toString());
+    recipe.aggregateRatingCount = toInt(data.get("aggregateRatingCount")?.toString());
+    recipe.rating = toFloat(data.get("rating")?.toString());
+    recipe.ingredients = data.getAll('ingredients') as string[];
+    recipe.instructions = data.getAll('instructions') as string[];
+    recipe.history = [];
+    if (data.has('history')) {
+        const dataHistory = data.getAll('history') as string[];
+        if (dataHistory.length % 2 !== 0) {
+            throw new Error(`Can't proceed: History entries not passed as tuples.`);
+        }
+        for (let i = 0; i < dataHistory.length; i += 2) {
+            const date = tupleToDate(dataHistory[i], dataHistory[i + 1]);
+            recipe.history.push(date);
+        }
+    }
+
+    recipe.updatedAt = new Date();
+
+    return recipe;
+}
+
 export class Recipe extends Model {
     static override readonly columns = [
         ...Model.columns,
@@ -135,54 +191,6 @@ export class Recipe extends Model {
         this.totalTime = args.totalTime;
         this.lastCookedAt = args.lastCookedAt ? toDate(args.lastCookedAt) : undefined;
         this.cookedCount = args.cookedCount;
-    }
-
-    updateFromRawData(data: Record<keyof this, string[]>): this {
-        const get = (key: keyof this) => {
-            return (data[key] as string[])[0];
-        };
-        const stringFields: (keyof this)[] = [
-            "title",
-            "description",
-            "source",
-            "nutritionCalories",
-            "nutritionCarbohydrate",
-            "nutritionCholesterol",
-            "nutritionFat",
-            "nutritionFiber",
-            "nutritionProtein",
-            "nutritionSaturatedFat",
-            "nutritionSodium",
-            "nutritionSugar",
-            "nutritionTransFat",
-            "nutritionUnsaturatedFat",
-            "source",
-        ];
-        for (const field of stringFields) {
-            this[field] = get(field) as never;
-        }
-        this.yield = toInt(get("yield"));
-        this.prepTime = toInt(get("prepTime"));
-        this.cookTime = toInt(get("cookTime"));
-        this.aggregateRatingValue = toFloat(get("aggregateRatingValue"));
-        this.aggregateRatingCount = toInt(get("aggregateRatingCount"));
-        this.rating = toFloat(get("rating"));
-        this.ingredients = data.ingredients as string[];
-        this.instructions = data.instructions as string[];
-        this.history = [];
-        if (data.history) {
-            if (data.history.length % 2 !== 0) {
-                throw new Error(`Can't proceed: History entries not passed as tuples.`);
-            }
-            for (let i = 0; i < data.history.length; i += 2) {
-                const date = tupleToDate(data.history[i], data.history[i + 1]);
-                this.history.push(date);
-            }
-        }
-
-        this.updatedAt = new Date();
-
-        return this;
     }
 }
 

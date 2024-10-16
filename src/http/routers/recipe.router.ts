@@ -1,28 +1,17 @@
 import { Oak, singleton } from "../../../deps.ts";
 import { RecipeController } from "../../controllers/recipe.controller.ts";
-import { Recipe } from "../../data/model/recipe.ts";
+import { translateFormDataToRecipe, translateFormDataToThumbnail} from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";
-import { collectFormData, urlWithParams } from "../util/mod.ts";
+import { urlWithParams } from "../util/mod.ts";
 import { parameters } from "../util/parameters.ts";
 import { UrlGenerator } from "../util/url-generator.ts";
 import { AppState } from "../webserver.ts";
 import { Router } from "./router.ts";
 
-async function extractPostData(ctx: Oak.Context<AppState>) {
-    const formDataReader: Oak.FormDataReader = await ctx.request.body({
-        type: "form-data",
-    }).value;
-    const payload = await collectFormData<keyof Recipe | "shouldDeleteThumbnail">(
-        formDataReader,
-    );
-    const thumbnail = payload.thumbnail?.[0] as Oak.FormDataFile;
-    const shouldDeleteThumbnail = typeof payload.shouldDeleteThumbnail?.[0] !== "undefined";
-
-    return {
-        payload: payload as Record<keyof Recipe, string[]>,
-        thumbnail,
-        shouldDeleteThumbnail,
-    };
+function baseUrl(ctx: Oak.Context): URL {
+    const base = new URL(ctx.request.url);
+    base.port = (ctx.request.headers.get('host') ?? '').split(':')[1] ?? '';
+    return base;
 }
 
 @singleton()
@@ -53,7 +42,7 @@ export class RecipeRouter extends Router {
             return await next();
         }
 
-        const formData = await ctx.request.body({ type: "form" }).value;
+        const formData = await ctx.request.body.form();
         const rawUrls = formData.get("urls");
         const urls = rawUrls?.split("\n");
 
@@ -65,19 +54,19 @@ export class RecipeRouter extends Router {
     };
 
     postEdit: Oak.RouterMiddleware<"/:id/:slug/edit", { id: string; slug: string }, AppState> = async (ctx) => {
-        const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
-        const recipe = await this.recipeController.postEdit(toInt(ctx.params.id), payload, thumbnail, shouldDeleteThumbnail);
+        const formData = await ctx.request.body.formData();
+        const { thumbnail, shouldDeleteThumbnail } = await translateFormDataToThumbnail(formData);
+        const foo = translateFormDataToRecipe(formData);
+        const recipe = await this.recipeController.postEdit(toInt(ctx.params.id), foo, thumbnail, shouldDeleteThumbnail);
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "editSuccessful",
-            }, ctx.request.url),
+            }, baseUrl(ctx)),
         );
     };
 
     rate: Oak.RouterMiddleware<"/:id/:slug/rate", { id: string; slug: string }> = async (ctx) => {
-        const formData: URLSearchParams = await ctx.request.body({
-            type: "form",
-        }).value;
+        const formData = await ctx.request.body.form();
         const rating = parseFloat(formData.get("rating") ?? "0");
         ctx.response.body = this.recipeController.rate(toInt(ctx.params.id), rating);
     };
@@ -87,12 +76,14 @@ export class RecipeRouter extends Router {
     };
 
     postCreate: Oak.RouterMiddleware<"/create", Record<never, never>, AppState> = async (ctx) => {
-        const { payload, thumbnail, shouldDeleteThumbnail } = await extractPostData(ctx);
-        const recipe = await this.recipeController.postCreate(payload, thumbnail, shouldDeleteThumbnail);
+        const formData = await ctx.request.body.formData();
+        const { thumbnail, shouldDeleteThumbnail } = await translateFormDataToThumbnail(formData);
+        const foo = translateFormDataToRecipe(formData);
+        const recipe = await this.recipeController.postCreate(foo, thumbnail, shouldDeleteThumbnail);
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "createSuccessful",
-            }, ctx.request.url),
+            }, baseUrl(ctx)),
         );
     };
 
@@ -105,7 +96,7 @@ export class RecipeRouter extends Router {
         ctx.response.redirect(
             urlWithParams(UrlGenerator.home(), {
                 "flash": "deleteSuccessful",
-            }, ctx.request.url),
+            }, baseUrl(ctx)),
         );
     };
 
@@ -114,7 +105,7 @@ export class RecipeRouter extends Router {
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "editSuccessful",
-            }, ctx.request.url),
+            }, baseUrl(ctx)),
         );
     };
 

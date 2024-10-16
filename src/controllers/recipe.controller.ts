@@ -12,11 +12,6 @@ import { RecipeEditTemplate } from "../tpl/templates/recipe/recipe-edit.template
 import { RecipeImportTemplate } from "../tpl/templates/recipe/recipe-import.template.tsx";
 import { renderTemplate } from "../tpl/util/render.ts";
 
-export interface SentFile {
-    filename?: string;
-    originalName: string;
-}
-
 async function deleteThumbnail(recipe: Recipe, configDir: string) {
     if (recipe.thumbnail) {
         const thumbnailDir = getThumbnailDir(configDir);
@@ -28,23 +23,25 @@ async function deleteThumbnail(recipe: Recipe, configDir: string) {
     }
 }
 
-async function handleThumbnail(recipe: Recipe, configDir: string, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
+async function handleThumbnail(recipe: Recipe, configDir: string, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
     if (shouldDeleteThumbnail) {
         await deleteThumbnail(recipe, configDir);
         recipe.thumbnail = undefined;
     }
-    if (thumbnail?.filename) {
+    if (thumbnail?.name) {
         // TODO server-side type validation?
         const thumbnailDir = getThumbnailDir(configDir);
         const filename = getUniqueFilename(
             thumbnailDir,
-            thumbnail.originalName,
+            thumbnail.name,
         );
-        await Deno.copyFile(
-            thumbnail.filename,
+        //Deno.writeFile(filePath, new Uint8Array(await value.arrayBuffer()));
+        await Deno.writeFile(path.join(thumbnailDir, filename), new Uint8Array(await thumbnail.arrayBuffer()));
+        /*await Deno.copyFile(
+            thumbnail.name,
             path.join(thumbnailDir, filename),
-        );
-        await Deno.remove(thumbnail.filename);
+        );*/
+        //await Deno.remove(thumbnail.name);
         await deleteThumbnail(recipe, configDir);
         recipe.thumbnail = filename;
     }
@@ -59,8 +56,7 @@ export class RecipeController {
         return renderTemplate(RecipeEditTemplate());
     }
 
-    async postCreate(data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
-        const recipe = new Recipe({}).updateFromRawData(data);
+    async postCreate(recipe: Recipe, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
         await handleThumbnail(recipe, this.configDir, thumbnail, shouldDeleteThumbnail);
         this.recipeService.create([recipe]);
         return recipe;
@@ -98,7 +94,7 @@ export class RecipeController {
         return renderTemplate(RecipeEditTemplate({ recipe }));
     }
 
-    async postEdit(id: number, data: Record<keyof Recipe, string[]>, thumbnail: SentFile, shouldDeleteThumbnail: boolean) {
+    async postEdit(id: number, data: Recipe, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
         const recipe = this.recipeService.find(
             id,
             true,
@@ -108,7 +104,7 @@ export class RecipeController {
         if (!recipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
-            recipe.updateFromRawData(data);
+            //recipe.updateFromRawData(data);
             await handleThumbnail(recipe, this.configDir, thumbnail, shouldDeleteThumbnail);
             this.recipeService.update([recipe], true);
             return recipe;

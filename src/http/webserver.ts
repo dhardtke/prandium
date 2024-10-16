@@ -65,7 +65,7 @@ export async function spawnServer(
 
     const sslOptions = args.secure
         ? {
-            secure: true,
+            secure: true as const,
             certFile: args.cert || "",
             keyFile: args.key || "",
         }

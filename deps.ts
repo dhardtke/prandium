@@ -1,26 +1,24 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v3.9.1/mod.ts";
-export * as Oak from "https://deno.land/x/oak@v11.1.0/mod.ts";
-export * as Reflect from "https://esm.sh/@abraham/reflection@0.11.0?pin=v66&no-check";
-export { container, injectable, singleton, inject, Lifecycle, registry, type Disposable } from "https://esm.sh/tsyringe@4.7.0?pin=v66";
+export * as Oak from "https://deno.land/x/oak@v17.1.0/mod.ts";
+export * as Reflect from "https://esm.sh/@abraham/reflection@0.12.0?pin=v66&no-check";
+export { container, injectable, singleton, inject, Lifecycle, registry, type Disposable } from "https://esm.sh/tsyringe@4.8.0?pin=v66";
 
-export type { ComponentChildren, VNode } from "https://esm.sh/preact@10.11.3?pin=v67";
-export { render } from "https://esm.sh/preact-render-to-string@5.2.6?pin=v66";
-export { default as classNames } from "https://cdn.esm.sh/classnames@2.3.2?pin=v66";
-// FIXME this is a nasty workaround to ensure Deno adds jsx-runtime files to deno.lock - remove maybe once https://github.com/denoland/deno/issues/14723 is fixed
-import "https://esm.sh/preact@10.11.3?pin=v67/jsx-runtime";
+export type { ComponentChildren, VNode } from "https://esm.sh/preact@10.24.3?pin=v67";
+export { render } from "https://esm.sh/preact-render-to-string@6.5.11?pin=v66";
+export { default as classNames } from "https://cdn.esm.sh/classnames@2.5.1?pin=v66";
 
 // utils
-export * as path from "https://deno.land/std@0.170.0/path/mod.ts";
-export * as log from "https://deno.land/std@0.170.0/log/mod.ts";
-export { LogRecord } from "https://deno.land/std@0.170.0/log/logger.ts";
-export * as fs from "https://deno.land/std@0.170.0/fs/mod.ts";
-export * as Colors from "https://deno.land/std@0.170.0/fmt/colors.ts";
-export { sprintf } from "https://deno.land/std@0.170.0/fmt/printf.ts";
+export * as path from "jsr:@std/path";
+export * as log from "jsr:@std/log";
+export { type LogRecord } from "jsr:@std/log";
+export * as fs from "jsr:@std/fs";
+export * as Colors from "jsr:@std/fmt/colors";
+export { sprintf } from "jsr:@std/fmt/printf";
 export { default as slash } from "https://deno.land/x/slash@v0.3.0/mod.ts";
-export * as flags from "https://deno.land/std@0.170.0/flags/mod.ts";
-export { satisfies } from "https://deno.land/std@0.170.0/semver/mod.ts";
-export { pooledMap } from "https://deno.land/std@0.170.0/async/mod.ts";
+export * as flags from "jsr:@std/flags";
+export * as semVer from "jsr:@std/semver";
+export { pooledMap } from "jsr:@std/async";
 
 // types
 export type {
@@ -28,5 +26,5 @@ export type {
     NutritionInformation as SchemaNutritionInformation,
     Recipe as SchemaRecipe,
     Review as SchemaReview,
-} from "https://esm.sh/schema-dts@1.1.0?pin=v66";
+} from "https://esm.sh/schema-dts@1.1.2?pin=v66";
 // @formatter:on

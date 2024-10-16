@@ -12,7 +12,7 @@ export async function disableLogging() {
 
 type PureLogRecord = Pick<LogRecord, "level" | "levelName" | "loggerName" | "msg">;
 
-class CapturingLogHandler extends log.handlers.BaseHandler {
+class CapturingLogHandler extends log.BaseHandler {
     readonly records: PureLogRecord[] = [];
 
     constructor() {

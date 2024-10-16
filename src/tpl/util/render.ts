@@ -9,5 +9,5 @@ export function shouldPrettifyTemplates(state: boolean): void {
 
 export function renderTemplate(template: VNode): string {
     const buildInfoString = BUILD_INFO ? `<!-- ${BUILD_INFO} -->` : "";
-    return `<!DOCTYPE html>\n${buildInfoString}${render(template, undefined, { pretty: prettyTemplates })}`;
+    return `<!DOCTYPE html>\n${buildInfoString}${render(template, { pretty: prettyTemplates })}`;
 }

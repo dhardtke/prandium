@@ -76,7 +76,7 @@ export class SchemaParser implements ParseHtmlToSchema {
                     }
                 }
             } catch (e) {
-                log.warning(`Skipping invalid JSON ${json}`, e);
+                log.warn(`Skipping invalid JSON ${json}`, e);
             }
         }
 

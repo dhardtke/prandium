@@ -1,4 +1,4 @@
-import { classNames, ComponentChildren, VNode } from "../../../../deps.ts";
+import { classNames, VNode } from "../../../../deps.ts";
 import { l } from "../../../i18n/mod.ts";
 
 interface IBreadcrumbItem {

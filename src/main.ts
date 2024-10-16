@@ -1,4 +1,4 @@
-import { container, fs, log, path, satisfies } from "../deps.ts";
+import { container, fs, log, path, semVer } from "../deps.ts";
 import { Database } from "./data/db.ts";
 import { readFromDisk, Settings } from "./data/settings.ts";
 import { buildDbPath } from "./data/util/build-db-path.ts";
@@ -19,7 +19,7 @@ async function prepareConfigDir(options: Options) {
 }
 
 export function denoVersionIsSatified(denoVersion = Deno.version.deno, requiredVersionRange = REQUIRED_DENO_VERSION_RANGE): boolean {
-    return satisfies(denoVersion, requiredVersionRange);
+    return semVer.satisfies(semVer.parse(denoVersion), semVer.parseRange(requiredVersionRange));
 }
 
 export async function readSettings(configDir: string): Promise<ResultWithErrorCode<Settings>> {
@@ -46,7 +46,7 @@ export interface BootData {
     }) => Promise<void>;
     denoVersion: string;
     requiredDenoVersionRange: string;
-    logHandlerFactory: () => InstanceType<typeof log.handlers.BaseHandler>;
+    logHandlerFactory: () => InstanceType<typeof log.BaseHandler>;
 }
 
 export async function main(bootData: BootData = {

@@ -1,6 +1,6 @@
 import { NUMBERS_ONE_TO_TEN } from "./constants.ts";
 
-function toNumber(str: string | undefined, parseFn: (str: string) => number, _default = 0) {
+function toNumber(str: string | null | undefined, parseFn: (str: string) => number, _default = 0) {
     if (str === null || str === undefined) {
         return _default;
     } else {
@@ -13,7 +13,7 @@ function toNumber(str: string | undefined, parseFn: (str: string) => number, _de
     }
 }
 
-export function toInt(str: string | undefined, _default = 0): number {
+export function toInt(str: string | null | undefined, _default = 0): number {
     return toNumber(str, (n) => parseInt(n, 10), _default);
 }
 
