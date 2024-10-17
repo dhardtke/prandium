@@ -18,16 +18,16 @@ const coverage = new Deno.Command(Deno.execPath(), {
     args: ["coverage", "--unstable", SourceDir, "--lcov"],
     stdout: "piped",
 });
-const {stdout, success, code} = await coverage.output();
-if (success && code.code === 0) {
+const { stdout, success, code } = await coverage.output();
+if (success && code === 0) {
     const tmpFile = await Deno.makeTempFile({
         suffix: ".lcov",
     });
     await Deno.writeFileSync(tmpFile, stdout);
     console.log(`Written ${tmpFile}`);
-    const {success, code} = (await new Deno.Command("genhtml", {
+    const { success, code } = await new Deno.Command("genhtml", {
         args: ["-o", OutputDir, tmpFile],
-    }).output());
+    }).output();
     if (success && code === 0) {
         await Deno.remove(tmpFile);
         console.log(`Generated ${OutputDir}`);
