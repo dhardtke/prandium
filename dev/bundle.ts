@@ -12,7 +12,7 @@ if (config.endsWith("deno.json")) {
     };
 }
 
-const result = await esbuild.build({
+await esbuild.build({
     plugins: [...denoPlugins()],
     entryPoints: [entryPoint],
     outfile: outfile,
