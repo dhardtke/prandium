@@ -1,4 +1,4 @@
-import * as esbuild from "npm:esbuild";
+import * as esbuild from "npm:esbuild@latest";
 import { denoPlugins } from "jsr:@luca/esbuild-deno-loader";
 
 const config = Deno.args[0];
