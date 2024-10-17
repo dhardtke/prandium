@@ -8,8 +8,7 @@
         "lib": [
             "dom",
             "dom.iterable",
-            "deno.ns",
-            "deno.unstable"
+            "deno.ns"
         ]
     },
     "fmt": {
@@ -44,7 +43,7 @@
         "build:assets:css:watch": "sass --no-source-map -I assets/node_modules assets/index.scss out/assets/index.css --watch",
         "build:assets:js": "deno task ensure-out-exists && deno task bundle assets/tsconfig.json assets/index.ts ./out/assets/index.js",
         "build:assets:js:watch": "deno task ensure-out-exists && deno task bundle assets/tsconfig.json assets/index.ts out/assets/index.js",
-        "build:ingredient-parser": "deno run --unstable --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
+        "build:ingredient-parser": "deno run --allow-run --allow-read --allow-write=src/data/parse/ingredient/parser.js dev/build-ingredient-parser.ts",
         "build:server": "deno task bundle deno.json src/main.ts out/server.js && deno run --allow-read --allow-write --allow-run dev/write-build-info.ts",
         "build:icons": "deno run --allow-read --allow-write dev/build-icons.ts",
         "build:icons:watch": "deno run --watch=src/tpl/templates/_components/icon.tsx --allow-read --allow-write dev/build-icons.ts",
@@ -53,24 +52,24 @@
         "compress:brotli": "cd out/assets && brotli -f -k index.min.css index.min.js",
         "compress:gzip": "cd out/assets && gzip -f -k index.min.css index.min.js",
         "copy:assets": "cp -r assets/favicons/ assets/icons.svg assets/placeholder.svg assets/sw.js out/assets",
-        "coverage": "deno coverage --exclude=tests --unstable --lcov ./out/coverage --output=out/coverage.lcov",
+        "coverage": "deno coverage --exclude=tests --lcov ./out/coverage --output=out/coverage.lcov",
         "coverage:html": "genhtml -o out/coverage-html out/coverage.lcov",
         "ensure-out-exists": "deno run --allow-read --allow-write dev/ensure-dir-exists.ts out/assets",
         "fmt": "deno fmt ./dev ./src ./tests",
         "fmt:check": "deno task fmt --check",
-        "insert-example-data": "deno run --unstable --allow-all dev/insert-example-data.ts",
-        "lint": "deno lint --unstable ./dev ./src ./tests",
+        "insert-example-data": "deno run --allow-all dev/insert-example-data.ts",
+        "lint": "deno lint ./dev ./src ./tests",
         "minify:assets": "deno task minify:assets:js && deno task minify:assets:css",
         "minify:assets:css": "lightningcss --minify --nesting --bundle --targets '>= 0.25%' out/assets/index.css -o out/assets/index.min.css",
         "minify:assets:js": "esbuild --bundle --format=esm --minify out/assets/index.js --outfile=out/assets/index.min.js",
         "minify:server": "esbuild --bundle --format=esm --minify --platform=node out/server.js --outfile=out/server.min.js",
-        "run:debug": "deno run --watch=deno.lock,deno.json --check --allow-all --unstable --config=deno.json src/main.ts",
+        "run:debug": "deno run --watch=deno.lock,deno.json --check --allow-all --config=deno.json src/main.ts",
         "run:dev": "deno task build:assets:css:watch & deno task build:assets:js:watch & deno task build:icons:watch & deno task run:debug",
-        "test": "deno test --unstable --allow-read --allow-net --allow-import --allow-env --allow-write --fail-fast --parallel .",
+        "test": "deno test --allow-read --allow-net --allow-import --allow-env --allow-write --fail-fast --parallel .",
         "test:coverage": "deno task test --coverage=out/coverage",
         "test:check": "deno task test --check",
         "test:watch": "deno task test --watch",
-        "update-lock-file": "deno cache --unstable --lock deno.lock deps.ts deps-test.ts",
+        "update-lock-file": "deno cache --lock deno.lock deps.ts deps-test.ts",
         "bundle": "deno run --allow-all dev/bundle.ts"
     }
 }
