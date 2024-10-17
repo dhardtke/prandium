@@ -7,12 +7,7 @@ import { parameters } from "../util/parameters.ts";
 import { UrlGenerator } from "../util/url-generator.ts";
 import { AppState } from "../webserver.ts";
 import { Router } from "./router.ts";
-
-function baseUrl(ctx: Oak.Context): URL {
-    const base = new URL(ctx.request.url);
-    base.port = (ctx.request.headers.get("host") ?? "").split(":")[1] ?? "";
-    return base;
-}
+import { currentUrl } from "../middleware/helpers/current-url.ts";
 
 @needle.injectable()
 export class RecipeRouter extends Router {
@@ -63,7 +58,7 @@ export class RecipeRouter extends Router {
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "editSuccessful",
-            }, baseUrl(ctx)),
+            }, currentUrl(ctx)),
         );
     };
 
@@ -85,7 +80,7 @@ export class RecipeRouter extends Router {
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "createSuccessful",
-            }, baseUrl(ctx)),
+            }, currentUrl(ctx)),
         );
     };
 
@@ -98,7 +93,7 @@ export class RecipeRouter extends Router {
         ctx.response.redirect(
             urlWithParams(UrlGenerator.home(), {
                 "flash": "deleteSuccessful",
-            }, baseUrl(ctx)),
+            }, currentUrl(ctx)),
         );
     };
 
@@ -107,7 +102,7 @@ export class RecipeRouter extends Router {
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "editSuccessful",
-            }, baseUrl(ctx)),
+            }, currentUrl(ctx)),
         );
     };
 

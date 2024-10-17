@@ -6,6 +6,7 @@ import { Page } from "../tpl/templates/_structure/page.tsx";
 import { handleNotFound, handleServerError } from "./middleware/error.ts";
 import { languageMiddleware } from "./middleware/language.ts";
 import { RouterRegistry } from "./routers/router-registry.ts";
+import {currentUrl} from "./middleware/helpers/current-url.ts";
 
 export interface AppState {
     settings: Settings;
@@ -42,7 +43,7 @@ export async function spawnServer(
         logErrors: false,
     });
     app.use(async (ctx, next) => {
-        Page.currentUrl = ctx.request.url;
+        Page.currentUrl = currentUrl(ctx);
         Page.authorization = ctx.request.headers.get("Authorization");
         Page.dark = await ctx.cookies.get(DarkModeCookie) === "true";
         await next();
