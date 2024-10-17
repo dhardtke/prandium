@@ -28,6 +28,7 @@
     "jsr:@std/semver@*": "1.0.3",
     "npm:@types/node@*": "22.5.4",
     "npm:esbuild@*": "0.20.0",
+    "npm:esbuild@0.20.0": "0.20.0",
     "npm:path-to-regexp@6.2.1": "6.2.1"
   },
   "jsr": {
