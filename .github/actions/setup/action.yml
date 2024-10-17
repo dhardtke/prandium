@@ -14,7 +14,7 @@ runs:
     using: composite
     steps:
         -   name: Clone repository
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
             with:
                 submodules: true
                 persist-credentials: false
@@ -25,7 +25,7 @@ runs:
                 deno-version: "${{ inputs.denoVersion }}"
 
         -   name: Cache dependencies
-            uses: actions/cache@v3
+            uses: actions/cache@v4
             with:
                 path: ${{ inputs.denoDir }}
                 key: ${{ inputs.cacheVersion }}-${{ hashFiles('deno.lock') }}
