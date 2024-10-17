@@ -8,6 +8,9 @@ on:
             - "dev/**"
             - ".github/workflows/*"
             - "deno.lock"
+            - "deno.json"
+            - "deps.ts"
+            - "deps-test.ts"
     workflow_dispatch:
 env:
     denoVersion: "v2.0.1"
