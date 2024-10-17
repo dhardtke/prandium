@@ -10,7 +10,7 @@ export function consoleLogHandlerFactory(): InstanceType<typeof log.BaseHandler>
             [log.LogLevels.ERROR]: Colors.red,
             [log.LogLevels.CRITICAL]: Colors.brightRed,
         };
-        const levelName = Object.keys(log.LogLevels).find(levelName => log.LogLevels[levelName as keyof typeof log.LogLevels] === logRecord.level) ?? '';
+        const levelName = Object.keys(log.LogLevels).find((levelName) => log.LogLevels[levelName as keyof typeof log.LogLevels] === logRecord.level) ?? "";
         const color = colors[logRecord.level];
         return `${color(levelName)} ${logRecord.msg}`;
     }

@@ -6,10 +6,10 @@ const entryPoint = Deno.args[1];
 const outfile = Deno.args[2];
 
 let parsedConfig = JSON.parse(Deno.readTextFileSync(config));
-if (config.endsWith('deno.json')) {
+if (config.endsWith("deno.json")) {
     parsedConfig = {
-        compilerOptions: parsedConfig.compilerOptions
-    }
+        compilerOptions: parsedConfig.compilerOptions,
+    };
 }
 
 const result = await esbuild.build({

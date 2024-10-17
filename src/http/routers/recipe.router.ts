@@ -1,6 +1,6 @@
 import { Oak, singleton } from "../../../deps.ts";
 import { RecipeController } from "../../controllers/recipe.controller.ts";
-import { translateFormDataToRecipe, translateFormDataToThumbnail} from "../../data/model/recipe.ts";
+import { translateFormDataToRecipe, translateFormDataToThumbnail } from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";
 import { urlWithParams } from "../util/mod.ts";
 import { parameters } from "../util/parameters.ts";
@@ -10,7 +10,7 @@ import { Router } from "./router.ts";
 
 function baseUrl(ctx: Oak.Context): URL {
     const base = new URL(ctx.request.url);
-    base.port = (ctx.request.headers.get('host') ?? '').split(':')[1] ?? '';
+    base.port = (ctx.request.headers.get("host") ?? "").split(":")[1] ?? "";
     return base;
 }
 

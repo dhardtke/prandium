@@ -2,7 +2,7 @@ import { toDate, toFloat, toInt, tupleToDate } from "../util/convert.ts";
 import { Model, ModelArgs } from "./model.ts";
 import { Tag } from "./tag.ts";
 
-export function translateFormDataToThumbnail(data: FormData): {thumbnail: File | undefined, shouldDeleteThumbnail: boolean} {
+export function translateFormDataToThumbnail(data: FormData): { thumbnail: File | undefined; shouldDeleteThumbnail: boolean } {
     const maybeThumbnail = data.get("thumbnail");
     const thumbnail = maybeThumbnail instanceof File ? maybeThumbnail : undefined;
     const shouldDeleteThumbnail = data.get("shouldDeleteThumbnail") === "true";
@@ -39,11 +39,11 @@ export function translateFormDataToRecipe(data: FormData): Recipe {
     recipe.aggregateRatingValue = toFloat(data.get("aggregateRatingValue")?.toString());
     recipe.aggregateRatingCount = toInt(data.get("aggregateRatingCount")?.toString());
     recipe.rating = toFloat(data.get("rating")?.toString());
-    recipe.ingredients = data.getAll('ingredients') as string[];
-    recipe.instructions = data.getAll('instructions') as string[];
+    recipe.ingredients = data.getAll("ingredients") as string[];
+    recipe.instructions = data.getAll("instructions") as string[];
     recipe.history = [];
-    if (data.has('history')) {
-        const dataHistory = data.getAll('history') as string[];
+    if (data.has("history")) {
+        const dataHistory = data.getAll("history") as string[];
         if (dataHistory.length % 2 !== 0) {
             throw new Error(`Can't proceed: History entries not passed as tuples.`);
         }
