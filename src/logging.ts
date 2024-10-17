@@ -1,7 +1,7 @@
-import { Colors, log, LogRecord } from "../deps.ts";
+import { Colors, log } from "../deps.ts";
 
 export function consoleLogHandlerFactory(): InstanceType<typeof log.BaseHandler> {
-    function formatLogRecord(logRecord: LogRecord): string {
+    function formatLogRecord(logRecord: log.LogRecord): string {
         const colors: Record<number, (str: string) => string> = {
             [log.LogLevels.NOTSET]: Colors.red,
             [log.LogLevels.DEBUG]: Colors.gray,

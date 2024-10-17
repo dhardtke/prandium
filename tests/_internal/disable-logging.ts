@@ -1,4 +1,4 @@
-import { log, LogRecord } from "../../deps.ts";
+import { log } from "../../deps.ts";
 
 export async function disableLogging() {
     await log.setup({
@@ -10,7 +10,7 @@ export async function disableLogging() {
     });
 }
 
-type PureLogRecord = Pick<LogRecord, "level" | "levelName" | "loggerName" | "msg">;
+type PureLogRecord = Pick<log.LogRecord, "level" | "levelName" | "loggerName" | "msg">;
 
 class CapturingLogHandler extends log.BaseHandler {
     readonly records: PureLogRecord[] = [];
@@ -19,8 +19,12 @@ class CapturingLogHandler extends log.BaseHandler {
         super("INFO");
     }
 
-    override handle(logRecord: LogRecord) {
+    override handle(logRecord: log.LogRecord) {
         this.records.push({ ...logRecord });
+    }
+
+    log(): void {
+        // no-op
     }
 }
 

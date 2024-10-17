@@ -11,7 +11,6 @@ export { default as classNames } from "https://cdn.esm.sh/classnames@2.5.1?pin=v
 // utils
 export * as path from "jsr:@std/path";
 export * as log from "jsr:@std/log";
-export { type LogRecord } from "jsr:@std/log";
 export * as fs from "jsr:@std/fs";
 export * as Colors from "jsr:@std/fmt/colors";
 export { sprintf } from "jsr:@std/fmt/printf";
