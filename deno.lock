@@ -26,6 +26,7 @@
     "jsr:@std/path@1": "1.0.6",
     "jsr:@std/path@^1.0.6": "1.0.6",
     "jsr:@std/semver@*": "1.0.3",
+    "npm:@types/node@*": "22.5.4",
     "npm:esbuild@*": "0.20.0",
     "npm:path-to-regexp@6.2.1": "6.2.1"
   },
@@ -188,6 +189,12 @@
     "@esbuild/win32-x64@0.20.0": {
       "integrity": "sha512-NgJnesu1RtWihtTtXGFMU5YSE6JyyHPMxCwBZK7a6/8d31GuSo9l0Ss7w1Jw5QnKUawG6UEehs883kcXf5fYwg=="
     },
+    "@types/node@22.5.4": {
+      "integrity": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
     "esbuild@0.20.0": {
       "integrity": "sha512-6iwE3Y2RVYCME1jLpBqq7LQWK3MW6vjV2bZy6gt/WrqkY+WE74Spyc0ThAOYpMtITvnjX09CrC6ym7A/m9mebA==",
       "dependencies": [
@@ -218,6 +225,9 @@
     },
     "path-to-regexp@6.2.1": {
       "integrity": "sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw=="
+    },
+    "undici-types@6.19.8": {
+      "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
     }
   },
   "redirects": {

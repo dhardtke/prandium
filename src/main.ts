@@ -77,9 +77,9 @@ export async function main(bootData: BootData = {
     }
     // Dependency Injection registration
     const database = new Database(buildDbPath(options.configDir));
-    await container.bind({provide: Database, useValue: database });
-    await container.bind({provide: SETTINGS, useValue: settings });
-    await container.bind({provide: CONFIG_DIR, useValue: options.configDir });
+    await container.bind({ provide: Database, useValue: database });
+    await container.bind({ provide: SETTINGS, useValue: settings });
+    await container.bind({ provide: CONFIG_DIR, useValue: options.configDir });
     database.migrate();
 
     log.debug(() => `IS_COMPILED is initialized as ${IS_COMPILED}`);

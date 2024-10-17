@@ -6,7 +6,7 @@ import { Page } from "../tpl/templates/_structure/page.tsx";
 import { handleNotFound, handleServerError } from "./middleware/error.ts";
 import { languageMiddleware } from "./middleware/language.ts";
 import { RouterRegistry } from "./routers/router-registry.ts";
-import {currentUrl} from "./middleware/helpers/current-url.ts";
+import { currentUrl } from "./middleware/helpers/current-url.ts";
 
 export interface AppState {
     settings: Settings;
