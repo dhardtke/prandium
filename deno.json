@@ -69,7 +69,7 @@
         "test:coverage": "deno task test --coverage=out/coverage",
         "test:check": "deno task test --check",
         "test:watch": "deno task test --watch",
-        "update-lock-file": "deno cache --lock deno.lock deps.ts deps-test.ts",
+        "update-lock-file": "deno cache --allow-import --lock deno.lock deps.ts deps-test.ts dev/bundle.ts",
         "bundle": "deno run --allow-all dev/bundle.ts"
     }
 }
