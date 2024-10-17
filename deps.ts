@@ -1,6 +1,9 @@
 // @formatter:off
 export * as sqlite from "https://deno.land/x/sqlite@v3.9.1/mod.ts";
 export * as Oak from "https://deno.land/x/oak@v17.1.0/mod.ts";
+// workaround for https://github.com/dhardtke/prandium/actions/runs/11377150775/job/31650809264
+import oakBuildWorkaround from "npm:path-to-regexp@6.2.1";
+console.assert(!!oakBuildWorkaround);
 export * as needle from "jsr:@needle-di/core";
 import { Container } from "jsr:@needle-di/core";
 export const container = new Container();
