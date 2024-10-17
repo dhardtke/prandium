@@ -80,6 +80,9 @@ jobs:
                     echo brotli version
                     brotli --version
 
+            -   name: Update cache (WIP)
+                run: deno cache --allow-import --lock deno.lock ./deps.ts
+
             -   name: Build
                 run: deno task build
 
