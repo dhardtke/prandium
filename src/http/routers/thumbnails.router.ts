@@ -1,11 +1,13 @@
-import { inject, Oak, singleton } from "../../../deps.ts";
+import { needle, Oak } from "../../../deps.ts";
 import { getThumbnailDir } from "../../data/util/thumbnails.ts";
 import { CONFIG_DIR } from "../../di.ts";
 import { Router } from "./router.ts";
 
-@singleton()
+@needle.injectable()
 export class ThumbnailsRouter extends Router {
-    constructor(@inject(CONFIG_DIR) private configDir: string) {
+    constructor(
+        private configDir: string = needle.inject(CONFIG_DIR),
+    ) {
         super();
         this.router.get("/thumbnails/(.+)", this.get);
     }

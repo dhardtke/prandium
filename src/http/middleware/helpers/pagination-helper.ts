@@ -1,4 +1,4 @@
-import { inject, Oak, singleton } from "../../../../deps.ts";
+import { needle, Oak } from "../../../../deps.ts";
 import { PaginationParams } from "../../../data/pagination.ts";
 import { type Settings } from "../../../data/settings.ts";
 import { toInt } from "../../../data/util/convert.ts";
@@ -6,9 +6,9 @@ import { SETTINGS } from "../../../di.ts";
 import { parameters } from "../../util/parameters.ts";
 import { copyUrlAndDo } from "../../util/url.ts";
 
-@singleton()
+@needle.injectable()
 export class PaginationHelper {
-    constructor(@inject(SETTINGS) private settings: Settings) {
+    constructor(private settings: Settings = needle.inject(SETTINGS)) {
     }
 
     buildPaginationParams(ctx: Oak.Context): PaginationParams {

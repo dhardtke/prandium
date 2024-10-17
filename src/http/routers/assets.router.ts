@@ -1,4 +1,4 @@
-import { Oak, singleton } from "../../../deps.ts";
+import { Oak, needle } from "../../../deps.ts";
 import { root } from "../../shared/util.ts";
 import { Router } from "./router.ts";
 
@@ -36,7 +36,7 @@ async function assetMiddleware<P extends string>(
     }
 }
 
-@singleton()
+@needle.injectable()
 export class AssetsRouter extends Router {
     constructor() {
         super();

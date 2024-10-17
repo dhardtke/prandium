@@ -1,7 +1,5 @@
 {
     "compilerOptions": {
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
         "strict": true,
         "jsx": "react-jsx",
         "jsxImportSource": "https://esm.sh/preact@10.24.3?pin=v67",
@@ -72,7 +70,7 @@
         "test:coverage": "deno task test --coverage=out/coverage",
         "test:check": "deno task test --check",
         "test:watch": "deno task test --watch",
-        "update-lock-file": "deno cache --unstable --lock-write deps.ts deps-test.ts",
+        "update-lock-file": "deno cache --unstable --lock deno.lock deps.ts deps-test.ts",
         "bundle": "deno run --allow-all dev/bundle.ts"
     }
 }

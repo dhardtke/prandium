@@ -7,10 +7,10 @@ import { ThumbnailsRouter } from "./thumbnails.router.ts";
 export class RouterRegistry {
     static get() {
         return [
-            container.resolve(AssetsRouter),
-            container.resolve(IndexRouter),
-            container.resolve(RecipeRouter),
-            container.resolve(ThumbnailsRouter),
+            container.get(AssetsRouter),
+            container.get(IndexRouter),
+            container.get(RecipeRouter),
+            container.get(ThumbnailsRouter),
         ];
     }
 }

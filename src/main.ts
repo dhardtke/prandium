@@ -77,9 +77,9 @@ export async function main(bootData: BootData = {
     }
     // Dependency Injection registration
     const database = new Database(buildDbPath(options.configDir));
-    await container.register(Database, { useValue: database });
-    await container.register(SETTINGS, { useValue: settings });
-    await container.register(CONFIG_DIR, { useValue: options.configDir });
+    await container.bind({provide: Database, useValue: database });
+    await container.bind({provide: SETTINGS, useValue: settings });
+    await container.bind({provide: CONFIG_DIR, useValue: options.configDir });
     database.migrate();
 
     log.debug(() => `IS_COMPILED is initialized as ${IS_COMPILED}`);
@@ -90,8 +90,8 @@ export async function main(bootData: BootData = {
         settings,
     });
     await database.dispose(); // FIXME remove this line when database is disposed by disposing of the container.
-    // Right now it doesn't work because Database is constructed manually
-    await container.dispose();
+    /*// Right now it doesn't work because Database is constructed manually
+    await container.dispose();*/
     return 0;
 }
 

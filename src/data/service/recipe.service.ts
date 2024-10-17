@@ -1,4 +1,4 @@
-import { singleton } from "../../../deps.ts";
+import { needle } from "../../../deps.ts";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { toCamelCase, toDate } from "../util/convert.ts";
@@ -23,9 +23,12 @@ function titleFilter(title?: string): Filter {
     };
 }
 
-@singleton()
+@needle.injectable()
 export class RecipeService implements Service<Recipe> {
-    constructor(private readonly db: Database, private readonly tagService: TagService) {
+    constructor(
+        private readonly db: Database = needle.inject(Database),
+        private readonly tagService: TagService = needle.inject(TagService),
+    ) {
         this.db = db;
         this.tagService = tagService;
     }

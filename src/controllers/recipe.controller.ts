@@ -1,4 +1,4 @@
-import { inject, path, singleton } from "../../deps.ts";
+import { path, needle } from "../../deps.ts";
 import { Recipe } from "../data/model/recipe.ts";
 import { importRecipes } from "../data/parse/import/import-recipe.ts";
 import { RecipeService } from "../data/service/recipe.service.ts";
@@ -47,9 +47,13 @@ async function handleThumbnail(recipe: Recipe, configDir: string, thumbnail: Fil
     }
 }
 
-@singleton()
+@needle.injectable()
 export class RecipeController {
-    constructor(private recipeService: RecipeService, @inject(SETTINGS) private settings: Settings, @inject(CONFIG_DIR) private configDir: string) {
+    constructor(
+        private recipeService: RecipeService = needle.inject(RecipeService),
+        private settings: Settings = needle.inject(SETTINGS),
+        private configDir: string = needle.inject(CONFIG_DIR),
+    ) {
     }
 
     createGet() {

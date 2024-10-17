@@ -1,4 +1,4 @@
-import { Oak, singleton } from "../../../deps.ts";
+import { Oak, needle } from "../../../deps.ts";
 import { IndexController } from "../../controllers/index.controller.ts";
 import { OrderBy } from "../../data/service/util/order-by.ts";
 import { toInt } from "../../data/util/convert.ts";
@@ -9,11 +9,11 @@ import { Router } from "./router.ts";
 
 export const DEFAULT_ORDER_BY: OrderBy = { column: "title" } as const;
 
-@singleton()
+@needle.injectable()
 export class IndexRouter extends Router {
     constructor(
-        private paginationHelper: PaginationHelper,
-        private indexController: IndexController,
+        private paginationHelper: PaginationHelper = needle.inject(PaginationHelper),
+        private indexController: IndexController = needle.inject(IndexController),
     ) {
         super();
         this.router.get("/", this.get);

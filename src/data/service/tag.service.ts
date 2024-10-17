@@ -1,4 +1,4 @@
-import { singleton, sqlite } from "../../../deps.ts";
+import { needle, sqlite } from "../../../deps.ts";
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
@@ -64,9 +64,11 @@ function recipeCountColumn(
     };
 }
 
-@singleton()
+@needle.injectable()
 export class TagService implements Service<Tag> {
-    constructor(private readonly db: Database) {
+    constructor(
+        private readonly db: Database = needle.inject(Database),
+    ) {
         this.db = db;
     }
 

@@ -1,4 +1,4 @@
-import { singleton } from "../../deps.ts";
+import { needle } from "../../deps.ts";
 import { buildPagination, PaginationParams } from "../data/pagination.ts";
 import { RecipeService } from "../data/service/recipe.service.ts";
 import { TagService } from "../data/service/tag.service.ts";
@@ -6,11 +6,14 @@ import { OrderBy } from "../data/service/util/order-by.ts";
 import { RecipeListTemplate } from "../tpl/templates/recipe/recipe-list.template.tsx";
 import { renderTemplate } from "../tpl/util/render.ts";
 
-@singleton()
+@needle.injectable()
 export class IndexController {
     listTemplate = RecipeListTemplate;
 
-    constructor(private recipeService: RecipeService, private tagService: TagService) {
+    constructor(
+        private recipeService: RecipeService = needle.inject(RecipeService),
+        private tagService: TagService = needle.inject(TagService),
+    ) {
     }
 
     list(filters: { tagIds: number[]; title: string }, showTagFilter: boolean, orderBy: OrderBy | undefined, paginationParams: PaginationParams) {

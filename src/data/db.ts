@@ -1,10 +1,10 @@
-import { Colors, Disposable, log, sqlite } from "../../deps.ts";
+import { Colors, log, sqlite } from "../../deps.ts";
 import { Migration } from "./migrations/migration.ts";
 import { MIGRATIONS } from "./migrations/mod.ts";
 
 export type RowObject = Record<string, unknown>;
 
-export class Database implements Disposable {
+export class Database {
     private readonly db: sqlite.DB;
     private readonly migrations: Migration[];
 

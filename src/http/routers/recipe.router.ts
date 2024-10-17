@@ -1,4 +1,4 @@
-import { Oak, singleton } from "../../../deps.ts";
+import { Oak, needle } from "../../../deps.ts";
 import { RecipeController } from "../../controllers/recipe.controller.ts";
 import { translateFormDataToRecipe, translateFormDataToThumbnail } from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";
@@ -14,9 +14,11 @@ function baseUrl(ctx: Oak.Context): URL {
     return base;
 }
 
-@singleton()
+@needle.injectable()
 export class RecipeRouter extends Router {
-    constructor(private recipeController: RecipeController) {
+    constructor(
+        private recipeController: RecipeController = needle.inject(RecipeController),
+    ) {
         super({ prefix: "/recipe" });
 
         this.router
