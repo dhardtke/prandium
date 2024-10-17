@@ -20,8 +20,8 @@ export function consoleLogHandlerFactory(): InstanceType<typeof log.BaseHandler>
     });
 }
 
-export async function setupLogger(logHandlerFactory: () => InstanceType<typeof log.BaseHandler>, debug?: boolean) {
-    await log.setup({
+export function setupLogger(logHandlerFactory: () => InstanceType<typeof log.BaseHandler>, debug?: boolean) {
+    log.setup({
         handlers: {
             console: logHandlerFactory(),
         },

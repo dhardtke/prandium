@@ -60,7 +60,7 @@ export async function main(bootData: BootData = {
     if (typeof options === "number") {
         return options;
     }
-    await setupLogger(bootData.logHandlerFactory, options.debug);
+    setupLogger(bootData.logHandlerFactory, options.debug);
     if (!denoVersionIsSatified(bootData.denoVersion, bootData.requiredDenoVersionRange)) {
         log.error(
             `The installed version of Deno does not satisfy the required version range ${REQUIRED_DENO_VERSION_RANGE}.` +
