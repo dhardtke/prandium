@@ -13,7 +13,7 @@ if (config.endsWith("deno.json")) {
 }
 
 await esbuild.build({
-    plugins: [...denoPlugins()],
+    plugins: [...denoPlugins({ loader: "portable" })],
     entryPoints: [entryPoint],
     outfile: outfile,
     bundle: true,
