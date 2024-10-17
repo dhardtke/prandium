@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "variables";
 @use "../mixins/breakpoints";
 
@@ -7,7 +8,7 @@ $grid-columns: 12;
 $grid-gutter-width: 1.5rem;
 
 @mixin make-cssgrid($columns: $grid-columns, $breakpoints: variables.$grid-breakpoints) {
-    @each $breakpoint in map-keys($breakpoints) {
+    @each $breakpoint in map.keys($breakpoints) {
         $infix: breakpoints.breakpoint-infix($breakpoint, $breakpoints);
 
         @include breakpoints.media-breakpoint-up($breakpoint, $breakpoints) {
