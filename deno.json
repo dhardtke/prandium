@@ -1,6 +1,7 @@
 {
     "nodeModulesDir": "auto",
     "compilerOptions": {
+        "experimentalDecorators": true,
         "strict": true,
         "jsx": "react-jsx",
         "jsxImportSource": "https://esm.sh/preact@10.24.3?pin=v67",
