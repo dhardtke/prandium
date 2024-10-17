@@ -155,12 +155,13 @@ header {
         }
 
         svg {
+            width: 24px;
+
             @include spacing($right: variables.$s-2, $asPadding: false);
 
             @include breakpoints.media-breakpoint-down(md) {
                 @include spacing($left: variables.$s-0, $asPadding: false);
             }
-            width: 24px;
         }
     }
 }
