@@ -14,22 +14,21 @@ try {
     // ignore
 }
 
-const coverage = Deno.run({
-    cmd: ["deno", "coverage", "--unstable", SourceDir, "--lcov"],
+const coverage = new Deno.Command(Deno.execPath(), {
+    args: ["coverage", "--unstable", SourceDir, "--lcov"],
     stdout: "piped",
 });
-const output = await coverage.output();
-const coverageStatus = await coverage.status();
-if (coverageStatus.success && coverageStatus.code === 0) {
+const {stdout, success, code} = await coverage.output();
+if (success && code.code === 0) {
     const tmpFile = await Deno.makeTempFile({
         suffix: ".lcov",
     });
-    await Deno.writeFileSync(tmpFile, output);
+    await Deno.writeFileSync(tmpFile, stdout);
     console.log(`Written ${tmpFile}`);
-    const htmlStatus = await Deno.run({
-        cmd: ["genhtml", "-o", OutputDir, tmpFile],
-    }).status();
-    if (htmlStatus.success && htmlStatus.code === 0) {
+    const {success, code} = (await new Deno.Command("genhtml", {
+        args: ["-o", OutputDir, tmpFile],
+    }).output());
+    if (success && code === 0) {
         await Deno.remove(tmpFile);
         console.log(`Generated ${OutputDir}`);
         Deno.exit(0);

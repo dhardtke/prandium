@@ -2,16 +2,16 @@ const PATH = "out/server.js";
 const SEARCH_STRING = `globalThis["BUILD_INFO"]`;
 
 async function execute(cmd: string[], fallback?: string): Promise<string | undefined> {
-    const p = Deno.run({
-        cmd,
+    const p = new Deno.Command(cmd[0], {
+        args: cmd.slice(1),
         stdout: "piped",
         stderr: "piped",
     });
-    const status = await p.status();
-    if (!status.success) {
+    const { success, stdout } = await p.output();
+    if (!success) {
         return fallback;
     }
-    return new TextDecoder().decode(await p.output()).trim();
+    return new TextDecoder().decode(stdout).trim();
 }
 
 const tag = await execute(["git", "describe", "--tags"]);

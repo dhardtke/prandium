@@ -98,7 +98,8 @@ export class RecipeController {
         return renderTemplate(RecipeEditTemplate({ recipe }));
     }
 
-    async postEdit(id: number, data: Recipe, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
+    // FIXME: use _data
+    async postEdit(id: number, _data: Recipe, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
         const recipe = this.recipeService.find(
             id,
             true,

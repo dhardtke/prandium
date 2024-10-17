@@ -5,7 +5,6 @@ import { importRecipes } from "../../../../src/data/parse/import/import-recipe.t
 import { ParseHtmlToSchema } from "../../../../src/data/parse/schema-parser.ts";
 import { FetchFn } from "../../../../src/data/util/fetch.ts";
 import { withTemp } from "../../../_internal/with-temp.function.ts";
-import TestContext = Deno.TestContext;
 
 Deno.test("importRecipes", async (t) => {
     let fetchCalls: { url: string; userAgent: string }[] = [];
@@ -42,7 +41,7 @@ Deno.test("importRecipes", async (t) => {
         }
     };
 
-    async function simpleTest(t: TestContext, given: unknown, then: unknown, schemaField: string, recipeField: string): Promise<void> {
+    async function simpleTest(t: Deno.TestContext, given: unknown, then: unknown, schemaField: string, recipeField: string): Promise<void> {
         beforeEach();
         await t.step(
             `Given ${JSON.stringify(given)} Then Recipe#${recipeField}=${JSON.stringify(then)}`,

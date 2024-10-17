@@ -110,7 +110,6 @@ export class PaginationBuilder<T> {
     }
 }
 
-// deno-lint-ignore no-undef
 export class Pagination<T> implements Iterable<T> {
     // noinspection JSUnusedGlobalSymbols
     public constructor(

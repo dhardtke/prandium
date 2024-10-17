@@ -10,10 +10,10 @@ export function call(
     cwd?: string,
     ...cmd: (string | undefined)[]
 ): ProcessLike {
-    let p: Deno.Process;
+    let p: Deno.ChildProcess;
     return {
         close() {
-            p && p.close();
+            p && p.kill();
         },
         // deno-lint-ignore require-await
         async run() {
@@ -26,14 +26,14 @@ export function callAndWait(
     cwd?: string,
     ...cmd: (string | undefined)[]
 ): ProcessLike {
-    let p: Deno.Process;
+    let p: Deno.ChildProcess;
     return {
         close() {
-            p && p.close();
+            p && p.kill();
         },
         async run() {
             p = process(cwd, ...cmd)();
-            await p.status();
+            await p.status;
         },
     };
 }
@@ -41,14 +41,14 @@ export function callAndWait(
 function process(
     cwd?: string,
     ...cmd: (string | undefined)[]
-): () => Deno.Process {
+): () => Deno.ChildProcess {
     return () => {
         const actualCmd = cmd.filter((c) => Boolean(c)) as string[];
         try {
-            return Deno.run({
+            return new Deno.Command(actualCmd[0], {
                 ...cwd ? { cwd: path.resolve(Deno.cwd(), cwd) } : {},
-                cmd: actualCmd,
-            });
+                args: actualCmd.slice(1),
+            }).spawn();
         } catch (e) {
             console.error(`Could not execute ${actualCmd.join(" ")}`);
             throw e;

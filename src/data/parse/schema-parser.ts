@@ -10,7 +10,6 @@ export interface ParseHtmlToSchema {
     findFirstRecipe(): SchemaRecipe | null;
 }
 
-// deno-lint-ignore no-undef
 export class SchemaParser implements ParseHtmlToSchema {
     constructor(private readonly html: string) {
         this.html = html;
