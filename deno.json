@@ -11,13 +11,11 @@
         ]
     },
     "fmt": {
-        "options": {
-            "useTabs": false,
-            "lineWidth": 160,
-            "indentWidth": 4,
-            "singleQuote": false,
-            "proseWrap": "preserve"
-        }
+        "useTabs": false,
+        "lineWidth": 160,
+        "indentWidth": 4,
+        "singleQuote": false,
+        "proseWrap": "preserve"
     },
     "lint": {
         "rules": {
