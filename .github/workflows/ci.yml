@@ -84,7 +84,7 @@ jobs:
                     brotli --version
 
             -   name: Debug
-                run: npm config ls
+                run: npm i path-to-regexp@6.2.1
 
             -   name: Build
                 run: deno task build
