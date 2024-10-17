@@ -70,6 +70,6 @@
         "test:check": "deno task test --check",
         "test:watch": "deno task test --watch",
         "update-lock-file": "deno cache --unstable --lock deno.lock deps.ts deps-test.ts",
-        "bundle": "deno run --allow-all -r dev/bundle.ts"
+        "bundle": "deno run --allow-all dev/bundle.ts"
     }
 }
