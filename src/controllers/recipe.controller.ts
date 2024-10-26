@@ -98,21 +98,21 @@ export class RecipeController {
         return renderTemplate(RecipeEditTemplate({ recipe }));
     }
 
-    // FIXME: use _data
-    async postEdit(id: number, _data: Recipe, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
-        const recipe = this.recipeService.find(
+    async postEdit(id: number, inputRecipe: Recipe, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
+        const dbRecipe = this.recipeService.find(
             id,
             true,
             true,
             true,
         );
-        if (!recipe) {
+        if (!dbRecipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
-            //recipe.updateFromRawData(data);
-            await handleThumbnail(recipe, this.configDir, thumbnail, shouldDeleteThumbnail);
-            this.recipeService.update([recipe], true);
-            return recipe;
+            inputRecipe.id = dbRecipe.id;
+            inputRecipe.thumbnail ??= dbRecipe.thumbnail;
+            await handleThumbnail(inputRecipe, this.configDir, thumbnail, shouldDeleteThumbnail);
+            this.recipeService.update([inputRecipe], true);
+            return inputRecipe;
         }
     }
 

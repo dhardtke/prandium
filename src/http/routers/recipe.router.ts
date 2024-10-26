@@ -52,9 +52,9 @@ export class RecipeRouter extends Router {
 
     postEdit: Oak.RouterMiddleware<"/:id/:slug/edit", { id: string; slug: string }, AppState> = async (ctx) => {
         const formData = await ctx.request.body.formData();
-        const { thumbnail, shouldDeleteThumbnail } = await translateFormDataToThumbnail(formData);
-        const foo = translateFormDataToRecipe(formData);
-        const recipe = await this.recipeController.postEdit(toInt(ctx.params.id), foo, thumbnail, shouldDeleteThumbnail);
+        const { thumbnail, shouldDeleteThumbnail } = translateFormDataToThumbnail(formData);
+        const inputRecipe = translateFormDataToRecipe(formData);
+        const recipe = await this.recipeController.postEdit(toInt(ctx.params.id), inputRecipe, thumbnail, shouldDeleteThumbnail);
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "editSuccessful",
@@ -74,9 +74,9 @@ export class RecipeRouter extends Router {
 
     postCreate: Oak.RouterMiddleware<"/create", Record<never, never>, AppState> = async (ctx) => {
         const formData = await ctx.request.body.formData();
-        const { thumbnail, shouldDeleteThumbnail } = await translateFormDataToThumbnail(formData);
-        const foo = translateFormDataToRecipe(formData);
-        const recipe = await this.recipeController.postCreate(foo, thumbnail, shouldDeleteThumbnail);
+        const { thumbnail, shouldDeleteThumbnail } = translateFormDataToThumbnail(formData);
+        const inputRecipe = translateFormDataToRecipe(formData);
+        const recipe = await this.recipeController.postCreate(inputRecipe, thumbnail, shouldDeleteThumbnail);
         ctx.response.redirect(
             urlWithParams(UrlGenerator.recipe(recipe), {
                 "flash": "createSuccessful",
