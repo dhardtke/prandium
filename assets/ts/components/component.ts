@@ -11,7 +11,6 @@ export function Component(name: string) {
 }
 
 export abstract class BaseComponent {
-  static readonly _name: string;
   protected readonly ctx: HTMLElement;
 
   protected constructor(ctx: HTMLElement) {
