@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Select-String *)",
+      "PowerShell(Get-Content *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(git status)",
+      "PowerShell(git status *)",
+      "PowerShell(gh run list *)",
+      "PowerShell(gh run view *)",
+      "PowerShell(git log *)",
+      "PowerShell(git diff *)",
+      "PowerShell(Get-Process)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(Test-Path *)"
+    ]
+  }
+}
