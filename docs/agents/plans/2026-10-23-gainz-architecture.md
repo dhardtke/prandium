@@ -707,36 +707,36 @@ Produce the deployable file, the seed and screenshot scripts, the deploy pipelin
 
 **Tasks**:
 
-- [ ] Port `src/scripts/build.ts` (`dist/prandium.js`, stamp `<!-- prandium <commit>, built … -->`) and `src/scripts/build-bundle.probe.ts`
+- [x] Port `src/scripts/build.ts` (`dist/prandium.js`, stamp `<!-- prandium <commit>, built … -->`) and `src/scripts/build-bundle.probe.ts`
       (its tag list: `pr-app`, `pr-recipe-list`, `pr-recipe-detail`, `pr-recipe-edit`, `pr-recipe-import`, `pr-login`); `package.json` `build`;
       `.idea/runConfigurations/build.xml`.
-- [ ] `src/scripts/seed.ts`: empty the DB and `thumbnails/`, then create about 30 sample recipes from the old `dev/insert-example-data.ts` data
+- [x] `src/scripts/seed.ts`: empty the DB and `thumbnails/`, then create about 30 sample recipes from the old `dev/insert-example-data.ts` data
       through `RecipesFacade.create` (tags, history, ratings, a few generated SVG thumbnails via `ThumbnailsFacade.store`); `package.json`
       `seed`; `.idea/runConfigurations/seed.xml`; delete `dev/insert-example-data.ts`.
-- [ ] Port `src/scripts/screenshots.ts` against a seeded temp config dir, writing `docs/screenshots/{list,detail,edit}-{light,dark}.png` and
+- [x] Port `src/scripts/screenshots.ts` against a seeded temp config dir, writing `docs/screenshots/{list,detail,edit}-{light,dark}.png` and
       `mobile-{list,detail}-{light,dark}.png`; `package.json` `screenshots`; run it.
-- [ ] Ask the operator to disable the old poller's cron on the server before this phase is pushed (it would deploy the new `prandium`
+- [-] Ask the operator to disable the old poller's cron on the server before this phase is pushed (it would deploy the new `prandium`
       artifact); then delete `dev/poll-gh-actions-for-deployment.py` and `dev/`.
-- [ ] `.github/workflows/ci.yml`: add gainz's `changes` step, build and upload steps (artifact `prandium`) and the `deploy` job (runner labels
+- [x] `.github/workflows/ci.yml`: add gainz's `changes` step, build and upload steps (artifact `prandium`) and the `deploy` job (runner labels
       `[self-hosted, prandium-prod]`, `prandium-deploy`).
-- [ ] `deploy/prandium-deploy`, `deploy/prandium.service` (`EnvironmentFile` with `PRANDIUM_CONFIG_DIR=/home/prandium/.config/prandium`,
+- [x] `deploy/prandium-deploy`, `deploy/prandium.service` (`EnvironmentFile` with `PRANDIUM_CONFIG_DIR=/home/prandium/.config/prandium`,
       `HOST`, `PORT`, `PRANDIUM_PASSWORD_HASH`), `deploy/gh-runner.sudoers` from gainz; the snapshot keeps gainz's `VACUUM INTO` of `data.db`;
       thumbnails stay in the config dir and are not snapshotted; the health check reads `/api/health`.
-- [ ] Docs: `AGENTS.md` (Prandium commands, env table, architecture, docs index) and `CLAUDE.md` as a symlink to it (as in gainz);
+- [x] Docs: `AGENTS.md` (Prandium commands, env table, architecture, docs index) and `CLAUDE.md` as a symlink to it (as in gainz);
       `docs/backend.md` and `docs/frontend.md` written from gainz's with Prandium's features, data model, API table, ingredients/portions, i18n,
       tag sync, thumbnails, import, legacy redirects and lenient validation; `docs/checklists.md`, `docs/coding-guidelines.md`,
       `docs/styling-guidelines.md` from gainz with names adapted (commits on `main`); `docs/deployment.md` (running a build with env vars, reverse
       proxy/TLS, authentication, SELinux notes for `PRANDIUM_CONFIG_DIR/thumbnails` and the systemd unit from the old `docs/setup.md`, runner
       setup, how a deploy works, retiring the poller); `README.md` rewritten in gainz's shape (features, screenshots via `<picture>`, quick start,
       env table); delete `docs/setup.md`.
-- [ ] Tests: port gainz `build.test.ts` (child env sets `PRANDIUM_CONFIG_DIR` to a temp dir), `build-bundle.test.ts`, `hash-password.test.ts`;
+- [x] Tests: port gainz `build.test.ts` (child env sets `PRANDIUM_CONFIG_DIR` to a temp dir), `build-bundle.test.ts`, `hash-password.test.ts`;
       `seed.test.ts` (runs against a temp config dir, list total > 0, thumbnails present); a docs test that every `docs/*.md` is listed in
       `AGENTS.md`.
 
 **Automated Verification**:
 
 - [ ] `bun run fmt:check && bun run lint && bun run typecheck && bun test --parallel` pass.
-- [ ] `bun run build` writes `dist/prandium.js`, `.map` and `bun-version`; `src/scripts/build.test.ts` starts it with a temp
+- [x] `bun run build` writes `dist/prandium.js`, `.map` and `bun-version`; `src/scripts/build.test.ts` starts it with a temp
       `PRANDIUM_CONFIG_DIR` and gets `/api/health`, `/`, `/main.ts` (bundle) and `/vendor/oat.css`.
 - [ ] The CI `check` job is green on GitHub for the phase-7 push.
 
@@ -828,6 +828,19 @@ During implementation, document user feedback, problems, and decisions here.
   old `recipe.import.*` strings cover it.
 - `security-headers.test.ts`'s revalidation case retries: parallel tests write scratch modules into `src/frontend/`, which changes the
   page's tag between its two requests.
+
+### Phase 7
+
+- `dev/` (with `insert-example-data.ts` and the poller) is deleted locally; **asking the operator to disable the poller's cron stays open**
+  and is a precondition for pushing this phase, since the new workflow uploads an artifact named `prandium`.
+- `seed()` is exported and takes `(db, config)`, so `screenshots.ts` seeds in-process into its temp config dir and `seed.test.ts` runs it
+  against `useServer()`'s database. Its 30 recipes are deterministic; some get a generated SVG thumbnail.
+- `deploy/prandium-deploy` keeps gainz's flow; `PORT=8000` and `CONFIG_DIR=/home/prandium/.config/prandium` are constants that must match
+  `prandium.env`, and the snapshot covers `data.db` only. `docs/deployment.md` describes moving the existing server from the old system
+  unit and nginx `location` blocks; its SELinux advice is a best guess from the old `docs/setup.md` and has not been tried on the server.
+- `CLAUDE.md` is committed as a symlink (mode 120000) to `./AGENTS.md`, like gainz's; on this Windows checkout `core.symlinks` is off, so the
+  working tree holds the link text.
+- The docs test is `src/scripts/docs.test.ts`.
 
 ## References
 

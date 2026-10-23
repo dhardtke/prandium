@@ -3,7 +3,7 @@
   "options": {
     "typeAware": true
   },
-  "ignorePatterns": ["src/backend/features/recipes/internal/ingredient/parser.js", "dev/", "src/backend/features/recipes/internal/ingredient/parser.d.ts"],
+  "ignorePatterns": ["src/backend/features/recipes/internal/ingredient/parser.js", "src/backend/features/recipes/internal/ingredient/parser.d.ts"],
   "rules": {
     "curly": "error",
     "typescript/adjacent-overload-signatures": "error",

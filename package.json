@@ -7,6 +7,7 @@
   "type": "module",
   "module": "src/backend/main.ts",
   "scripts": {
+    "build": "bun run src/scripts/build.ts",
     "build:ingredient-parser": "bun run src/scripts/build-ingredient-parser.ts",
     "fmt": "bun fmt --no-script",
     "fmt:check": "bun fmt --no-script --check",
@@ -14,6 +15,8 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "migrate": "bun run src/scripts/migrate.ts",
+    "screenshots": "bun run src/scripts/screenshots.ts",
+    "seed": "bun run src/scripts/seed.ts",
     "start": "bun run src/backend/main.ts",
     "start:dev": "PRANDIUM_DEV=1 bun --watch src/backend/main.ts",
     "test": "bun test --parallel",

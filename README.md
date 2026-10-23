@@ -1,56 +1,93 @@
-[![Workflow badge](https://github.com/dhardtke/prandium/actions/workflows/ci.yml/badge.svg)](https://github.com/dhardtke/prandium/actions/workflows/ci.yml)
+[![CI](https://github.com/dhardtke/prandium/actions/workflows/ci.yml/badge.svg)](https://github.com/dhardtke/prandium/actions/workflows/ci.yml)
 
-# Prandium
+# <img src="src/frontend/icons/icon.svg" alt="" width="32" height="32" align="top"> Prandium
 
-<!--suppress HtmlDeprecatedAttribute -->
-<img align="left" src="src/frontend/icons/icon.svg" width="64" alt="Logo" />
+Prandium, Latin for [lunch](https://en.wiktionary.org/wiki/prandium), is a small, self-hosted recipe manager for one household. A
+[Bun](https://bun.sh) and SQLite backend serves a frontend of TypeScript custom elements styled with [Oat](https://oat.ink).
 
-Prandium, latin for [lunch](https://en.wiktionary.org/wiki/prandium), is a single-user content management system for organizing recipes.
+- Import recipes by URL from any site that publishes [schema.org](https://schema.org/) JSON-LD, with their image, tags, nutrition and
+  reviews
+- Search by title, sort by any of two dozen keys, and narrow the list by tags, with counts that follow the selection
+- Keep track of when and how often you cooked a recipe, and rate it in half stars
+- Scale the ingredients to the portions you cook, and keep the screen on while the recipe is open
+- Create and edit recipes, tags and thumbnails in the browser
+- English and German, a light and a dark theme, installable on your phone
+- Optional password login, and a single-file build for deployment
 
-_WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it on a
-daily basis)._
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/list-dark.png">
+  <img src="docs/screenshots/list-light.png" alt="The recipe list: cards with thumbnails, when each was last cooked, ratings and times">
+</picture>
 
-<br clear="left"/>
+## A look around
 
-## Features
+A recipe shows everything it holds: its source and foreign rating, its tags, nutrition, times, your history with it, and the ingredients,
+scaled as you change the portions.
 
-- Import recipes by URL from websites that use [schema.org](https://schema.org/) JSON-LD microdata
-- Keep track of when and how often you cooked a recipe
-- Assign tags to each recipe to easily find them later
-- Mobile friendly: Responsive, fast and niche features such as keeping your screen active while you are on a recipe page
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/detail-dark.png">
+  <img src="docs/screenshots/detail-light.png" alt="Spaghetti Carbonara: source, foreign rating, tags, your rating, nutrition, times and history">
+</picture>
 
-## Installation
+Every field is editable, tags and the thumbnail included.
 
-See [Setup](docs/setup.md)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/edit-dark.png">
+  <img src="docs/screenshots/edit-light.png" alt="The edit form: basic fields with tags, the thumbnail, nutrition, times and ratings">
+</picture>
 
-## Development
+Built for the phone on the kitchen counter.
 
-Prandium runs on [Bun](https://bun.com/) (the version in `.bun-version`).
+<table>
+  <tr>
+    <td width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/mobile-list-dark.png">
+        <img src="docs/screenshots/mobile-list-light.png" alt="The recipe list on a phone">
+      </picture>
+    </td>
+    <td width="50%">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/mobile-detail-dark.png">
+        <img src="docs/screenshots/mobile-detail-light.png" alt="A recipe on a phone">
+      </picture>
+    </td>
+  </tr>
+</table>
+
+## Quick start
+
+Requires [Bun](https://bun.sh) 1.4 or newer.
 
 ```sh
-bun install            # dependencies
-bun run start:dev      # serve on http://127.0.0.1:8000 with hot reload
-bun test --parallel    # the test suite
-bun run fmt && bun run lint && bun run typecheck
+bun install          # Oat, plus TypeScript types for development
+bun start            # http://127.0.0.1:8000
 ```
 
-It is configured through environment variables only:
+The database and the thumbnails live in `~/.config/prandium` (override with `PRANDIUM_CONFIG_DIR`), created and migrated on first run. A
+config dir of an earlier Prandium opens as it is. To try Prandium with sample recipes, point it at a scratch directory first:
+`PRANDIUM_CONFIG_DIR=/tmp/prandium bun run seed && PRANDIUM_CONFIG_DIR=/tmp/prandium bun start`.
 
-| Variable                      | Default                 | Meaning                                               |
-| ----------------------------- | ----------------------- | ----------------------------------------------------- |
-| `PORT`                        | `8000`                  | Port to listen on                                     |
-| `HOST`                        | `127.0.0.1`             | Address to listen on                                  |
-| `PRANDIUM_CONFIG_DIR`         | `~/.config/prandium`    | Holds the database `data.db` and `thumbnails/`        |
-| `PRANDIUM_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password`; turns the login on |
-| `PRANDIUM_DEV`                | unset                   | `1` turns on hot reload                               |
-| `PRANDIUM_IMPORT_CONCURRENCY` | the number of CPU cores | How many recipes are imported at once                 |
-| `PRANDIUM_USER_AGENT`         | a Firefox user agent    | The User-Agent sent when importing                    |
+| Variable                      | Default                 | Meaning                           |
+| ----------------------------- | ----------------------- | --------------------------------- |
+| `PORT`                        | `8000`                  | Port to listen on                 |
+| `HOST`                        | `127.0.0.1`             | Address to listen on              |
+| `PRANDIUM_CONFIG_DIR`         | `~/.config/prandium`    | Holds `data.db` and `thumbnails/` |
+| `PRANDIUM_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password` |
+| `PRANDIUM_DEV`                | unset                   | `1` turns on hot reload           |
+| `PRANDIUM_IMPORT_CONCURRENCY` | the number of CPU cores | Recipes imported at once          |
+| `PRANDIUM_USER_AGENT`         | a Firefox 86 user agent | Sent when importing               |
 
-## Contributing
+## Security
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Without `PRANDIUM_PASSWORD_HASH` the server is open to anyone who can reach it — fine on your own machine or inside a private network,
+never on the internet. Create the hash with `bun run hash-password` to enable the login, and put HTTPS in front of the server before
+exposing it.
 
-Please make sure to update tests as appropriate.
+## Documentation
+
+- [`docs/deployment.md`](docs/deployment.md) — building a single file, running it on a server, and the automatic deploys from `main`.
+- [`AGENTS.md`](AGENTS.md) — every script, including test, typecheck, lint and format, and an index of the rest of `docs/`.
 
 ## License
 
@@ -58,10 +95,8 @@ Please make sure to update tests as appropriate.
 
 ## Acknowledgements
 
-- [Bun: A fast all-in-one JavaScript runtime](https://bun.com/)
-- [TypeScript](https://www.typescriptlang.org/)
+- [Bun](https://bun.com/)
 - [Oat](https://oat.ink)
-- [Oxlint](https://oxc.rs/docs/guide/usage/linter)
 - [Peggy](https://github.com/peggyjs/peggy)
-- [IntelliJ](https://www.jetbrains.com/idea/)
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter)
 - [Nextcloud Cookbook](https://github.com/nextcloud/cookbook)

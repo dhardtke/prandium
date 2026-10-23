@@ -8,7 +8,7 @@ printWidth = 160
 singleQuote = true
 ignorePatterns = [
   "docs/agents/",
-  "dev/",
+  "CLAUDE.md",
   "src/backend/features/recipes/internal/ingredient/parser.js",
   "src/backend/features/recipes/internal/ingredient/parser.d.ts",
   "src/backend/features/recipes/internal/import/**/*.html",

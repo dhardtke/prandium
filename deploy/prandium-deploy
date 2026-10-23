@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+# Installs one prandium build as a release together with the Bun it was built with, backs up the
+# database, switches the service onto the release and rolls code, Bun and database back if it does
+# not come up healthy.
+#
+#   tar -C dist -c prandium.js prandium.js.map bun-version | sudo -u prandium prandium-deploy <commit sha>
+#
+# Runs as the prandium user and drives its systemd user service; see docs/deployment.md.
+set -euo pipefail
+
+readonly APP=/home/prandium/app
+readonly BUNS=$APP/bun
+# Must match PORT and PRANDIUM_CONFIG_DIR in $APP/prandium.env; the thumbnails stay beside the database and are not snapshotted.
+readonly PORT=8000
+readonly CONFIG_DIR=/home/prandium/.config/prandium
+readonly PRANDIUM_DB=$CONFIG_DIR/data.db
+readonly RELEASES=$APP/releases
+readonly CURRENT=$APP/current
+readonly BACKUPS=$APP/backups
+readonly KEEP_RELEASES=5
+readonly KEEP_BACKUPS=10
+
+fail() {
+  echo "prandium-deploy: $*" >&2
+  exit 1
+}
+
+[[ $(id -un) == prandium ]] || fail 'run this as the prandium user'
+[[ $# -eq 1 ]] || fail 'usage: prandium-deploy <commit sha> < build.tar'
+readonly sha=$1
+[[ $sha =~ ^[0-9a-f]{40}$ ]] || fail "not a commit sha: $sha"
+
+# sudo neither points systemctl --user at this user's manager nor leaves a working directory prandium
+# may enter.
+export HOME=/home/prandium XDG_RUNTIME_DIR=/run/user/$(id -u)
+cd /
+
+exec 9>"$XDG_RUNTIME_DIR/prandium-deploy.lock"
+flock -n 9 || fail 'another deploy is running'
+
+point_current_at() {
+  ln -sfn "$1" "$CURRENT.new"
+  mv -T "$CURRENT.new" "$CURRENT"
+}
+
+healthy() {
+  for _ in $(seq 30); do
+    if curl -fsS -o /dev/null "http://127.0.0.1:$PORT/api/health"; then
+      return 0
+    fi
+    sleep 1
+  done
+  return 1
+}
+
+# The release must ask for a password: a missing or empty PRANDIUM_PASSWORD_HASH would serve the log to
+# anyone. Not `curl | grep -q`: under pipefail, the SIGPIPE grep -q can cause would fail a healthy release.
+has_auth() {
+  local body
+  body=$(curl -fsS "http://127.0.0.1:$PORT/api/health") && [[ $body == *'"auth":true'* ]]
+}
+
+prune() {
+  local keep=$1 dir=$2 current
+  current=$(readlink -f "$CURRENT" || true)
+  find "$dir" -mindepth 1 -maxdepth 1 -printf '%T@ %p\n' | sort -rn | cut -d' ' -f2- | tail -n +"$((keep + 1))" |
+    while read -r old; do
+      [[ $old == "$current" ]] || rm -rf -- "$old"
+    done
+}
+
+# Installs Bun $1 into $BUNS/$1 unless it is there, from the release assets Bun's own install
+# script downloads, choosing the same build it would.
+install_bun() {
+  local version=$1 asset base
+  local download=$BUNS/.download
+  [[ -x $BUNS/$version/bun ]] && return 0
+  command -v unzip >/dev/null || fail 'unzip is missing'
+  case $(uname -m) in
+    x86_64)
+      asset=bun-linux-x64
+      grep -qw avx2 /proc/cpuinfo || asset=bun-linux-x64-baseline
+      ;;
+    aarch64) asset=bun-linux-aarch64 ;;
+    *) fail "Bun has no build for $(uname -m)" ;;
+  esac
+  base=https://github.com/oven-sh/bun/releases/download/bun-v$version
+  echo "prandium-deploy: installing Bun $version ($asset)"
+  rm -rf -- "$download"
+  mkdir -p -- "$download"
+  curl -fsSL --proto '=https' -o "$download/$asset.zip" "$base/$asset.zip"
+  curl -fsSL --proto '=https' -o "$download/SHASUMS256.txt" "$base/SHASUMS256.txt"
+  (cd "$download" && awk -v file="$asset.zip" '$2 == file' SHASUMS256.txt | sha256sum -c --quiet --strict) ||
+    fail "$asset.zip does not match the checksum Bun $version publishes"
+  unzip -q "$download/$asset.zip" -d "$download"
+  [[ $("$download/$asset/bun" --version) == "$version" ]] || fail "$asset.zip does not hold Bun $version"
+  rm -rf -- "${BUNS:?}/$version"
+  mv -T -- "$download/$asset" "$BUNS/$version"
+  rm -rf -- "$download"
+}
+
+# Removes every Bun no remaining release runs.
+prune_bun() {
+  local in_use dir link
+  in_use=$(for link in "$RELEASES"/*/bun; do readlink -- "$link" || true; done)
+  for dir in "$BUNS"/*/; do
+    dir=${dir%/}
+    grep -qxF -- "$dir/bun" <<<"$in_use" || rm -rf -- "$dir"
+  done
+}
+
+readonly release=$RELEASES/$sha
+previous=$(readlink -e "$CURRENT" || true)
+readonly previous
+[[ $release != "$previous" ]] || {
+  echo "prandium-deploy: $sha is already the current release"
+  exit 0
+}
+# A rollback starts the previous release with its own Bun.
+[[ -z $previous || -x $previous/bun ]] || fail "$previous has no bun to roll back to"
+
+rm -rf -- "$release.tmp"
+mkdir -p -- "$release.tmp"
+tar -x -C "$release.tmp" --no-same-owner --no-same-permissions prandium.js prandium.js.map bun-version
+[[ -f $release.tmp/prandium.js && ! -L $release.tmp/prandium.js ]] || fail 'the archive holds no prandium.js'
+[[ -f $release.tmp/bun-version && ! -L $release.tmp/bun-version ]] || fail 'the archive holds no bun-version'
+bun_version=$(<"$release.tmp/bun-version")
+readonly bun_version
+[[ $bun_version =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || fail "not a Bun version: $bun_version"
+install_bun "$bun_version"
+ln -s -- "$BUNS/$bun_version/bun" "$release.tmp/bun"
+rm -rf -- "$release"
+mv -T -- "$release.tmp" "$release"
+
+systemctl --user stop prandium
+
+backup=
+if [[ -f $PRANDIUM_DB ]]; then
+  mkdir -p -- "$BACKUPS"
+  backup=$BACKUPS/$(date -u +%Y%m%dT%H%M%SZ).sqlite
+  SRC=$PRANDIUM_DB DST=$backup "$release/bun" -e \
+    'const { Database } = require("bun:sqlite"); new Database(process.env.SRC).run("VACUUM INTO ?", [process.env.DST]);'
+  echo "prandium-deploy: backed up the database to $backup"
+fi
+
+point_current_at "$release"
+systemctl --user start prandium
+
+# Puts the previous release and the database snapshot back, then fails the deploy.
+roll_back() {
+  echo "prandium-deploy: $*, rolling back" >&2
+  journalctl --user -u prandium -n 50 --no-pager >&2 || true
+  systemctl --user stop prandium
+  if [[ -n $backup ]]; then
+    rm -f -- "$PRANDIUM_DB-wal" "$PRANDIUM_DB-shm"
+    cp -- "$backup" "$PRANDIUM_DB"
+  fi
+  if [[ -n $previous ]]; then
+    point_current_at "$previous"
+    systemctl --user start prandium
+  fi
+  exit 1
+}
+
+healthy || roll_back "$sha did not become healthy"
+has_auth || roll_back "$sha came up without auth (is PRANDIUM_PASSWORD_HASH in $APP/prandium.env?)"
+
+prune "$KEEP_RELEASES" "$RELEASES"
+[[ -d $BACKUPS ]] && prune "$KEEP_BACKUPS" "$BACKUPS"
+prune_bun
+echo "prandium-deploy: $sha is live"
