@@ -52,8 +52,10 @@ export function schemaVersion(db: DB): number {
 }
 
 export function readMigrations(dir: string): MigrationSource[] {
+  // readdirSync's order is the file system's: sorted on Windows, not on Linux.
   return readdirSync(dir)
     .filter((entry) => entry.endsWith('.sql'))
+    .toSorted()
     .map((filename) => ({ filename, sql: readFileSync(join(dir, filename), 'utf8') }));
 }
 
