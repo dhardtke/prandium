@@ -3,12 +3,12 @@ import { ICONS } from "../src/tpl/templates/_components/icon.tsx";
 
 const icons = new Set(ICONS);
 
-const source = root("assets/node_modules/bootstrap-icons/bootstrap-icons.svg");
+const source = root("node_modules/bootstrap-icons/bootstrap-icons.svg");
 const target = root("assets/icons.svg");
 
 const glyphs: string[] = [];
 
-let contents = await Deno.readTextFile(source);
+let contents = await Bun.file(source).text();
 contents = contents.substring(contents.indexOf("<symbol"), contents.lastIndexOf("</symbol>"));
 const allGlyphs: { [iconName: string]: string } = {};
 const IdPattern = /id=["'](.*?)["']/;
@@ -37,4 +37,4 @@ for (const icon of icons) {
     );
 }
 
-await Deno.writeTextFile(target, `<svg xmlns="http://www.w3.org/2000/svg">${glyphs.join("")}</svg>`);
+await Bun.write(target, `<svg xmlns="http://www.w3.org/2000/svg">${glyphs.join("")}</svg>`);

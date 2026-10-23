@@ -38,11 +38,6 @@
     "ignorePatterns": [
         "src/data/parse/ingredient/parser.js",
         "dev/generate-favicons.js",
-        "src/http/**",
-        "src/main.ts",
-        "tests/http/**",
-        "tests/main.test.ts",
-        "tests/_internal/mock-context.ts",
         "dev/**"
     ]
 }

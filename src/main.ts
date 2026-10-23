@@ -1,24 +1,25 @@
-import { container, fs, log, path, semVer } from "../deps.ts";
+import { mkdir } from "node:fs/promises";
+import path from "node:path";
 import { Database } from "./data/db.ts";
 import { readFromDisk, Settings } from "./data/settings.ts";
 import { buildDbPath } from "./data/util/build-db-path.ts";
-import { CONFIG_DIR, SETTINGS } from "./di.ts";
+import { CONFIG_DIR, container, SETTINGS } from "./di.ts";
 import { spawnServer } from "./http/webserver.ts";
-import { consoleLogHandlerFactory, setupLogger } from "./logging.ts";
+import { BaseHandler, consoleLogHandlerFactory, log, setupLogger } from "./logging.ts";
 import { Options, parseOptions } from "./options.ts";
 import { type ResultWithErrorCode } from "./shared/types.ts";
 import { IS_COMPILED } from "./shared/util.ts";
 import { shouldPrettifyTemplates } from "./tpl/util/render.ts";
 
-export const REQUIRED_DENO_VERSION_RANGE = "^2.0.0";
+export const REQUIRED_BUN_VERSION_RANGE = ">=1.4.4";
 
 async function prepareConfigDir(options: Options) {
-    await fs.ensureDir(options.configDir);
-    await fs.ensureDir(path.join(options.configDir, "thumbnails"));
+    await mkdir(options.configDir, { recursive: true });
+    await mkdir(path.join(options.configDir, "thumbnails"), { recursive: true });
 }
 
-export function denoVersionIsSatified(denoVersion = Deno.version.deno, requiredVersionRange = REQUIRED_DENO_VERSION_RANGE): boolean {
-    return semVer.satisfies(semVer.parse(denoVersion), semVer.parseRange(requiredVersionRange));
+export function bunVersionIsSatisfied(version = Bun.version, range = REQUIRED_BUN_VERSION_RANGE): boolean {
+    return Bun.semver.satisfies(version, range);
 }
 
 export async function readSettings(configDir: string): Promise<ResultWithErrorCode<Settings>> {
@@ -43,17 +44,17 @@ export interface BootData {
         db: Database;
         settings: Settings;
     }) => Promise<void>;
-    denoVersion: string;
-    requiredDenoVersionRange: string;
-    logHandlerFactory: () => InstanceType<typeof log.BaseHandler>;
+    bunVersion: string;
+    requiredBunVersionRange: string;
+    logHandlerFactory: () => BaseHandler;
 }
 
 export async function main(
     bootData: BootData = {
-        args: Deno.args,
+        args: process.argv.slice(2),
         serverFactory: spawnServer,
-        denoVersion: Deno.version.deno,
-        requiredDenoVersionRange: REQUIRED_DENO_VERSION_RANGE,
+        bunVersion: Bun.version,
+        requiredBunVersionRange: REQUIRED_BUN_VERSION_RANGE,
         logHandlerFactory: consoleLogHandlerFactory,
     },
 ): Promise<number> {
@@ -62,10 +63,10 @@ export async function main(
         return options;
     }
     setupLogger(bootData.logHandlerFactory, options.debug);
-    if (!denoVersionIsSatified(bootData.denoVersion, bootData.requiredDenoVersionRange)) {
+    if (!bunVersionIsSatisfied(bootData.bunVersion, bootData.requiredBunVersionRange)) {
         log.error(
-            `The installed version of Deno does not satisfy the required version range ${REQUIRED_DENO_VERSION_RANGE}.` +
-                ` Please install a compatible Deno version and try again.`,
+            `The installed version of Bun does not satisfy the required version range ${REQUIRED_BUN_VERSION_RANGE}.` +
+                ` Please install a compatible Bun version and try again.`,
         );
         return 1;
     }
@@ -97,5 +98,5 @@ export async function main(
 }
 
 if (import.meta.main) {
-    await main();
+    process.exitCode = await main();
 }

@@ -1,38 +1,44 @@
-import { assertEquals, assertThrows } from "../../deps-test.ts";
-import { handleNotFound, handleServerError, NotFoundError } from "../../src/http/middleware/error.ts";
+import { beforeAll, describe, expect, test } from "bun:test";
+import { errorHandler, notFound } from "../../src/http/middleware/error.ts";
+import { toAppRequest } from "../../src/http/server/request.ts";
+import { NotFoundError } from "../../src/shared/errors.ts";
 import { disableLogging } from "../_internal/disable-logging.ts";
-import { MockContextBuilder } from "../_internal/mock-context.ts";
 
-Deno.test("error", async (t) => {
-    await t.step("handleServerError handles errors correctly", async () => {
-        await disableLogging();
-        const mockContextBuilder = new MockContextBuilder();
+describe("error", () => {
+    const req = toAppRequest(new Request("http://localhost/"));
 
-        const next = () => {
+    beforeAll(() => {
+        disableLogging();
+    });
+
+    test("errorHandler renders the 500 page if an error is thrown", async () => {
+        const response = await errorHandler(req, () => {
             throw new Error("NEXT");
-        };
-        await handleServerError(mockContextBuilder.ctx, next);
-        assertEquals(mockContextBuilder.ctx.response.status, 500);
-        // assertEquals(mockContextBuilder.renderCalls, [[ServerErrorTemplate, null]]);
+        });
+
+        expect(response.status).toEqual(500);
+        expect(response.headers.get("Content-Type")).toEqual("text/html; charset=utf-8");
+        expect(await response.text()).toContain("<!DOCTYPE html>");
     });
 
-    await t.step("handleServerError does not handle if no error was thrown", async () => {
-        await disableLogging();
-        const mockContextBuilder = new MockContextBuilder();
+    test("errorHandler renders the 404 page if a NotFoundError is thrown", async () => {
+        const response = await errorHandler(req, () => {
+            throw new NotFoundError();
+        });
 
-        const origStatusCode = mockContextBuilder.ctx.response.status;
-        const next = async () => {};
-        await handleServerError(mockContextBuilder.ctx, next);
-        assertEquals(mockContextBuilder.ctx.response.status, origStatusCode);
-        // assertEquals(mockContextBuilder.renderCalls, []);
+        expect(response.status).toEqual(404);
+        expect(await response.text()).toContain("<!DOCTYPE html>");
     });
 
-    await t.step("handleNotFound handles not-found correctly", async () => {
-        await disableLogging();
-        //const mockContextBuilder = new MockContextBuilder();
+    test("errorHandler does not handle if no error was thrown", async () => {
+        const original = new Response("ok", { status: 201 });
 
-        assertThrows(() => handleNotFound(), NotFoundError);
-        // assertEquals(mockContextBuilder.ctx.response.status, 404);
-        // assertEquals(mockContextBuilder.renderCalls, [[NotFoundTemplate, null]]);
+        const response = await errorHandler(req, () => Promise.resolve(original));
+
+        expect(response).toBe(original);
+    });
+
+    test("notFound throws a NotFoundError", () => {
+        expect(() => notFound(req)).toThrow(NotFoundError);
     });
 });

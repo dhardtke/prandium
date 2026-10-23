@@ -1,17 +1,28 @@
-import { Oak } from "../../../deps.ts";
+import { Handler, Method, RouteTable } from "../server/types.ts";
 
 export abstract class Router {
-    protected router: Oak.Router;
+    private readonly table: RouteTable = {};
 
-    protected constructor(opts: Oak.RouterOptions = {}) {
-        this.router = new Oak.Router(opts);
+    protected constructor(private readonly prefix = "") {}
+
+    /**
+     * Registers a handler for GET requests (Bun.serve answers HEAD requests with the GET handler, omitting the body).
+     */
+    protected get(path: string, handler: Handler): this {
+        return this.add("GET", path, handler);
     }
 
-    routes(): Oak.Middleware {
-        return this.router.routes();
+    protected post(path: string, handler: Handler): this {
+        return this.add("POST", path, handler);
     }
 
-    allowedMethods(): Oak.Middleware {
-        return this.router.allowedMethods();
+    routes(): RouteTable {
+        return this.table;
+    }
+
+    private add(method: Method, path: string, handler: Handler): this {
+        const fullPath = this.prefix + path;
+        this.table[fullPath] = { ...this.table[fullPath], [method]: handler };
+        return this;
     }
 }

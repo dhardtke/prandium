@@ -1,21 +1,21 @@
-import { needle, Oak } from "../../../deps.ts";
+import * as needle from "@needle-di/core";
 import { RecipeController } from "../../controllers/recipe.controller.ts";
 import { translateFormDataToRecipe, translateFormDataToThumbnail } from "../../data/model/recipe.ts";
 import { toInt } from "../../data/util/convert.ts";
+import { NotFoundError } from "../../shared/errors.ts";
+import { html, redirect, text } from "../server/responses.ts";
+import { AppRequest } from "../server/types.ts";
 import { urlWithParams } from "../util/mod.ts";
 import { parameters } from "../util/parameters.ts";
 import { UrlGenerator } from "../util/url-generator.ts";
-import { AppState } from "../webserver.ts";
 import { Router } from "./router.ts";
-import { currentUrl } from "../middleware/helpers/current-url.ts";
 
 @needle.injectable()
 export class RecipeRouter extends Router {
     constructor(private recipeController: RecipeController = needle.inject(RecipeController)) {
-        super({ prefix: "/recipe" });
+        super("/recipe");
 
-        this.router
-            .get("/import", this.getImport)
+        this.get("/import", this.getImport)
             .post("/import", this.postImport)
             .get("/:id/:slug/edit", this.getEdit)
             .post("/:id/:slug/edit", this.postEdit)
@@ -25,103 +25,74 @@ export class RecipeRouter extends Router {
             .get("/:id/:slug/delete", this.getDelete)
             .post("/:id/:slug/delete", this.postDelete)
             .get("/:id/:slug/flag", this.flag)
-            .get("/:id/:slug", this.get);
+            .get("/:id/:slug", this.getRecipe);
     }
 
-    getImport: Oak.RouterMiddleware<"/import"> = (ctx) => {
-        ctx.response.body = this.recipeController.getImport();
+    getImport = (): Response => {
+        return html(this.recipeController.getImport());
     };
 
-    postImport: Oak.RouterMiddleware<"/import"> = async (ctx, next) => {
-        if (!ctx.request.hasBody) {
-            return await next();
+    postImport = async (req: AppRequest): Promise<Response> => {
+        if (req.request.body === null) {
+            throw new NotFoundError("No URLs to import given.");
         }
 
-        const formData = await ctx.request.body.form();
-        const rawUrls = formData.get("urls");
-        const urls = rawUrls?.split("\n");
+        const formData = await req.request.formData();
+        const urls = formData.get("urls")?.toString().split("\n");
 
-        ctx.response.body = await this.recipeController.postImport(urls);
+        const body = await this.recipeController.postImport(urls);
+        if (body === undefined) {
+            throw new NotFoundError("No URLs to import given.");
+        }
+        return html(body);
     };
 
-    getEdit: Oak.RouterMiddleware<"/:id/:slug/edit", { id: string; slug: string }> = (ctx) => {
-        ctx.response.body = this.recipeController.getEdit(toInt(ctx.params.id));
+    getEdit = (req: AppRequest): Response => {
+        return html(this.recipeController.getEdit(toInt(req.params.id)));
     };
 
-    postEdit: Oak.RouterMiddleware<"/:id/:slug/edit", { id: string; slug: string }, AppState> = async (ctx) => {
-        const formData = await ctx.request.body.formData();
+    postEdit = async (req: AppRequest): Promise<Response> => {
+        const formData = await req.request.formData();
         const { thumbnail, shouldDeleteThumbnail } = translateFormDataToThumbnail(formData);
         const inputRecipe = translateFormDataToRecipe(formData);
-        const recipe = await this.recipeController.postEdit(toInt(ctx.params.id), inputRecipe, thumbnail, shouldDeleteThumbnail);
-        ctx.response.redirect(
-            urlWithParams(
-                UrlGenerator.recipe(recipe),
-                {
-                    flash: "editSuccessful",
-                },
-                currentUrl(ctx),
-            ),
-        );
+        const recipe = await this.recipeController.postEdit(toInt(req.params.id), inputRecipe, thumbnail, shouldDeleteThumbnail);
+        return redirect(urlWithParams(UrlGenerator.recipe(recipe), { flash: "editSuccessful" }, req.url));
     };
 
-    rate: Oak.RouterMiddleware<"/:id/:slug/rate", { id: string; slug: string }> = async (ctx) => {
-        const formData = await ctx.request.body.form();
-        const rating = parseFloat(formData.get("rating") ?? "0");
-        ctx.response.body = this.recipeController.rate(toInt(ctx.params.id), rating);
+    rate = async (req: AppRequest): Promise<Response> => {
+        const formData = await req.request.formData();
+        const rating = parseFloat(formData.get("rating")?.toString() ?? "0");
+        return text(this.recipeController.rate(toInt(req.params.id), rating));
     };
 
-    getCreate: Oak.RouterMiddleware<"/create"> = (ctx) => {
-        ctx.response.body = this.recipeController.createGet();
+    getCreate = (): Response => {
+        return html(this.recipeController.createGet());
     };
 
-    postCreate: Oak.RouterMiddleware<"/create", Record<never, never>, AppState> = async (ctx) => {
-        const formData = await ctx.request.body.formData();
+    postCreate = async (req: AppRequest): Promise<Response> => {
+        const formData = await req.request.formData();
         const { thumbnail, shouldDeleteThumbnail } = translateFormDataToThumbnail(formData);
         const inputRecipe = translateFormDataToRecipe(formData);
         const recipe = await this.recipeController.postCreate(inputRecipe, thumbnail, shouldDeleteThumbnail);
-        ctx.response.redirect(
-            urlWithParams(
-                UrlGenerator.recipe(recipe),
-                {
-                    flash: "createSuccessful",
-                },
-                currentUrl(ctx),
-            ),
-        );
+        return redirect(urlWithParams(UrlGenerator.recipe(recipe), { flash: "createSuccessful" }, req.url));
     };
 
-    getDelete: Oak.RouterMiddleware<"/:id/:slug/delete", { id: string; slug: string }> = (ctx) => {
-        ctx.response.body = this.recipeController.getDelete(toInt(ctx.params.id));
+    getDelete = (req: AppRequest): Response => {
+        return html(this.recipeController.getDelete(toInt(req.params.id)));
     };
 
-    postDelete: Oak.RouterMiddleware<"/:id/:slug/delete", { id: string; slug: string }> = async (ctx) => {
-        await this.recipeController.postDelete(toInt(ctx.params.id));
-        ctx.response.redirect(
-            urlWithParams(
-                UrlGenerator.home(),
-                {
-                    flash: "deleteSuccessful",
-                },
-                currentUrl(ctx),
-            ),
-        );
+    postDelete = async (req: AppRequest): Promise<Response> => {
+        await this.recipeController.postDelete(toInt(req.params.id));
+        return redirect(urlWithParams(UrlGenerator.home(), { flash: "deleteSuccessful" }, req.url));
     };
 
-    flag: Oak.RouterMiddleware<"/:id/:slug/flag", { id: string; slug: string }> = (ctx) => {
-        const recipe = this.recipeController.flag(toInt(ctx.params.id));
-        ctx.response.redirect(
-            urlWithParams(
-                UrlGenerator.recipe(recipe),
-                {
-                    flash: "editSuccessful",
-                },
-                currentUrl(ctx),
-            ),
-        );
+    flag = (req: AppRequest): Response => {
+        const recipe = this.recipeController.flag(toInt(req.params.id));
+        return redirect(urlWithParams(UrlGenerator.recipe(recipe), { flash: "editSuccessful" }, req.url));
     };
 
-    get: Oak.RouterMiddleware<"/:id/:slug", { id: string; slug: string }> = (ctx) => {
-        const portions = toInt(parameters(ctx).get("portions"), 0);
-        ctx.response.body = this.recipeController.get(toInt(ctx.params.id), portions === 0 ? undefined : portions);
+    getRecipe = (req: AppRequest): Response => {
+        const portions = toInt(parameters(req.url).get("portions"), 0);
+        return html(this.recipeController.get(toInt(req.params.id), portions === 0 ? undefined : portions));
     };
 }

@@ -1,13 +1,15 @@
-import { assertEquals } from "../deps-test.ts";
-import { log } from "../deps.ts";
-import { denoVersionIsSatified, main, REQUIRED_DENO_VERSION_RANGE } from "../src/main.ts";
-import { LogCapture2 } from "./_internal/disable-logging.ts";
+import { afterAll, describe, expect, test } from "bun:test";
+import { LogLevels } from "../src/logging.ts";
+import { bunVersionIsSatisfied, main, REQUIRED_BUN_VERSION_RANGE } from "../src/main.ts";
+import { disableLogging, LogCapture2 } from "./_internal/disable-logging.ts";
 
-Deno.test("main", async (t) => {
-    const logCapture = new LogCapture2();
+describe("main", () => {
+    afterAll(() => {
+        disableLogging();
+    });
 
-    await t.step("denoVersionIsSatified", async (t) => {
-        const tests = [
+    describe("bunVersionIsSatisfied", () => {
+        test.each([
             ["1.0.0", "~1.0.0", true],
             ["2.0.0", "~1.0.0", false],
             ["1.1.0", "~1.0.0", false],
@@ -17,31 +19,34 @@ Deno.test("main", async (t) => {
             ["2.0.0", ">1.0.0", true],
             ["1.5.2", "^1.0.0", true],
             ["2.0.0", "^1.0.0", false],
-        ];
-        for (const [denoVersion, requiredVersionRange, expected] of tests) {
-            await t.step(`when called with denoVersion="${denoVersion}", requiredVersionRange="${requiredVersionRange}" should return ${expected}`, () => {
-                assertEquals(denoVersionIsSatified(denoVersion as string, requiredVersionRange as string), expected);
-            });
-        }
+            ["1.4.3", ">=1.4.4", false],
+            ["1.4.4", ">=1.4.4", true],
+        ])(`when called with version="%s", range="%s" should return %p`, (version, range, expected) => {
+            expect(bunVersionIsSatisfied(version, range)).toEqual(expected);
+        });
+
+        test("the running Bun version satisfies the required version range", () => {
+            expect(bunVersionIsSatisfied()).toEqual(true);
+        });
     });
 
-    await t.step("should return error code 1 if the version of Deno does not satisfy the required version range", async () => {
-        assertEquals(
+    test("should return error code 1 if the version of Bun does not satisfy the required version range", async () => {
+        const logCapture = new LogCapture2();
+        expect(
             await main({
                 args: [],
                 serverFactory: async () => {},
-                denoVersion: "42.0.0",
-                requiredDenoVersionRange: "~1.22.0",
+                bunVersion: "42.0.0",
+                requiredBunVersionRange: "~1.22.0",
                 logHandlerFactory: logCapture.logHandlerFactory,
             }),
-            1,
-        );
-        assertEquals(logCapture.records, [
+        ).toEqual(1);
+        expect(logCapture.records).toEqual([
             {
                 msg:
-                    `The installed version of Deno does not satisfy the required version range ${REQUIRED_DENO_VERSION_RANGE}.` +
-                    ` Please install a compatible Deno version and try again.`,
-                level: log.LogLevels.ERROR,
+                    `The installed version of Bun does not satisfy the required version range ${REQUIRED_BUN_VERSION_RANGE}.` +
+                    ` Please install a compatible Bun version and try again.`,
+                level: LogLevels.ERROR,
                 levelName: "ERROR",
                 loggerName: "default",
             },

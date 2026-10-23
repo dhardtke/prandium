@@ -1,49 +1,39 @@
-import { needle, Oak } from "../../../deps.ts";
+import * as needle from "@needle-di/core";
+import { NotFoundError } from "../../shared/errors.ts";
 import { root } from "../../shared/util.ts";
+import { serveFile } from "../server/static-files.ts";
+import { AppRequest } from "../server/types.ts";
 import { Router } from "./router.ts";
 
 const AssetsDir = root("assets");
 const CompiledAssetsDir = root("out/assets");
 
-export const GET_ROUTE = "/assets/(.+)" as const;
+export const ASSETS_PREFIX = "/assets/" as const;
+export const GET_ROUTE = `${ASSETS_PREFIX}*` as const;
 export const SW_JS_ROUTE = "/sw.js" as const;
 
-async function tryMultiple<P extends string>(ctx: Oak.RouterContext<P>, filename: string, dirs: string[]) {
-    let lastError: unknown;
-    for (const dir of dirs) {
-        try {
-            await Oak.send(ctx, filename, {
-                root: dir,
-            });
-            return;
-        } catch (e) {
-            // ignored
-            lastError = e;
+async function serveAsset(req: AppRequest, filename: string): Promise<Response> {
+    for (const dir of [AssetsDir, CompiledAssetsDir]) {
+        const response = await serveFile(req, dir, filename);
+        if (response) {
+            return response;
         }
     }
-    throw lastError;
-}
-
-async function assetMiddleware<P extends string>(ctx: Oak.RouterContext<P>, next: () => Promise<unknown>, filename: string) {
-    try {
-        await tryMultiple(ctx, filename, [AssetsDir, CompiledAssetsDir]);
-    } catch {
-        await next();
-    }
+    throw new NotFoundError(`Asset not found: ${filename}`);
 }
 
 @needle.injectable()
 export class AssetsRouter extends Router {
     constructor() {
         super();
-        this.router.get(GET_ROUTE, this.get).get(SW_JS_ROUTE, this.getSw);
+        this.get(GET_ROUTE, this.getAsset).get(SW_JS_ROUTE, this.getSw);
     }
 
-    get: Oak.RouterMiddleware<typeof GET_ROUTE> = async (ctx, next) => {
-        await assetMiddleware(ctx, next, ctx.params && ctx.params[0]);
+    getAsset = (req: AppRequest): Promise<Response> => {
+        return serveAsset(req, req.url.pathname.substring(ASSETS_PREFIX.length));
     };
 
-    getSw: Oak.RouterMiddleware<typeof SW_JS_ROUTE> = async (ctx, next) => {
-        await assetMiddleware(ctx, next, "sw.js");
+    getSw = (req: AppRequest): Promise<Response> => {
+        return serveAsset(req, "sw.js");
     };
 }

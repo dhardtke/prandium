@@ -6,7 +6,10 @@
         "bun": ">=1.4.4"
     },
     "scripts": {
-        "test": "bun test tests/data tests/controllers tests/tpl tests/shared tests/logging.test.ts tests/options.test.ts",
+        "dev": "bun dev/dev.ts",
+        "build:assets": "bun dev/build.ts assets",
+        "build:icons": "bun dev/build-icons.ts",
+        "test": "bun test",
         "test:coverage": "bun run test --coverage --coverage-reporter=lcov --coverage-reporter=text --coverage-dir=out/coverage",
         "lint": "oxlint src tests dev",
         "fmt": "bun fmt",

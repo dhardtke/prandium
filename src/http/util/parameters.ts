@@ -14,9 +14,8 @@ export interface ParametersBuilder {
     toString(): string;
 }
 
-export const parameters = (urlLike: URL | string | { request: { url: URL } }): ParametersBuilder => {
-    const originalUrl = (urlLike as { request: { url: URL } })?.request?.url || urlLike;
-    const result = new URL(originalUrl.toString());
+export const parameters = (url: URL | string): ParametersBuilder => {
+    const result = new URL(url.toString());
 
     const builder = {
         get(name: string, _default = ""): string {

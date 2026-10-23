@@ -1,41 +1,35 @@
-import { assertEquals } from "../../../deps-test.ts";
-import { fs, Oak, path } from "../../../deps.ts";
+import { describe, expect, test } from "bun:test";
+import { copyFile, mkdir } from "node:fs/promises";
+import path from "node:path";
 import { ThumbnailsRouter } from "../../../src/http/routers/thumbnails.router.ts";
-import { AppState } from "../../../src/http/webserver.ts";
+import { toAppRequest } from "../../../src/http/server/request.ts";
+import { NotFoundError } from "../../../src/shared/errors.ts";
 import { root } from "../../../src/shared/util.ts";
 import { withTemp } from "../../_internal/with-temp.function.ts";
 
-Deno.test("ThumbnailsRouter", async (t) => {
-    await t.step(
-        "get invokes next middleware if an error is thrown",
+describe("ThumbnailsRouter", () => {
+    test(
+        "getThumbnail throws a NotFoundError if the thumbnail does not exist",
         withTemp(async (tmpDir) => {
-            const ctx = Oak.testing.createMockContext<"/thumbnails/(.+)", { 0: string }>({ method: "GET", path: "/" });
-            let invocationCount = 0;
-            const next: () => Promise<unknown> = () => {
-                invocationCount++;
-                return Promise.resolve();
-            };
-            // param[0] is missing => error
-            await new ThumbnailsRouter(tmpDir).get(ctx, next);
-            assertEquals(invocationCount, 1);
+            const req = toAppRequest(new Request("http://localhost/thumbnails/does-not-exist.png"));
+
+            await expect(new ThumbnailsRouter(tmpDir).getThumbnail(req)).rejects.toThrow(NotFoundError);
         }),
     );
 
-    await t.step(
-        "get returns the thumbnail image data",
+    test(
+        "getThumbnail returns the thumbnail image data",
         withTemp(async (tmpDir) => {
             const thumbnailDir = path.join(tmpDir, "thumbnails");
-            await fs.ensureDir(thumbnailDir);
+            await mkdir(thumbnailDir, { recursive: true });
             const sourceImage = root("tests", "http", "router", "1x1.png");
-            fs.copySync(sourceImage, path.join(thumbnailDir, "1x1.png"));
+            await copyFile(sourceImage, path.join(thumbnailDir, "1x1.png"));
 
-            const ctx = Oak.testing.createMockContext<"/thumbnails/(.+)", { 0: string }, AppState>({ method: "GET", path: "/", params: { 0: "1x1.png" } });
-            const next = Oak.testing.createMockNext();
+            const req = toAppRequest(new Request("http://localhost/thumbnails/1x1.png"));
+            const response = await new ThumbnailsRouter(tmpDir).getThumbnail(req);
 
-            await new ThumbnailsRouter(tmpDir).get(ctx, next);
-
-            const sourceData = Deno.readFileSync(sourceImage);
-            assertEquals(ctx.response.body, sourceData);
+            expect(response.headers.get("Content-Type")).toEqual("image/png");
+            expect(new Uint8Array(await response.arrayBuffer())).toEqual(await Bun.file(sourceImage).bytes());
         }),
     );
 });

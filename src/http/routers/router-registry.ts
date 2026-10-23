@@ -1,4 +1,4 @@
-import { container } from "../../../deps.ts";
+import { container } from "../../di.ts";
 import { AssetsRouter } from "./assets.router.ts";
 import { IndexRouter } from "./index.router.ts";
 import { RecipeRouter } from "./recipe.router.ts";

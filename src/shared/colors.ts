@@ -2,8 +2,11 @@ import { styleText } from "node:util";
 
 type Format = Parameters<typeof styleText>[0];
 
+// like @std/fmt/colors, colors are always applied unless disabled via NO_COLOR (see https://no-color.org)
+const enabled = !process.env.NO_COLOR;
+
 function color(format: Format): (str: string) => string {
-    return (str: string) => styleText(format, str, { validateStream: false });
+    return (str: string) => (enabled ? styleText(format, str, { validateStream: false }) : str);
 }
 
 export const red = color("red");
