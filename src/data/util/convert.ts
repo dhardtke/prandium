@@ -52,19 +52,14 @@ export function toCamelCase<T, O>(obj: O): T {
         if (Array.isArray(obj)) {
             return obj.map(toCamelCase) as unknown as T;
         }
-        return Object
-            .entries(obj as Record<string, unknown>)
-            .reduce((acc, [key, val]) => {
-                const modifiedKey = key.replace(
-                    SnakeCasePattern,
-                    (g) => g[1].toUpperCase(),
-                );
-                const modifiedVal = typeof val === "object" && val !== null ? toCamelCase(val as unknown) : val;
-                return {
-                    ...acc,
-                    ...{ [modifiedKey]: modifiedVal },
-                };
-            }, {} as T);
+        return Object.entries(obj as Record<string, unknown>).reduce((acc, [key, val]) => {
+            const modifiedKey = key.replace(SnakeCasePattern, (g) => g[1].toUpperCase());
+            const modifiedVal = typeof val === "object" && val !== null ? toCamelCase(val as unknown) : val;
+            return {
+                ...acc,
+                ...{ [modifiedKey]: modifiedVal },
+            };
+        }, {} as T);
     }
     return obj as unknown as T;
 }

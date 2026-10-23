@@ -11,8 +11,7 @@ const LanguageDropdownItem = (props: { lang: Language }) => (
             dangerouslySetInnerHTML={{
                 __html: props.lang.meta.flag,
             }}
-        >
-        </span>
+        ></span>
         {l.meta.labels[props.lang.meta.id]}
     </>
 );
@@ -35,13 +34,13 @@ const LanguageDropdown = () => (
                 .map(([id, lang]) => ({ lang, active: l.meta.id === id }))
                 .map((item: { active: boolean; lang: Language }) => (
                     <DropdownItem active={item.active}>
-                        {item.active
-                            ? <LanguageDropdownItem lang={item.lang} />
-                            : (
-                                <a href={parameters(Page.currentUrl).set("lang", item.lang.meta.id).toString()}>
-                                    <LanguageDropdownItem lang={item.lang} />
-                                </a>
-                            )}
+                        {item.active ? (
+                            <LanguageDropdownItem lang={item.lang} />
+                        ) : (
+                            <a href={parameters(Page.currentUrl).set("lang", item.lang.meta.id).toString()}>
+                                <LanguageDropdownItem lang={item.lang} />
+                            </a>
+                        )}
                     </DropdownItem>
                 ))}
         </Dropdown>
@@ -72,19 +71,17 @@ function Menu() {
                 .map((item) => ({ item, active: Page.currentUrl.pathname === item.url }))
                 .map(({ item, active }) => (
                     <li class={classNames("nav-item", { active: active })}>
-                        {active
-                            ? (
-                                <>
-                                    <Icon name={item.icon} />
-                                    {item.label}
-                                </>
-                            )
-                            : (
-                                <a href={item.url}>
-                                    <Icon name={item.icon} />
-                                    {item.label}
-                                </a>
-                            )}
+                        {active ? (
+                            <>
+                                <Icon name={item.icon} />
+                                {item.label}
+                            </>
+                        ) : (
+                            <a href={item.url}>
+                                <Icon name={item.icon} />
+                                {item.label}
+                            </a>
+                        )}
                     </li>
                 ))}
         </>
@@ -93,7 +90,7 @@ function Menu() {
 
 const DarkModeSwitcher = () => (
     <li className="nav-item" id="dark-mode-switcher" data-cmp="DarkModeSwitcher">
-        <span className={classNames("active", { "hidden": !Page.dark })}>
+        <span className={classNames("active", { hidden: !Page.dark })}>
             <Icon name="sun-fill" />
             {l.lightMode}
         </span>
@@ -111,9 +108,7 @@ export const Header = () => (
                 <div class="app-icon">
                     <Icon name="journal-richtext" />
                 </div>
-                <div class="app-name">
-                    {l.appName}
-                </div>
+                <div class="app-name">{l.appName}</div>
             </a>
 
             <ul class="nav">

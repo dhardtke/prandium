@@ -13,25 +13,21 @@ export interface AppState {
     configDir: string;
 }
 
-function buildState(
-    args: { settings: Settings; configDir: string },
-): AppState {
+function buildState(args: { settings: Settings; configDir: string }): AppState {
     return { ...args };
 }
 
-export async function spawnServer(
-    args: {
-        host: string;
-        port: number;
-        debug?: boolean;
-        secure?: boolean;
-        key?: string;
-        cert?: string;
-        configDir: string;
-        db: Database;
-        settings: Settings;
-    },
-) {
+export async function spawnServer(args: {
+    host: string;
+    port: number;
+    debug?: boolean;
+    secure?: boolean;
+    key?: string;
+    cert?: string;
+    configDir: string;
+    db: Database;
+    settings: Settings;
+}) {
     const state: AppState = buildState({
         settings: args.settings,
         configDir: args.configDir,
@@ -45,7 +41,7 @@ export async function spawnServer(
     app.use(async (ctx, next) => {
         Page.currentUrl = currentUrl(ctx);
         Page.authorization = ctx.request.headers.get("Authorization");
-        Page.dark = await ctx.cookies.get(DarkModeCookie) === "true";
+        Page.dark = (await ctx.cookies.get(DarkModeCookie)) === "true";
         await next();
     });
 
@@ -66,10 +62,10 @@ export async function spawnServer(
 
     const sslOptions = args.secure
         ? {
-            secure: true as const,
-            certFile: args.cert || "",
-            keyFile: args.key || "",
-        }
+              secure: true as const,
+              certFile: args.cert || "",
+              keyFile: args.key || "",
+          }
         : {};
     await app.listen({
         hostname: args.host,

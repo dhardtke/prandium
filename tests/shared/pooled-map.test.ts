@@ -15,23 +15,27 @@ describe("pooledMap", () => {
         let running = 0;
         let maxRunning = 0;
 
-        const results = await collect(pooledMap(2, [1, 2, 3, 4, 5], async (i) => {
-            running++;
-            maxRunning = Math.max(maxRunning, running);
-            await sleep(5);
-            running--;
-            return i;
-        }));
+        const results = await collect(
+            pooledMap(2, [1, 2, 3, 4, 5], async (i) => {
+                running++;
+                maxRunning = Math.max(maxRunning, running);
+                await sleep(5);
+                running--;
+                return i;
+            }),
+        );
 
         expect(results).toEqual([1, 2, 3, 4, 5]);
         expect(maxRunning).toEqual(2);
     });
 
     test("Results are yielded in the order of the input values even if later values finish first", async () => {
-        const results = await collect(pooledMap(3, [30, 10, 20], async (delay) => {
-            await sleep(delay);
-            return delay * 2;
-        }));
+        const results = await collect(
+            pooledMap(3, [30, 10, 20], async (delay) => {
+                await sleep(delay);
+                return delay * 2;
+            }),
+        );
 
         expect(results).toEqual([60, 20, 40]);
     });
@@ -51,12 +55,10 @@ describe("pooledMap", () => {
 
         let error: unknown;
         try {
-            for await (
-                const value of pooledMap(1, [1, 2, 3], (i) => {
-                    processed.push(i);
-                    return i === 2 ? Promise.reject(new Error("boom")) : Promise.resolve(i);
-                })
-            ) {
+            for await (const value of pooledMap(1, [1, 2, 3], (i) => {
+                processed.push(i);
+                return i === 2 ? Promise.reject(new Error("boom")) : Promise.resolve(i);
+            })) {
                 yielded.push(value);
             }
         } catch (e) {

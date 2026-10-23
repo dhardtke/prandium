@@ -42,15 +42,8 @@ export const DefaultSettings: Settings = {
 
 // oxlint-disable-next-line typescript/no-explicit-any
 function validate(settings: any): Settings {
-    const validate: Record<keyof Settings, unknown> = Object.assign(
-        {},
-        DefaultSettings,
-        settings,
-    );
-    if (
-        typeof validate.importConcurrency !== "number" ||
-        validate.importConcurrency <= 0 || validate.importConcurrency > CpuCores
-    ) {
+    const validate: Record<keyof Settings, unknown> = Object.assign({}, DefaultSettings, settings);
+    if (typeof validate.importConcurrency !== "number" || validate.importConcurrency <= 0 || validate.importConcurrency > CpuCores) {
         throw new Error(`importConcurrency must be between 1 and ${CpuCores}`);
     }
     const types: Record<keyof Settings, "boolean" | "string" | "number"> = {

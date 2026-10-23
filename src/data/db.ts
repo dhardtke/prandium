@@ -66,10 +66,7 @@ export class Database {
      * @param sql the SQL to execute
      * @param values the values to bind
      */
-    public single<T>(
-        sql: string,
-        values?: QueryParameterSet,
-    ): T | undefined {
+    public single<T>(sql: string, values?: QueryParameterSet): T | undefined {
         const result = this.query<T>(sql, values);
         return result[0];
     }
@@ -83,10 +80,7 @@ export class Database {
         this.query(sql, values);
     }
 
-    public prepare<O extends RowObject = RowObject>(
-        sql: string,
-        processor: (execute: (params?: QueryParameterSet) => O[]) => void,
-    ): void {
+    public prepare<O extends RowObject = RowObject>(sql: string, processor: (execute: (params?: QueryParameterSet) => O[]) => void): void {
         const query = this.db.prepare<O, SQLQueryBindings[]>(sql);
 
         try {
@@ -95,10 +89,11 @@ export class Database {
             const allEntries = (params?: QueryParameterSet): O[] => {
                 const duration = performance.now();
                 const result = query.all(...normalizeBindings(params));
-                log.debug(() =>
-                    `Executing prepared query${params ? ` with values ${brightCyan(JSON.stringify(params))}` : ""} took ${
-                        (performance.now() - duration).toFixed(2)
-                    }ms`
+                log.debug(
+                    () =>
+                        `Executing prepared query${params ? ` with values ${brightCyan(JSON.stringify(params))}` : ""} took ${(
+                            performance.now() - duration
+                        ).toFixed(2)}ms`,
                 );
                 return result;
             };
@@ -111,21 +106,16 @@ export class Database {
         }
     }
 
-    public transaction<ReturnValue = void>(
-        fn: () => ReturnValue,
-    ): ReturnValue | undefined {
+    public transaction<ReturnValue = void>(fn: () => ReturnValue): ReturnValue | undefined {
         return this.db.transaction(fn)();
     }
 
     public migrate() {
         const { user_version: currentVersionDb } = this.db.query<{ user_version: number }, []>("PRAGMA user_version").get()!;
         let currentVersion: number = currentVersionDb;
-        const migrations = this.migrations.filter((m) => currentVersion < m.version)
-            .sort((a, b) => a.version - b.version);
+        const migrations = this.migrations.filter((m) => currentVersion < m.version).sort((a, b) => a.version - b.version);
         if (migrations.length) {
-            log.debug(
-                `[DB] Current database version is ${cyan("" + currentVersion)}`,
-            );
+            log.debug(`[DB] Current database version is ${cyan("" + currentVersion)}`);
             log.debug(() => `[DB] Migrations to run: ${cyan(migrations.map((m) => m.name).join(", "))}`);
             for (const migration of migrations) {
                 this.transaction(() => {
@@ -154,10 +144,11 @@ export class Database {
             } finally {
                 statement.finalize();
             }
-            log.debug(() =>
-                `[DB] Executing ${cyan(sql)}${values ? ` with values ${brightCyan(JSON.stringify(values))}` : ""} took ${
-                    (performance.now() - duration).toFixed(2)
-                }ms`
+            log.debug(
+                () =>
+                    `[DB] Executing ${cyan(sql)}${values ? ` with values ${brightCyan(JSON.stringify(values))}` : ""} took ${(
+                        performance.now() - duration
+                    ).toFixed(2)}ms`,
             );
             return result;
         } catch (e) {

@@ -13,22 +13,16 @@ export class IndexController {
     constructor(
         private recipeService: RecipeService = needle.inject(RecipeService),
         private tagService: TagService = needle.inject(TagService),
-    ) {
-    }
+    ) {}
 
     list(filters: { tagIds: number[]; title: string }, showTagFilter: boolean, orderBy: OrderBy | undefined, paginationParams: PaginationParams) {
-        const recipes = buildPagination(
-            paginationParams,
-            this.recipeService.count(filters),
-            (limit, offset) =>
-                this.recipeService.list(
-                    {
-                        limit,
-                        offset,
-                        orderBy,
-                        filters,
-                    },
-                ),
+        const recipes = buildPagination(paginationParams, this.recipeService.count(filters), (limit, offset) =>
+            this.recipeService.list({
+                limit,
+                offset,
+                orderBy,
+                filters,
+            }),
         );
 
         const tags = this.tagService.list({
@@ -42,10 +36,12 @@ export class IndexController {
             },
         });
 
-        return renderTemplate(this.listTemplate({
-            recipes,
-            tags,
-            showTagFilter,
-        }));
+        return renderTemplate(
+            this.listTemplate({
+                recipes,
+                tags,
+                showTagFilter,
+            }),
+        );
     }
 }

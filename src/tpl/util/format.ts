@@ -7,16 +7,14 @@ interface UnitWithTime {
 
 const unitsWithTime: UnitWithTime[] = [
     { unit: "year", ms: 24 * 60 * 60 * 1000 * 365 },
-    { unit: "month", ms: 24 * 60 * 60 * 1000 * 365 / 12 },
+    { unit: "month", ms: (24 * 60 * 60 * 1000 * 365) / 12 },
     { unit: "day", ms: 24 * 60 * 60 * 1000 },
     { unit: "hour", ms: 60 * 60 * 1000 },
     { unit: "minute", ms: 60 * 1000 },
     { unit: "second", ms: 1000 },
 ];
 
-function closestUnit(
-    millis: number,
-): UnitWithTime {
+function closestUnit(millis: number): UnitWithTime {
     const unitWithTime = unitsWithTime.find(({ ms }) => Math.abs(millis) >= ms) || unitsWithTime[unitsWithTime.length - 1];
     return { unit: unitWithTime.unit, ms: Math.round(millis / unitWithTime.ms) };
 }

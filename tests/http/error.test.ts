@@ -21,8 +21,7 @@ Deno.test("error", async (t) => {
         const mockContextBuilder = new MockContextBuilder();
 
         const origStatusCode = mockContextBuilder.ctx.response.status;
-        const next = async () => {
-        };
+        const next = async () => {};
         await handleServerError(mockContextBuilder.ctx, next);
         assertEquals(mockContextBuilder.ctx.response.status, origStatusCode);
         // assertEquals(mockContextBuilder.renderCalls, []);

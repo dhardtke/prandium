@@ -33,10 +33,7 @@ async function handleThumbnail(recipe: Recipe, configDir: string, thumbnail: Fil
     if (thumbnail?.name) {
         // TODO server-side type validation?
         const thumbnailDir = getThumbnailDir(configDir);
-        const filename = getUniqueFilename(
-            thumbnailDir,
-            thumbnail.name,
-        );
+        const filename = getUniqueFilename(thumbnailDir, thumbnail.name);
         await Bun.write(path.join(thumbnailDir, filename), thumbnail);
         await deleteThumbnail(recipe, configDir);
         recipe.thumbnail = filename;
@@ -49,8 +46,7 @@ export class RecipeController {
         private recipeService: RecipeService = needle.inject(RecipeService),
         private settings: Settings = needle.inject(SETTINGS),
         private configDir: string = needle.inject(CONFIG_DIR),
-    ) {
-    }
+    ) {}
 
     createGet() {
         return renderTemplate(RecipeEditTemplate());
@@ -81,12 +77,7 @@ export class RecipeController {
     }
 
     getEdit(id: number) {
-        const recipe = this.recipeService.find(
-            id,
-            true,
-            true,
-            true,
-        );
+        const recipe = this.recipeService.find(id, true, true, true);
         if (!recipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         }
@@ -95,12 +86,7 @@ export class RecipeController {
     }
 
     async postEdit(id: number, inputRecipe: Recipe, thumbnail: File | undefined, shouldDeleteThumbnail: boolean) {
-        const dbRecipe = this.recipeService.find(
-            id,
-            true,
-            true,
-            true,
-        );
+        const dbRecipe = this.recipeService.find(id, true, true, true);
         if (!dbRecipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
@@ -114,11 +100,7 @@ export class RecipeController {
 
     rate(id: number, rating: number) {
         // TODO use update route and ensure only non-empty fields are set?
-        const recipe = this.recipeService.find(
-            id,
-            false,
-            true,
-        );
+        const recipe = this.recipeService.find(id, false, true);
         if (!recipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
@@ -132,9 +114,7 @@ export class RecipeController {
     }
 
     getDelete(id: number) {
-        const recipe = this.recipeService.find(
-            id,
-        );
+        const recipe = this.recipeService.find(id);
         if (!recipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
@@ -143,9 +123,7 @@ export class RecipeController {
     }
 
     async postDelete(id: number) {
-        const recipe = this.recipeService.find(
-            id,
-        );
+        const recipe = this.recipeService.find(id);
         if (!recipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
@@ -155,9 +133,7 @@ export class RecipeController {
     }
 
     flag(id: number) {
-        const recipe = this.recipeService.find(
-            id,
-        );
+        const recipe = this.recipeService.find(id);
         if (!recipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
@@ -169,19 +145,16 @@ export class RecipeController {
     }
 
     get(id: number, portions?: number) {
-        const recipe = this.recipeService.find(
-            id,
-            true,
-            true,
-            true,
-        );
+        const recipe = this.recipeService.find(id, true, true, true);
         if (!recipe) {
             throw new NotFoundError(`Recipe not found: ${id}`);
         } else {
-            return renderTemplate(RecipeDetailTemplate({
-                recipe,
-                portions: portions ?? recipe.yield,
-            }));
+            return renderTemplate(
+                RecipeDetailTemplate({
+                    recipe,
+                    portions: portions ?? recipe.yield,
+                }),
+            );
         }
     }
 }

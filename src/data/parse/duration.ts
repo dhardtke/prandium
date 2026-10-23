@@ -19,14 +19,10 @@ const minutePattern = `(?<minutes>\\d{2})`;
 const secondPattern = `(?<seconds>\\d{2})`;
 
 // PYYYYMMDDThhmmss
-const dateTimePattern = new RegExp(
-    `^P${yearPattern}${monthPattern}${dayPattern}T${hourPattern}${minutePattern}${secondPattern}$`,
-);
+const dateTimePattern = new RegExp(`^P${yearPattern}${monthPattern}${dayPattern}T${hourPattern}${minutePattern}${secondPattern}$`);
 
 // P[YYYY]-[MM]-[DD]T[hh]:[mm]:[ss].
-const dateTimeExtendedPattern = new RegExp(
-    `^P${yearPattern}-${monthPattern}-${dayPattern}T${hourPattern}:${minutePattern}:${secondPattern}$`,
-);
+const dateTimeExtendedPattern = new RegExp(`^P${yearPattern}-${monthPattern}-${dayPattern}T${hourPattern}:${minutePattern}:${secondPattern}$`);
 
 /**
  * Parses the given Duration string into a Duration object.
@@ -38,8 +34,7 @@ export function parseDuration(iso8601duration: string): Duration {
         throw new Error("Duration must start with 'P'");
     }
 
-    const exec = dateTimePattern.exec(iso8601duration) ||
-        dateTimeExtendedPattern.exec(iso8601duration);
+    const exec = dateTimePattern.exec(iso8601duration) || dateTimeExtendedPattern.exec(iso8601duration);
     if (exec?.groups) {
         return {
             years: toInt(exec.groups.years),
@@ -55,15 +50,15 @@ export function parseDuration(iso8601duration: string): Duration {
     const tmp: string[] = [];
     let sawTime = false;
     const date: Record<"Y" | "M" | "W" | "D", string[]> = {
-        "Y": [],
-        "M": [],
-        "W": [],
-        "D": [],
+        Y: [],
+        M: [],
+        W: [],
+        D: [],
     };
     const time: Record<"H" | "M" | "S", string[]> = {
-        "H": [],
-        "M": [],
-        "S": [],
+        H: [],
+        M: [],
+        S: [],
     };
     for (let i = 1; i < iso8601duration.length; i++) {
         const char = iso8601duration[i];
@@ -75,7 +70,7 @@ export function parseDuration(iso8601duration: string): Duration {
             }
             sawTime = true;
         } else {
-            const target = sawTime ? (char in time && time) : (char in date && date);
+            const target = sawTime ? char in time && time : char in date && date;
             if (target) {
                 // @ts-ignore TypeScript can't infer that char is a valid key of either time or date
                 target[char] = [...tmp];
@@ -87,17 +82,13 @@ export function parseDuration(iso8601duration: string): Duration {
     }
 
     const nonEmpty = Object.values({ ...date, ...time }).filter((v) => v.length);
-    if (
-        tmp.length || !nonEmpty.length
-    ) {
+    if (tmp.length || !nonEmpty.length) {
         throw new Error(`Unexpected end of input.`);
     }
 
     const floatIdx = nonEmpty.findIndex((v) => v.includes(".") || v.includes(","));
     if (floatIdx > -1 && floatIdx !== nonEmpty.length - 1) {
-        throw new Error(
-            `Only the smallest provided designator is allowed to be a float`,
-        );
+        throw new Error(`Only the smallest provided designator is allowed to be a float`);
     }
 
     const convert = (arr: string[]) => {
@@ -119,11 +110,13 @@ const HOUR = 60;
 const DAY = HOUR * 24;
 
 export function durationToMinutes(duration: Duration): number {
-    return duration.years * 365 * DAY +
+    return (
+        duration.years * 365 * DAY +
         duration.weeks * 7 * DAY +
         duration.months * 31 * DAY +
         duration.days * DAY +
         duration.hours * HOUR +
         duration.minutes +
-        Math.round(duration.seconds / 60);
+        Math.round(duration.seconds / 60)
+    );
 }

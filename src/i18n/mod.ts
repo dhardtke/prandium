@@ -4,8 +4,8 @@ import { en } from "./en.ts";
 export type LanguageId = "en" | "de";
 
 export const LANGUAGES: Record<LanguageId, Language> = {
-    "en": en,
-    "de": de,
+    en: en,
+    de: de,
 } as const;
 
 interface OrderBy {

@@ -5,9 +5,7 @@ import { Router } from "./router.ts";
 
 @needle.injectable()
 export class ThumbnailsRouter extends Router {
-    constructor(
-        private configDir: string = needle.inject(CONFIG_DIR),
-    ) {
+    constructor(private configDir: string = needle.inject(CONFIG_DIR)) {
         super();
         this.router.get("/thumbnails/(.+)", this.get);
     }

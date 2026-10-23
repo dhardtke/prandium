@@ -14,46 +14,30 @@ export interface ParametersBuilder {
     toString(): string;
 }
 
-export const parameters = (
-    urlLike: URL | string | { request: { url: URL } },
-): ParametersBuilder => {
+export const parameters = (urlLike: URL | string | { request: { url: URL } }): ParametersBuilder => {
     const originalUrl = (urlLike as { request: { url: URL } })?.request?.url || urlLike;
     const result = new URL(originalUrl.toString());
 
     const builder = {
-        get(
-            name: string,
-            _default = "",
-        ): string {
+        get(name: string, _default = ""): string {
             return result.searchParams.get(name) || _default;
         },
 
-        getAll(
-            name: string,
-            _default: string[] = [],
-        ): string[] {
+        getAll(name: string, _default: string[] = []): string[] {
             return result.searchParams.has(name) ? result.searchParams.getAll(name) : _default;
         },
 
-        set(
-            name: string,
-            value: string,
-        ): ParametersBuilder {
+        set(name: string, value: string): ParametersBuilder {
             result.searchParams.set(name, value);
             return builder;
         },
 
-        append(
-            name: string,
-            value: unknown,
-        ): ParametersBuilder {
+        append(name: string, value: unknown): ParametersBuilder {
             result.searchParams.append(name, String(value));
             return builder;
         },
 
-        remove(
-            ...names: string[]
-        ): ParametersBuilder {
+        remove(...names: string[]): ParametersBuilder {
             names.forEach((name) => result.searchParams.delete(name));
             return builder;
         },

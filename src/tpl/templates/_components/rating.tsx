@@ -26,7 +26,7 @@ export const Rating = (props: { name: string; value?: number; readonly?: boolean
                             checked={currentValue === comparisonValue}
                             disabled={props.readonly}
                         />
-                        <label htmlFor={`${props.name}-${i}`} title={props.readonly ? "" : String(currentValue)} class={classNames({ "half": half })}>
+                        <label htmlFor={`${props.name}-${i}`} title={props.readonly ? "" : String(currentValue)} class={classNames({ half: half })}>
                             <Icon name={`star-${half ? "half" : "fill"}` as IconName} />
                         </label>
                     </>
@@ -36,7 +36,7 @@ export const Rating = (props: { name: string; value?: number; readonly?: boolean
     };
 
     return (
-        <div class={classNames("rating", { "disabled": props.readonly, "small": props.small })}>
+        <div class={classNames("rating", { disabled: props.readonly, small: props.small })}>
             <Stars />
         </div>
     );

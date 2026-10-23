@@ -13,9 +13,7 @@ export const Dropdown = (props: {
 }) => {
     return (
         <Collapsible id={props.id} label={props.label} labelClass={props.labelClass} caret={props.caret}>
-            <ul class={classNames("dropdown", { "dropdown--with-spacing": props.spacing, "dropdown--full-width": props.fullWidthMobile })}>
-                {props.children}
-            </ul>
+            <ul class={classNames("dropdown", { "dropdown--with-spacing": props.spacing, "dropdown--full-width": props.fullWidthMobile })}>{props.children}</ul>
         </Collapsible>
     );
 };
@@ -25,9 +23,7 @@ export const DropdownItem: AbstractDropdownItem<{
     children: ComponentChildren;
 }> = (props) => (
     <li>
-        <div class={classNames("item", { active: props.active })}>
-            {props.children}
-        </div>
+        <div class={classNames("item", { active: props.active })}>{props.children}</div>
     </li>
 );
 

@@ -89,8 +89,7 @@ class Logger {
     level: number = LogLevels.INFO;
     handlers: BaseHandler[] = [];
 
-    constructor(readonly name: string) {
-    }
+    constructor(readonly name: string) {}
 
     private log(level: number, msg: LogMessage, args: unknown[]): void {
         if (this.level > level) {

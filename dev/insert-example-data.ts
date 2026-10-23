@@ -17,25 +17,14 @@ const thumbnail = await downloadThumbnail(
     "https://img.chefkoch-cdn.de/rezepte/2788721431008084/bilder/949592/crop-960x540/blaetterteig-mit-gyrosfuellung-und-feta-kaese.jpg",
 );
 
-const tags = Tag.createMany(
-    "Fleisch",
-    "Hauptspeise",
-    "Backen",
-    "Party",
-    "Schwein",
-    "K\u00e4se",
-    "Gluten",
-    "Lactose",
-    "Low Carb",
-);
+const tags = Tag.createMany("Fleisch", "Hauptspeise", "Backen", "Party", "Schwein", "K\u00e4se", "Gluten", "Lactose", "Low Carb");
 tagService.create(tags);
 for (let i = 0; i < 50; i++) {
-    const history = Array.from(Array(5).keys())
-        .map((i) => {
-            const d = new Date();
-            d.setDate(d.getDate() - i);
-            return d;
-        });
+    const history = Array.from(Array(5).keys()).map((i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        return d;
+    });
 
     recipeService.create([
         new Recipe({
@@ -88,8 +77,7 @@ for (let i = 0; i < 50; i++) {
                     date: "2020-02-03",
                 }),
                 new Review({
-                    text:
-                        "Wir machen die Taschen auch total gerne. Wir wandeln es nur etwas ab, den Feta ersetze ich mit Hirtenk\u00e4se und die Zwiebeln brate ich direkt mit dem Fleisch an. Beim Taschen formen, nehme ich kein Ei, das h\u00e4lt bei mir auch ohne. Heute gibt es sie wieder, danke f\u00fcr das tolle Rezept. \n\nMeli",
+                    text: "Wir machen die Taschen auch total gerne. Wir wandeln es nur etwas ab, den Feta ersetze ich mit Hirtenk\u00e4se und die Zwiebeln brate ich direkt mit dem Fleisch an. Beim Taschen formen, nehme ich kein Ei, das h\u00e4lt bei mir auch ohne. Heute gibt es sie wieder, danke f\u00fcr das tolle Rezept. \n\nMeli",
                     date: "2019-10-03",
                 }),
                 new Review({
@@ -97,8 +85,7 @@ for (let i = 0; i < 50; i++) {
                     date: "2019-04-13",
                 }),
                 new Review({
-                    text:
-                        "Sehr sehr lecker! habe den Bl\u00e4tterteig vorher noch mit Zaziki bestrichen und, weil \u00fcbrig, nach 10 Minuten im Ofen mit K\u00e4se bestreut und \u00fcberbacken \ud83d\ude0a\ud83d\ude09",
+                    text: "Sehr sehr lecker! habe den Bl\u00e4tterteig vorher noch mit Zaziki bestrichen und, weil \u00fcbrig, nach 10 Minuten im Ofen mit K\u00e4se bestreut und \u00fcberbacken \ud83d\ude0a\ud83d\ude09",
                     date: "2019-04-03",
                 }),
             ],

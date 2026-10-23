@@ -31,10 +31,7 @@ describe("sql", () => {
         for (const order of [undefined, "asc", "desc"]) {
             const expected = `ORDER BY title${order && order !== "asc" ? ` ${order.toUpperCase()}` : ""}`;
             expect(buildOrderBySql({ column: "title", order: order as "asc" }, ["title"])).toEqual(expected);
-            expect(buildOrderBySql(
-                    { column: "title", order: order?.toUpperCase() as "asc" },
-                    ["title"],
-                )).toEqual(expected);
+            expect(buildOrderBySql({ column: "title", order: order?.toUpperCase() as "asc" }, ["title"])).toEqual(expected);
         }
     });
 

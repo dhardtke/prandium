@@ -157,9 +157,7 @@ describe("importRecipes", () => {
             });
 
             // Then
-            expect(result).toEqual([
-                { url: "url", success: false, error: "Recipe metadata not found in HTML." },
-            ]);
+            expect(result).toEqual([{ url: "url", success: false, error: "Recipe metadata not found in HTML." }]);
         }),
     );
 
@@ -195,7 +193,10 @@ describe("importRecipes", () => {
 
     describe("parsing instructions", () => {
         test.each<[unknown, string[]]>([
-            [["instruction1", "instruction2"], ["instruction1", "instruction2"]],
+            [
+                ["instruction1", "instruction2"],
+                ["instruction1", "instruction2"],
+            ],
             [["   instruction1   "], ["instruction1"]],
             ["instruction1\ninstruction2\ninstruction3", ["instruction1", "instruction2", "instruction3"]],
             ["", []],
@@ -205,13 +206,26 @@ describe("importRecipes", () => {
     describe("parsing tags", () => {
         describe.each(["keywords", "recipeCategory"])("schema field is %s", (field) => {
             test.each<[unknown, string[]]>([
-                [["tag1", "tag2"], ["tag1", "tag2"]],
+                [
+                    ["tag1", "tag2"],
+                    ["tag1", "tag2"],
+                ],
                 [["   tag1   "], ["tag1"]],
                 ["tag1,tag2,tag3", ["tag1", "tag2", "tag3"]],
                 ["", []],
                 ["tag1, tag2, tag3", ["tag1", "tag2", "tag3"]],
-                [["tag1, tag2, tag3", "tag4"], ["tag1, tag2, tag3", "tag4"]],
-            ])("Given %j Then Recipe#tags have the titles %j", (given, then) => simpleTest(given, then.map((title) => ({ title })), field, "tags")());
+                [
+                    ["tag1, tag2, tag3", "tag4"],
+                    ["tag1, tag2, tag3", "tag4"],
+                ],
+            ])("Given %j Then Recipe#tags have the titles %j", (given, then) =>
+                simpleTest(
+                    given,
+                    then.map((title) => ({ title })),
+                    field,
+                    "tags",
+                )(),
+            );
         });
     });
 
@@ -247,7 +261,8 @@ describe("importRecipes", () => {
             ["transFatContent", "nutritionTransFat"],
             ["unsaturatedFatContent", "nutritionUnsaturatedFat"],
         ])("Given nutrition.%s Then Recipe#%s is set", (schemaField, recipeField) =>
-            simpleTest({ [schemaField]: "my nutritional value" }, "my nutritional value", "nutrition", recipeField)());
+            simpleTest({ [schemaField]: "my nutritional value" }, "my nutritional value", "nutrition", recipeField)(),
+        );
     });
 
     test("parsing prepTime", simpleTest("PT20M", 20, "prepTime", "prepTime"));

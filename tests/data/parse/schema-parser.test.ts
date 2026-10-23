@@ -86,7 +86,7 @@ describe("SchemaParser", () => {
     </script>`;
         const expected: SchemaRecipe = {
             "@type": "Recipe",
-            "name": "My Recipe",
+            name: "My Recipe",
         };
         expect(new SchemaParser(html).findFirstRecipe()).toEqual(expected);
     });

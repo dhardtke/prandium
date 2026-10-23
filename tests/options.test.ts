@@ -24,10 +24,7 @@ describe("parseOptions", () => {
         });
     });
 
-    test.each([
-        [["--port=9000"]],
-        [["--port", "9000"]],
-    ])("Given %j Then the port is 9000", (args) => {
+    test.each([[["--port=9000"]], [["--port", "9000"]]])("Given %j Then the port is 9000", (args) => {
         expect((parseOptions(args) as Options).port).toEqual(9000);
     });
 

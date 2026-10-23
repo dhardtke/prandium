@@ -6,11 +6,6 @@ import { ThumbnailsRouter } from "./thumbnails.router.ts";
 
 export class RouterRegistry {
     static get() {
-        return [
-            container.get(AssetsRouter),
-            container.get(IndexRouter),
-            container.get(RecipeRouter),
-            container.get(ThumbnailsRouter),
-        ];
+        return [container.get(AssetsRouter), container.get(IndexRouter), container.get(RecipeRouter), container.get(ThumbnailsRouter)];
     }
 }

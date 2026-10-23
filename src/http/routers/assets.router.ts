@@ -24,11 +24,7 @@ async function tryMultiple<P extends string>(ctx: Oak.RouterContext<P>, filename
     throw lastError;
 }
 
-async function assetMiddleware<P extends string>(
-    ctx: Oak.RouterContext<P>,
-    next: () => Promise<unknown>,
-    filename: string,
-) {
+async function assetMiddleware<P extends string>(ctx: Oak.RouterContext<P>, next: () => Promise<unknown>, filename: string) {
     try {
         await tryMultiple(ctx, filename, [AssetsDir, CompiledAssetsDir]);
     } catch {
@@ -40,9 +36,7 @@ async function assetMiddleware<P extends string>(
 export class AssetsRouter extends Router {
     constructor() {
         super();
-        this.router
-            .get(GET_ROUTE, this.get)
-            .get(SW_JS_ROUTE, this.getSw);
+        this.router.get(GET_ROUTE, this.get).get(SW_JS_ROUTE, this.getSw);
     }
 
     get: Oak.RouterMiddleware<typeof GET_ROUTE> = async (ctx, next) => {

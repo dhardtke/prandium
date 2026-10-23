@@ -29,8 +29,7 @@ Deno.test("main", async (t) => {
         assertEquals(
             await main({
                 args: [],
-                serverFactory: async () => {
-                },
+                serverFactory: async () => {},
                 denoVersion: "42.0.0",
                 requiredDenoVersionRange: "~1.22.0",
                 logHandlerFactory: logCapture.logHandlerFactory,
@@ -39,7 +38,8 @@ Deno.test("main", async (t) => {
         );
         assertEquals(logCapture.records, [
             {
-                msg: `The installed version of Deno does not satisfy the required version range ${REQUIRED_DENO_VERSION_RANGE}.` +
+                msg:
+                    `The installed version of Deno does not satisfy the required version range ${REQUIRED_DENO_VERSION_RANGE}.` +
                     ` Please install a compatible Deno version and try again.`,
                 level: log.LogLevels.ERROR,
                 levelName: "ERROR",

@@ -20,7 +20,10 @@ export class IndexRouter extends Router {
     }
 
     get: Oak.RouterMiddleware<"/"> = (ctx) => {
-        const tagIds = ctx.request.url.searchParams.getAll("tagId").map((id) => toInt(id, -1)).filter((i) => i !== -1);
+        const tagIds = ctx.request.url.searchParams
+            .getAll("tagId")
+            .map((id) => toInt(id, -1))
+            .filter((i) => i !== -1);
         const title = parameters(ctx).get("title");
         const orderBy = orderByHelper(ctx, DEFAULT_ORDER_BY);
         const paginationParams = this.paginationHelper.buildPaginationParams(ctx);

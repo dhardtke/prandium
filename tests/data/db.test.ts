@@ -19,9 +19,7 @@ beforeAll(() => {
 describe("database", () => {
     const db = new Database(":memory:");
 
-    db.exec(
-        "CREATE TABLE book (id INTEGER PRIMARY KEY, title TEXT NOT NULL)",
-    );
+    db.exec("CREATE TABLE book (id INTEGER PRIMARY KEY, title TEXT NOT NULL)");
 
     afterEach(() => {
         flushAllTables(db);
@@ -36,9 +34,7 @@ describe("database", () => {
     });
 
     test("exec", () => {
-        db.exec(
-            "INSERT INTO book (title) VALUES ('Lorem Ipsum'), ('Ipsum Lorem')",
-        );
+        db.exec("INSERT INTO book (title) VALUES ('Lorem Ipsum'), ('Ipsum Lorem')");
         const rows = [...db.query("SELECT id, title FROM book")];
         expect(rows).toEqual([
             { id: 1, title: "Lorem Ipsum" },
@@ -50,23 +46,18 @@ describe("database", () => {
     });
 
     test("single", () => {
-        db.exec(
-            "INSERT INTO book (title) VALUES ('Lorem Ipsum'), ('Ipsum Lorem')",
-        );
+        db.exec("INSERT INTO book (title) VALUES ('Lorem Ipsum'), ('Ipsum Lorem')");
         const row = db.single("SELECT id, title FROM book");
         expect(row).toEqual({ id: 1, title: "Lorem Ipsum" });
     });
 
     test("prepare", () => {
         const titles = [...Array(10).keys()].map((i) => `Book ${i + 1}`);
-        db.prepare<{ id: number }>(
-            "INSERT INTO book (title) VALUES (:title) RETURNING id",
-            (query) => {
-                titles.forEach((title, i) => {
-                    expect(query({ title })).toEqual([{ id: i + 1 }]);
-                });
-            },
-        );
+        db.prepare<{ id: number }>("INSERT INTO book (title) VALUES (:title) RETURNING id", (query) => {
+            titles.forEach((title, i) => {
+                expect(query({ title })).toEqual([{ id: i + 1 }]);
+            });
+        });
         const rows = [...db.query("SELECT id, title FROM book")];
         expect(rows).toEqual(titles.map((title, i) => ({ title, id: i + 1 })));
     });

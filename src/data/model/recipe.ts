@@ -195,19 +195,13 @@ export class Recipe extends Model {
 }
 
 export class Review {
-    static columns = [
-        "id",
-        "date",
-        "text",
-    ];
+    static columns = ["id", "date", "text"];
 
     public id?: number;
     public date: Date;
     public text: string;
 
-    constructor(
-        args: { id?: number; date?: Date | string; text: string },
-    ) {
+    constructor(args: { id?: number; date?: Date | string; text: string }) {
         this.id = args.id;
         this.date = toDate(args.date);
         this.text = args.text;

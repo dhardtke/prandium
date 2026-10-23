@@ -24,12 +24,10 @@ const slug = (str: string): string => {
 
 export const UrlGenerator = {
     home: (filters?: { tagIds?: number[]; tagFilter?: boolean }): string => {
-        return `/${filters ? "?" : ""}${
-            join(
-                filters?.tagIds?.map((id) => "tagId=" + id),
-                filters?.tagFilter && "tagFilter=true",
-            )
-        }`;
+        return `/${filters ? "?" : ""}${join(
+            filters?.tagIds?.map((id) => "tagId=" + id),
+            filters?.tagFilter && "tagFilter=true",
+        )}`;
     },
     recipeImport: (): string => {
         return `/recipe/import`;

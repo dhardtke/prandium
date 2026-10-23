@@ -7,15 +7,17 @@ import { PaginationHelper } from "../../../src/http/middleware/helpers/paginatio
 import { DEFAULT_ORDER_BY, IndexRouter } from "../../../src/http/routers/index.router.ts";
 
 Deno.test("IndexRouter", async (t) => {
-    let lastListInvocation: {
-        filters: {
-            tagIds: number[];
-            title: string;
-        };
-        showTagFilter: boolean;
-        orderBy: OrderBy | undefined;
-        paginationParams: PaginationParams;
-    } | undefined = undefined;
+    let lastListInvocation:
+        | {
+              filters: {
+                  tagIds: number[];
+                  title: string;
+              };
+              showTagFilter: boolean;
+              orderBy: OrderBy | undefined;
+              paginationParams: PaginationParams;
+          }
+        | undefined = undefined;
 
     const mockIndexController: IndexController = {
         list(filters: { tagIds: number[]; title: string }, showTagFilter: boolean, orderBy: OrderBy | undefined, paginationParams: PaginationParams) {
@@ -53,14 +55,11 @@ Deno.test("IndexRouter", async (t) => {
         const path = "/?tagId=1&tagId=2&tagId=3&tagId=4&tagId=5&tagId=6&tagId=9&title=lorem+ipsum";
         await invokeRoute(path);
 
-        assertEquals(
-            lastListInvocation,
-            {
-                filters: { tagIds: [1, 2, 3, 4, 5, 6, 9], title: "lorem ipsum" },
-                showTagFilter: false,
-                orderBy: DEFAULT_ORDER_BY,
-                paginationParams: { page: 1, pageSize, currentUrl: `http://localhost${path}` },
-            },
-        );
+        assertEquals(lastListInvocation, {
+            filters: { tagIds: [1, 2, 3, 4, 5, 6, 9], title: "lorem ipsum" },
+            showTagFilter: false,
+            orderBy: DEFAULT_ORDER_BY,
+            paginationParams: { page: 1, pageSize, currentUrl: `http://localhost${path}` },
+        });
     });
 });

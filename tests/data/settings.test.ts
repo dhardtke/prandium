@@ -48,12 +48,10 @@ describe("Settings", () => {
         },
     ])("readFromDisk throws $message", ({ data, message }) =>
         withTemp(async (tmpDir) => {
-            await Bun.write(
-                path.join(tmpDir, SettingsFilename),
-                typeof data === "string" ? data : JSON.stringify(data),
-            );
+            await Bun.write(path.join(tmpDir, SettingsFilename), typeof data === "string" ? data : JSON.stringify(data));
             await expect(readFromDisk(tmpDir)).rejects.toThrow(message);
-        })());
+        })(),
+    );
 
     test(
         `readFromDisk returns default settings if settings unavailable`,
@@ -69,10 +67,7 @@ describe("Settings", () => {
                 importConcurrency: 1,
                 pageSize: DefaultSettings.pageSize + 1,
             };
-            await Bun.write(
-                path.join(tmpDir, SettingsFilename),
-                JSON.stringify(data),
-            );
+            await Bun.write(path.join(tmpDir, SettingsFilename), JSON.stringify(data));
             const actual = await readFromDisk(tmpDir);
             expect(actual.importConcurrency).toEqual(data.importConcurrency!);
             expect(actual.pageSize).toEqual(data.pageSize!);

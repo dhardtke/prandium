@@ -17,14 +17,17 @@ export const EmptyFilter = { sql: "TRUE", bindings: [] };
 export function buildFilters(...filters: Filter[]): Filters {
     const activeFilters = filters.filter((f) => f.active);
     if (activeFilters.length) {
-        return activeFilters.reduce((result: Filters, { sql, bindings }, i) => {
-            result.sql += `${i === 0 ? "" : " AND "}${sql()}`;
-            const effectiveBindings = bindings ? bindings() : [];
-            if (effectiveBindings.length) {
-                result.bindings = [...result.bindings, ...effectiveBindings];
-            }
-            return result;
-        }, { sql: "", bindings: [] });
+        return activeFilters.reduce(
+            (result: Filters, { sql, bindings }, i) => {
+                result.sql += `${i === 0 ? "" : " AND "}${sql()}`;
+                const effectiveBindings = bindings ? bindings() : [];
+                if (effectiveBindings.length) {
+                    result.bindings = [...result.bindings, ...effectiveBindings];
+                }
+                return result;
+            },
+            { sql: "", bindings: [] },
+        );
     } else {
         return EmptyFilter;
     }
@@ -32,21 +35,14 @@ export function buildFilters(...filters: Filter[]): Filters {
 
 export const EmptyOrderBy = "ORDER BY TRUE";
 
-export function buildOrderBySql(
-    orderBy: OrderBy | undefined,
-    allowedColumns: string[],
-): string {
+export function buildOrderBySql(orderBy: OrderBy | undefined, allowedColumns: string[]): string {
     if (orderBy && allowedColumns.includes(orderBy.column)) {
         return `ORDER BY ${orderBy.column}${orderBy.order?.toUpperCase() === "DESC" ? " DESC" : ""}`;
     }
     return EmptyOrderBy;
 }
 
-export function columns(
-    names: (string | undefined)[],
-    columnPrefix?: string,
-    aliasPrefix?: string,
-): string {
+export function columns(names: (string | undefined)[], columnPrefix?: string, aliasPrefix?: string): string {
     return names
         .filter((name) => Boolean(name))
         .map((n) => `${columnPrefix ?? ""}${n}${aliasPrefix ? ` AS ${aliasPrefix}${n}` : ""}`)
@@ -58,5 +54,7 @@ export function placeholders<T>(count: T[] | number | undefined): string {
         return "";
     }
     const howMany = typeof count === "number" ? count : count.length;
-    return Array.from(Array(howMany)).map(() => "?").join(", ");
+    return Array.from(Array(howMany))
+        .map(() => "?")
+        .join(", ");
 }

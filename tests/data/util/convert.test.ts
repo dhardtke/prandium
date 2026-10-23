@@ -9,14 +9,12 @@ describe("convert", () => {
             });
         }
 
-        for (
-            const [str, expected] of [
-                ["42", 42],
-                ["0", 0],
-                // oxlint-disable-next-line no-loss-of-precision
-                ["102341998323241321", 102341998323241321],
-            ] as [string, number][]
-        ) {
+        for (const [str, expected] of [
+            ["42", 42],
+            ["0", 0],
+            // oxlint-disable-next-line no-loss-of-precision
+            ["102341998323241321", 102341998323241321],
+        ] as [string, number][]) {
             test(`Given str="${str}" and default=-1 Then it returns the parsed value ${expected}`, () => {
                 expect(toInt(str as string, -1)).toEqual(expected);
             });
@@ -30,16 +28,14 @@ describe("convert", () => {
             });
         }
 
-        for (
-            const [str, expected] of [
-                ["42", 42],
-                ["0", 0],
-                // oxlint-disable-next-line no-loss-of-precision
-                ["102341998323241321", 102341998323241321],
-                // oxlint-disable-next-line no-loss-of-precision
-                ["432934294823942.20012", 432934294823942.20012],
-            ] as [string, number][]
-        ) {
+        for (const [str, expected] of [
+            ["42", 42],
+            ["0", 0],
+            // oxlint-disable-next-line no-loss-of-precision
+            ["102341998323241321", 102341998323241321],
+            // oxlint-disable-next-line no-loss-of-precision
+            ["432934294823942.20012", 432934294823942.20012],
+        ] as [string, number][]) {
             test(`Given str="${str}" and default=-1 Then it returns the parsed value ${expected}`, () => {
                 expect(toFloat(str as string, -1)).toEqual(expected);
             });
@@ -54,13 +50,11 @@ describe("convert", () => {
             });
         }
 
-        for (
-            const [str, expected] of [
-                ["0", new Date(0)],
-                ["1616804763", new Date(1616804763)],
-                ["2016-09-12T00:00:00.000Z", new Date("2016-09-12T00:00:00.000Z")],
-            ] as [string, Date][]
-        ) {
+        for (const [str, expected] of [
+            ["0", new Date(0)],
+            ["1616804763", new Date(1616804763)],
+            ["2016-09-12T00:00:00.000Z", new Date("2016-09-12T00:00:00.000Z")],
+        ] as [string, Date][]) {
             test(`Given str="${str}" and _default=undefined Then it returns the parsed value ${expected}`, () => {
                 expect(toDate(str as string, undefined)).toEqual(expected);
             });
@@ -75,7 +69,8 @@ describe("convert", () => {
         expect(toCamelCase({ arr: ["a", "b", { my_arr: ["d"] }] })).toEqual({
             arr: ["a", "b", { myArr: ["d"] }],
         });
-        expect(toCamelCase({
+        expect(
+            toCamelCase({
                 id: 42,
                 created_at: "yesterday",
                 updated_at: null,
@@ -86,17 +81,18 @@ describe("convert", () => {
                         arr: [42, 43],
                     },
                 },
-            })).toEqual({
-                id: 42,
-                createdAt: "yesterday",
-                updatedAt: null,
-                nestedObj: {
-                    createdAt: "today",
-                    deepObject: {
-                        deep: true,
-                        arr: [42, 43],
-                    },
+            }),
+        ).toEqual({
+            id: 42,
+            createdAt: "yesterday",
+            updatedAt: null,
+            nestedObj: {
+                createdAt: "today",
+                deepObject: {
+                    deep: true,
+                    arr: [42, 43],
                 },
-            });
+            },
+        });
     });
 });

@@ -116,18 +116,9 @@ describe("duration", () => {
             ["P10DT10A", "Unexpected character A at position 7"],
             ["PP", "Unexpected character P at position 1"],
             ["PT", "Unexpected end of input"],
-            [
-                "P0.5YT0.25M0.25S",
-                "Only the smallest provided designator is allowed to be a float",
-            ],
-            [
-                "P0.5YT0.25S",
-                "Only the smallest provided designator is allowed to be a float",
-            ],
-            [
-                "PT0.5M0.25S",
-                "Only the smallest provided designator is allowed to be a float",
-            ],
+            ["P0.5YT0.25M0.25S", "Only the smallest provided designator is allowed to be a float"],
+            ["P0.5YT0.25S", "Only the smallest provided designator is allowed to be a float"],
+            ["PT0.5M0.25S", "Only the smallest provided designator is allowed to be a float"],
         ]);
         for (const [input, expected] of tests.entries()) {
             expect(() => parseDuration(input)).toThrow(expected);
@@ -135,7 +126,8 @@ describe("duration", () => {
     });
 
     test(`durationToMinutes`, () => {
-        expect(durationToMinutes({
+        expect(
+            durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -143,8 +135,10 @@ describe("duration", () => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            })).toEqual(0);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(0);
+        expect(
+            durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -152,8 +146,10 @@ describe("duration", () => {
                 hours: 0,
                 minutes: 0,
                 seconds: 1,
-            })).toEqual(0);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(0);
+        expect(
+            durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -161,8 +157,10 @@ describe("duration", () => {
                 hours: 0,
                 minutes: 1,
                 seconds: 0,
-            })).toEqual(1);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(1);
+        expect(
+            durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -170,8 +168,10 @@ describe("duration", () => {
                 hours: 1,
                 minutes: 0,
                 seconds: 0,
-            })).toEqual(60);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(60);
+        expect(
+            durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -179,8 +179,10 @@ describe("duration", () => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            })).toEqual(24 * 60);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(24 * 60);
+        expect(
+            durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 1,
@@ -188,8 +190,10 @@ describe("duration", () => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            })).toEqual(7 * 24 * 60);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(7 * 24 * 60);
+        expect(
+            durationToMinutes({
                 years: 0,
                 months: 1,
                 weeks: 0,
@@ -197,8 +201,10 @@ describe("duration", () => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            })).toEqual(31 * 24 * 60);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(31 * 24 * 60);
+        expect(
+            durationToMinutes({
                 years: 1,
                 months: 0,
                 weeks: 0,
@@ -206,8 +212,10 @@ describe("duration", () => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            })).toEqual(365 * 24 * 60);
-        expect(durationToMinutes({
+            }),
+        ).toEqual(365 * 24 * 60);
+        expect(
+            durationToMinutes({
                 years: 3,
                 months: 2,
                 weeks: 4,
@@ -215,6 +223,7 @@ describe("duration", () => {
                 hours: 10,
                 minutes: 47,
                 seconds: 36,
-            })).toEqual((((365 * 3 + 2 * 31 + 4 * 7 + 5) * 24 + 10) * 60 + 47) + 1);
+            }),
+        ).toEqual(((365 * 3 + 2 * 31 + 4 * 7 + 5) * 24 + 10) * 60 + 47 + 1);
     });
 });

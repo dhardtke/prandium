@@ -26,14 +26,12 @@ const PreventFOUC = () => (
             dangerouslySetInnerHTML={{
                 __html: `html { display: none } .preload * { transition: none !important}`,
             }}
-        >
-        </style>
+        ></style>
         <script
             dangerouslySetInnerHTML={{
                 __html: `document.documentElement.classList.remove("preload")`,
             }}
-        >
-        </script>
+        ></script>
     </>
 );
 
@@ -42,8 +40,7 @@ const RegisterServiceWorker = () => (
         dangerouslySetInnerHTML={{
             __html: `window.addEventListener("load", function () { if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js") } })`,
         }}
-    >
-    </script>
+    ></script>
 );
 
 const Assets = () => {
@@ -76,9 +73,7 @@ const Page: PageType = (props: { title?: string; children: ComponentChildren }) 
             </head>
             <body>
                 <Header />
-                <main className="container">
-                    {props.children}
-                </main>
+                <main className="container">{props.children}</main>
             </body>
         </html>
     );

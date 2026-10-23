@@ -31,9 +31,7 @@ function _sameRecipeIds(tagIds?: number[]): Filter {
     };
 }
 
-function tagsWithSameRecipes(
-    tags?: { ids: number[]; includeOthers?: boolean },
-): Filter {
+function tagsWithSameRecipes(tags?: { ids: number[]; includeOthers?: boolean }): Filter {
     const internalFilter = _sameRecipeIds(tags?.ids);
     return {
         active: Boolean(tags && !tags.includeOthers),
@@ -42,10 +40,7 @@ function tagsWithSameRecipes(
     };
 }
 
-function recipeCountColumn(
-    active?: boolean,
-    tagIdsWithSameRecipes?: number[],
-): { column: string; bindings: QueryParameter[] } {
+function recipeCountColumn(active?: boolean, tagIdsWithSameRecipes?: number[]): { column: string; bindings: QueryParameter[] } {
     if (!active) {
         return {
             column: "",
@@ -67,16 +62,11 @@ function recipeCountColumn(
 
 @needle.injectable()
 export class TagService implements Service<Tag> {
-    constructor(
-        private readonly db: Database = needle.inject(Database),
-    ) {
-    }
+    constructor(private readonly db: Database = needle.inject(Database)) {}
 
     // TODO filter arguments
     count(): number {
-        return this.db.single<{ total: number }>(
-            "SELECT COUNT(*) AS total FROM tag",
-        )!.total;
+        return this.db.single<{ total: number }>("SELECT COUNT(*) AS total FROM tag")!.total;
     }
 
     list(
@@ -97,48 +87,28 @@ export class TagService implements Service<Tag> {
         } = {},
     ): Tag[] {
         // TODO support loadRecipes
-        const filter = buildFilters(
-            recipeFilter(args.filters?.recipeId),
-            tagsWithSameRecipes(args.filters?.tagsWithSameRecipes),
-            idsFilter(args.filters?.ids),
-        );
-        const recipeCount = recipeCountColumn(
-            args.loadRecipeCount,
-            args.filters?.tagsWithSameRecipes?.ids,
-        );
-        const cols = columns([
-            ...Tag.columns,
-            recipeCount.column,
-        ]);
-        return this.db.query(
-            `SELECT ${cols}
+        const filter = buildFilters(recipeFilter(args.filters?.recipeId), tagsWithSameRecipes(args.filters?.tagsWithSameRecipes), idsFilter(args.filters?.ids));
+        const recipeCount = recipeCountColumn(args.loadRecipeCount, args.filters?.tagsWithSameRecipes?.ids);
+        const cols = columns([...Tag.columns, recipeCount.column]);
+        return this.db
+            .query(
+                `SELECT ${cols}
        FROM tag
        WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, Tag.columns)}
        LIMIT ? OFFSET ?`,
-            [
-                ...recipeCount.bindings,
-                ...filter.bindings,
-                args.limit || -1,
-                args.offset || 0,
-            ],
-        ).map((src) => new Tag(toCamelCase(src)));
+                [...recipeCount.bindings, ...filter.bindings, args.limit || -1, args.offset || 0],
+            )
+            .map((src) => new Tag(toCamelCase(src)));
     }
 
     create(tags: Tag[]): void {
         this.db.transaction(() => {
-            this.db.prepare<{ id: number }>(
-                `INSERT INTO tag (created_at, updated_at, title) VALUES (?, ?, ?) RETURNING id`,
-                (query) => {
-                    for (const tag of tags) {
-                        const rows = query([
-                            tag.createdAt,
-                            tag.updatedAt,
-                            tag.title,
-                        ]);
-                        tag.id = rows[0].id;
-                    }
-                },
-            );
+            this.db.prepare<{ id: number }>(`INSERT INTO tag (created_at, updated_at, title) VALUES (?, ?, ?) RETURNING id`, (query) => {
+                for (const tag of tags) {
+                    const rows = query([tag.createdAt, tag.updatedAt, tag.title]);
+                    tag.id = rows[0].id;
+                }
+            });
 
             this.db.prepare(
                 `INSERT INTO recipe_tag (tag_id, recipe_id)
@@ -155,14 +125,11 @@ export class TagService implements Service<Tag> {
     }
 
     update(tags: Tag[]): void {
-        this.db.prepare(
-            "UPDATE tag SET updated_at = ?, title = ? WHERE id = ?",
-            (query) => {
-                for (const tag of tags) {
-                    query([tag.updatedAt, tag.title, tag.id]);
-                }
-            },
-        );
+        this.db.prepare("UPDATE tag SET updated_at = ?, title = ? WHERE id = ?", (query) => {
+            for (const tag of tags) {
+                query([tag.updatedAt, tag.title, tag.id]);
+            }
+        });
     }
 
     // oxlint-disable-next-line no-unused-vars
@@ -186,14 +153,12 @@ export class TagService implements Service<Tag> {
             titleToTags[tag.title] = tag;
         }
         const titles = Object.keys(titleToTags);
-        for (
-            const row of this.db.query<Tag>(
-                `SELECT id, title
+        for (const row of this.db.query<Tag>(
+            `SELECT id, title
        FROM tag
        WHERE title IN (${titles.map(() => "?").join(", ")})`,
-                titles,
-            )
-        ) {
+            titles,
+        )) {
             titleToTags[row.title].id = row.id;
         }
     }

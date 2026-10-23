@@ -68,9 +68,7 @@ const TagFilter = (props: { tags: Tag[]; showTagFilter: boolean }) => {
                             <div class="col col-lg-2 tag">
                                 <a class={classNames("card", "padded", { disabled: disabled, active: active })} href={disabled ? undefined : href.toString()}>
                                     <div class="side-by-side">
-                                        <small class={classNames("title", { "c-muted": tag.recipeCount === 0 })}>
-                                            {tag.title}
-                                        </small>
+                                        <small class={classNames("title", { "c-muted": tag.recipeCount === 0 })}>{tag.title}</small>
                                         {tag.recipeCount! > 0 ? <span class="badge">{tag.recipeCount}</span> : ""}
                                     </div>
                                 </a>
@@ -97,88 +95,115 @@ function OrderBy() {
     const optgroups: Optgroup[] = [
         {
             label: l.recipe.form.group.basic,
-            options: [{
-                value: "id",
-                label: l.id,
-            }, {
-                value: "title",
-                label: l.title,
-            }, {
-                value: "cooked_count",
-                label: l.recipe.cookedCount,
-            }, {
-                value: "flagged",
-                label: l.recipe.flagged,
-            }],
+            options: [
+                {
+                    value: "id",
+                    label: l.id,
+                },
+                {
+                    value: "title",
+                    label: l.title,
+                },
+                {
+                    value: "cooked_count",
+                    label: l.recipe.cookedCount,
+                },
+                {
+                    value: "flagged",
+                    label: l.recipe.flagged,
+                },
+            ],
         },
         {
             label: l.recipe.form.group.ratings,
-            options: [{
-                value: "aggregate_rating_value",
-                label: l.recipe.aggregateRatingValue,
-            }, {
-                value: "rating",
-                label: l.recipe.rating,
-            }],
+            options: [
+                {
+                    value: "aggregate_rating_value",
+                    label: l.recipe.aggregateRatingValue,
+                },
+                {
+                    value: "rating",
+                    label: l.recipe.rating,
+                },
+            ],
         },
         {
             label: l.recipe.form.group.times,
-            options: [{
-                value: "created_at",
-                label: l.createdAt,
-            }, {
-                value: "updated_at",
-                label: l.updatedAt,
-            }, {
-                value: "last_cooked_at",
-                label: l.recipe.lastCookedAt,
-            }, {
-                value: "prep_time",
-                label: l.recipe.prepTime,
-            }, {
-                value: "cook_time",
-                label: l.recipe.cookTime,
-            }, {
-                value: "total_time",
-                label: l.recipe.time.total,
-            }],
+            options: [
+                {
+                    value: "created_at",
+                    label: l.createdAt,
+                },
+                {
+                    value: "updated_at",
+                    label: l.updatedAt,
+                },
+                {
+                    value: "last_cooked_at",
+                    label: l.recipe.lastCookedAt,
+                },
+                {
+                    value: "prep_time",
+                    label: l.recipe.prepTime,
+                },
+                {
+                    value: "cook_time",
+                    label: l.recipe.cookTime,
+                },
+                {
+                    value: "total_time",
+                    label: l.recipe.time.total,
+                },
+            ],
         },
         {
             label: l.recipe.form.group.nutrition,
-            options: [{
-                value: "nutrition_calories",
-                label: l.recipe.nutrition.calories,
-            }, {
-                value: "nutrition_carbohydrate",
-                label: l.recipe.nutrition.carbohydrate,
-            }, {
-                value: "nutrition_cholesterol",
-                label: l.recipe.nutrition.cholesterol,
-            }, {
-                value: "nutrition_fat",
-                label: l.recipe.nutrition.fat,
-            }, {
-                value: "nutrition_fiber",
-                label: l.recipe.nutrition.fiber,
-            }, {
-                value: "nutrition_protein",
-                label: l.recipe.nutrition.protein,
-            }, {
-                value: "nutrition_saturatedFat",
-                label: l.recipe.nutrition.saturatedFat,
-            }, {
-                value: "nutrition_sodium",
-                label: l.recipe.nutrition.sodium,
-            }, {
-                value: "nutrition_sugar",
-                label: l.recipe.nutrition.sugar,
-            }, {
-                value: "nutrition_trans_fat",
-                label: l.recipe.nutrition.transFat,
-            }, {
-                value: "nutrition_unsaturated_fat",
-                label: l.recipe.nutrition.unsaturatedFat,
-            }],
+            options: [
+                {
+                    value: "nutrition_calories",
+                    label: l.recipe.nutrition.calories,
+                },
+                {
+                    value: "nutrition_carbohydrate",
+                    label: l.recipe.nutrition.carbohydrate,
+                },
+                {
+                    value: "nutrition_cholesterol",
+                    label: l.recipe.nutrition.cholesterol,
+                },
+                {
+                    value: "nutrition_fat",
+                    label: l.recipe.nutrition.fat,
+                },
+                {
+                    value: "nutrition_fiber",
+                    label: l.recipe.nutrition.fiber,
+                },
+                {
+                    value: "nutrition_protein",
+                    label: l.recipe.nutrition.protein,
+                },
+                {
+                    value: "nutrition_saturatedFat",
+                    label: l.recipe.nutrition.saturatedFat,
+                },
+                {
+                    value: "nutrition_sodium",
+                    label: l.recipe.nutrition.sodium,
+                },
+                {
+                    value: "nutrition_sugar",
+                    label: l.recipe.nutrition.sugar,
+                },
+                {
+                    value: "nutrition_trans_fat",
+                    label: l.recipe.nutrition.transFat,
+                },
+                {
+                    value: "nutrition_unsaturated_fat",
+                    label: l.recipe.nutrition.unsaturatedFat,
+                },
+            ],
         },
     ];
 
@@ -190,7 +215,9 @@ function OrderBy() {
         <>
             {[...Page.currentUrl.searchParams.entries()]
                 .filter(([name]) => !["orderBy", "order", "flash", "page"].includes(name))
-                .map(([name, value]) => <input type="hidden" name={name} value={value} />)}
+                .map(([name, value]) => (
+                    <input type="hidden" name={name} value={value} />
+                ))}
         </>
     );
 
@@ -198,9 +225,7 @@ function OrderBy() {
         <form id="orderBy">
             <HiddenInputs />
             <div class="input-group">
-                <span class="input-group-text">
-                    {l.orderBy.title}
-                </span>
+                <span class="input-group-text">{l.orderBy.title}</span>
                 <select class="form-select" title={l.recipe.orderBy} autocomplete="off" name="orderBy">
                     {optgroups.map(({ label, options }) => (
                         <optgroup label={label}>
@@ -231,17 +256,11 @@ const ActionButtons = (props: { recipeCount: number }) => (
             <LabeledIcon label={l.recipe.import.title} name="cloud-arrow-down-fill" />
         </a>
 
-        <div class="badge recipe-count">
-            {l.recipe.count(props.recipeCount)}
-        </div>
+        <div class="badge recipe-count">{l.recipe.count(props.recipeCount)}</div>
     </div>
 );
 
-export const RecipeListTemplate = (props: {
-    recipes: Pagination<Recipe>;
-    tags: Tag[];
-    showTagFilter: boolean;
-}) => {
+export const RecipeListTemplate = (props: { recipes: Pagination<Recipe>; tags: Tag[]; showTagFilter: boolean }) => {
     const tagFilterId = "collapsible-tag-filter";
 
     return (
@@ -287,62 +306,68 @@ export const RecipeListTemplate = (props: {
             </Collapsible>
 
             {"" /* TODO: move card to components function */}
-            {Page.currentUrl.searchParams.get("flash") === "deleteSuccessful" && <Alert type="success" title={l.info}>{l.recipe.deleteSuccessful}</Alert>}
-            {props.recipes.totalItems
-                ? (
-                    <div class="grid mb" id="recipe-list">
-                        {props.recipes.items.map((recipe, i) => (
-                            <div class={classNames("col-12", "col-md-6", "col-lg-4", "recipe", { flagged: recipe.flagged })}>
-                                <Dropdown id={`dropdown-recipe-${i}`} label={<Icon name="three-dots" />} labelClass={"btn light"}>
-                                    <DropdownItem>
-                                        <a href={UrlGenerator.recipeEdit(recipe)}>
-                                            <LabeledIcon label={l.edit} name="pencil" />
-                                        </a>
-                                    </DropdownItem>
-                                    <DropdownDivider />
-                                    <DropdownItem>
-                                        <a class="c-danger" href={UrlGenerator.recipeDelete(recipe)}>
-                                            <LabeledIcon label={l.delete} name="trash" />
-                                        </a>
-                                    </DropdownItem>
-                                </Dropdown>
-                                <a class="card" href={UrlGenerator.recipe(recipe)}>
-                                    <img src={UrlGenerator.thumbnail(recipe.thumbnail)} class="img-responsive" alt="" loading="lazy" />
-                                    <div class="card-body">
-                                        <h5 class="card-title text-clamp">{recipe.title}</h5>
-                                        <p class="text-clamp">{recipe.description}</p>
-                                        <p>
-                                            <small class="c-muted" title={recipe.lastCookedAt && date.format(recipe.lastCookedAt)}>
-                                                {recipe.lastCookedAt ? l.recipe.lastCooked(date.formatRelative(recipe.lastCookedAt)) : l.recipe.notCookedYet}
-                                            </small>
-                                        </p>
-                                    </div>
-                                    <div class="card-footer">
-                                        <ul>
-                                            <li>
-                                                <ul>
-                                                    <li title={l.recipe.cookedCount}>
-                                                        <LabeledIcon label={recipe.cookedCount?.toString() || "-"} name="bar-chart" />
-                                                    </li>
-                                                    <li title={l.recipe.rating}>
-                                                        <LabeledIcon label={number.format(recipe.rating) || "-"} name="star" />
-                                                    </li>
-                                                    <li title={l.recipe.aggregateRating}>
-                                                        <LabeledIcon label={number.format(recipe.aggregateRatingValue) || "-"} name="people" />
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li title={l.recipe.time.total}>
-                                                <LabeledIcon label={date.formatMinutes(recipe.totalTime) || "-"} name="clock-fill" />
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </a>
-                            </div>
-                        ))}
-                    </div>
-                )
-                : <Alert type="info" title={l.info} className="mb">{l.recipe.noRecipesFound}</Alert>}
+            {Page.currentUrl.searchParams.get("flash") === "deleteSuccessful" && (
+                <Alert type="success" title={l.info}>
+                    {l.recipe.deleteSuccessful}
+                </Alert>
+            )}
+            {props.recipes.totalItems ? (
+                <div class="grid mb" id="recipe-list">
+                    {props.recipes.items.map((recipe, i) => (
+                        <div class={classNames("col-12", "col-md-6", "col-lg-4", "recipe", { flagged: recipe.flagged })}>
+                            <Dropdown id={`dropdown-recipe-${i}`} label={<Icon name="three-dots" />} labelClass={"btn light"}>
+                                <DropdownItem>
+                                    <a href={UrlGenerator.recipeEdit(recipe)}>
+                                        <LabeledIcon label={l.edit} name="pencil" />
+                                    </a>
+                                </DropdownItem>
+                                <DropdownDivider />
+                                <DropdownItem>
+                                    <a class="c-danger" href={UrlGenerator.recipeDelete(recipe)}>
+                                        <LabeledIcon label={l.delete} name="trash" />
+                                    </a>
+                                </DropdownItem>
+                            </Dropdown>
+                            <a class="card" href={UrlGenerator.recipe(recipe)}>
+                                <img src={UrlGenerator.thumbnail(recipe.thumbnail)} class="img-responsive" alt="" loading="lazy" />
+                                <div class="card-body">
+                                    <h5 class="card-title text-clamp">{recipe.title}</h5>
+                                    <p class="text-clamp">{recipe.description}</p>
+                                    <p>
+                                        <small class="c-muted" title={recipe.lastCookedAt && date.format(recipe.lastCookedAt)}>
+                                            {recipe.lastCookedAt ? l.recipe.lastCooked(date.formatRelative(recipe.lastCookedAt)) : l.recipe.notCookedYet}
+                                        </small>
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <ul>
+                                        <li>
+                                            <ul>
+                                                <li title={l.recipe.cookedCount}>
+                                                    <LabeledIcon label={recipe.cookedCount?.toString() || "-"} name="bar-chart" />
+                                                </li>
+                                                <li title={l.recipe.rating}>
+                                                    <LabeledIcon label={number.format(recipe.rating) || "-"} name="star" />
+                                                </li>
+                                                <li title={l.recipe.aggregateRating}>
+                                                    <LabeledIcon label={number.format(recipe.aggregateRatingValue) || "-"} name="people" />
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li title={l.recipe.time.total}>
+                                            <LabeledIcon label={date.formatMinutes(recipe.totalTime) || "-"} name="clock-fill" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </a>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <Alert type="info" title={l.info} className="mb">
+                    {l.recipe.noRecipesFound}
+                </Alert>
+            )}
 
             <PaginationComponent pagination={props.recipes} wrapperClass="mb" />
 

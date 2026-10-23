@@ -12,8 +12,7 @@ export interface ParseHtmlToSchema {
 }
 
 export class SchemaParser implements ParseHtmlToSchema {
-    constructor(private readonly html: string) {
-    }
+    constructor(private readonly html: string) {}
 
     // oxlint-disable-next-line typescript/no-explicit-any
     private static getObjects(parsed: any): { [k: string]: unknown }[] {
@@ -34,11 +33,7 @@ export class SchemaParser implements ParseHtmlToSchema {
     }
 
     private *collectJsons(): Generator<string> {
-        for (
-            let pos = this.html.indexOf(ScriptOpen);
-            pos !== -1;
-            pos = this.html.indexOf(ScriptOpen, pos)
-        ) {
+        for (let pos = this.html.indexOf(ScriptOpen); pos !== -1; pos = this.html.indexOf(ScriptOpen, pos)) {
             const scriptOpen = pos;
             const openingScriptEnd = this.html.indexOf(AngleBracketClose, pos);
             pos = openingScriptEnd;
@@ -46,17 +41,9 @@ export class SchemaParser implements ParseHtmlToSchema {
                 const scriptEnd = this.html.indexOf(ScriptClose, openingScriptEnd);
                 pos = scriptEnd;
                 if (scriptEnd !== -1) {
-                    const scriptAttributes = this.html.substring(
-                        scriptOpen,
-                        openingScriptEnd + AngleBracketClose.length,
-                    );
-                    if (
-                        ["", "'", '"'].some((char) => scriptAttributes.includes(`type=${char}${LdJson}${char}`))
-                    ) {
-                        yield this.html.substring(
-                            openingScriptEnd + AngleBracketClose.length,
-                            scriptEnd,
-                        );
+                    const scriptAttributes = this.html.substring(scriptOpen, openingScriptEnd + AngleBracketClose.length);
+                    if (["", "'", '"'].some((char) => scriptAttributes.includes(`type=${char}${LdJson}${char}`))) {
+                        yield this.html.substring(openingScriptEnd + AngleBracketClose.length, scriptEnd);
                     }
                 }
             }

@@ -28,24 +28,15 @@ export class RecipeService implements Service<Recipe> {
     constructor(
         private readonly db: Database = needle.inject(Database),
         private readonly tagService: TagService = needle.inject(TagService),
-    ) {
-    }
+    ) {}
 
-    count(filters?: {
-        tagIds?: number[];
-        title?: string;
-    }): number {
-        const filter = buildFilters(
-            tagFilter(filters?.tagIds),
-            titleFilter(filters?.title),
-        );
+    count(filters?: { tagIds?: number[]; title?: string }): number {
+        const filter = buildFilters(tagFilter(filters?.tagIds), titleFilter(filters?.title));
         return this.db.single<{ total: number }>(
             `SELECT COUNT(*) AS total
        FROM recipe
        WHERE ${filter.sql}`,
-            [
-                ...filter.bindings,
-            ],
+            [...filter.bindings],
         )!.total;
     }
 
@@ -60,28 +51,20 @@ export class RecipeService implements Service<Recipe> {
             };
         } = {},
     ): Recipe[] {
-        const filter = buildFilters(
-            tagFilter(args.filters?.tagIds),
-            titleFilter(args.filters?.title),
-        );
-        const orderByColumns = [
-            ...Recipe.columns,
-            ...Recipe.syntheticColumns,
-        ];
+        const filter = buildFilters(tagFilter(args.filters?.tagIds), titleFilter(args.filters?.title));
+        const orderByColumns = [...Recipe.columns, ...Recipe.syntheticColumns];
         const totalTime = "(prep_time + cook_time) AS total_time";
         const lastCookedAt = "(SELECT MAX(timestamp) FROM recipe_history WHERE recipe_id = recipe.id) AS last_cooked_at";
         const cookedCount = "(SELECT COUNT(*) FROM recipe_history WHERE recipe_id = recipe.id) AS cooked_count";
-        return this.db.query(
-            `SELECT ${columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])}
+        return this.db
+            .query(
+                `SELECT ${columns([...Recipe.columns, totalTime, lastCookedAt, cookedCount])}
        FROM recipe
        WHERE ${filter.sql} ${buildOrderBySql(args.orderBy, orderByColumns)}
        LIMIT ? OFFSET ?`,
-            [
-                ...filter.bindings,
-                args.limit || -1,
-                args.offset || 0,
-            ],
-        ).map((src) => new Recipe(toCamelCase(src)));
+                [...filter.bindings, args.limit || -1, args.offset || 0],
+            )
+            .map((src) => new Recipe(toCamelCase(src)));
     }
 
     create(recipes: Recipe[]): void {
@@ -138,10 +121,7 @@ export class RecipeService implements Service<Recipe> {
              VALUES (?, ?)`,
                         (query) => {
                             for (const timestamp of recipe.history) {
-                                query([
-                                    recipe.id,
-                                    timestamp,
-                                ]);
+                                query([recipe.id, timestamp]);
                             }
                         },
                     );
@@ -153,11 +133,7 @@ export class RecipeService implements Service<Recipe> {
              VALUES (?, ?, ?)`,
                         (query) => {
                             for (const review of recipe.reviews) {
-                                query([
-                                    recipe.id,
-                                    review.date,
-                                    review.text,
-                                ]);
+                                query([recipe.id, review.date, review.text]);
                             }
                         },
                     );
@@ -245,10 +221,7 @@ export class RecipeService implements Service<Recipe> {
                     (query) => {
                         for (const recipe of recipes) {
                             for (const date of recipe.history) {
-                                query([
-                                    recipe.id,
-                                    date,
-                                ]);
+                                query([recipe.id, date]);
                             }
                         }
                     },
@@ -257,20 +230,13 @@ export class RecipeService implements Service<Recipe> {
         });
     }
 
-    find(
-        id: number,
-        loadTags?: boolean,
-        loadHistory?: boolean,
-        loadReviews?: boolean,
-    ): Recipe | undefined {
+    find(id: number, loadTags?: boolean, loadHistory?: boolean, loadReviews?: boolean): Recipe | undefined {
         const totalTime = "(prep_time + cook_time) AS total_time";
         const result = this.db.single<{ ingredients: string; instructions: string }>(
             `SELECT ${columns([...Recipe.columns, totalTime])}
        FROM recipe
        WHERE id = ?`,
-            [
-                id,
-            ],
+            [id],
         );
         if (result) {
             const recipe = new Recipe({
@@ -280,37 +246,35 @@ export class RecipeService implements Service<Recipe> {
             });
 
             if (loadTags) {
-                recipe.tags.push(...this.tagService.list({
-                    filters: {
-                        recipeId: recipe.id,
-                    },
-                }));
+                recipe.tags.push(
+                    ...this.tagService.list({
+                        filters: {
+                            recipeId: recipe.id,
+                        },
+                    }),
+                );
             }
 
             if (loadHistory) {
-                for (
-                    const row of this.db.query<{ timestamp: string }>(
-                        `SELECT timestamp
+                for (const row of this.db.query<{ timestamp: string }>(
+                    `SELECT timestamp
            FROM recipe_history
            WHERE recipe_id = ?
            ORDER BY timestamp DESC`,
-                        [recipe.id],
-                    )
-                ) {
+                    [recipe.id],
+                )) {
                     recipe.history.push(toDate(row.timestamp));
                 }
             }
 
             if (loadReviews) {
-                for (
-                    const row of this.db.query(
-                        `SELECT ${columns(Review.columns)}
+                for (const row of this.db.query(
+                    `SELECT ${columns(Review.columns)}
            FROM recipe_review
            WHERE recipe_id = ?
            ORDER BY date DESC`,
-                        [recipe.id],
-                    )
-                ) {
+                    [recipe.id],
+                )) {
                     recipe.reviews.push(new Review(toCamelCase(row)));
                 }
             }

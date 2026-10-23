@@ -8,16 +8,12 @@ import { copyUrlAndDo } from "../../util/url.ts";
 
 @needle.injectable()
 export class PaginationHelper {
-    constructor(private settings: Settings = needle.inject(SETTINGS)) {
-    }
+    constructor(private settings: Settings = needle.inject(SETTINGS)) {}
 
     buildPaginationParams(ctx: Oak.Context): PaginationParams {
         return {
             page: toInt(parameters(ctx).get("page"), 1),
-            pageSize: toInt(
-                parameters(ctx).get("pageSize"),
-                this.settings.pageSize,
-            ),
+            pageSize: toInt(parameters(ctx).get("pageSize"), this.settings.pageSize),
             currentUrl: copyUrlAndDo(ctx.request.url, (url) => url.searchParams.delete("flash")).toString(),
         };
     }

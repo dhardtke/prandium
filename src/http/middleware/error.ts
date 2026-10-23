@@ -5,10 +5,7 @@ import { NotFoundError } from "../../shared/errors.ts";
 import { renderTemplate } from "../../tpl/util/render.ts";
 import { AppState } from "../webserver.ts";
 
-export async function handleServerError(
-    ctx: Oak.Context<AppState>,
-    next: () => Promise<unknown>,
-) {
+export async function handleServerError(ctx: Oak.Context<AppState>, next: () => Promise<unknown>) {
     try {
         await next();
     } catch (e) {

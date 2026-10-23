@@ -22,19 +22,15 @@ export interface ImportResult {
 
 type Instruction = string | { text?: string; name?: string };
 
-function parseInstructions(
-    instructions: Instruction[],
-): string[] {
+function parseInstructions(instructions: Instruction[]): string[] {
     return instructions
-        .flatMap((i) => typeof i === "string" ? i.split("\n") : [i.text || i.name])
+        .flatMap((i) => (typeof i === "string" ? i.split("\n") : [i.text || i.name]))
         .map((i) => i?.trim())
         .filter(Boolean) as string[];
 }
 
 function parseKeywordsToTags(schemaRecipe: SchemaRecipe): Tag[] {
-    let keywords = ensureArray<string>(
-        schemaRecipe.keywords || schemaRecipe.recipeCategory,
-    );
+    let keywords = ensureArray<string>(schemaRecipe.keywords || schemaRecipe.recipeCategory);
     if (keywords.length === 1) {
         keywords = keywords[0].split(/, ?/);
     }
@@ -46,11 +42,12 @@ function parseKeywordsToTags(schemaRecipe: SchemaRecipe): Tag[] {
 
 function parseReviews(schemaRecipe: SchemaRecipe): Review[] {
     return ensureArray<SchemaReview>(schemaRecipe.review || schemaRecipe.reviews)
-        .map((review) =>
-            new Review({
-                date: first<string | Date>(review.datePublished),
-                text: first<string>(review.reviewBody)?.trim() ?? "",
-            })
+        .map(
+            (review) =>
+                new Review({
+                    date: first<string | Date>(review.datePublished),
+                    text: first<string>(review.reviewBody)?.trim() ?? "",
+                }),
         )
         .filter((review) => Boolean(review.text));
 }
@@ -64,12 +61,7 @@ async function mapSchemaRecipe(schemaRecipe: SchemaRecipe, url: string, configDi
     return new Recipe({
         tags,
         reviews,
-        thumbnail: await downloadThumbnail(
-            configDir,
-            userAgent,
-            first(schemaRecipe.image as string),
-            fetchFn,
-        ),
+        thumbnail: await downloadThumbnail(configDir, userAgent, first(schemaRecipe.image as string), fetchFn),
         title: first<string>(schemaRecipe.name),
         description: first<string>(schemaRecipe.description),
         source: url,
@@ -96,9 +88,7 @@ async function mapSchemaRecipe(schemaRecipe: SchemaRecipe, url: string, configDi
 
 async function fetchHtml(url: string, userAgent: string, fetchFn = fetchCustom): Promise<string> {
     const response = await fetchFn(url, userAgent);
-    return new TextDecoder().decode(
-        new Uint8Array(await response.arrayBuffer()),
-    );
+    return new TextDecoder().decode(new Uint8Array(await response.arrayBuffer()));
 }
 
 async function importRecipe(
@@ -143,27 +133,20 @@ async function importFromUrl(
     return response;
 }
 
-export async function importRecipes(
-    args: {
-        urls: string[];
-        configDir: string;
-        importConcurrency: number;
-        userAgent: string;
-        fetchFn?: FetchFn;
-        parserFactory?: (html: string) => ParseHtmlToSchema;
-    },
-): Promise<ImportResult[]> {
+export async function importRecipes(args: {
+    urls: string[];
+    configDir: string;
+    importConcurrency: number;
+    userAgent: string;
+    fetchFn?: FetchFn;
+    parserFactory?: (html: string) => ParseHtmlToSchema;
+}): Promise<ImportResult[]> {
     const results: ImportResult[] = [];
 
-    const concurrency = Math.min(
-        args.urls.length,
-        args.importConcurrency,
-    );
+    const concurrency = Math.min(args.urls.length, args.importConcurrency);
 
-    const importResults = pooledMap(
-        concurrency,
-        args.urls,
-        (url: string) => importFromUrl(url, args.configDir, args.userAgent, args.fetchFn, args.parserFactory),
+    const importResults = pooledMap(concurrency, args.urls, (url: string) =>
+        importFromUrl(url, args.configDir, args.userAgent, args.fetchFn, args.parserFactory),
     );
 
     for await (const result of importResults) {

@@ -11,9 +11,7 @@ import { currentUrl } from "../middleware/helpers/current-url.ts";
 
 @needle.injectable()
 export class RecipeRouter extends Router {
-    constructor(
-        private recipeController: RecipeController = needle.inject(RecipeController),
-    ) {
+    constructor(private recipeController: RecipeController = needle.inject(RecipeController)) {
         super({ prefix: "/recipe" });
 
         this.router
@@ -56,9 +54,13 @@ export class RecipeRouter extends Router {
         const inputRecipe = translateFormDataToRecipe(formData);
         const recipe = await this.recipeController.postEdit(toInt(ctx.params.id), inputRecipe, thumbnail, shouldDeleteThumbnail);
         ctx.response.redirect(
-            urlWithParams(UrlGenerator.recipe(recipe), {
-                "flash": "editSuccessful",
-            }, currentUrl(ctx)),
+            urlWithParams(
+                UrlGenerator.recipe(recipe),
+                {
+                    flash: "editSuccessful",
+                },
+                currentUrl(ctx),
+            ),
         );
     };
 
@@ -78,9 +80,13 @@ export class RecipeRouter extends Router {
         const inputRecipe = translateFormDataToRecipe(formData);
         const recipe = await this.recipeController.postCreate(inputRecipe, thumbnail, shouldDeleteThumbnail);
         ctx.response.redirect(
-            urlWithParams(UrlGenerator.recipe(recipe), {
-                "flash": "createSuccessful",
-            }, currentUrl(ctx)),
+            urlWithParams(
+                UrlGenerator.recipe(recipe),
+                {
+                    flash: "createSuccessful",
+                },
+                currentUrl(ctx),
+            ),
         );
     };
 
@@ -91,18 +97,26 @@ export class RecipeRouter extends Router {
     postDelete: Oak.RouterMiddleware<"/:id/:slug/delete", { id: string; slug: string }> = async (ctx) => {
         await this.recipeController.postDelete(toInt(ctx.params.id));
         ctx.response.redirect(
-            urlWithParams(UrlGenerator.home(), {
-                "flash": "deleteSuccessful",
-            }, currentUrl(ctx)),
+            urlWithParams(
+                UrlGenerator.home(),
+                {
+                    flash: "deleteSuccessful",
+                },
+                currentUrl(ctx),
+            ),
         );
     };
 
     flag: Oak.RouterMiddleware<"/:id/:slug/flag", { id: string; slug: string }> = (ctx) => {
         const recipe = this.recipeController.flag(toInt(ctx.params.id));
         ctx.response.redirect(
-            urlWithParams(UrlGenerator.recipe(recipe), {
-                "flash": "editSuccessful",
-            }, currentUrl(ctx)),
+            urlWithParams(
+                UrlGenerator.recipe(recipe),
+                {
+                    flash: "editSuccessful",
+                },
+                currentUrl(ctx),
+            ),
         );
     };
 

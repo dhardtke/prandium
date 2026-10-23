@@ -37,23 +37,18 @@ export const ICONS = [
     "house-door",
 ] as const;
 
-export type IconName = typeof ICONS[number];
+export type IconName = (typeof ICONS)[number];
 
 export const Icon = (props: { name: IconName; className?: string; large?: boolean }) => (
     <svg
-        class={classNames("bi", props.className, { "lg": props.large })}
+        class={classNames("bi", props.className, { lg: props.large })}
         dangerouslySetInnerHTML={{
             __html: `<use xlink:href="/assets/icons.svg#${props.name}"/>`,
         }}
-    >
-    </svg>
+    ></svg>
 );
 
-export const LabeledIcon = (props: {
-    label: VNode | string;
-    name: IconName;
-    className?: string;
-}) => (
+export const LabeledIcon = (props: { label: VNode | string; name: IconName; className?: string }) => (
     <>
         <Icon name={props.name} className={props.className ? `${props.className} labeled` : "labeled"} />
         {props.label}

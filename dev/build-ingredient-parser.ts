@@ -21,11 +21,6 @@ await callAndWait(
     "src/data/parse/ingredient/parser.js",
 ).run();
 
-const text = await Deno.readTextFile(
-    "src/data/parse/ingredient/parser.js",
-);
+const text = await Deno.readTextFile("src/data/parse/ingredient/parser.js");
 const preamble = `// deno-lint-ignore-file\n// deno-fmt-ignore-file`;
-await Deno.writeTextFile(
-    "src/data/parse/ingredient/parser.js",
-    `${preamble}\n${text}`,
-);
+await Deno.writeTextFile("src/data/parse/ingredient/parser.js", `${preamble}\n${text}`);

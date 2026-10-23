@@ -9,10 +9,7 @@ const target = root("assets/icons.svg");
 const glyphs: string[] = [];
 
 let contents = await Deno.readTextFile(source);
-contents = contents.substring(
-    contents.indexOf("<symbol"),
-    contents.lastIndexOf("</symbol>"),
-);
+contents = contents.substring(contents.indexOf("<symbol"), contents.lastIndexOf("</symbol>"));
 const allGlyphs: { [iconName: string]: string } = {};
 const IdPattern = /id=["'](.*?)["']/;
 
@@ -40,7 +37,4 @@ for (const icon of icons) {
     );
 }
 
-await Deno.writeTextFile(
-    target,
-    `<svg xmlns="http://www.w3.org/2000/svg">${glyphs.join("")}</svg>`,
-);
+await Deno.writeTextFile(target, `<svg xmlns="http://www.w3.org/2000/svg">${glyphs.join("")}</svg>`);

@@ -5,22 +5,15 @@ export interface FetchFn {
 /**
  * A custom wrapper around fetch to make sure requests use the configured User Agent.
  */
-export const fetchCustom: FetchFn = (
-    input: RequestInfo,
-    userAgent: string,
-    init?: RequestInit,
-): Promise<Response> => {
+export const fetchCustom: FetchFn = (input: RequestInfo, userAgent: string, init?: RequestInit): Promise<Response> => {
     return fetch(
         input,
-        merge(
-            init ?? {},
-            {
-                headers: {
-                    "User-Agent": userAgent,
-                    "Accept-Encoding": "UTF-8",
-                },
+        merge(init ?? {}, {
+            headers: {
+                "User-Agent": userAgent,
+                "Accept-Encoding": "UTF-8",
             },
-        ),
+        }),
     );
 };
 

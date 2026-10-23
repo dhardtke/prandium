@@ -6,10 +6,7 @@ export interface ProcessLike {
     close?(): void;
 }
 
-export function call(
-    cwd?: string,
-    ...cmd: (string | undefined)[]
-): ProcessLike {
+export function call(cwd?: string, ...cmd: (string | undefined)[]): ProcessLike {
     let p: Deno.ChildProcess;
     return {
         close() {
@@ -22,10 +19,7 @@ export function call(
     };
 }
 
-export function callAndWait(
-    cwd?: string,
-    ...cmd: (string | undefined)[]
-): ProcessLike {
+export function callAndWait(cwd?: string, ...cmd: (string | undefined)[]): ProcessLike {
     let p: Deno.ChildProcess;
     return {
         close() {
@@ -38,15 +32,12 @@ export function callAndWait(
     };
 }
 
-function process(
-    cwd?: string,
-    ...cmd: (string | undefined)[]
-): () => Deno.ChildProcess {
+function process(cwd?: string, ...cmd: (string | undefined)[]): () => Deno.ChildProcess {
     return () => {
         const actualCmd = cmd.filter((c) => Boolean(c)) as string[];
         try {
             return new Deno.Command(actualCmd[0], {
-                ...cwd ? { cwd: path.resolve(Deno.cwd(), cwd) } : {},
+                ...(cwd ? { cwd: path.resolve(Deno.cwd(), cwd) } : {}),
                 args: actualCmd.slice(1),
             }).spawn();
         } catch (e) {

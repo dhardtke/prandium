@@ -65,10 +65,14 @@ describe("IndexController", () => {
             expect(templateCallProps.showTagFilter).toEqual(showTagFilter);
 
             const paginationCallArg = templateCallProps.recipes;
-            const pages: Page[] = [{ number: 1, url: "http://localhost:8080/?page=1" }, { number: 2, url: "http://localhost:8080/?page=2" }, {
-                number: 3,
-                url: "http://localhost:8080/?page=3",
-            }];
+            const pages: Page[] = [
+                { number: 1, url: "http://localhost:8080/?page=1" },
+                { number: 2, url: "http://localhost:8080/?page=2" },
+                {
+                    number: 3,
+                    url: "http://localhost:8080/?page=3",
+                },
+            ];
 
             expect(paginationCallArg.pageSize).toEqual(pageSize);
             expect(paginationCallArg.currentPage).toEqual(1);

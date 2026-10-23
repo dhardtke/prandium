@@ -74,7 +74,7 @@ describe("ingredient", () => {
             },
             {
                 input: "0.5 Kalbsfond",
-                output: { quantity: .5, unit: null, description: "Kalbsfond" },
+                output: { quantity: 0.5, unit: null, description: "Kalbsfond" },
             },
         ];
         for (const { input, output } of tests) {
@@ -134,24 +134,8 @@ describe("ingredient", () => {
             expected: string[];
         }[] = [
             {
-                input: [
-                    "Salz / Pfeffer",
-                    "4g Zucker",
-                    "1 Banane",
-                    "2 EL Olivenöl",
-                    "200g Nudeln",
-                    "3 Lorbeeren",
-                    "Zitronenschale",
-                ],
-                expected: [
-                    "2 EL Olivenöl",
-                    "4 g Zucker",
-                    "200 g Nudeln",
-                    "1 Banane",
-                    "3 Lorbeeren",
-                    "Salz / Pfeffer",
-                    "Zitronenschale",
-                ],
+                input: ["Salz / Pfeffer", "4g Zucker", "1 Banane", "2 EL Olivenöl", "200g Nudeln", "3 Lorbeeren", "Zitronenschale"],
+                expected: ["2 EL Olivenöl", "4 g Zucker", "200 g Nudeln", "1 Banane", "3 Lorbeeren", "Salz / Pfeffer", "Zitronenschale"],
             },
         ];
         for (const { input, expected } of tests) {

@@ -7,51 +7,47 @@ export const PaginationComponent = (props: { pagination: _Pagination<unknown>; w
     <>
         {props.pagination.hasPages && (
             <ul class={classNames("pagination", props.wrapperClass)}>
-                {props.pagination.isFirstPage
-                    ? (
-                        <li>
-                            <span class="page-link disabled">
-                                <Icon name="arrow-left-short" />
-                            </span>
-                        </li>
-                    )
-                    : (
-                        <li>
-                            <a class="page-link" href={props.pagination.previousPage?.url} rel="prev" title={l.pagination.previous}>
-                                <Icon name="arrow-left-short" />
-                            </a>
-                        </li>
-                    )}
-
-                {props.pagination.pages.map((page) =>
-                    page.number === props.pagination.currentPage
-                        ? (
-                            <li>
-                                <span class="page-link active">{page.number}</span>
-                            </li>
-                        )
-                        : (
-                            <li>
-                                <a class="page-link" href={page.url}>{page.number}</a>
-                            </li>
-                        )
+                {props.pagination.isFirstPage ? (
+                    <li>
+                        <span class="page-link disabled">
+                            <Icon name="arrow-left-short" />
+                        </span>
+                    </li>
+                ) : (
+                    <li>
+                        <a class="page-link" href={props.pagination.previousPage?.url} rel="prev" title={l.pagination.previous}>
+                            <Icon name="arrow-left-short" />
+                        </a>
+                    </li>
                 )}
 
-                {props.pagination.isLastPage
-                    ? (
+                {props.pagination.pages.map((page) =>
+                    page.number === props.pagination.currentPage ? (
                         <li>
-                            <span class="page-link disabled">
-                                <Icon name="arrow-right-short" />
-                            </span>
+                            <span class="page-link active">{page.number}</span>
                         </li>
-                    )
-                    : (
+                    ) : (
                         <li>
-                            <a class="page-link" href={props.pagination.nextPage?.url} rel="next" title={l.pagination.next}>
-                                <Icon name="arrow-right-short" />
+                            <a class="page-link" href={page.url}>
+                                {page.number}
                             </a>
                         </li>
-                    )}
+                    ),
+                )}
+
+                {props.pagination.isLastPage ? (
+                    <li>
+                        <span class="page-link disabled">
+                            <Icon name="arrow-right-short" />
+                        </span>
+                    </li>
+                ) : (
+                    <li>
+                        <a class="page-link" href={props.pagination.nextPage?.url} rel="next" title={l.pagination.next}>
+                            <Icon name="arrow-right-short" />
+                        </a>
+                    </li>
+                )}
             </ul>
         )}
     </>

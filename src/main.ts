@@ -48,13 +48,15 @@ export interface BootData {
     logHandlerFactory: () => InstanceType<typeof log.BaseHandler>;
 }
 
-export async function main(bootData: BootData = {
-    args: Deno.args,
-    serverFactory: spawnServer,
-    denoVersion: Deno.version.deno,
-    requiredDenoVersionRange: REQUIRED_DENO_VERSION_RANGE,
-    logHandlerFactory: consoleLogHandlerFactory,
-}): Promise<number> {
+export async function main(
+    bootData: BootData = {
+        args: Deno.args,
+        serverFactory: spawnServer,
+        denoVersion: Deno.version.deno,
+        requiredDenoVersionRange: REQUIRED_DENO_VERSION_RANGE,
+        logHandlerFactory: consoleLogHandlerFactory,
+    },
+): Promise<number> {
     const options = parseOptions(bootData.args);
     if (typeof options === "number") {
         return options;
@@ -70,7 +72,7 @@ export async function main(bootData: BootData = {
     await prepareConfigDir(options);
     shouldPrettifyTemplates(Boolean(options.debug));
 
-    const settings = await readSettings(options.configDir) as Settings;
+    const settings = (await readSettings(options.configDir)) as Settings;
     if (typeof settings === "number") {
         return settings;
     }

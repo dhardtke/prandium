@@ -16,12 +16,7 @@ export class PaginationBuilder<T> {
     private readonly startIndex!: number;
     private readonly endIndex!: number;
 
-    public constructor(
-        totalItems: number,
-        currentPage: number = 1,
-        pageSize: number = 10,
-        maxPages: number = 10,
-    ) {
+    public constructor(totalItems: number, currentPage: number = 1, pageSize: number = 10, maxPages: number = 10) {
         this.totalItems = totalItems;
         this.pageSize = pageSize;
         this.totalPages = Math.ceil(totalItems / pageSize);
@@ -46,9 +41,7 @@ export class PaginationBuilder<T> {
                 // current page near the start
                 this.startPage = 1;
                 this.endPage = maxPages;
-            } else if (
-                this.currentPage + maxPagesAfterCurrentPage >= this.totalPages
-            ) {
+            } else if (this.currentPage + maxPagesAfterCurrentPage >= this.totalPages) {
                 // current page near the end
                 this.startPage = this.totalPages - maxPages + 1;
                 this.endPage = this.totalPages;
@@ -59,9 +52,7 @@ export class PaginationBuilder<T> {
             }
         }
 
-        this.startIndex = (
-            this.currentPage - 1
-        ) * pageSize;
+        this.startIndex = (this.currentPage - 1) * pageSize;
         this.endIndex = Math.min(this.startIndex + pageSize - 1, totalItems - 1);
     }
 
@@ -71,23 +62,12 @@ export class PaginationBuilder<T> {
     }
 
     private static buildPage(url: URL, page: number): Page {
-        return (
-            { number: page, url: PaginationBuilder.buildPageUrl(url, page) }
-        );
+        return { number: page, url: PaginationBuilder.buildPageUrl(url, page) };
     }
 
-    public build(
-        items: (limit: number, offset: number) => T[],
-        currentUrl: URL | string,
-    ): Pagination<T> {
+    public build(items: (limit: number, offset: number) => T[], currentUrl: URL | string): Pagination<T> {
         const url = new URL(currentUrl.toString());
-        const pages = Array.from(
-            Array(
-                (
-                    this.endPage + 1
-                ) - this.startPage,
-            ).keys(),
-        )
+        const pages = Array.from(Array(this.endPage + 1 - this.startPage).keys())
             .map((i) => this.startPage + i)
             .map((number) => PaginationBuilder.buildPage(url, number));
         const previousPage = this.currentPage === this.startPage ? undefined : PaginationBuilder.buildPage(url, this.currentPage - 1);
@@ -125,8 +105,7 @@ export class Pagination<T> implements Iterable<T> {
         public readonly nextPage?: Page,
         public readonly pages: Page[] = [],
         public readonly items: T[] = [],
-    ) {
-    }
+    ) {}
 
     public get isFirstPage(): boolean {
         return this.currentPage === this.firstPage;
@@ -151,13 +130,8 @@ export interface PaginationParams {
     currentUrl: string;
 }
 
-export function buildPagination<T>(
-    paginationParams: PaginationParams,
-    total: number,
-    listSupplier: (limit: number, offset: number) => T[],
-): Pagination<T> {
+export function buildPagination<T>(paginationParams: PaginationParams, total: number, listSupplier: (limit: number, offset: number) => T[]): Pagination<T> {
     const { page, pageSize, currentUrl } = paginationParams;
 
-    return new PaginationBuilder<T>(total, page, pageSize)
-        .build(listSupplier, currentUrl);
+    return new PaginationBuilder<T>(total, page, pageSize).build(listSupplier, currentUrl);
 }

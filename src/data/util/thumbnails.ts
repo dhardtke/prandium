@@ -18,20 +18,12 @@ export function getUniqueFilename(dir: string, origFilename: string): string {
     return candidate;
 }
 
-export async function downloadThumbnail(
-    configDir: string,
-    userAgent: string,
-    url?: string,
-    fetchFn: FetchFn = fetchCustom,
-): Promise<string | undefined> {
+export async function downloadThumbnail(configDir: string, userAgent: string, url?: string, fetchFn: FetchFn = fetchCustom): Promise<string | undefined> {
     if (!url) {
         return undefined;
     }
     const thumbnailDir = getThumbnailDir(configDir);
-    const filename = getUniqueFilename(
-        thumbnailDir,
-        path.basename(decodeURIComponent(new URL(url).pathname)),
-    );
+    const filename = getUniqueFilename(thumbnailDir, path.basename(decodeURIComponent(new URL(url).pathname)));
     log.debug(() => `[Thumbnail] Downloading ${url} as ${filename}`);
     const response = await fetchFn(url, userAgent);
     await Bun.write(path.join(thumbnailDir, filename), await response.arrayBuffer());

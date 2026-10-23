@@ -52,15 +52,12 @@ describe("format", () => {
             },
         ];
         for (const testCase of tests) {
-            test(
-                `When given ${testCase.value} with options=${
-                    JSON.stringify(testCase.options)
-                } and the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`,
-                () => {
-                    setLanguage(testCase.language);
-                    expect(date.format(new Date(testCase.value), testCase.options)).toEqual(testCase.expected);
-                },
-            );
+            test(`When given ${testCase.value} with options=${JSON.stringify(
+                testCase.options,
+            )} and the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`, () => {
+                setLanguage(testCase.language);
+                expect(date.format(new Date(testCase.value), testCase.options)).toEqual(testCase.expected);
+            });
         }
     });
 
@@ -113,16 +110,12 @@ describe("format", () => {
                 },
             ];
             for (const testCase of tests) {
-                test(
-                    `When given relative=${testCase.value[0]}, pivot=${testCase.value[1]} with the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`,
-                    () => {
-                        setLanguage(testCase.language);
-                        expect(date.formatRelative(
-                                new Date(testCase.value[0]),
-                                testCase.value[1] === undefined ? undefined : new Date(testCase.value[1]),
-                            )).toEqual(testCase.expected);
-                    },
-                );
+                test(`When given relative=${testCase.value[0]}, pivot=${testCase.value[1]} with the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`, () => {
+                    setLanguage(testCase.language);
+                    expect(date.formatRelative(new Date(testCase.value[0]), testCase.value[1] === undefined ? undefined : new Date(testCase.value[1]))).toEqual(
+                        testCase.expected,
+                    );
+                });
             }
         });
     });
@@ -201,15 +194,12 @@ describe("format", () => {
             { language: de, value: 42, options: undefined, expected: "42,00" },
         ];
         for (const testCase of tests) {
-            test(
-                `When given num=${testCase.value}, decimals=${
-                    JSON.stringify(testCase.options)
-                } with the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`,
-                () => {
-                    setLanguage(testCase.language);
-                    expect(number.format(testCase.value, testCase.options)).toEqual(testCase.expected);
-                },
-            );
+            test(`When given num=${testCase.value}, decimals=${JSON.stringify(
+                testCase.options,
+            )} with the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`, () => {
+                setLanguage(testCase.language);
+                expect(number.format(testCase.value, testCase.options)).toEqual(testCase.expected);
+            });
         }
     });
 });
