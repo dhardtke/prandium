@@ -43,6 +43,11 @@ export const de: Language = {
   },
   recipe: {
     count: (n) => `${n} Rezept${n === 1 ? '' : 'e'}`,
+    newRecipe: 'Neues Rezept',
+    actions: 'Rezeptaktionen',
+    cookedTimes: (n) => `${n}× gekocht`,
+    tagsSelected: (n) => (n === 0 ? 'Tags' : `Tags (${n} ausgewählt)`),
+    noTags: 'Noch keine Tags.',
     aggregateRating: 'Fremde Bewertung',
     aggregateRatingCount: 'Anzahl fremder Bewertungen',
     aggregateRatingValue: 'Fremde Bewertung',

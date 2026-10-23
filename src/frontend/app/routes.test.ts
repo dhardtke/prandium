@@ -9,7 +9,13 @@ describe('routes', () => {
     expect(matchRoute(ROUTES, path)?.route.title?.(en)).toBe('Log in');
   });
 
-  test.each(['/nope', '/login/extra'])('%s matches nothing', (path) => {
+  test('/ is the recipe list, linked in the header as Recipes', () => {
+    const list = matchRoute(ROUTES, '/');
+    expect(list?.route.title?.(en)).toBe('Recipes');
+    expect(ROUTES.filter((route) => route.nav).map((route) => [route.nav?.path, route.nav?.label(en)])).toEqual([['/', 'Recipes']]);
+  });
+
+  test.each(['/nope', '/login/extra', '/recipes'])('%s matches nothing', (path) => {
     expect(matchRoute(ROUTES, path)).toBeNull();
   });
 

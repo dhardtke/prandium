@@ -34,6 +34,11 @@ describe('with auth off', () => {
     }
   });
 
+  test('the data routes need no cookie', async () => {
+    expect((await api('/api/recipes')).status).toBe(200);
+    expect((await api('/api/tags')).status).toBe(200);
+  });
+
   test('login lets any non-empty password in without setting a cookie', async () => {
     const res = await post('/api/auth/login', { password: 'anything' });
     expect(res.status).toBe(204);

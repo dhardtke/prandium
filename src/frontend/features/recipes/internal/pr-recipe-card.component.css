@@ -1,0 +1,63 @@
+:host {
+  height: 100%;
+}
+
+article.open-card {
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  & .thumb {
+    display: block;
+    width: calc(100% + 2 * var(--space-6));
+    max-width: none;
+    aspect-ratio: 16 / 9;
+    margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-2);
+    object-fit: cover;
+    background-color: var(--muted);
+
+    @media (max-width: 640px) {
+      width: calc(100% + 2 * var(--space-4));
+      margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-4)) var(--space-2);
+    }
+  }
+
+  & .head {
+    align-items: flex-start;
+  }
+
+  & .open {
+    overflow-wrap: anywhere;
+  }
+
+  & .flag {
+    color: var(--warning);
+    margin-inline-end: var(--space-1);
+  }
+
+  & .description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  & .foot {
+    margin-top: auto;
+  }
+
+  &.flagged {
+    box-shadow: inset 0 0 0 2px var(--warning);
+  }
+
+  & .actions svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+menu[popover] .danger {
+  color: var(--danger);
+}

@@ -43,6 +43,11 @@ export const en: Language = {
   },
   recipe: {
     count: (n) => `${n} Recipe${n === 1 ? '' : 's'}`,
+    newRecipe: 'New recipe',
+    actions: 'Recipe actions',
+    cookedTimes: (n) => `${n}× cooked`,
+    tagsSelected: (n) => (n === 0 ? 'Tags' : `Tags (${n} selected)`),
+    noTags: 'No tags yet.',
     aggregateRating: 'Foreign rating',
     aggregateRatingCount: 'Number of foreign ratings',
     aggregateRatingValue: 'Foreign rating',

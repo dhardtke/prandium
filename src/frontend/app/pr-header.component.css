@@ -64,8 +64,11 @@ pr-theme-toggle {
     padding-inline-start: var(--space-2);
   }
 
-  pr-theme-toggle {
+  pr-language-switch {
     margin-inline-start: auto;
+  }
+
+  pr-theme-toggle {
     border-inline-start: none;
     padding-inline-start: 0;
   }
@@ -131,8 +134,11 @@ nav.login {
     display: none;
   }
 
-  & pr-theme-toggle {
+  & pr-language-switch {
     margin-inline-start: auto;
+  }
+
+  & pr-theme-toggle {
     border-inline-start: none;
     padding-inline-start: 0;
   }

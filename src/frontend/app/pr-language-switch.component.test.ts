@@ -16,7 +16,8 @@ test('names the current language and offers each language in its own', () => {
   expect(find(root, testId('toggle')).textContent.trim()).toBe('English');
   expect(find(root, testId('language-de')).textContent.trim()).toBe('Deutsch');
   expect(find(root, testId('language-de')).getAttribute('lang')).toBe('de');
-  expect(find(root, testId('language-en')).getAttribute('aria-checked')).toBe('true');
+  expect(find(root, testId('language-en')).getAttribute('aria-current')).toBe('true');
+  expect(find(root, testId('language-de')).hasAttribute('aria-current')).toBe(false);
 });
 
 test('switches the language when one is chosen, and re-renders in it', () => {
@@ -26,5 +27,5 @@ test('switches the language when one is chosen, and re-renders in it', () => {
   expect(document.documentElement.getAttribute('lang')).toBe('de');
   expect(find(root, testId('toggle')).textContent.trim()).toBe('Deutsch');
   expect(find(root, testId('toggle')).getAttribute('aria-label')).toBe('Sprache: Deutsch');
-  expect(find(root, testId('language-de')).getAttribute('aria-checked')).toBe('true');
+  expect(find(root, testId('language-de')).getAttribute('aria-current')).toBe('true');
 });

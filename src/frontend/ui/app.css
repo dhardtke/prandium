@@ -17,11 +17,6 @@
   scrollbar-gutter: stable;
 }
 
-/* The workout page's progress strip sticks below the header. */
-:root:has(pr-workout-detail) {
-  scroll-padding-top: calc(var(--header-height) + 3rem);
-}
-
 /* color-scheme inherits, so this reaches every shadow root. */
 :root[data-theme="light"] {
   color-scheme: light;

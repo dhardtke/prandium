@@ -1,3 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="250" viewBox="0 0 500 250">
-    <rect fill="#e2e3e5" width="500" height="250"/>
+  <!-- Transparent, so the card's own background shows through in either theme. -->
+  <g fill="none" stroke="#8b8b94" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.6">
+    <circle cx="250" cy="125" r="48" />
+    <circle cx="250" cy="125" r="30" />
+    <path d="M178 85v28a10 10 0 0 0 20 0V85M188 85v80" />
+    <path d="M322 165V85c-12 6-18 22-18 40h18" />
+  </g>
 </svg>

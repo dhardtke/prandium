@@ -68,6 +68,11 @@ interface Ingredients {
 
 interface Recipe {
   count: (n: number) => string;
+  newRecipe: string;
+  actions: string;
+  cookedTimes: (n: number) => string;
+  tagsSelected: (n: number) => string;
+  noTags: string;
   aggregateRating: string;
   aggregateRatingCount: string;
   aggregateRatingValue: string;

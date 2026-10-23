@@ -13,6 +13,13 @@ function open(root: ShadowRoot): void {
   find(root, testId('menu')).dispatchEvent(Object.assign(new Event('toggle'), { newState: 'open' }));
 }
 
+test('focuses the menu item of the current page when the menu opens', () => {
+  history.replaceState(null, '', '/');
+  const root = shadow(mount('pr-header'));
+  open(root);
+  expect(root.activeElement?.textContent).toBe('Recipes');
+});
+
 test('leaves focus alone when no menu item is the current page', () => {
   history.replaceState(null, '', '/nowhere');
   const root = shadow(mount('pr-header'));

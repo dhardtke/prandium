@@ -4,6 +4,8 @@ import { basename, extname, join, parse, resolve, sep } from 'node:path';
 
 export type ThumbnailFetch = (url: string, userAgent: string) => Promise<Response>;
 
+const fetchWithUserAgent: ThumbnailFetch = (url, userAgent) => fetch(url, { headers: { 'User-Agent': userAgent } });
+
 const EXTENSIONS: Record<string, string> = {
   'image/jpeg': '.jpg',
   'image/png': '.png',
@@ -65,7 +67,7 @@ export class ThumbnailStore {
     }
   }
 
-  async download(url: string, userAgent: string, fetchFn: ThumbnailFetch): Promise<string> {
+  async download(url: string, userAgent: string, fetchFn: ThumbnailFetch = fetchWithUserAgent): Promise<string> {
     const response = await fetchFn(url, userAgent);
     if (!response.ok) {
       throw new Error(`The image answered ${response.status}`);

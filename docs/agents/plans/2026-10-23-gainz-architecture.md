@@ -524,39 +524,39 @@ Serve recipes (list and create), tags and thumbnails over the API and build the 
 
 **Tasks**:
 
-- [ ] `src/shared/dto/recipe.ts`: `RecipeSummaryDto`, `RecipePageDto`, `RecipeSortKey`, `CreateRecipeDto`, `RecipeDto`, `IngredientDto`,
+- [x] `src/shared/dto/recipe.ts`: `RecipeSummaryDto`, `RecipePageDto`, `RecipeSortKey`, `CreateRecipeDto`, `RecipeDto`, `IngredientDto`,
       `ReviewDto`; `src/shared/dto/tag.ts`: `TagDto`.
-- [ ] `features/recipes/ports/recipe.ts`: `RecipeRow`, `RecipeSummaryRow`, `RECIPE_SORT_KEYS` (`id, title, cooked_count, flagged,
+- [x] `features/recipes/ports/recipe.ts`: `RecipeRow`, `RecipeSummaryRow`, `RECIPE_SORT_KEYS` (`id, title, cooked_count, flagged,
       aggregate_rating_value, rating, created_at, updated_at, last_cooked_at, prep_time, cook_time, total_time` and the 11 `nutrition_*` columns).
-- [ ] `features/recipes/internal/recipe.repository.ts`: `list(filter, sort, limit, offset)` and `count(filter)` with the SQL of the old
+- [x] `features/recipes/internal/recipe.repository.ts`: `list(filter, sort, limit, offset)` and `count(filter)` with the SQL of the old
       `RecipeService.list/count` (title `LIKE`, one tag `EXISTS` per id, synthetic `total_time`, `last_cooked_at`, `cooked_count`), ordered by the
       sort column then `id`; `create(input)` in one transaction (row, history, reviews, tags via `TagRepository.replaceForRecipe`); `find(id)`
       (row, tags, history and reviews newest first) for the create response.
-- [ ] `features/tags/`: `ports/tag.ts`, `internal/tag.repository.ts` (`list(selected)` with the old `_sameRecipeIds`/`recipeCountColumn` SQL,
+- [x] `features/tags/`: `ports/tag.ts`, `internal/tag.repository.ts` (`list(selected)` with the old `_sameRecipeIds`/`recipeCountColumn` SQL,
       ordered by title; `replaceForRecipe(recipeId, titles)`: find or create by title, replace `recipe_tag`, delete tags without recipes),
       translator, controller, `tags.facade.ts`, `tag.routes.ts` (`/api/tags` GET).
-- [ ] `recipe.translator.ts` (`translateToRecipeSummaryDto`, `translateToRecipePageDto`, `translateToRecipeDto` with `parseIngredients`,
+- [x] `recipe.translator.ts` (`translateToRecipeSummaryDto`, `translateToRecipePageDto`, `translateToRecipeDto` with `parseIngredients`,
       `translateToCreateRecipeDto`, `translateDtoToCreateRecipe`; thumbnail file → `/thumbnails/<encodeURIComponent(file)>` or null),
       `recipes.facade.ts` (`createRecipesFacade(db, config)`; `list`, `count`, `create` with `#validateCreate` per "Facade rules"),
       `recipe.controller.ts` (`list`, `create`), `recipe.routes.ts` (`/api/recipes` GET, POST).
-- [ ] `features/thumbnails/`: `thumbnails.facade.ts` (`createThumbnailsFacade(config)`; `store(bytes, type, suggestedName)`, `remove(file)`,
+- [x] `features/thumbnails/`: `thumbnails.facade.ts` (`createThumbnailsFacade(config)`; `store(bytes, type, suggestedName)`, `remove(file)`,
       `download(url, userAgent)`), `internal/thumbnail.controller.ts` (serve with ETag/304, content type from extension, path-escape guard via
       `thumbnail.store.ts#resolve`), `thumbnail.routes.ts` (`/thumbnails/*` GET, HEAD).
-- [ ] Spread the recipe, tag and thumbnail route tables into `auth.guard()` in `http/routes.ts`.
-- [ ] `features/recipes/recipes.fixtures.ts` (backend): `createRecipe(post, overrides)`; `features/recipes/recipes.fixtures.ts` (frontend):
+- [x] Spread the recipe, tag and thumbnail route tables into `auth.guard()` in `http/routes.ts`.
+- [x] `features/recipes/recipes.fixtures.ts` (backend): `createRecipe(post, overrides)`; `features/recipes/recipes.fixtures.ts` (frontend):
       `recipe()`, `summary()`, `tag()` builders.
-- [ ] Frontend: `features/recipes/internal/recipe.api.ts` (`list`), `features/tags/internal/tag.api.ts` (`list(selected)`), `recipes.facade.ts`,
+- [x] Frontend: `features/recipes/internal/recipe.api.ts` (`list`), `features/tags/internal/tag.api.ts` (`list(selected)`), `recipes.facade.ts`,
       `tags.facade.ts`, `recipes.routes.ts` (`/` → `PrRecipeListComponent`, `nav` Recipes), `app/routes.ts`.
-- [ ] `features/recipes/internal/list-query.ts`: `parseListQuery(search)` → `{ search, tags, sort, order, page, tagsOpen }` (also reading
+- [x] `features/recipes/internal/list-query.ts`: `parseListQuery(search)` → `{ search, tags, sort, order, page, tagsOpen }` (also reading
       `title`, `tagId`, `orderBy`, `tagFilter`), `listPath(query)` (defaults omitted).
-- [ ] `features/recipes/pr-recipe-list.component.{ts,css}` per the List mockup (`PAGE_SIZE = 24`; `pushState` + reload without remount on
+- [x] `features/recipes/pr-recipe-list.component.{ts,css}` per the List mockup (`PAGE_SIZE = 24`; `pushState` + reload without remount on
       search/sort/order/tag/page changes; popstate re-reads the query); the card menu's Delete appears in phase 3, Edit and New/Import buttons
       link to routes that arrive in phases 4–5 (the not-found view meanwhile).
-- [ ] `features/recipes/internal/pr-recipe-card.component.{ts,css}` (open-card, thumbnail or `ui/placeholder.svg`, `<ot-dropdown>` menu,
+- [x] `features/recipes/internal/pr-recipe-card.component.{ts,css}` (open-card, thumbnail or `ui/placeholder.svg`, `<ot-dropdown>` menu,
       flagged style), `internal/pr-tag-panel.component.{ts,css}` (`<details>`, filter input with `jaro-winkler.ts`, `aria-pressed` toggles,
       disabled when count 0 and not selected, Clear).
-- [ ] i18n keys for the list in `en.ts`/`de.ts`.
-- [ ] Tests: `recipe.routes.test.ts` (POST minimal and full, validation 400s, legacy-shaped values accepted; list paging bounds and 400s, search,
+- [x] i18n keys for the list in `en.ts`/`de.ts`.
+- [x] Tests: `recipe.routes.test.ts` (POST minimal and full, validation 400s, legacy-shaped values accepted; list paging bounds and 400s, search,
       tag AND filter, every sort key in both orders, invalid sort 400, totals); `tag.routes.test.ts` (counts with and without selection, zero
       counts, orphan deletion through a second POST is covered in phase 4); `thumbnail.routes.test.ts` (200, 304, 404, escape 404, using
       `configDir` and `1x1.png`); `list-query.test.ts` (incl. legacy names); `jaro-winkler.test.ts`; component tests for `pr-recipe-list`,
@@ -565,7 +565,7 @@ Serve recipes (list and create), tags and thumbnails over the API and build the 
 **Automated Verification**:
 
 - [ ] `bun run fmt:check && bun run lint && bun run typecheck && bun test --parallel` pass; CI is green.
-- [ ] `src/backend/features/recipes/recipe.routes.test.ts` "lists by every sort key" passes for all `RECIPE_SORT_KEYS`.
+- [x] `src/backend/features/recipes/recipe.routes.test.ts` "lists by every sort key" passes for all `RECIPE_SORT_KEYS`.
 
 **Manual Verification**:
 
@@ -772,6 +772,23 @@ During implementation, document user feedback, problems, and decisions here.
 - `tests/data/parse/complex.html` in git is a placeholder (`<!-- TODO write HTML -->`, the real page was removed as proprietary); the phase 5
   fixture server needs an HTML page written for the purpose.
 - The settings.json warning is logged before the server starts, so it is printed even when startup is cut short.
+
+### Phase 2
+
+- Tags are written through `TagFacade.replaceForRecipe`, which `RecipeRepository` receives in its constructor: a feature may not import
+  another's `internal/`, and the nested `db.transaction()` becomes a savepoint inside the recipe's transaction. An existing tag is reused
+  ignoring case (`title = ? COLLATE NOCASE`, the exact spelling preferred), so "pasta" joins "Pasta".
+- `total_time` is `COALESCE(prep_time, 0) + COALESCE(cook_time, 0)` (the old sum was NULL when either was); titles and tags sort binary,
+  as before, then by id.
+- Prep and cook minutes and the aggregate count are validated as numbers (not integers), like `yield`, because old rows and imports may
+  hold fractions; `requiredNumber` rounds to two decimals.
+- Dates read from the database are normalized to ISO 8601 by `translateToIsoDateTime` (`CURRENT_TIMESTAMP` wrote `2024-03-12 10:00:00`);
+  new rows store `toISOString()`. `isIsoDateTime` refuses `2026-02-30`, which `Date.parse` rolls over.
+- The list patches its results, count and tag panel after a change instead of re-rendering, so the search field keeps focus while typing;
+  opening the tag panel only `replaceState`s `?tags`.
+- `ui/placeholder.svg` is now a transparent plate-and-cutlery glyph over the card's muted background, so it suits both themes.
+- The frontend copies `RECIPE_SORT_KEYS` into `list-query.ts`; `list-query.test.ts` compares it with the backend's.
+- "CI is green" stays unchecked until the phases are pushed (pushing waits for the operator).
 
 ## References
 

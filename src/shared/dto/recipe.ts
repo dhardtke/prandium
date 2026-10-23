@@ -129,3 +129,14 @@ export interface CreateRecipeDto {
   history?: Iso8601DateTime[];
   tags?: string[];
 }
+
+export interface RecipeFilterDto {
+  search?: string;
+  /** Recipes carrying every one of these tags. */
+  tags?: TagId[];
+}
+
+export interface RecipeSortDto {
+  sort: RecipeSortKey;
+  order: SortOrder;
+}
