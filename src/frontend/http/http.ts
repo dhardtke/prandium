@@ -1,13 +1,15 @@
 import { ApiError, UNAUTHORIZED_EVENT } from './errors.ts';
 
+// A Blob goes as itself, typed by its own type; anything else as JSON.
 async function request<T>(method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', path: string, body?: unknown): Promise<T> {
   let response: Response;
+  const blob = body instanceof Blob;
   try {
     response = await fetch(`/api${path}`, {
       method,
-      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
+      headers: body === undefined ? undefined : { 'Content-Type': blob ? body.type : 'application/json' },
       // oxlint-disable-next-line unicorn/no-invalid-fetch-options
-      body: body === undefined ? undefined : JSON.stringify(body),
+      body: body === undefined ? undefined : blob ? body : JSON.stringify(body),
     });
   } catch (cause) {
     throw new ApiError('Could not reach the prandium server', 0, cause);
@@ -44,3 +46,8 @@ export const put = <T>(path: string, body?: unknown): Promise<T> => request<T>('
 export const patch = <T>(path: string, body?: unknown): Promise<T> => request<T>('PATCH', path, body ?? {});
 
 export const remove = (path: string): Promise<null> => request<null>('DELETE', path);
+
+export const putBlob = <T>(path: string, blob: Blob): Promise<T> => request<T>('PUT', path, blob);
+
+/** A DELETE whose answer carries a body, unlike `remove`. */
+export const removeReturning = <T>(path: string): Promise<T> => request<T>('DELETE', path);

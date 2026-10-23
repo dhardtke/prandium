@@ -38,6 +38,17 @@ const LIMITS = {
   tags: { maxItems: 200, maxLength: 200 },
 } as const;
 
+function thumbnailName(title: string): string {
+  const slug = title
+    .normalize('NFKD')
+    .replaceAll(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/g, '-')
+    .replaceAll(/^-+|-+$/g, '')
+    .slice(0, 60);
+  return slug === '' ? 'thumbnail' : slug;
+}
+
 function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -87,6 +98,26 @@ export class RecipesFacade {
     if (thumbnail !== null) {
       await this.#thumbnails.remove(thumbnail);
     }
+  }
+
+  /** Stores the image under a name from the title and drops the one it replaces. */
+  async setThumbnail(id: RecipeId, bytes: Uint8Array, type: string): Promise<RecipeDetails> {
+    const current = this.require(id).recipe;
+    const file = await this.#thumbnails.store(bytes, type, thumbnailName(current.title));
+    this.#recipes.update(id, { thumbnail: file });
+    if (current.thumbnail !== null && current.thumbnail !== '' && current.thumbnail !== file) {
+      await this.#thumbnails.remove(current.thumbnail);
+    }
+    return this.require(id);
+  }
+
+  async removeThumbnail(id: RecipeId): Promise<RecipeDetails> {
+    const current = this.require(id).recipe;
+    this.#recipes.update(id, { thumbnail: null });
+    if (current.thumbnail !== null && current.thumbnail !== '') {
+      await this.#thumbnails.remove(current.thumbnail);
+    }
+    return this.require(id);
   }
 
   #validateCreate(dto: CreateRecipeDto): Required<CreateRecipeDto> {

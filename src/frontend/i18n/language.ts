@@ -30,6 +30,19 @@ interface Form {
   imageError: string;
   thumbnailHint: string;
   timeHint: string;
+  sourceUrl: string;
+  thumbnail: string;
+  imageTooLarge: string;
+  removeThumbnail: string;
+  tagsPlaceholder: string;
+  date: string;
+  time: string;
+  remove: string;
+  ingredient: (n: number) => string;
+  instruction: (n: number) => string;
+  historyEntry: (n: number) => string;
+  saved: string;
+  required: string;
 }
 
 interface Import {
@@ -161,6 +174,11 @@ export interface Language {
   languageNames: Record<LanguageId, string>;
   notFound: (path: string) => string;
   loading: string;
+  leave: {
+    title: string;
+    message: string;
+    discard: string;
+  };
   logOut: string;
   menu: string;
   theme: {

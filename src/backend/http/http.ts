@@ -1,5 +1,8 @@
 import { badRequest, unsupportedMediaType } from './errors.ts';
 
+/** Bun refuses a larger body with 413 before a handler runs; the largest is a thumbnail upload. */
+export const MAX_BODY_BYTES = 10 * 1024 * 1024;
+
 export function json(data: unknown, status = 200, headers: HeadersInit = {}): Response {
   return Response.json(data, { status, headers });
 }

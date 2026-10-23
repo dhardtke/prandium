@@ -1,6 +1,6 @@
 import type { CreateRecipeDto, EditRecipeDto, RecipeDto, RecipeFilterDto, RecipePageDto, RecipeSortDto } from '../../../../shared/dto/recipe.ts';
 import type { RecipeId } from '../../../../shared/flavors.ts';
-import { get, patch, post, remove } from '../../../http/http.ts';
+import { get, patch, post, putBlob, remove, removeReturning } from '../../../http/http.ts';
 
 export type RecipeListRequest = RecipeFilterDto & Partial<RecipeSortDto> & { limit: number; offset: number };
 
@@ -36,5 +36,13 @@ export class RecipeApi {
 
   delete(id: RecipeId): Promise<null> {
     return remove(`/recipes/${id}`);
+  }
+
+  putThumbnail(id: RecipeId, image: Blob): Promise<RecipeDto> {
+    return putBlob(`/recipes/${id}/thumbnail`, image);
+  }
+
+  deleteThumbnail(id: RecipeId): Promise<RecipeDto> {
+    return removeReturning(`/recipes/${id}/thumbnail`);
   }
 }

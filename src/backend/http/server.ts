@@ -4,9 +4,10 @@ import type { DB } from '../db/db.ts';
 import { createDevFacade } from '../features/dev/dev.facade.ts';
 import { log } from '../shared/log.ts';
 import { errorResponse } from './errors.ts';
+import { MAX_BODY_BYTES } from './http.ts';
 import { allRoutes } from './routes.ts';
 
-export const MAX_BODY_BYTES = 10 * 1024 * 1024;
+export { MAX_BODY_BYTES } from './http.ts';
 
 /** `now` is the login throttle's and the session cookie's clock; only tests pass one. */
 export function startServer(db: DB, config: Config, now?: () => number): Server<undefined> {

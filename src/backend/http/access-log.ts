@@ -25,8 +25,7 @@ export function accessLog(table: RouteTable): RouteTable {
       const url = new URL(req.url);
       if (url.pathname === '/api' || url.pathname.startsWith('/api/') || res.status >= 500) {
         const line = `${req.method} ${url.pathname}${url.search} ${res.status} ${Math.round(ms)}ms`;
-        const text = copy === null ? '' : await copy.text();
-        const payload = text === '' ? undefined : describeBody(text);
+        const payload = copy === null ? undefined : await describeRequestBody(copy);
         if (res.status >= 500) {
           log.error('http', line, error, payload);
         } else {
@@ -36,6 +35,19 @@ export function accessLog(table: RouteTable): RouteTable {
     }
     return res;
   });
+}
+
+const BINARY = /^(image|audio|video|font)\/|^application\/octet-stream$/;
+
+// An upload shows only its size and type; reading it as text would garble the log.
+async function describeRequestBody(req: Request): Promise<string | undefined> {
+  const type = req.headers.get('Content-Type')?.split(';', 1)[0]?.trim().toLowerCase() ?? '';
+  if (BINARY.test(type)) {
+    const size = (await req.arrayBuffer()).byteLength;
+    return size === 0 ? undefined : `<${size} bytes ${type}>`;
+  }
+  const text = await req.text();
+  return text === '' ? undefined : describeBody(text);
 }
 
 // A non-JSON body shows only its size, so a malformed login cannot leak a password.

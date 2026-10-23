@@ -18,6 +18,11 @@ export function recipeRoutes(db: DB, config: Config): RouteTable {
       PATCH: (req) => controller.update(req),
       DELETE: (req) => controller.delete(req),
     },
+
+    '/api/recipes/:id/thumbnail': {
+      PUT: (req) => controller.putThumbnail(req),
+      DELETE: (req) => controller.deleteThumbnail(req),
+    },
   };
 }
 

@@ -30,6 +30,15 @@ export abstract class PrView<Data> extends PrElement {
     return this.#state.status === 'ready' ? this.titleFor(this.#state.data) : null;
   }
 
+  /** Breadcrumb parents that depend on the data, such as the recipe above its edit page; null keeps the route's. */
+  parentsFor(_data: Data): { path: string; label: string }[] | null {
+    return null;
+  }
+
+  get pageParents(): { path: string; label: string }[] | null {
+    return this.#state.status === 'ready' ? this.parentsFor(this.#state.data) : null;
+  }
+
   abstract load(): Promise<Data>;
 
   abstract readyTemplate(data: Data): RawHtml;

@@ -1,6 +1,17 @@
 import type { RecipeFilterDto, RecipeSortDto } from '../../../../shared/dto/recipe.ts';
 import { notFound } from '../../../http/errors.ts';
-import { json, noContent, optionalQueryOneOf, optionalQueryString, pathId, queryIds, queryInt, readJsonObject } from '../../../http/http.ts';
+import {
+  json,
+  MAX_BODY_BYTES,
+  noContent,
+  optionalQueryOneOf,
+  optionalQueryString,
+  pathId,
+  queryIds,
+  queryInt,
+  readBytes,
+  readJsonObject,
+} from '../../../http/http.ts';
 import type { ParamRequest } from '../../../http/routing.ts';
 import type { RecipeId } from '../../../../shared/flavors.ts';
 import { MAX_SEARCH_LENGTH, RECIPE_SORT_KEYS, type RecipesFacade } from '../recipes.facade.ts';
@@ -45,6 +56,16 @@ export class RecipeController {
   async delete(req: ParamRequest): Promise<Response> {
     await this.#recipes.delete(pathId(req.params.id, 'recipe'));
     return noContent();
+  }
+
+  async putThumbnail(req: ParamRequest): Promise<Response> {
+    const id: RecipeId = pathId(req.params.id, 'recipe');
+    const { bytes, type } = await readBytes(req, { types: ['image/'], maxBytes: MAX_BODY_BYTES });
+    return json(translateToRecipeDto(await this.#recipes.setThumbnail(id, bytes, type)));
+  }
+
+  async deleteThumbnail(req: ParamRequest): Promise<Response> {
+    return json(translateToRecipeDto(await this.#recipes.removeThumbnail(pathId(req.params.id, 'recipe'))));
   }
 
   /** The old server-rendered URLs, so bookmarks keep working. */

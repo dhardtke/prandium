@@ -620,19 +620,19 @@ Create and edit recipes in the browser, including tags and the thumbnail, with a
 
 **Tasks**:
 
-- [ ] Thumbnail endpoints: recipe controller `putThumbnail` (`readBytes(req, { types: ['image/'], maxBytes: MAX_BODY_BYTES })` →
+- [x] Thumbnail endpoints: recipe controller `putThumbnail` (`readBytes(req, { types: ['image/'], maxBytes: MAX_BODY_BYTES })` →
       `ThumbnailsFacade.store`, update the row, remove the previous file) and `deleteThumbnail`; routes `/api/recipes/:id/thumbnail` PUT, DELETE.
-- [ ] Access log: log binary bodies as `<n bytes type>`.
-- [ ] Frontend: `http/http.ts` `putBlob(path, blob)`; `recipe.api.ts` (`create`, `putThumbnail`, `deleteThumbnail`); facade methods; routes
+- [x] Access log: log binary bodies as `<n bytes type>`.
+- [x] Frontend: `http/http.ts` `putBlob(path, blob)`; `recipe.api.ts` (`create`, `putThumbnail`, `deleteThumbnail`); facade methods; routes
       `/recipes/new` (`parents`: Recipes) and `/recipes/:id/edit` (`parents`: Recipes, the recipe).
-- [ ] `features/recipes/pr-recipe-edit.component.{ts,css}` per the Edit mockup: `<ot-taginput>` fed tag objects (decision 10) and a `<datalist>`
+- [x] `features/recipes/pr-recipe-edit.component.{ts,css}` per the Edit mockup: `<ot-taginput>` fed tag objects (decision 10) and a `<datalist>`
       from `tagFacade.list()`, `<ot-upload>` with a `URL.createObjectURL` preview and Remove; save sequence POST/PATCH then PUT/DELETE thumbnail.
-- [ ] `internal/pr-list-field.component.{ts,css}` (add, remove, up, down; single-line or multiline), `internal/pr-history-field.component.{ts,css}`
+- [x] `internal/pr-list-field.component.{ts,css}` (add, remove, up, down; single-line or multiline), `internal/pr-history-field.component.{ts,css}`
       (date + time inputs ↔ ISO date-time in local time).
-- [ ] `ui/leave-guard.ts` and the `pr-app` hook: before a route change ask registered guards; `confirmAction()` with "Discard changes?";
+- [x] `ui/leave-guard.ts` and the `pr-app` hook: before a route change ask registered guards; `confirmAction()` with "Discard changes?";
       `beforeunload` while dirty.
-- [ ] i18n keys for the edit page.
-- [ ] Tests: route tests (PATCH tags creates, reuses and deletes orphans; tags with commas survive; history replace; thumbnail PUT 415/400/200
+- [x] i18n keys for the edit page.
+- [x] Tests: route tests (PATCH tags creates, reuses and deletes orphans; tags with commas survive; history replace; thumbnail PUT 415/400/200
       with the old file removed; DELETE thumbnail; access log shows `<n bytes image/png>`); component tests (form fills from a recipe, tags with
       commas stay whole, list-field reorder, save sends POST then PUT, 400 keeps values and toasts, leave guard asks only when dirty).
 
@@ -801,6 +801,21 @@ During implementation, document user feedback, problems, and decisions here.
 - Deleting a recipe also deletes the tags it leaves without recipes (`TagFacade.deleteOrphans`), as replacing tags does.
 - Card titles on the detail page are `h3`s under the `h1` (no font sizes in CSS, and an `h2` per small card was too loud).
 - `useServer()` exposes `db()` so the legacy round-trip test can insert a row exactly as the old app wrote it.
+
+### Phase 4
+
+- An uploaded thumbnail is named after the recipe's title (`gemuse-reis-a-la-maison.png`, extension from the content type) and replaces
+  the previous file, which is removed. `MAX_BODY_BYTES` moved into `http/http.ts` (re-exported by `server.ts`) so the controller does not
+  import the server module.
+- The edit page's breadcrumb gets the recipe from the view: `PrView.parentsFor(data)` / `pageParents`, which `pr-app` prefers over the
+  route's static `parents` (a regex route cannot name the recipe).
+- `confirmLeave()` clears the guards once confirmed, so the navigation that follows does not ask twice; on Back/Forward a declined leave
+  pushes the shown URL back. After a successful save the view releases its guard before navigating.
+- `pr-history-field` keeps each stored timestamp while its row is untouched, so saving a recipe does not drop the seconds of old entries.
+- The form keeps today's limits (yield 1–99, minutes ≤ 1440, rating step 0.5) but uses `step="any"` for yield, minutes and the foreign
+  rating, so fractional values of old rows and imports pass browser validation.
+- A language change re-renders the form only while it is clean, so typed values are never lost.
+- A failed thumbnail upload after a create keeps the created id, so saving again PATCHes instead of creating a duplicate.
 
 ## References
 

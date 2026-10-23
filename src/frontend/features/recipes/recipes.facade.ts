@@ -28,6 +28,14 @@ export class RecipeFacade {
   delete(id: RecipeId): Promise<null> {
     return this.#api.delete(id);
   }
+
+  putThumbnail(id: RecipeId, image: Blob): Promise<RecipeDto> {
+    return this.#api.putThumbnail(id, image);
+  }
+
+  deleteThumbnail(id: RecipeId): Promise<RecipeDto> {
+    return this.#api.deleteThumbnail(id);
+  }
 }
 
 export const recipeFacade = new RecipeFacade(new RecipeApi());

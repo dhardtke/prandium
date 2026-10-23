@@ -8,7 +8,7 @@ import { at, body, useServer } from '../../testing.ts';
 import { RECIPE_SORT_KEYS } from './recipes.facade.ts';
 import { createRecipe } from './recipes.fixtures.ts';
 
-const { api, post, patch, del, db, configDir } = useServer();
+const { api, post, patch, del, db, configDir, logs } = useServer();
 
 async function page(query = ''): Promise<RecipePageDto> {
   const res = await api(`/api/recipes${query}`);
@@ -462,6 +462,110 @@ describe('the old URLs', () => {
   test('answer 404 for an id that is none', async () => {
     expect((await api('/recipe/abc/slug', { redirect: 'manual' })).status).toBe(404);
     expect((await api('/recipe/abc/slug/edit', { redirect: 'manual' })).status).toBe(404);
+  });
+});
+
+describe('editing tags', () => {
+  async function tagTitles(): Promise<string[]> {
+    return (await body<TagDto[]>(await api('/api/tags'))).map((tag) => tag.title);
+  }
+
+  test('creates new tags, reuses existing ones and deletes those left without recipes', async () => {
+    const lasagna = await createRecipe(post, { title: 'Lasagna', tags: ['Pasta'] });
+    const { id } = await createRecipe(post, { tags: ['Pasta', 'Quick', 'Italian'] });
+    const updated = await body<RecipeDto>(await patch(`/api/recipes/${id}`, { tags: ['pasta', 'Dinner'] }));
+    expect(updated.tags.map((tag) => tag.title)).toEqual(['Dinner', 'Pasta']);
+    expect(updated.tags.find((tag) => tag.title === 'Pasta')?.id).toBe(lasagna.tags[0]?.id);
+    expect(await tagTitles()).toEqual(['Dinner', 'Pasta']);
+  });
+
+  test('keeps a tag with a comma whole', async () => {
+    const { id } = await createRecipe(post);
+    const updated = await body<RecipeDto>(await patch(`/api/recipes/${id}`, { tags: ['Salt, pepper', 'Quick'] }));
+    expect(updated.tags.map((tag) => tag.title)).toEqual(['Quick', 'Salt, pepper']);
+  });
+
+  test('deletes every tag when the list is emptied', async () => {
+    const { id } = await createRecipe(post, { tags: ['Pasta'] });
+    await patch(`/api/recipes/${id}`, { tags: [] });
+    expect(await tagTitles()).toEqual([]);
+  });
+});
+
+describe('PUT /api/recipes/:id/thumbnail', () => {
+  const PNG = join(import.meta.dir, '../thumbnails/1x1.png');
+
+  function upload(id: number, bytes: Uint8Array<ArrayBuffer> | string, type: string | null): Promise<Response> {
+    return api(`/api/recipes/${id}/thumbnail`, { method: 'PUT', headers: type === null ? {} : { 'Content-Type': type }, body: bytes });
+  }
+
+  async function png(): Promise<Uint8Array<ArrayBuffer>> {
+    return new Uint8Array(await Bun.file(PNG).arrayBuffer());
+  }
+
+  test('stores the image under a name from the title and answers the recipe', async () => {
+    const { id } = await createRecipe(post, { title: 'Gemüse-Reis à la Maison' });
+    const res = await upload(id, await png(), 'image/png');
+    expect(res.status).toBe(200);
+    const recipe = await body<RecipeDto>(res);
+    expect(recipe.thumbnail).toBe('/thumbnails/gemuse-reis-a-la-maison.png');
+    const served = await api(recipe.thumbnail ?? '');
+    expect(served.status).toBe(200);
+    expect(served.headers.get('content-type')).toBe('image/png');
+  });
+
+  test('replaces an earlier image and removes its file', async () => {
+    const { id } = await createRecipe(post, { title: 'Ramen' });
+    await upload(id, await png(), 'image/png');
+    const second = await body<RecipeDto>(await upload(id, await png(), 'image/jpeg'));
+    expect(second.thumbnail).toBe('/thumbnails/ramen.jpg');
+    expect(existsSync(join(configDir(), 'thumbnails', 'ramen.png'))).toBe(false);
+    expect(existsSync(join(configDir(), 'thumbnails', 'ramen.jpg'))).toBe(true);
+  });
+
+  test.each([
+    ['text/plain', 415],
+    ['application/json', 415],
+    [null, 415],
+  ])('refuses a body sent as %p with %p', async (type, status) => {
+    const { id } = await createRecipe(post);
+    expect((await upload(id, 'not an image', type)).status).toBe(status);
+  });
+
+  test('refuses an empty image', async () => {
+    const { id } = await createRecipe(post);
+    expect((await upload(id, new Uint8Array(), 'image/png')).status).toBe(400);
+  });
+
+  test('answers 404 for a recipe that does not exist', async () => {
+    expect((await upload(999, await png(), 'image/png')).status).toBe(404);
+  });
+
+  test('logs the upload by its size and type', async () => {
+    const { id } = await createRecipe(post);
+    await upload(id, await png(), 'image/png');
+    const size = Bun.file(PNG).size;
+    expect(logs().at(-1)?.text).toMatch(new RegExp(`^http PUT /api/recipes/${id}/thumbnail 200 \\d+ms <${size} bytes image/png>$`));
+  });
+});
+
+describe('DELETE /api/recipes/:id/thumbnail', () => {
+  test('removes the image and its file', async () => {
+    const { id } = await createRecipe(post, { title: 'Ramen' });
+    await api(`/api/recipes/${id}/thumbnail`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'image/png' },
+      body: await Bun.file(join(import.meta.dir, '../thumbnails/1x1.png')).bytes(),
+    });
+    const res = await del(`/api/recipes/${id}/thumbnail`);
+    expect(res.status).toBe(200);
+    expect((await body<RecipeDto>(res)).thumbnail).toBeNull();
+    expect(existsSync(join(configDir(), 'thumbnails', 'ramen.png'))).toBe(false);
+  });
+
+  test('is harmless without an image', async () => {
+    const { id } = await createRecipe(post);
+    expect((await del(`/api/recipes/${id}/thumbnail`)).status).toBe(200);
   });
 });
 

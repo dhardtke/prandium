@@ -9,6 +9,7 @@ import { tabTitle } from './tab-title.ts';
 import { toastError } from '../ui/toast.ts';
 import { UNAUTHORIZED_EVENT } from '../http/errors.ts';
 import { t } from '../ui/i18n.ts';
+import { confirmLeave, hasUnsavedChanges } from '../ui/leave-guard.ts';
 import type { PrBreadcrumbsComponent } from './pr-breadcrumbs.component.ts';
 import './pr-breadcrumbs.component.ts';
 import './pr-header.component.ts';
@@ -20,6 +21,7 @@ class PrAppComponent extends PrElement {
   #unsubscribe: (() => void) | null = null;
   #renderToken = 0;
   #shown: { route: RouteDef | null; view: Element } | null = null;
+  #shownUrl = '';
 
   readonly #onUnauthorized = (): void => {
     if (currentPath() !== '/login') {
@@ -40,7 +42,7 @@ class PrAppComponent extends PrElement {
         return;
       }
       event.preventDefault();
-      navigate(path);
+      void this.#follow(path);
     });
     this.addEventListener(PAGE_TITLE_EVENT, (event) => {
       if (event.target === this.#shown?.view) {
@@ -52,7 +54,7 @@ class PrAppComponent extends PrElement {
   override connectedCallback(): void {
     super.connectedCallback();
     this.#unsubscribe = onRouteChange(() => {
-      this.#renderView();
+      void this.#onRouteChange();
     });
     window.addEventListener(UNAUTHORIZED_EVENT, this.#onUnauthorized);
   }
@@ -64,6 +66,22 @@ class PrAppComponent extends PrElement {
   }
 
   override afterRender(): void {
+    this.#renderView();
+  }
+
+  async #follow(path: string): Promise<void> {
+    if (await confirmLeave()) {
+      navigate(path);
+    }
+  }
+
+  // Back and Forward have moved the URL already, so declining puts the shown page's URL back.
+  async #onRouteChange(): Promise<void> {
+    const url = location.pathname + location.search;
+    if (this.#shownUrl !== '' && url !== this.#shownUrl && hasUnsavedChanges() && !(await confirmLeave())) {
+      history.pushState(null, '', this.#shownUrl);
+      return;
+    }
     this.#renderView();
   }
 
@@ -132,6 +150,7 @@ class PrAppComponent extends PrElement {
     }
     view.removeAttribute('hidden');
     this.#shown = { route: match?.route ?? null, view };
+    this.#shownUrl = location.pathname + location.search;
     this.#showPage();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
@@ -149,7 +168,8 @@ class PrAppComponent extends PrElement {
     }
     const breadcrumbs = this.$<PrBreadcrumbsComponent>('pr-breadcrumbs');
     if (breadcrumbs) {
-      const parents = (route?.parents ?? []).map((parent) => ({ path: parent.path, label: parent.label(t()) }));
+      const parents =
+        (view instanceof PrView ? view.pageParents : null) ?? (route?.parents ?? []).map((parent) => ({ path: parent.path, label: parent.label(t()) }));
       breadcrumbs.trail = parents.length > 0 ? { parents, current: name ?? '' } : null;
     }
   }

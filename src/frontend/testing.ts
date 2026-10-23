@@ -54,7 +54,7 @@ export function useFetch(): FakeFetch {
     stub('fetch', (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
       const url = urlOf(input);
       const method = init?.method ?? 'GET';
-      const body: unknown = typeof init?.body === 'string' ? JSON.parse(init.body) : undefined;
+      const body: unknown = typeof init?.body === 'string' ? JSON.parse(init.body) : init?.body instanceof Blob ? init.body : undefined;
       requests.push({ method, url, headers: Object.fromEntries(new Headers(init?.headers)), body });
       return (answers.get(`${method} ${url}`) ?? answer)();
     });

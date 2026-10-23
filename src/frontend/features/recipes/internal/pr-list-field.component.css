@@ -1,0 +1,41 @@
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+legend {
+  font-weight: 600;
+  padding: 0;
+}
+
+.items {
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+
+  & input,
+  & textarea {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+  }
+
+  & .buttons {
+    flex: none;
+    flex-wrap: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    flex-wrap: wrap;
+
+    & .buttons {
+      margin-inline-start: auto;
+    }
+  }
+}

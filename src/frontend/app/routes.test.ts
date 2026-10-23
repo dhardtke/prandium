@@ -23,6 +23,15 @@ describe('routes', () => {
     expect(matchRoute(ROUTES, '/recipes/12/')?.route).toBe(detail?.route);
   });
 
+  test('/recipes/new and /recipes/:id/edit open the form, below the list', () => {
+    const create = matchRoute(ROUTES, '/recipes/new');
+    const edit = matchRoute(ROUTES, '/recipes/12/edit');
+    expect(create?.route.title?.(en)).toBe('New recipe');
+    expect(edit?.params).toEqual({ id: '12' });
+    expect(edit?.route.title?.(en)).toBe('Edit');
+    expect(create?.route).not.toBe(matchRoute(ROUTES, '/recipes/12')?.route);
+  });
+
   test.each(['/nope', '/login/extra', '/recipes', '/recipes/abc', '/recipes/12/extra'])('%s matches nothing', (path) => {
     expect(matchRoute(ROUTES, path)).toBeNull();
   });

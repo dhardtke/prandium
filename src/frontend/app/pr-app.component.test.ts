@@ -1,6 +1,7 @@
 import { beforeAll, beforeEach, expect, test } from 'bun:test';
-import { find, mount, settle, shadow, testId, useDom, useFetch } from '../testing.ts';
+import { find, mount, openDialog, settle, shadow, testId, useDom, useFetch } from '../testing.ts';
 import type * as I18n from '../ui/i18n.ts';
+import type * as LeaveGuard from '../ui/leave-guard.ts';
 import { navigate } from './router.ts';
 import { APP_TITLE } from './tab-title.ts';
 
@@ -8,10 +9,13 @@ useDom();
 const fake = useFetch();
 
 let setLanguage: typeof I18n.setLanguage;
+let guardLeave: typeof LeaveGuard.guardLeave;
 
 beforeAll(async () => {
   await import('./pr-app.component.ts');
   ({ setLanguage } = await import('../ui/i18n.ts'));
+  ({ guardLeave } = await import('../ui/leave-guard.ts'));
+  await import('../ui/confirm/pr-confirm-dialog.component.ts');
   if (!customElements.get('pr-test-link')) {
     class PrTestLink extends HTMLElement {
       readonly #anchor = document.createElement('a');
@@ -249,4 +253,36 @@ test('renders the breadcrumb in German once the language changes', async () => {
   setLanguage('de');
   expect(trail(app)).toEqual(['Rezepte → /', 'Rezept']);
   expect(document.title).toBe('Rezept · Prandium');
+});
+
+test('asks before following a link away from unsaved changes, and stays when declined', async () => {
+  const app = await mountApp();
+  const release = guardLeave(() => true);
+  try {
+    click(link(app, { href: '/elsewhere' }));
+    find<HTMLButtonElement>(openDialog(), testId('cancel')).click();
+    await settle();
+    expect(location.pathname).toBe('/nowhere');
+    click(link(app, { href: '/elsewhere' }));
+    find<HTMLButtonElement>(openDialog(), testId('confirm')).click();
+    await settle();
+    expect(location.pathname).toBe('/elsewhere');
+  } finally {
+    release();
+  }
+});
+
+test('puts the URL back when Back is declined', async () => {
+  const app = await mountApp();
+  const release = guardLeave(() => true);
+  try {
+    history.pushState(null, '', '/back-here');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+    find<HTMLButtonElement>(openDialog(), testId('cancel')).click();
+    await settle();
+    expect(location.pathname).toBe('/nowhere');
+    expect(notFound(app)).toBe('Nothing lives at /nowhere.');
+  } finally {
+    release();
+  }
 });

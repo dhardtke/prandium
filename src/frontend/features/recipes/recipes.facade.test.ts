@@ -30,3 +30,13 @@ test('get(), update() and delete() address the recipe', async () => {
     { method: 'DELETE', url: '/api/recipes/12' },
   ]);
 });
+
+test('putThumbnail() sends the image as its own type, deleteThumbnail() removes it', async () => {
+  const image = new Blob([new Uint8Array([1])], { type: 'image/png' });
+  await recipeFacade.putThumbnail(12, image);
+  await recipeFacade.deleteThumbnail(12);
+  expect(fake.requests).toMatchObject([
+    { method: 'PUT', url: '/api/recipes/12/thumbnail', headers: { 'Content-Type': 'image/png' }, body: image },
+    { method: 'DELETE', url: '/api/recipes/12/thumbnail' },
+  ]);
+});
