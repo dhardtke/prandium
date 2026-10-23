@@ -1,8 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="fmt:check" type="DenoConfigurationType" inputPath="$PROJECT_DIR$/dev/intellij-deno.ts" programParameters="run --no-check --allow-all">
-    <option name="applicationArguments" value="task fmt:check" />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
+  <configuration default="false" name="fmt:check" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="fmt:check" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
   </configuration>
 </component>
