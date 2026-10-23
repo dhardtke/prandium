@@ -1,11 +1,14 @@
 import { describe, expect, test } from 'bun:test';
-import type { CreateRecipeDto, RecipeDto, RecipePageDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
+import { copyFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import type { CreateRecipeDto, EditRecipeDto, RecipeDto, RecipePageDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
+import type { TagDto } from '../../../shared/dto/tag.ts';
 import type { ErrorDto } from '../../../shared/dto/error.ts';
 import { at, body, useServer } from '../../testing.ts';
 import { RECIPE_SORT_KEYS } from './recipes.facade.ts';
 import { createRecipe } from './recipes.fixtures.ts';
 
-const { api, post } = useServer();
+const { api, post, patch, del, db, configDir } = useServer();
 
 async function page(query = ''): Promise<RecipePageDto> {
   const res = await api(`/api/recipes${query}`);
@@ -95,8 +98,8 @@ describe('POST /api/recipes', () => {
       history: ['2026-10-20T18:30:00.000Z', '2026-10-01T18:00:00.000Z'],
     });
     expect(recipe.ingredients).toEqual([
-      { raw: '400 g Spaghetti', quantity: 400, unit: 'g', description: 'Spaghetti' },
       { raw: '4 egg yolks', quantity: 4, unit: null, description: 'egg yolks' },
+      { raw: '400 g Spaghetti', quantity: 400, unit: 'g', description: 'Spaghetti' },
       { raw: 'Salt', quantity: null, unit: null, description: 'Salt' },
     ]);
     expect(recipe.tags.map((tag) => tag.title)).toEqual(['Italian', 'Pasta']);
@@ -303,6 +306,162 @@ describe('GET /api/recipes', () => {
     await createRecipe(post, { title: 'Cherry' });
     await createRecipe(post, { title: 'Apple' });
     expect(await titles()).toEqual(['Apple', 'Cherry']);
+  });
+});
+
+describe('GET /api/recipes/:id', () => {
+  test('answers the recipe with its tags, newest history first, and its parsed, unscaled ingredients in the stored order', async () => {
+    const created = await createRecipe(post, { ...FULL, ingredients: ['Salt', '⅓ TL Pfeffer', '400 g Spaghetti', '2 Eier'] });
+    const recipe = await body<RecipeDto>(await api(`/api/recipes/${created.id}`));
+    expect(recipe).toEqual(created);
+    expect(recipe.ingredients.map((ingredient) => [ingredient.raw, ingredient.quantity])).toEqual([
+      ['Salt', null],
+      ['⅓ TL Pfeffer', 1 / 3],
+      ['400 g Spaghetti', 400],
+      ['2 Eier', 2],
+    ]);
+  });
+
+  test('answers 404 for a recipe that does not exist and 400 for an id that is none', async () => {
+    expect((await api('/api/recipes/999')).status).toBe(404);
+    expect((await api('/api/recipes/abc')).status).toBe(400);
+  });
+});
+
+describe('PATCH /api/recipes/:id', () => {
+  test('flags and unflags', async () => {
+    const { id } = await createRecipe(post);
+    expect((await body<RecipeDto>(await patch(`/api/recipes/${id}`, { flagged: true }))).flagged).toBe(true);
+    expect((await body<RecipeDto>(await patch(`/api/recipes/${id}`, { flagged: false }))).flagged).toBe(false);
+  });
+
+  test('changes only the fields present, and moves updatedAt', async () => {
+    const created = await createRecipe(post, FULL);
+    await Bun.sleep(5);
+    const res = await patch(`/api/recipes/${created.id}`, { title: 'Carbonara', prepTime: 5 });
+    expect(res.status).toBe(200);
+    const updated = await body<RecipeDto>(res);
+    expect(updated).toEqual({ ...created, title: 'Carbonara', prepTime: 5, totalTime: 20, updatedAt: updated.updatedAt });
+    expect(updated.updatedAt > created.updatedAt).toBe(true);
+  });
+
+  test('records a cooking the first time an unrated recipe is rated, and only then', async () => {
+    const { id } = await createRecipe(post);
+    const before = Date.now();
+    const rated = await body<RecipeDto>(await patch(`/api/recipes/${id}`, { rating: 4 }));
+    expect(rated.rating).toBe(4);
+    expect(rated.history).toHaveLength(1);
+    expect(Date.parse(rated.history[0] ?? '')).toBeGreaterThanOrEqual(before - 1000);
+    const rerated = await body<RecipeDto>(await patch(`/api/recipes/${id}`, { rating: 4.5 }));
+    expect(rerated.history).toEqual(rated.history);
+    const cleared = await body<RecipeDto>(await patch(`/api/recipes/${id}`, { rating: 0 }));
+    expect(cleared.history).toEqual(rated.history);
+  });
+
+  test('replaces the history and the tags when present', async () => {
+    const { id } = await createRecipe(post, FULL);
+    const updated = await body<RecipeDto>(await patch(`/api/recipes/${id}`, { history: ['2025-01-01T12:00:00Z'], tags: ['Quick'] }));
+    expect(updated.history).toEqual(['2025-01-01T12:00:00.000Z']);
+    expect(updated.tags.map((tag) => tag.title)).toEqual(['Quick']);
+  });
+
+  test('validates only the fields present', async () => {
+    const { id } = await createRecipe(post);
+    expect((await patch(`/api/recipes/${id}`, { rating: 7 })).status).toBe(400);
+    expect((await patch(`/api/recipes/${id}`, { title: '' })).status).toBe(400);
+    expect((await patch(`/api/recipes/${id}`, {})).status).toBe(200);
+  });
+
+  test('answers 404 for a recipe that does not exist', async () => {
+    expect((await patch('/api/recipes/999', { flagged: true })).status).toBe(404);
+  });
+
+  test('saves a row of the old app back unchanged, whole', async () => {
+    const database = db();
+    database.run(
+      `INSERT INTO recipe (id, created_at, updated_at, title, description, source, thumbnail, yield, nutrition_calories, prep_time, cook_time,
+                           aggregate_rating_value, aggregate_rating_count, rating, ingredients, instructions, flagged)
+       VALUES (12, '2021-03-27 10:00:00', '2021-03-28 11:30:00', 'Gemüsereis', NULL, NULL, NULL, NULL, '540 kcal', 7.5, 25,
+               87, 12, NULL, '["200 g Reis","1 Zwiebel"]', NULL, 0)`,
+    );
+    database.run("INSERT INTO recipe_history (recipe_id, timestamp) VALUES (12, '2021-04-01 18:00:00'), (12, '2021-05-02T17:30:00.000Z')");
+    database.run("INSERT INTO recipe_review (recipe_id, date, text) VALUES (12, '2021-01-01T00:00:00.000Z', 'Lecker')");
+    database.run("INSERT INTO tag (id, title) VALUES (5, 'Reis')");
+    database.run('INSERT INTO recipe_tag (tag_id, recipe_id) VALUES (5, 12)');
+
+    const legacy = await body<RecipeDto>(await api('/api/recipes/12'));
+    expect(legacy).toMatchObject({
+      description: '',
+      source: '',
+      yield: null,
+      prepTime: 7.5,
+      aggregateRating: { value: 87, count: 12 },
+      rating: 0,
+      instructions: [],
+      history: ['2021-05-02T17:30:00.000Z', '2021-04-01T18:00:00.000Z'],
+      reviews: [{ date: '2021-01-01T00:00:00.000Z', text: 'Lecker' }],
+      createdAt: '2021-03-27T10:00:00.000Z',
+    });
+
+    const whole: EditRecipeDto = {
+      title: legacy.title,
+      flagged: legacy.flagged,
+      description: legacy.description,
+      source: legacy.source,
+      yield: legacy.yield,
+      nutrition: legacy.nutrition,
+      prepTime: legacy.prepTime,
+      cookTime: legacy.cookTime,
+      aggregateRating: legacy.aggregateRating,
+      rating: legacy.rating,
+      ingredients: legacy.ingredients.map((ingredient) => ingredient.raw),
+      instructions: legacy.instructions,
+      history: legacy.history,
+      tags: legacy.tags.map((tag) => tag.title),
+    };
+    const res = await patch('/api/recipes/12', whole);
+    expect(res.status).toBe(200);
+    const saved = await body<RecipeDto>(res);
+    // A NULL yield is stored as 1, the scale the old app used for it.
+    expect(saved).toEqual({ ...legacy, yield: 1, updatedAt: saved.updatedAt });
+  });
+});
+
+describe('DELETE /api/recipes/:id', () => {
+  test('deletes the recipe, its thumbnail file and the tags left without recipes', async () => {
+    const keep = await createRecipe(post, { title: 'Lasagna', tags: ['Pasta'] });
+    const gone = await createRecipe(post, { tags: ['Pasta', 'Quick'] });
+    copyFileSync(join(import.meta.dir, '../thumbnails/1x1.png'), join(configDir(), 'thumbnails', 'carbonara.png'));
+    db().run("UPDATE recipe SET thumbnail = 'carbonara.png' WHERE id = ?", [gone.id]);
+
+    expect((await del(`/api/recipes/${gone.id}`)).status).toBe(204);
+
+    expect((await api(`/api/recipes/${gone.id}`)).status).toBe(404);
+    expect(existsSync(join(configDir(), 'thumbnails', 'carbonara.png'))).toBe(false);
+    expect((await body<TagDto[]>(await api('/api/tags'))).map((tag) => tag.title)).toEqual(['Pasta']);
+    expect((await api(`/api/recipes/${keep.id}`)).status).toBe(200);
+  });
+
+  test('answers 404 for a recipe that does not exist', async () => {
+    expect((await del('/api/recipes/999')).status).toBe(404);
+  });
+});
+
+describe('the old URLs', () => {
+  test.each([
+    ['/recipe/12/spaghetti-carbonara', '/recipes/12'],
+    ['/recipe/12/spaghetti-carbonara/edit', '/recipes/12/edit'],
+    ['/recipe/create', '/recipes/new'],
+    ['/recipe/import', '/recipes/import'],
+  ])('redirect %s permanently to %s', async (from, to) => {
+    const res = await api(from, { redirect: 'manual' });
+    expect(res.status).toBe(301);
+    expect(new URL(res.headers.get('location') ?? '').pathname).toBe(to);
+  });
+
+  test('answer 404 for an id that is none', async () => {
+    expect((await api('/recipe/abc/slug', { redirect: 'manual' })).status).toBe(404);
+    expect((await api('/recipe/abc/slug/edit', { redirect: 'manual' })).status).toBe(404);
   });
 });
 

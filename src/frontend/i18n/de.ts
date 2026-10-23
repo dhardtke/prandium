@@ -44,6 +44,10 @@ export const de: Language = {
   recipe: {
     count: (n) => `${n} Rezept${n === 1 ? '' : 'e'}`,
     newRecipe: 'Neues Rezept',
+    recipe: 'Rezept',
+    deleteTitle: (title) => `„${title}“ löschen?`,
+    ratingCount: (n) => `${n} Bewertung${n === 1 ? '' : 'en'}`,
+    noRating: 'Noch nicht bewertet',
     actions: 'Rezeptaktionen',
     cookedTimes: (n) => `${n}× gekocht`,
     tagsSelected: (n) => (n === 0 ? 'Tags' : `Tags (${n} ausgewählt)`),

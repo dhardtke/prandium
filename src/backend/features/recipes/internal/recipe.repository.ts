@@ -1,5 +1,5 @@
 import type { DB } from '../../../db/db.ts';
-import { type Binding, buildFilters, buildOrderBySql, type Filter, likePattern } from '../../../db/sql.ts';
+import { type Binding, buildFilters, buildOrderBySql, buildUpdate, type Filter, likePattern } from '../../../db/sql.ts';
 import type { RecipeId, TagId } from '../../../../shared/flavors.ts';
 import type { TagFacade } from '../../tags/tags.facade.ts';
 import {
@@ -33,6 +33,9 @@ export type CreateRecipe = {
   tags: string[];
   reviews: ReviewRow[];
 } & Record<NutritionColumn, string | null>;
+
+/** Present fields only; `history` and `tags` replace the stored lists. */
+export type EditRecipe = Partial<Omit<CreateRecipe, 'reviews'>>;
 
 const SCALAR_COLUMNS = [
   'title',
@@ -138,10 +141,52 @@ export class RecipeRepository {
     })();
   }
 
+  update(id: RecipeId, edit: EditRecipe, { addHistoryAt }: { addHistoryAt?: string } = {}): void {
+    this.#db.transaction(() => {
+      const columns: Record<string, Binding> = {};
+      for (const column of SCALAR_COLUMNS) {
+        const value = edit[column];
+        if (value !== undefined) {
+          columns[column] = value;
+        }
+      }
+      if (edit.ingredients !== undefined) {
+        columns.ingredients = JSON.stringify(edit.ingredients);
+      }
+      if (edit.instructions !== undefined) {
+        columns.instructions = JSON.stringify(edit.instructions);
+      }
+      columns.updated_at = new Date().toISOString();
+      const statement = buildUpdate('recipe', Object.keys(columns), columns);
+      if (statement) {
+        this.#db.query(statement.sql).run(...statement.values, id);
+      }
+      if (edit.history !== undefined) {
+        this.#db.query('DELETE FROM recipe_history WHERE recipe_id = ?').run(id);
+        this.#insertHistory(id, edit.history);
+      }
+      if (addHistoryAt !== undefined) {
+        this.#insertHistory(id, [addHistoryAt]);
+      }
+      if (edit.tags !== undefined) {
+        this.#tags.replaceForRecipe(id, edit.tags);
+      }
+    })();
+  }
+
+  /** Returns the thumbnail file the recipe held, for the caller to remove. */
+  delete(id: RecipeId): string | null {
+    return this.#db.transaction(() => {
+      const row = this.#db.query<{ thumbnail: string | null }, [RecipeId]>('DELETE FROM recipe WHERE id = ? RETURNING thumbnail').get(id);
+      this.#tags.deleteOrphans();
+      return row?.thumbnail ?? null;
+    })();
+  }
+
   // (recipe_id, timestamp) is the primary key, so a repeated entry is stored once.
   #insertHistory(id: RecipeId, history: readonly string[]): void {
     for (const timestamp of new Set(history)) {
-      this.#db.query('INSERT INTO recipe_history (recipe_id, timestamp) VALUES (?, ?)').run(id, timestamp);
+      this.#db.query('INSERT OR IGNORE INTO recipe_history (recipe_id, timestamp) VALUES (?, ?)').run(id, timestamp);
     }
   }
 }

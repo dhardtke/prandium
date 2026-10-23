@@ -1,0 +1,18 @@
+header h2 {
+  margin: 0;
+}
+
+.portions {
+  flex-wrap: nowrap;
+
+  & input {
+    width: 4.5rem;
+    text-align: center;
+  }
+}
+
+td.amount {
+  width: 1%;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}

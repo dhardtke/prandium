@@ -5,7 +5,7 @@ import { navigate } from './router.ts';
 import { APP_TITLE } from './tab-title.ts';
 
 useDom();
-useFetch();
+const fake = useFetch();
 
 let setLanguage: typeof I18n.setLanguage;
 
@@ -199,4 +199,54 @@ test('names the login page in German once the language changes', async () => {
   expect(await shown(app, 'pr-login')).not.toBeNull();
   setLanguage('de');
   expect(document.title).toBe('Anmelden · Prandium');
+});
+
+async function openRecipe(status = 200, body = JSON.stringify({ ...RECIPE })): Promise<HTMLElement> {
+  fake.respondTo('GET /api/recipes/12', status, body);
+  history.replaceState(null, '', '/recipes/12');
+  const app = await mountApp();
+  await shown(app, 'pr-recipe-detail');
+  return app;
+}
+
+const RECIPE = {
+  id: 12,
+  title: 'Carbonara',
+  flagged: false,
+  description: '',
+  source: '',
+  thumbnail: null,
+  yield: 4,
+  nutrition: {},
+  prepTime: 0,
+  cookTime: 0,
+  totalTime: 0,
+  aggregateRating: { value: null, count: null },
+  rating: 0,
+  ingredients: [],
+  instructions: [],
+  history: [],
+  reviews: [],
+  tags: [],
+  createdAt: '2026-10-01T10:00:00.000Z',
+  updatedAt: '2026-10-01T10:00:00.000Z',
+};
+
+test('shows a recipe below its list in the breadcrumb, and its title in the tab', async () => {
+  const app = await openRecipe();
+  expect(trail(app)).toEqual(['Recipes → /', 'Carbonara']);
+  expect(document.title).toBe('Carbonara · Prandium');
+});
+
+test("falls back to the route's title for a recipe that cannot be loaded", async () => {
+  const app = await openRecipe(404, JSON.stringify({ error: 'Recipe not found' }));
+  expect(trail(app)).toEqual(['Recipes → /', 'Recipe']);
+  expect(document.title).toBe('Recipe · Prandium');
+});
+
+test('renders the breadcrumb in German once the language changes', async () => {
+  const app = await openRecipe(404, JSON.stringify({ error: 'Recipe not found' }));
+  setLanguage('de');
+  expect(trail(app)).toEqual(['Rezepte → /', 'Rezept']);
+  expect(document.title).toBe('Rezept · Prandium');
 });

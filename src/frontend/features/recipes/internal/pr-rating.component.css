@@ -1,0 +1,69 @@
+:host {
+  --star-size: 2rem;
+
+  display: inline-block;
+}
+
+:host([readonly]) {
+  --star-size: 1.125rem;
+}
+
+/* Each label is half a star: a `half` shows its left half, a `full` its right. */
+.stars {
+  display: inline-flex;
+  flex-direction: row-reverse;
+
+  & input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  & label {
+    display: inline-block;
+    width: calc(var(--star-size) / 2);
+    height: var(--star-size);
+    overflow: hidden;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+
+    & svg {
+      display: block;
+      width: var(--star-size);
+      max-width: none;
+      height: var(--star-size);
+      fill: currentColor;
+    }
+
+    &.full svg {
+      margin-inline-start: calc(var(--star-size) / -2);
+    }
+  }
+
+  & label.half {
+    margin-inline-start: 2px;
+  }
+
+  & input:checked ~ label {
+    color: var(--warning);
+  }
+
+  & input:focus-visible + label {
+    outline: 2px solid var(--ring);
+    outline-offset: 1px;
+  }
+
+  &:not(.readonly) label:hover,
+  &:not(.readonly) label:hover ~ label {
+    color: var(--warning);
+    opacity: 0.8;
+  }
+
+  &.readonly label {
+    cursor: default;
+  }
+}

@@ -27,17 +27,7 @@ export function parseIngredient(raw: string): IngredientDto {
   };
 }
 
-// Quantity and unit first, then a unit alone, then neither; then by unit, where both lines have one.
-function rank(ingredient: IngredientDto): number {
-  if (ingredient.quantity === null) {
-    return 3;
-  }
-  return ingredient.unit === null ? 2 : 1;
-}
-
+/** In the stored order: the edit form shows it, and the detail page sorts for display. */
 export function parseIngredients(raw: readonly string[]): IngredientDto[] {
-  return raw
-    .map(parseIngredient)
-    .sort((a, b) => rank(a) - rank(b))
-    .sort((a, b) => (a.unit !== null && b.unit !== null ? a.unit.localeCompare(b.unit) : 0));
+  return raw.map(parseIngredient);
 }

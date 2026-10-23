@@ -1,7 +1,10 @@
 import type { RecipeFilterDto, RecipeSortDto } from '../../../../shared/dto/recipe.ts';
-import { json, optionalQueryOneOf, optionalQueryString, queryIds, queryInt, readJsonObject } from '../../../http/http.ts';
+import { notFound } from '../../../http/errors.ts';
+import { json, noContent, optionalQueryOneOf, optionalQueryString, pathId, queryIds, queryInt, readJsonObject } from '../../../http/http.ts';
+import type { ParamRequest } from '../../../http/routing.ts';
+import type { RecipeId } from '../../../../shared/flavors.ts';
 import { MAX_SEARCH_LENGTH, RECIPE_SORT_KEYS, type RecipesFacade } from '../recipes.facade.ts';
-import { translateToCreateRecipeDto, translateToRecipeDto, translateToRecipePageDto } from './recipe.translator.ts';
+import { translateToCreateRecipeDto, translateToEditRecipeDto, translateToRecipeDto, translateToRecipePageDto } from './recipe.translator.ts';
 
 export const DEFAULT_PAGE_SIZE = 24;
 
@@ -27,6 +30,30 @@ export class RecipeController {
   async create(req: Request): Promise<Response> {
     const dto = translateToCreateRecipeDto(await readJsonObject(req));
     return json(translateToRecipeDto(this.#recipes.create(dto)), 201);
+  }
+
+  show(req: ParamRequest): Response {
+    return json(translateToRecipeDto(this.#recipes.require(pathId(req.params.id, 'recipe'))));
+  }
+
+  async update(req: ParamRequest): Promise<Response> {
+    const id: RecipeId = pathId(req.params.id, 'recipe');
+    const dto = translateToEditRecipeDto(await readJsonObject(req));
+    return json(translateToRecipeDto(this.#recipes.update(id, dto)));
+  }
+
+  async delete(req: ParamRequest): Promise<Response> {
+    await this.#recipes.delete(pathId(req.params.id, 'recipe'));
+    return noContent();
+  }
+
+  /** The old server-rendered URLs, so bookmarks keep working. */
+  legacy(req: ParamRequest, suffix: '' | '/edit'): Response {
+    const id = req.params.id ?? '';
+    if (!/^\d+$/.test(id)) {
+      throw notFound('Recipe');
+    }
+    return Response.redirect(new URL(`/recipes/${id}${suffix}`, req.url), 301);
   }
 
   #filter(params: URLSearchParams): RecipeFilterDto {

@@ -69,6 +69,10 @@ interface Ingredients {
 interface Recipe {
   count: (n: number) => string;
   newRecipe: string;
+  recipe: string;
+  deleteTitle: (title: string) => string;
+  ratingCount: (n: number) => string;
+  noRating: string;
   actions: string;
   cookedTimes: (n: number) => string;
   tagsSelected: (n: number) => string;

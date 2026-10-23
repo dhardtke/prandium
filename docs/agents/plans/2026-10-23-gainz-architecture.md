@@ -581,23 +581,23 @@ Show a recipe with everything it holds, rate and flag it in place, delete it, an
 
 **Tasks**:
 
-- [ ] `src/shared/dto/recipe.ts`: `EditRecipeDto` with every editable field optional.
-- [ ] `RecipeRepository`: `require(id)` (`find` or `notFound('Recipe')`), `update(id, edit, { addHistoryAt })` (only present fields; history
+- [x] `src/shared/dto/recipe.ts`: `EditRecipeDto` with every editable field optional.
+- [x] `RecipeRepository`: `require(id)` (`find` or `notFound('Recipe')`), `update(id, edit, { addHistoryAt })` (only present fields; history
       and tags replaced when present), `delete(id)` returning the thumbnail file name.
-- [ ] Facade: `require`, `update` (`#validateEdit` via `validatePresent`; a rating that turns 0 into > 0 appends now), `delete` (removes the row,
+- [x] Facade: `require`, `update` (`#validateEdit` via `validatePresent`; a rating that turns 0 into > 0 appends now), `delete` (removes the row,
       then the file through `ThumbnailsFacade.remove`).
-- [ ] Controller and routes: `/api/recipes/:id` GET, PATCH, DELETE; legacy 301 routes (`/recipe/:id/:slug`, `/recipe/:id/:slug/edit`,
+- [x] Controller and routes: `/api/recipes/:id` GET, PATCH, DELETE; legacy 301 routes (`/recipe/:id/:slug`, `/recipe/:id/:slug/edit`,
       `/recipe/create`, `/recipe/import`; non-numeric id → 404) in `recipe.routes.ts`, exported separately and spread outside `auth.guard()`.
-- [ ] Frontend: `recipe.api.ts` (`get`, `update`, `delete`), facade methods; route `/recipes/:id` (`parents`: Recipes).
-- [ ] `features/recipes/pr-recipe-detail.component.{ts,css}` per the Detail mockup; Flag/Unflag and rating patch the DOM without re-render
+- [x] Frontend: `recipe.api.ts` (`get`, `update`, `delete`), facade methods; route `/recipes/:id` (`parents`: Recipes).
+- [x] `features/recipes/pr-recipe-detail.component.{ts,css}` per the Detail mockup; Flag/Unflag and rating patch the DOM without re-render
       (`replaceData`); Delete through `confirmAction()` then `navigate('/')` and `toast`; source linked only when it parses as http(s).
-- [ ] `internal/pr-rating.component.{ts,css}` (10 half-star radios, readonly mode for the foreign rating, emits `rating-change`),
+- [x] `internal/pr-rating.component.{ts,css}` (10 half-star radios, readonly mode for the foreign rating, emits `rating-change`),
       `internal/pr-ingredients.component.{ts,css}` (portions 1–99 defaulting to the yield, ± buttons, `replaceState` `?portions=`),
       `internal/portions.ts` (`scaleQuantity(quantity, yield, portions)`, `roundUpToThreeDigits`), `internal/wake-lock.ts` (acquire on connect,
       re-acquire on `visibilitychange`, release on disconnect).
-- [ ] The list card's Delete menu item: `confirmAction()` → DELETE → reload + toast.
-- [ ] i18n keys for the detail page.
-- [ ] Tests: route tests (GET shape incl. unscaled parsed ingredients and their order, 404, PATCH flag, PATCH partial leaves other fields, first
+- [x] The list card's Delete menu item: `confirmAction()` → DELETE → reload + toast.
+- [x] i18n keys for the detail page.
+- [x] Tests: route tests (GET shape incl. unscaled parsed ingredients and their order, 404, PATCH flag, PATCH partial leaves other fields, first
       rating adds history once, legacy-shaped row round-trips GET → PATCH of the whole DTO, DELETE 204 removes the file, each legacy 301 and its
       404); `portions.test.ts` (numbers, ranges, rounding, null yield treated as 1); component tests for detail (every section, empty ones hidden,
       delete confirms then navigates), rating, ingredients (± bounds, URL), wake lock (fake `navigator.wakeLock`), card delete.
@@ -789,6 +789,18 @@ During implementation, document user feedback, problems, and decisions here.
 - `ui/placeholder.svg` is now a transparent plate-and-cutlery glyph over the card's muted background, so it suits both themes.
 - The frontend copies `RECIPE_SORT_KEYS` into `list-query.ts`; `list-query.test.ts` compares it with the backend's.
 - "CI is green" stays unchecked until the phases are pushed (pushing waits for the operator).
+
+### Phase 3
+
+- **`RecipeDto.ingredients` is in the stored order** (deviation from decision 7's "sorted as today"): the edit form needs the order the
+  user arranged, and the reorder buttons would be pointless otherwise. The detail page sorts for display with the old rule
+  (`sortIngredients` in `internal/portions.ts`); `parseIngredients` only parses.
+- A PATCH replaces `nutrition` and `aggregateRating` whole when present (missing keys become null); `validatePresent` runs the same field
+  rules a create does, so create and edit cannot drift apart.
+- Legacy redirects live in `legacyRecipeRoutes()`, spread outside `auth.guard()`; a non-numeric id answers the JSON 404.
+- Deleting a recipe also deletes the tags it leaves without recipes (`TagFacade.deleteOrphans`), as replacing tags does.
+- Card titles on the detail page are `h3`s under the `h1` (no font sizes in CSS, and an `h2` per small card was too loud).
+- `useServer()` exposes `db()` so the legacy round-trip test can insert a row exactly as the old app wrote it.
 
 ## References
 

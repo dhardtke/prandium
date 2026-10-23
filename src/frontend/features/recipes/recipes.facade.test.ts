@@ -19,3 +19,14 @@ test('create()', async () => {
   await recipeFacade.create({ title: 'Ramen' });
   expect(fake.requests).toMatchObject([{ method: 'POST', url: '/api/recipes', body: { title: 'Ramen' } }]);
 });
+
+test('get(), update() and delete() address the recipe', async () => {
+  await recipeFacade.get(12);
+  await recipeFacade.update(12, { flagged: true });
+  await recipeFacade.delete(12);
+  expect(fake.requests).toMatchObject([
+    { method: 'GET', url: '/api/recipes/12' },
+    { method: 'PATCH', url: '/api/recipes/12', body: { flagged: true } },
+    { method: 'DELETE', url: '/api/recipes/12' },
+  ]);
+});

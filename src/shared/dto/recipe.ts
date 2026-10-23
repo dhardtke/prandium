@@ -140,3 +140,6 @@ export interface RecipeSortDto {
   sort: RecipeSortKey;
   order: SortOrder;
 }
+
+/** Any subset of the editable fields; `history` and `tags` replace the stored lists when present. */
+export type EditRecipeDto = Partial<CreateRecipeDto>;

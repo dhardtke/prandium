@@ -1,15 +1,16 @@
 import { beforeAll, beforeEach, expect, test } from 'bun:test';
 import type { RecipePageDto } from '../../../shared/dto/recipe.ts';
 import type { TagDto } from '../../../shared/dto/tag.ts';
-import { choose, find, mount, settle, shadow, submit, testId, type, useDom, useFetch, useToasts } from '../../testing.ts';
+import { choose, find, mount, openDialog, settle, shadow, submit, testId, type, useDom, useFetch, useToasts } from '../../testing.ts';
 import { recipePage, summary, tag } from './recipes.fixtures.ts';
 
 useDom();
 const fake = useFetch();
-useToasts();
+const toasts = useToasts();
 
 beforeAll(async () => {
   await import('./pr-recipe-list.component.ts');
+  await import('../../ui/confirm/pr-confirm-dialog.component.ts');
 });
 
 beforeEach(() => {
@@ -150,4 +151,28 @@ test('links New recipe and Import', async () => {
   const root = await mountList();
   expect(find(root, testId('new')).getAttribute('href')).toBe('/recipes/new');
   expect(find(root, testId('import')).getAttribute('href')).toBe('/recipes/import');
+});
+
+test('deletes a recipe from its card menu after confirming, then reloads the page', async () => {
+  respond(recipePage([summary({ id: 1, title: 'Carbonara' }), summary({ id: 2, title: 'Ramen' })]));
+  const root = await mountList();
+  fake.respondTo('DELETE /api/recipes/2', 204);
+  respond(recipePage([summary({ id: 1, title: 'Carbonara' })]));
+  find<HTMLButtonElement>(shadow(find(root, testId('card-2'))), testId('delete')).click();
+  const dialog = openDialog();
+  expect(find(dialog, testId('title')).textContent).toBe('Delete "Ramen"?');
+  find<HTMLButtonElement>(dialog, testId('confirm')).click();
+  await settle();
+  expect(fake.sent('DELETE /api/recipes/2')).toHaveLength(1);
+  expect(cardTitles(root)).toEqual(['Carbonara']);
+  expect(toasts).toEqual(['The Recipe has been deleted successfully.']);
+});
+
+test('keeps a recipe whose deletion is canceled', async () => {
+  respond(recipePage([summary({ id: 2, title: 'Ramen' })]));
+  const root = await mountList();
+  find<HTMLButtonElement>(shadow(find(root, testId('card-2'))), testId('delete')).click();
+  find<HTMLButtonElement>(openDialog(), testId('cancel')).click();
+  await settle();
+  expect(fake.sent('DELETE /api/recipes/2')).toHaveLength(0);
 });

@@ -1,8 +1,8 @@
-import type { CreateRecipeDto, NutritionDto, RecipeDto, RecipePageDto, RecipeSummaryDto, ReviewDto } from '../../../../shared/dto/recipe.ts';
+import type { CreateRecipeDto, EditRecipeDto, NutritionDto, RecipeDto, RecipePageDto, RecipeSummaryDto, ReviewDto } from '../../../../shared/dto/recipe.ts';
 import type { Iso8601DateTime } from '../../../../shared/flavors.ts';
 import type { RecipeDetails, RecipeRow, RecipeSummaryRow, ReviewRow } from '../ports/recipe.ts';
 import { parseIngredients } from './ingredient/ingredient.ts';
-import type { CreateRecipe } from './recipe.repository.ts';
+import type { CreateRecipe, EditRecipe } from './recipe.repository.ts';
 
 export function translateToCreateRecipeDto(body: Record<string, unknown>): CreateRecipeDto {
   return {
@@ -33,17 +33,7 @@ export function translateDtoToCreateRecipe(dto: Required<CreateRecipeDto>, extra
     thumbnail: extra.thumbnail,
     // A recipe without a yield scales as if it served one.
     yield: dto.yield ?? 1,
-    nutrition_calories: dto.nutrition.calories ?? null,
-    nutrition_carbohydrate: dto.nutrition.carbohydrate ?? null,
-    nutrition_cholesterol: dto.nutrition.cholesterol ?? null,
-    nutrition_fat: dto.nutrition.fat ?? null,
-    nutrition_fiber: dto.nutrition.fiber ?? null,
-    nutrition_protein: dto.nutrition.protein ?? null,
-    nutrition_saturated_fat: dto.nutrition.saturatedFat ?? null,
-    nutrition_sodium: dto.nutrition.sodium ?? null,
-    nutrition_sugar: dto.nutrition.sugar ?? null,
-    nutrition_trans_fat: dto.nutrition.transFat ?? null,
-    nutrition_unsaturated_fat: dto.nutrition.unsaturatedFat ?? null,
+    ...nutritionColumns(dto.nutrition),
     prep_time: dto.prepTime,
     cook_time: dto.cookTime,
     aggregate_rating_value: dto.aggregateRating.value ?? null,
@@ -54,6 +44,63 @@ export function translateDtoToCreateRecipe(dto: Required<CreateRecipeDto>, extra
     history: dto.history,
     tags: dto.tags,
     reviews: extra.reviews,
+  };
+}
+
+export function translateToEditRecipeDto(body: Record<string, unknown>): EditRecipeDto {
+  return { ...translateToCreateRecipeDto(body), title: body.title as string | undefined };
+}
+
+type NutritionColumns = Pick<
+  CreateRecipe,
+  | 'nutrition_calories'
+  | 'nutrition_carbohydrate'
+  | 'nutrition_cholesterol'
+  | 'nutrition_fat'
+  | 'nutrition_fiber'
+  | 'nutrition_protein'
+  | 'nutrition_saturated_fat'
+  | 'nutrition_sodium'
+  | 'nutrition_sugar'
+  | 'nutrition_trans_fat'
+  | 'nutrition_unsaturated_fat'
+>;
+
+function nutritionColumns(nutrition: Partial<NutritionDto>): NutritionColumns {
+  return {
+    nutrition_calories: nutrition.calories ?? null,
+    nutrition_carbohydrate: nutrition.carbohydrate ?? null,
+    nutrition_cholesterol: nutrition.cholesterol ?? null,
+    nutrition_fat: nutrition.fat ?? null,
+    nutrition_fiber: nutrition.fiber ?? null,
+    nutrition_protein: nutrition.protein ?? null,
+    nutrition_saturated_fat: nutrition.saturatedFat ?? null,
+    nutrition_sodium: nutrition.sodium ?? null,
+    nutrition_sugar: nutrition.sugar ?? null,
+    nutrition_trans_fat: nutrition.transFat ?? null,
+    nutrition_unsaturated_fat: nutrition.unsaturatedFat ?? null,
+  };
+}
+
+/** `dto` is validated: a field is present only when it is to change. */
+export function translateDtoToEditRecipe(dto: EditRecipeDto): EditRecipe {
+  const flagged = dto.flagged === undefined ? undefined : Number(dto.flagged);
+  return {
+    title: dto.title,
+    flagged,
+    description: dto.description,
+    source: dto.source,
+    yield: dto.yield === undefined ? undefined : (dto.yield ?? 1),
+    ...(dto.nutrition === undefined ? {} : nutritionColumns(dto.nutrition)),
+    prep_time: dto.prepTime,
+    cook_time: dto.cookTime,
+    aggregate_rating_value: dto.aggregateRating === undefined ? undefined : (dto.aggregateRating.value ?? null),
+    aggregate_rating_count: dto.aggregateRating === undefined ? undefined : (dto.aggregateRating.count ?? null),
+    rating: dto.rating,
+    ingredients: dto.ingredients,
+    instructions: dto.instructions,
+    history: dto.history,
+    tags: dto.tags,
   };
 }
 

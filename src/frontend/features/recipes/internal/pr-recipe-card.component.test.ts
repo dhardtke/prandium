@@ -56,7 +56,7 @@ test('offers Edit as a link and Delete as an event', () => {
   const root = card({ id: 7 });
   expect(find(root, testId('edit')).getAttribute('href')).toBe('/recipes/7/edit');
   find<HTMLButtonElement>(root, testId('delete')).click();
-  expect(deletions).toMatchObject([{ id: 7 }]);
+  expect(deletions).toEqual([7]);
 });
 
 test('escapes the title', () => {

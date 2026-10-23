@@ -34,15 +34,7 @@ describe('parseIngredient', () => {
 });
 
 describe('parseIngredients', () => {
-  test('sorts quantity and unit first, by unit, then a quantity alone, then neither', () => {
-    const input = ['Salz / Pfeffer', '4g Zucker', '1 Banane', '2 EL Olivenöl', '200g Nudeln', '3 Lorbeeren', 'Zitronenschale'];
-    const sorted = parseIngredients(input).map((ingredient) => ingredient.raw);
-    expect(sorted).toEqual(['2 EL Olivenöl', '4g Zucker', '200g Nudeln', '1 Banane', '3 Lorbeeren', 'Salz / Pfeffer', 'Zitronenschale']);
-  });
-
-  test('leaves the input alone', () => {
-    const input = ['Salz', '1 g Zucker'];
-    parseIngredients(input);
-    expect(input).toEqual(['Salz', '1 g Zucker']);
+  test('keeps the stored order', () => {
+    expect(parseIngredients(['Salz', '4g Zucker', '1 Banane']).map((ingredient) => ingredient.raw)).toEqual(['Salz', '4g Zucker', '1 Banane']);
   });
 });

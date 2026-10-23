@@ -15,7 +15,15 @@ describe('routes', () => {
     expect(ROUTES.filter((route) => route.nav).map((route) => [route.nav?.path, route.nav?.label(en)])).toEqual([['/', 'Recipes']]);
   });
 
-  test.each(['/nope', '/login/extra', '/recipes'])('%s matches nothing', (path) => {
+  test('/recipes/:id is a recipe below the list, capturing the id', () => {
+    const detail = matchRoute(ROUTES, '/recipes/12');
+    expect(detail?.params).toEqual({ id: '12' });
+    expect(detail?.route.title?.(en)).toBe('Recipe');
+    expect(detail?.route.parents?.map((parent) => [parent.path, parent.label(en)])).toEqual([['/', 'Recipes']]);
+    expect(matchRoute(ROUTES, '/recipes/12/')?.route).toBe(detail?.route);
+  });
+
+  test.each(['/nope', '/login/extra', '/recipes', '/recipes/abc', '/recipes/12/extra'])('%s matches nothing', (path) => {
     expect(matchRoute(ROUTES, path)).toBeNull();
   });
 

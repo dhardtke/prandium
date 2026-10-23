@@ -36,6 +36,11 @@ export function formatNumber(value: number, decimals = 2): string {
   return new Intl.NumberFormat(locale(), { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(value);
 }
 
+/** Up to `maxDigits` decimals, none for a whole number: 400, 0.333, 2.5. */
+export function formatDecimal(value: number, maxDigits = 3): string {
+  return new Intl.NumberFormat(locale(), { maximumFractionDigits: maxDigits }).format(value);
+}
+
 export function formatDate(date: Date | string, options: Intl.DateTimeFormatOptions = { dateStyle: 'medium' }): string {
   return new Intl.DateTimeFormat(locale(), options).format(new Date(date));
 }

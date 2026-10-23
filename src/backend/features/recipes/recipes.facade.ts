@@ -1,12 +1,22 @@
-import type { CreateRecipeDto, NutritionDto, RecipeFilterDto, RecipeSortDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
+import type { CreateRecipeDto, EditRecipeDto, NutritionDto, RecipeFilterDto, RecipeSortDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
 import type { RecipeId } from '../../../shared/flavors.ts';
 import type { Config } from '../../config.ts';
 import type { DB } from '../../db/db.ts';
 import { badRequest, notFound } from '../../http/errors.ts';
-import { dateTimeList, optionalNumber, optionalString, requiredBoolean, requiredNumber, requiredString, stringList } from '../../shared/validate.ts';
+import {
+  dateTimeList,
+  optionalNumber,
+  optionalString,
+  requiredBoolean,
+  requiredNumber,
+  requiredString,
+  stringList,
+  validatePresent,
+} from '../../shared/validate.ts';
 import { createTagFacade } from '../tags/tags.facade.ts';
+import { createThumbnailsFacade, type ThumbnailsFacade } from '../thumbnails/thumbnails.facade.ts';
 import { RecipeRepository } from './internal/recipe.repository.ts';
-import { translateDtoToCreateRecipe } from './internal/recipe.translator.ts';
+import { translateDtoToCreateRecipe, translateDtoToEditRecipe } from './internal/recipe.translator.ts';
 import { RECIPE_SORT_KEYS as SORT_COLUMNS, type RecipeDetails, type RecipeSummaryRow, type ReviewRow } from './ports/recipe.ts';
 
 export const RECIPE_SORT_KEYS: readonly RecipeSortKey[] = SORT_COLUMNS satisfies readonly RecipeSortKey[];
@@ -34,9 +44,11 @@ function isObject(value: unknown): value is Record<string, unknown> {
 
 export class RecipesFacade {
   readonly #recipes: RecipeRepository;
+  readonly #thumbnails: ThumbnailsFacade;
 
-  constructor(recipes: RecipeRepository) {
+  constructor(recipes: RecipeRepository, thumbnails: ThumbnailsFacade) {
     this.#recipes = recipes;
+    this.#thumbnails = thumbnails;
   }
 
   list(filter: RecipeFilterDto, sort: RecipeSortDto, limit: number, offset: number): RecipeSummaryRow[] {
@@ -60,22 +72,60 @@ export class RecipesFacade {
     return this.require(id);
   }
 
+  /** The first rating of an unrated recipe also records that it was cooked now. */
+  update(id: RecipeId, dto: EditRecipeDto): RecipeDetails {
+    const valid = validatePresent(dto, this.#rules(dto));
+    const current = this.require(id).recipe;
+    const firstRating = valid.rating !== undefined && valid.rating > 0 && (current.rating ?? 0) === 0;
+    this.#recipes.update(id, translateDtoToEditRecipe(valid), firstRating ? { addHistoryAt: new Date().toISOString() } : {});
+    return this.require(id);
+  }
+
+  async delete(id: RecipeId): Promise<void> {
+    this.require(id);
+    const thumbnail = this.#recipes.delete(id);
+    if (thumbnail !== null) {
+      await this.#thumbnails.remove(thumbnail);
+    }
+  }
+
   #validateCreate(dto: CreateRecipeDto): Required<CreateRecipeDto> {
+    const rules = this.#rules(dto);
     return {
-      title: requiredString(dto, 'title', LIMITS.title),
-      flagged: dto.flagged === undefined ? false : requiredBoolean(dto, 'flagged'),
-      description: optionalString(dto, 'description', LIMITS.description) ?? '',
-      source: optionalString(dto, 'source', LIMITS.source) ?? '',
-      yield: optionalNumber(dto, 'yield', { min: Number.MIN_VALUE, max: LIMITS.yield }),
-      nutrition: this.#validateNutrition(dto.nutrition),
-      prepTime: dto.prepTime === undefined ? 0 : requiredNumber(dto, 'prepTime', { min: 0, max: LIMITS.minutes }),
-      cookTime: dto.cookTime === undefined ? 0 : requiredNumber(dto, 'cookTime', { min: 0, max: LIMITS.minutes }),
-      aggregateRating: this.#validateAggregateRating(dto.aggregateRating),
-      rating: dto.rating === undefined ? 0 : requiredNumber(dto, 'rating', { min: 0, max: 5 }),
-      ingredients: stringList(dto, 'ingredients', LIMITS.ingredients),
-      instructions: stringList(dto, 'instructions', LIMITS.instructions),
-      history: dateTimeList(dto, 'history', LIMITS.history),
-      tags: this.#validateTags(dto),
+      title: rules.title(),
+      flagged: rules.flagged(),
+      description: rules.description(),
+      source: rules.source(),
+      yield: rules.yield(),
+      nutrition: rules.nutrition(),
+      prepTime: rules.prepTime(),
+      cookTime: rules.cookTime(),
+      aggregateRating: rules.aggregateRating(),
+      rating: rules.rating(),
+      ingredients: rules.ingredients(),
+      instructions: rules.instructions(),
+      history: rules.history(),
+      tags: rules.tags(),
+    };
+  }
+
+  // One rule per field: a create runs them all, an edit only those of the fields present. `nutrition` and `aggregateRating` are replaced whole.
+  #rules(dto: EditRecipeDto): { [K in keyof CreateRecipeDto]-?: () => Required<CreateRecipeDto>[K] } {
+    return {
+      title: () => requiredString(dto, 'title', LIMITS.title),
+      flagged: () => (dto.flagged === undefined ? false : requiredBoolean(dto, 'flagged')),
+      description: () => optionalString(dto, 'description', LIMITS.description) ?? '',
+      source: () => optionalString(dto, 'source', LIMITS.source) ?? '',
+      yield: () => optionalNumber(dto, 'yield', { min: Number.MIN_VALUE, max: LIMITS.yield }),
+      nutrition: () => this.#validateNutrition(dto.nutrition),
+      prepTime: () => (dto.prepTime === undefined ? 0 : requiredNumber(dto, 'prepTime', { min: 0, max: LIMITS.minutes })),
+      cookTime: () => (dto.cookTime === undefined ? 0 : requiredNumber(dto, 'cookTime', { min: 0, max: LIMITS.minutes })),
+      aggregateRating: () => this.#validateAggregateRating(dto.aggregateRating),
+      rating: () => (dto.rating === undefined ? 0 : requiredNumber(dto, 'rating', { min: 0, max: 5 })),
+      ingredients: () => stringList(dto, 'ingredients', LIMITS.ingredients),
+      instructions: () => stringList(dto, 'instructions', LIMITS.instructions),
+      history: () => dateTimeList(dto, 'history', LIMITS.history),
+      tags: () => this.#validateTags(dto),
     };
   }
 
@@ -120,7 +170,7 @@ export class RecipesFacade {
   }
 
   // Tags are matched ignoring case, so two spellings of one tag keep the first.
-  #validateTags(dto: CreateRecipeDto): string[] {
+  #validateTags(dto: EditRecipeDto): string[] {
     const seen = new Set<string>();
     return stringList(dto, 'tags', LIMITS.tags).filter((title) => {
       const key = title.toLocaleLowerCase();
@@ -133,6 +183,6 @@ export class RecipesFacade {
   }
 }
 
-export function createRecipesFacade(db: DB, _config: Config): RecipesFacade {
-  return new RecipesFacade(new RecipeRepository(db, createTagFacade(db)));
+export function createRecipesFacade(db: DB, config: Config): RecipesFacade {
+  return new RecipesFacade(new RecipeRepository(db, createTagFacade(db)), createThumbnailsFacade(config));
 }

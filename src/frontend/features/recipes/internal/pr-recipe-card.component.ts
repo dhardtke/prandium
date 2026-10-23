@@ -24,7 +24,7 @@ export class PrRecipeCardComponent extends PrElement {
   override handleAction(action: string): void {
     const recipe = this.#recipe;
     if (action === 'delete' && recipe) {
-      this.emit('recipe-delete', recipe);
+      this.emit('recipe-delete', recipe.id);
     }
   }
 

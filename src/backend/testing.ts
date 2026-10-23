@@ -20,6 +20,8 @@ export interface TestServer {
   logs: () => LogLine[];
   /** The server's config dir, with an empty `thumbnails/`. */
   configDir: () => string;
+  /** For rows the API cannot write, such as an old app's. */
+  db: () => Database;
 }
 
 export interface LogLine {
@@ -85,7 +87,7 @@ export function useServer(options: { auth?: AuthOptions } = {}): TestServer {
   const put = (path: string, body: unknown): Promise<Response> => send('PUT', path, body);
   const del = (path: string): Promise<Response> => api(path, { method: 'DELETE' });
 
-  return { api, post, patch, put, del, logs, configDir };
+  return { api, post, patch, put, del, logs, configDir, db: () => db };
 }
 
 export function testConfig(configDir: string, overrides: Partial<Config> = {}): Config {

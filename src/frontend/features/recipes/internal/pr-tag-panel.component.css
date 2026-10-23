@@ -1,8 +1,4 @@
 details {
-  & .body {
-    margin-top: var(--space-3);
-  }
-
   & .hstack {
     flex-wrap: nowrap;
 

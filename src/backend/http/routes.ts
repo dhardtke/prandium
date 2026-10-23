@@ -4,7 +4,7 @@ import { createAuthFacade } from '../features/auth/auth.facade.ts';
 import { authRoutes } from '../features/auth/auth.routes.ts';
 import { devRoutes } from '../features/dev/dev.routes.ts';
 import { metaRoutes } from '../features/meta/meta.routes.ts';
-import { recipeRoutes } from '../features/recipes/recipe.routes.ts';
+import { legacyRecipeRoutes, recipeRoutes } from '../features/recipes/recipe.routes.ts';
 import { staticRoutes } from '../features/static/static.routes.ts';
 import { tagRoutes } from '../features/tags/tag.routes.ts';
 import { thumbnailRoutes } from '../features/thumbnails/thumbnail.routes.ts';
@@ -22,6 +22,7 @@ export function allRoutes(db: DB, config: Config, now?: () => number): RouteTabl
       sameOriginWrites({
         ...metaRoutes(auth),
         ...authRoutes(auth),
+        ...legacyRecipeRoutes(db, config),
         ...auth.guard({
           ...recipeRoutes(db, config),
           ...tagRoutes(db),

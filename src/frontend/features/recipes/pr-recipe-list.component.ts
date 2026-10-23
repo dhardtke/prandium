@@ -1,13 +1,14 @@
-import type { RecipePageDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
+import type { RecipePageDto, RecipeSortKey, RecipeSummaryDto } from '../../../shared/dto/recipe.ts';
 import type { TagDto } from '../../../shared/dto/tag.ts';
 import type { Language } from '../../i18n/language.ts';
 import type { RawHtml } from '../../ui/html.ts';
 import { define } from '../../ui/base.ts';
+import { confirmAction } from '../../ui/confirm/confirm.ts';
 import { html } from '../../ui/html.ts';
 import { t } from '../../ui/i18n.ts';
 import { pageCount, pageOffset } from '../../ui/pagination/pagination.ts';
 import '../../ui/pagination/pr-pagination.component.ts';
-import { toastError } from '../../ui/toast.ts';
+import { toast, toastError } from '../../ui/toast.ts';
 import { PrView } from '../../ui/view.ts';
 import { tagFacade } from '../tags/tags.facade.ts';
 import { type ListQuery, listPath, PAGE_SIZE, parseListQuery, RECIPE_SORT_KEYS } from './internal/list-query.ts';
@@ -118,6 +119,12 @@ export class PrRecipeListComponent extends PrView<RecipeListData> {
         this.#change({ tags: tags.includes(id) ? tags.filter((tag) => tag !== id) : [...tags, id], page: 1 });
       }
     });
+    this.root.addEventListener('recipe-delete', (event) => {
+      const recipe = event instanceof CustomEvent ? this.data?.recipes.items.find((item) => item.id === event.detail) : undefined;
+      if (recipe) {
+        void this.#delete(recipe);
+      }
+    });
     this.root.addEventListener('tags-clear', () => {
       this.#change({ tags: [], page: 1 });
     });
@@ -204,8 +211,24 @@ export class PrRecipeListComponent extends PrView<RecipeListData> {
     void this.#refresh(query);
   }
 
-  /** Reloads after a deletion elsewhere, keeping the page while it still exists. */
-  async refresh(): Promise<void> {
+  async #delete(recipe: RecipeSummaryDto): Promise<void> {
+    const l = t();
+    const confirmed = await confirmAction({
+      title: l.recipe.deleteTitle(recipe.title),
+      message: l.recipe.deleteConfirmation,
+      confirmLabel: l.delete,
+      danger: true,
+    });
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await recipeFacade.delete(recipe.id);
+    } catch (error) {
+      toastError(error);
+      return;
+    }
+    toast(l.recipe.deleteSuccessful, 'success');
     await this.#refresh(this.#query());
   }
 
