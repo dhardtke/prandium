@@ -1,136 +1,25 @@
 name: CI
+
 on:
-    push:
-        paths:
-            - "assets/**"
-            - "src/**"
-            - "tests/**"
-            - "dev/**"
-            - ".github/workflows/*"
-            - ".github/actions/**"
-            - "bun.lock"
-            - "package.json"
-            - "bunfig.toml"
-            - "tsconfig.json"
-            - ".oxlintrc.json"
-    workflow_dispatch:
-env:
-    bunVersion: "1.4.4"
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
 jobs:
-    lint:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Clone repository
-                uses: actions/checkout@v4
-                with:
-                    submodules: true
-                    persist-credentials: false
-
-            -   name: Setup
-                uses: ./.github/actions/setup
-                with:
-                    bunVersion: ${{ env.bunVersion }}
-                    cacheVersion: ${{ secrets.CACHE_VERSION }}
-
-            -   name: Format
-                run: bun fmt --check
-
-            -   name: Lint
-                run: bun run lint
-
-            -   name: Typecheck
-                run: bun run typecheck
-
-    test:
-        runs-on: ubuntu-latest
-        timeout-minutes: 5
-        steps:
-            -   name: Clone repository
-                uses: actions/checkout@v4
-                with:
-                    submodules: true
-                    persist-credentials: false
-
-            -   name: Setup
-                uses: ./.github/actions/setup
-                with:
-                    bunVersion: ${{ env.bunVersion }}
-                    cacheVersion: ${{ secrets.CACHE_VERSION }}
-
-            -   name: Run tests
-                run: bun run test:coverage
-
-            -   name: Upload coverage
-                uses: codecov/codecov-action@v4
-                with:
-                    files: out/coverage/lcov.info
-                    token: ${{ secrets.CODECOV_TOKEN }}
-                    fail_ci_if_error: true
-                    verbose: true
-
-    build:
-        needs: [ lint, test ]
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Clone repository
-                uses: actions/checkout@v4
-                with:
-                    submodules: true
-                    persist-credentials: false
-
-            -   name: Setup
-                uses: ./.github/actions/setup
-                with:
-                    bunVersion: ${{ env.bunVersion }}
-                    cacheVersion: ${{ secrets.CACHE_VERSION }}
-
-            -   name: Build
-                run: bun run build
-
-            -   name: Upload artifacts
-                uses: actions/upload-artifact@v4
-                with:
-                    name: prandium
-                    path: out/
-
-    release:
-        needs: [ build ]
-        runs-on: ubuntu-latest
-        if: startsWith(github.ref, 'refs/tags/v')
-        steps:
-            -   name: Clone repository
-                uses: actions/checkout@v4
-                with:
-                    submodules: true
-                    persist-credentials: false
-
-            -   name: Download artifact
-                uses: actions/download-artifact@v4
-                with:
-                    name: prandium
-                    path: out/
-
-            -   name: Remove non-minified files
-                run: rm out/assets/index.css out/assets/index.js
-
-            -   name: Create release zip
-                run: |
-                    cd out/
-                    zip -r prandium-${{github.ref_name}}.zip * ../docs/* ../README.md ../LICENSE
-
-            -   name: Build Changelog
-                id: github_release
-                uses: mikepenz/release-changelog-builder-action@v1
-                with:
-                    configuration: .github/changelog-config.json
-                    commitMode: true
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-            -   name: Create GitHub Release
-                uses: ncipollo/release-action@v1
-                with:
-                    artifacts: prandium-${{github.ref_name}}.zip
-                    body: ${{steps.github_release.outputs.changelog}}
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - run: bun run fmt:check
+      - run: bun run lint
+      - run: bun run typecheck
+      - run: bun test --parallel

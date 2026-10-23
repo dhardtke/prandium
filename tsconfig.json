@@ -1,26 +1,19 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "preserve",
-        "moduleDetection": "force",
-        "moduleResolution": "bundler",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "types": ["bun"],
-        "strict": true,
-        "experimentalDecorators": true,
-        "jsx": "react-jsx",
-        "jsxImportSource": "preact",
-        "allowJs": true,
-        "allowImportingTsExtensions": true,
-        "verbatimModuleSyntax": false,
-        "skipLibCheck": true,
-        "noEmit": true
-    },
-    "include": ["src", "tests", "dev"],
-    "exclude": [
-        "node_modules",
-        "out",
-        "src/data/parse/ingredient/parser.js",
-        "dev/generate-favicons.js"
-    ]
+  "compilerOptions": {
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "target": "ESNext",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "types": ["bun-types"],
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src"]
 }

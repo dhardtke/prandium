@@ -1,5 +1,7 @@
 # SELinux
+
 ## `prandium.te`:
+
 ```text
 module prandium 1.0;
 
@@ -20,7 +22,9 @@ allow init_t httpd_sys_content_t:file { create open setattr write };
 allow init_t self:process execmem;
 allow init_t user_home_t:file { execute execute_no_trans map open read };
 ```
+
 Install by executing
+
 ```shell
 checkmodule -M -m -o prandium.mod prandium.te
 semodule_package -o prandium.pp -m prandium.mod
@@ -28,6 +32,7 @@ semodule -i prandium.pp
 ```
 
 (This is the result of executing e.g.
+
 ```shell
 audit2allow -M prandium << _EOF_
 type=AVC msg=audit(1616334281.833:2075): avc:  denied  { execute } for  pid=11871 comm="(bun)" name="bun" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
@@ -41,9 +46,11 @@ type=AVC msg=audit(1616337423.744:2732): avc:  denied  { write open } for  pid=1
 type=AVC msg=audit(1616337423.744:2732): avc:  denied  { setattr } for  pid=50379 comm="bun" name="auflauf.jpg" dev="dm-1" ino=125832134 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
 _EOF_
 ```
+
 with the error messages from `/var/log/audit/audit.log`)
 
 ## Set context and flags
+
 ```shell
 CONFIG_DIR="/home/prandium/.config/prandium"
 INSTALL_DIR="/home/prandium/repository"
@@ -56,7 +63,9 @@ restorecon -Rv $INSTALL_DIR/assets/dist $INSTALL_DIR/assets/favicons $INSTALL_DI
 ```
 
 # systemd
-*/lib/systemd/system/prandium.service*
+
+_/lib/systemd/system/prandium.service_
+
 ```text
 Description=Prandium
 After=network.target
@@ -74,6 +83,7 @@ WantedBy=multi-user.target
 ```
 
 # nginx
+
 ```text
 server {
     listen 443 http2 ssl;

@@ -1,0 +1,16 @@
+/* A flex column, so a long list scrolls within Oat's max-height instead of pushing the footer out. */
+dialog {
+  &[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & > div {
+    min-height: 0;
+  }
+
+  /* Oat leaves no gap between the header and the footer when there is no body. */
+  & > header + footer {
+    padding-block-start: var(--space-6);
+  }
+}

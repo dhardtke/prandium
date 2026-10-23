@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/assets/assets.iml" filepath="$PROJECT_DIR$/assets/assets.iml" />
-      <module fileurl="file://$PROJECT_DIR$/prandium.iml" filepath="$PROJECT_DIR$/prandium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/prandium.iml" filepath="$PROJECT_DIR$/.idea/prandium.iml" />
     </modules>
   </component>
 </project>

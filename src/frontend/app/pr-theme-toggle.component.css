@@ -1,0 +1,15 @@
+/* Flex, not a line box, so no descender space pushes the button off-center. */
+:host {
+  display: flex;
+}
+
+/* At every width, so the header it sets the height of matches on desktop and phone. */
+button {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}
+
+svg {
+  width: auto;
+  height: 1.125rem;
+}

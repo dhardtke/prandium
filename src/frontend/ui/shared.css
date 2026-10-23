@@ -1,0 +1,203 @@
+:host {
+  display: block;
+}
+
+/* Author styles outrank the browser's [hidden] rule, so the rule above would override it. */
+:host([hidden]) {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ layout */
+
+.vstack > * {
+  margin-block: 0;
+}
+
+/* Oat leaves <hgroup> unstyled. */
+hgroup > * {
+  margin-block: 0;
+}
+
+.grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ------------------------------------------------------------------- forms */
+
+.fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: flex-end;
+
+  & > .field {
+    flex: 1 1 10rem;
+    min-width: 0;
+  }
+}
+
+/* A customizable <select>, so an option can hold an icon; elsewhere it stays a plain one. */
+@supports (appearance: base-select) {
+  select.rich,
+  select.rich::picker(select) {
+    appearance: base-select;
+  }
+
+  select.rich {
+    /* Sized to the chosen option, unlike a plain select; this keeps it from jumping. */
+    min-width: 12rem;
+
+    /* Oat draws the chevron as a background image. */
+    &::picker-icon {
+      display: none;
+    }
+
+    /* Drops Oat's button look, whose white text the selected content would inherit. */
+    & > button {
+      all: unset;
+      display: contents;
+    }
+
+    & :is(selectedcontent, option) {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    & option {
+      padding: var(--space-2) var(--space-3);
+    }
+  }
+
+  select.rich::picker(select) {
+    margin-block: var(--space-1);
+    padding-block: var(--space-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-medium);
+    background-color: var(--background);
+    color: var(--foreground);
+    box-shadow: var(--shadow-small);
+  }
+}
+
+/* ------------------------------------------------------------------- touch */
+
+@media (max-width: 720px) {
+  :is(button, a.button, select, input:not([type="checkbox"], [type="radio"])) {
+    min-height: 2.75rem;
+  }
+
+  :is(button, a.button).icon {
+    min-width: 2.75rem;
+  }
+}
+
+/* ------------------------------------------------------------------ typography */
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.error-text {
+  color: var(--danger);
+}
+
+/* Oat's alert display sits in a later cascade layer than its own [hidden] rule. */
+[role="alert"][hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ pieces */
+
+.card {
+  border-color: transparent;
+
+  @media (max-width: 640px) {
+    padding: var(--space-4);
+  }
+}
+
+details {
+  background-color: var(--card);
+}
+
+/* The hit area is the link's own ::after, so it stays a real anchor (Ctrl-click, keyboard). */
+article.open-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
+  & .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  & .foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+
+    & .actions {
+      margin-inline-start: auto;
+    }
+  }
+
+  & .open {
+    color: inherit;
+    font-weight: 600;
+    text-decoration: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+  }
+
+  &:hover {
+    background-color: var(--muted);
+  }
+
+  &:hover .open {
+    color: var(--primary);
+  }
+
+  /* Positioned and later in DOM order, so it paints above the overlay and takes its own click. */
+  & .actions {
+    position: relative;
+    display: flex;
+    gap: 0.25rem;
+  }
+}
+
+.empty {
+  margin: 0;
+  padding: var(--space-6);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-medium);
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------ tables */
+
+/* Oat floors .table at 320px, wider than a card on a phone, so the page scrolled instead. */
+.table {
+  min-width: 0;
+}
+
+:is(td, th).num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

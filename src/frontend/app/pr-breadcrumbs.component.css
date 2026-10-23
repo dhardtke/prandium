@@ -1,0 +1,35 @@
+:host {
+  margin-block-end: var(--space-4);
+}
+
+ol {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  white-space: nowrap;
+  color: var(--muted-foreground);
+
+  & li {
+    display: flex;
+    gap: var(--space-2);
+    flex: none;
+    min-width: 0;
+    margin: 0;
+
+    /* Empty alt text; the first declaration is the fallback for engines without it. */
+    & + li::before {
+      content: "›";
+      content: "›" / "";
+    }
+
+    &:last-child {
+      flex: 0 1 auto;
+    }
+  }
+
+  & [aria-current="page"] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--foreground);
+  }
+}

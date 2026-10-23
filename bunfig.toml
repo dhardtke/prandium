@@ -1,24 +1,19 @@
+# Dependencies are pinned to exact versions in package.json. Without this,
+# `bun add` would write a caret range again and quietly undo that.
+[install]
+exact = true
+
 [fmt]
-tabWidth = 4
-useTabs = false
 printWidth = 160
-singleQuote = false
-proseWrap = "preserve"
-# only src/, tests/ and dev/ are formatted
+singleQuote = true
 ignorePatterns = [
-    "src/data/parse/ingredient/parser.js",
-    "dev/generate-favicons.js",
-    "assets/**",
-    "docs/**",
-    ".agents/**",
-    ".github/**",
-    ".idea/**",
-    "*.md",
-    "*.json",
-    "*.toml",
-    "tests/**/*.html",
+  "docs/agents/",
+  "dev/",
+  "src/backend/features/recipes/internal/ingredient/parser.js",
+  "src/backend/features/recipes/internal/ingredient/parser.d.ts",
+  "src/backend/features/recipes/internal/import/**/*.html",
 ]
 
-[test]
-coverageSkipTestFiles = true
-coveragePathIgnorePatterns = ["tests/**"]
+[[fmt.overrides]]
+files = ["**/*.css"]
+options = { singleQuote = false }

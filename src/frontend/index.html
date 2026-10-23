@@ -1,0 +1,54 @@
+<!doctype html>
+<!--suppress HtmlUnknownTarget, HtmlUnknownTag -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="Prandium — a self-hosted recipe manager." />
+    <title>Prandium</title>
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#fff" />
+    <script>
+      // Runs before any module to avoid a theme flash; mirrors the keys and colors in ui/theme.ts and ui/i18n.ts.
+      {
+        let storedTheme = null;
+        try {
+          storedTheme = localStorage.getItem('prandium:theme');
+          if (storedTheme === 'light' || storedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', storedTheme);
+          }
+        } catch (error) {}
+        try {
+          const dark = storedTheme === 'dark' || (storedTheme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', dark ? '#202024' : '#fff');
+        } catch (error) {}
+        try {
+          let language = localStorage.getItem('prandium:language');
+          if (language !== 'en' && language !== 'de') {
+            language =
+              [...navigator.languages, navigator.language].map((tag) => tag.toLowerCase().split('-')[0]).find((id) => id === 'en' || id === 'de') ?? 'en';
+          }
+          document.documentElement.setAttribute('lang', language);
+        } catch (error) {}
+      }
+    </script>
+    <!-- Preloaded as fetch too: ui/styles.ts fetches them for shadow roots. -->
+    <link rel="stylesheet" href="/vendor/oat.css" />
+    <link rel="stylesheet" href="/ui/shared.css" />
+    <link rel="stylesheet" href="/ui/app.css" />
+    <link rel="preload" href="/vendor/oat.css" as="fetch" crossorigin />
+    <link rel="preload" href="/ui/shared.css" as="fetch" crossorigin />
+    <script src="/vendor/oat.js" defer></script>
+    <script type="module" src="/main.ts"></script>
+  </head>
+  <body>
+    <pr-app></pr-app>
+    <noscript>
+      <main class="container">
+        <p>Prandium is a client-rendered app and needs JavaScript enabled.</p>
+      </main>
+    </noscript>
+  </body>
+</html>

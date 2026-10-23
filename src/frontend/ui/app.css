@@ -1,0 +1,45 @@
+/* Unlayered, so it wins over Oat's theme layer. ui/contrast.test.ts checks the contrast. */
+:root {
+  --background: light-dark(#f4f4f5, #09090b);
+  --card: light-dark(#fff, #202024);
+  --primary: light-dark(#2563eb, #60a5fa);
+  --primary-foreground: light-dark(#fafafa, #09090b);
+  --ring: light-dark(#2563eb, #60a5fa);
+  --muted: light-dark(#e4e4e7, #27272a);
+  --muted-foreground: light-dark(#52525b, #a1a1aa);
+  --border: light-dark(#8b8b94, #71717a);
+  --input: light-dark(#8b8b94, #71717a);
+
+  /* pr-header's fixed height, border included; sticky page chrome sits below it. */
+  --header-height: calc(3.75rem + 1px);
+
+  /* Keeps the layout from shifting when a page grows tall enough to scroll. */
+  scrollbar-gutter: stable;
+}
+
+/* The workout page's progress strip sticks below the header. */
+:root:has(pr-workout-detail) {
+  scroll-padding-top: calc(var(--header-height) + 3rem);
+}
+
+/* color-scheme inherits, so this reaches every shadow root. */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+}
+
+pr-app {
+  display: block;
+  min-height: 100vh;
+
+  &:not(:defined) {
+    min-height: 100vh;
+  }
+}

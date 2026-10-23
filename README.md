@@ -1,15 +1,14 @@
 [![Workflow badge](https://github.com/dhardtke/prandium/actions/workflows/ci.yml/badge.svg)](https://github.com/dhardtke/prandium/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/dhardtke/prandium/branch/main/graph/badge.svg?token=SIR9GFWW4V)](https://codecov.io/gh/dhardtke/prandium)
 
 # Prandium
 
 <!--suppress HtmlDeprecatedAttribute -->
-<img align="left" src="assets/favicon.svg" width="64" alt="Logo" />
+<img align="left" src="src/frontend/icons/icon.svg" width="64" alt="Logo" />
 
 Prandium, latin for [lunch](https://en.wiktionary.org/wiki/prandium), is a single-user content management system for organizing recipes.
 
-*WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it on a
-daily basis).*
+_WARNING: This software is not ready for production yet as some important features and tests are still missing (although I am personally using it on a
+daily basis)._
 
 <br clear="left"/>
 
@@ -24,29 +23,28 @@ daily basis).*
 
 See [Setup](docs/setup.md)
 
-## Screenshots
+## Development
 
-<table>
-   <tr>
-      <th>Light (default)</th>
-      <th>Dark</th>
-   </tr>
-   <tr>
-      <th colspan="2" style="text-align: center">Recipe List</th>
-   </tr>
-   <tr>
-      <td>
-         <a href="docs/readme-images/recipe-list/light.webp">
-            <img src="docs/readme-images/recipe-list/light.thumb.webp" alt="recipe list in light mode">
-         </a>
-      </td>
-      <td>
-         <a href="docs/readme-images/recipe-list/dark.webp">
-            <img src="docs/readme-images/recipe-list/dark.thumb.webp" alt="the dark version of the recipe list">
-         </a>
-      </td>
-   </tr>
-</table>
+Prandium runs on [Bun](https://bun.com/) (the version in `.bun-version`).
+
+```sh
+bun install            # dependencies
+bun run start:dev      # serve on http://127.0.0.1:8000 with hot reload
+bun test --parallel    # the test suite
+bun run fmt && bun run lint && bun run typecheck
+```
+
+It is configured through environment variables only:
+
+| Variable                      | Default                 | Meaning                                               |
+| ----------------------------- | ----------------------- | ----------------------------------------------------- |
+| `PORT`                        | `8000`                  | Port to listen on                                     |
+| `HOST`                        | `127.0.0.1`             | Address to listen on                                  |
+| `PRANDIUM_CONFIG_DIR`         | `~/.config/prandium`    | Holds the database `data.db` and `thumbnails/`        |
+| `PRANDIUM_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password`; turns the login on |
+| `PRANDIUM_DEV`                | unset                   | `1` turns on hot reload                               |
+| `PRANDIUM_IMPORT_CONCURRENCY` | the number of CPU cores | How many recipes are imported at once                 |
+| `PRANDIUM_USER_AGENT`         | a Firefox user agent    | The User-Agent sent when importing                    |
 
 ## Contributing
 
@@ -54,19 +52,16 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-Please see [Development](docs/development.md) for information on how to set up your local development environment.
-
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Acknowledgements
 
-* [Bun: A fast all-in-one JavaScript runtime](https://bun.com/)
-* [TypeScript](https://www.typescriptlang.org/)
-* [Preact](https://preactjs.com/)
-* [needle-di](https://github.com/needle-di/needle-di)
-* [Oxlint](https://oxc.rs/docs/guide/usage/linter)
-* [Peggy](https://github.com/peggyjs/peggy)
-* [IntelliJ](https://www.jetbrains.com/idea/)
-* [Nextcloud Cookbook](https://github.com/nextcloud/cookbook)
+- [Bun: A fast all-in-one JavaScript runtime](https://bun.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Oat](https://oat.ink)
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter)
+- [Peggy](https://github.com/peggyjs/peggy)
+- [IntelliJ](https://www.jetbrains.com/idea/)
+- [Nextcloud Cookbook](https://github.com/nextcloud/cookbook)

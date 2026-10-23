@@ -1,38 +1,36 @@
 {
-    "name": "prandium",
-    "private": true,
-    "type": "module",
-    "engines": {
-        "bun": ">=1.4.4"
-    },
-    "scripts": {
-        "dev": "bun dev/dev.ts",
-        "build": "bun dev/build.ts build",
-        "build:assets": "bun dev/build.ts assets",
-        "build:icons": "bun dev/build-icons.ts",
-        "build:ingredient-parser": "bun dev/build-ingredient-parser.ts",
-        "insert-example-data": "bun dev/insert-example-data.ts",
-        "test": "bun test",
-        "test:coverage": "bun run test --coverage --coverage-reporter=lcov --coverage-reporter=text --coverage-dir=out/coverage",
-        "lint": "oxlint src tests dev",
-        "fmt": "bun fmt",
-        "fmt:check": "bun fmt --check",
-        "typecheck": "tsc --noEmit"
-    },
-    "dependencies": {
-        "@needle-di/core": "~0.8.4",
-        "classnames": "~2.5.1",
-        "preact": "~10.24.3",
-        "preact-render-to-string": "~6.5.11"
-    },
-    "devDependencies": {
-        "@types/bun": "^1.4.4",
-        "bootstrap-icons": "~1.8.3",
-        "oxlint": "^1.89.0",
-        "peggy": "^5.1.1",
-        "sass": "^1.106.1",
-        "schema-dts": "~1.1.2",
-        "terser": "^5.51.2",
-        "typescript": "^7.0.2"
-    }
+  "name": "prandium",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A self-hosted recipe manager: import, organize, rate and cook recipes.",
+  "license": "MIT",
+  "type": "module",
+  "module": "src/backend/main.ts",
+  "scripts": {
+    "build:ingredient-parser": "bun run src/scripts/build-ingredient-parser.ts",
+    "fmt": "bun fmt --no-script",
+    "fmt:check": "bun fmt --no-script --check",
+    "hash-password": "bun run src/scripts/hash-password.ts",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "migrate": "bun run src/scripts/migrate.ts",
+    "start": "bun run src/backend/main.ts",
+    "start:dev": "PRANDIUM_DEV=1 bun --watch src/backend/main.ts",
+    "test": "bun test --parallel",
+    "typecheck": "bun check"
+  },
+  "dependencies": {
+    "@knadh/oat": "1.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "1.4.3",
+    "happy-dom": "21.0.3",
+    "oxlint": "1.89.0",
+    "oxlint-tsgolint": "7.0.2004",
+    "peggy": "5.1.1",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "bun": "1.4.4"
+  }
 }
