@@ -1,4 +1,5 @@
-import { classNames, type ComponentChildren, type VNode } from "../../../../deps.ts";
+import classNames from "classnames";
+import type { ComponentChildren, VNode } from "preact";
 import { l } from "../../../i18n/mod.ts";
 import { asset } from "../../util/asset.ts";
 import { Favicons } from "./favicons.tsx";

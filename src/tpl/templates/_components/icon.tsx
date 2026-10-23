@@ -1,4 +1,5 @@
-import { classNames, VNode } from "../../../../deps.ts";
+import classNames from "classnames";
+import type { VNode } from "preact";
 
 export const ICONS = [
     "arrow-left-short",

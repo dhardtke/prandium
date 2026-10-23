@@ -1,4 +1,5 @@
-import { render, VNode } from "../../../deps.ts";
+import type { VNode } from "preact";
+import { render } from "preact-render-to-string";
 import { BUILD_INFO } from "../../shared/util.ts";
 
 let prettyTemplates = false;

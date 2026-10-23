@@ -1,4 +1,4 @@
-import { classNames } from "../../../../deps.ts";
+import classNames from "classnames";
 import { parameters } from "../../../http/util/parameters.ts";
 import { l, Language, LANGUAGES } from "../../../i18n/mod.ts";
 import { Dropdown, DropdownItem } from "../_components/dropdown.tsx";

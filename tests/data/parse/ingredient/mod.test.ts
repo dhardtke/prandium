@@ -1,8 +1,8 @@
-import { assertEquals } from "../../../../deps-test.ts";
+import { describe, expect, test } from "bun:test";
 import { Ingredient, ingredient } from "../../../../src/data/parse/ingredient/mod.ts";
 
-Deno.test("ingredient", async (t) => {
-    await t.step(`ingredient.parse`, () => {
+describe("ingredient", () => {
+    test(`ingredient.parse`, () => {
         const tests: { input: string; output: Ingredient }[] = [
             {
                 input: "Salz, Pfeffer",
@@ -78,11 +78,11 @@ Deno.test("ingredient", async (t) => {
             },
         ];
         for (const { input, output } of tests) {
-            assertEquals(ingredient.parse(input), output);
+            expect(ingredient.parse(input)).toEqual(output);
         }
     });
 
-    await t.step(`ingredient.parse quantity calculation`, () => {
+    test(`ingredient.parse quantity calculation`, () => {
         const tests: {
             raw: string;
             recipeYield: number;
@@ -97,14 +97,11 @@ Deno.test("ingredient", async (t) => {
             { raw: "10g salt", recipeYield: 5, portions: 10, expectedQuantity: 20 },
         ];
         for (const { raw, recipeYield, portions, expectedQuantity } of tests) {
-            assertEquals(
-                ingredient.parse(raw, recipeYield, portions).quantity,
-                expectedQuantity,
-            );
+            expect(ingredient.parse(raw, recipeYield, portions).quantity).toEqual(expectedQuantity);
         }
     });
 
-    await t.step(`ingredient.parse with invalid strings`, () => {
+    test(`ingredient.parse with invalid strings`, () => {
         ingredient.parse("");
         ingredient.parse("abc");
         ingredient.parse("0");
@@ -112,7 +109,7 @@ Deno.test("ingredient", async (t) => {
         ingredient.parse("1 /");
     });
 
-    await t.step(`ingredient.parseMany calculates the correct quantities`, () => {
+    test(`ingredient.parseMany calculates the correct quantities`, () => {
         const tests: {
             raw: string;
             recipeYield: number;
@@ -127,14 +124,11 @@ Deno.test("ingredient", async (t) => {
             { raw: "10g salt", recipeYield: 5, portions: 10, expectedQuantity: 20 },
         ];
         for (const { raw, recipeYield, portions, expectedQuantity } of tests) {
-            assertEquals(
-                ingredient.parse(raw, recipeYield, portions).quantity,
-                expectedQuantity,
-            );
+            expect(ingredient.parse(raw, recipeYield, portions).quantity).toEqual(expectedQuantity);
         }
     });
 
-    await t.step(`ingredient.parseMany sorts ingredients correctly`, () => {
+    test(`ingredient.parseMany sorts ingredients correctly`, () => {
         const tests: {
             input: string[];
             expected: string[];
@@ -163,7 +157,7 @@ Deno.test("ingredient", async (t) => {
         for (const { input, expected } of tests) {
             const ingredients = ingredient.parseMany(input);
             const actual = ingredients.map((i) => [i.quantity, i.unit, i.description].filter(Boolean).join(" "));
-            assertEquals(actual, expected);
+            expect(actual).toEqual(expected);
         }
     });
 });

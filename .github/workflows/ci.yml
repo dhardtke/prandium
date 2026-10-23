@@ -7,52 +7,63 @@ on:
             - "tests/**"
             - "dev/**"
             - ".github/workflows/*"
-            - "deno.lock"
-            - "deno.json"
-            - "deps.ts"
-            - "deps-test.ts"
+            - ".github/actions/**"
+            - "bun.lock"
+            - "package.json"
+            - "bunfig.toml"
+            - "tsconfig.json"
+            - ".oxlintrc.json"
     workflow_dispatch:
 env:
-    denoVersion: "v2.0.0"
-    DENO_DIR: deno
+    bunVersion: "1.4.4"
 jobs:
     lint:
         runs-on: ubuntu-latest
         steps:
-            -   name: Setup
-                uses: dhardtke/prandium/.github/actions/setup@main
+            -   name: Clone repository
+                uses: actions/checkout@v4
                 with:
-                    denoVersion: ${{ env.denoVersion }}
+                    submodules: true
+                    persist-credentials: false
+
+            -   name: Setup
+                uses: ./.github/actions/setup
+                with:
+                    bunVersion: ${{ env.bunVersion }}
                     cacheVersion: ${{ secrets.CACHE_VERSION }}
-                    denoDir: ${{ env.DENO_DIR }}
 
             -   name: Format
-                run: deno task fmt:check
+                run: bun fmt --check
 
             -   name: Lint
-                run: deno task lint
+                run: bun run lint
+
+            -   name: Typecheck
+                run: bun run typecheck
 
     test:
         runs-on: ubuntu-latest
         timeout-minutes: 5
         steps:
-            -   name: Setup
-                uses: dhardtke/prandium/.github/actions/setup@main
+            -   name: Clone repository
+                uses: actions/checkout@v4
                 with:
-                    denoVersion: ${{ env.denoVersion }}
+                    submodules: true
+                    persist-credentials: false
+
+            -   name: Setup
+                uses: ./.github/actions/setup
+                with:
+                    bunVersion: ${{ env.bunVersion }}
                     cacheVersion: ${{ secrets.CACHE_VERSION }}
-                    denoDir: ${{ env.DENO_DIR }}
 
             -   name: Run tests
-                run: deno task test:coverage -- `find src/ -name '*.ts' | xargs echo` tests/
-
-            -   name: Generate lcov
-                run: deno task coverage
+                run: bun run test:coverage
 
             -   name: Upload coverage
                 uses: codecov/codecov-action@v4
                 with:
-                    files: out/coverage.lcov
+                    files: out/coverage/lcov.info
                     token: ${{ secrets.CODECOV_TOKEN }}
                     fail_ci_if_error: true
                     verbose: true
@@ -60,34 +71,23 @@ jobs:
     build:
         needs: [ lint, test ]
         runs-on: ubuntu-latest
+        # TODO re-enable once dev/build.ts exists (phase 3 of the Bun migration)
+        if: false
         steps:
-            -   name: Setup
-                uses: dhardtke/prandium/.github/actions/setup@main
+            -   name: Clone repository
+                uses: actions/checkout@v4
                 with:
-                    denoVersion: ${{ env.denoVersion }}
+                    submodules: true
+                    persist-credentials: false
+
+            -   name: Setup
+                uses: ./.github/actions/setup
+                with:
+                    bunVersion: ${{ env.bunVersion }}
                     cacheVersion: ${{ secrets.CACHE_VERSION }}
-                    denoDir: ${{ env.DENO_DIR }}
-
-            -   name: Setup build tools
-                run: |
-                    sudo apt-get install -y brotli gzip nodejs
-                    npm install -g esbuild lightningcss-cli sass
-                    echo sass version
-                    sass --version
-                    echo esbuild version
-                    esbuild --version
-                    # echo lightningcss version
-                    # lightningcss --version
-                    echo gzip version
-                    gzip --version
-                    echo brotli version
-                    brotli --version
-
-            -   name: Debug
-                run: npm i path-to-regexp@6.2.1
 
             -   name: Build
-                run: deno task build
+                run: bun run build
 
             -   name: Upload artifacts
                 uses: actions/upload-artifact@v4

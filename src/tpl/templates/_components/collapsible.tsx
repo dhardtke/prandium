@@ -1,4 +1,5 @@
-import { classNames, ComponentChildren, VNode } from "../../../../deps.ts";
+import classNames from "classnames";
+import type { ComponentChildren, VNode } from "preact";
 
 export const Collapsible = (props: {
     label?: VNode | string;

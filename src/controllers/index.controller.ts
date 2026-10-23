@@ -1,4 +1,4 @@
-import { needle } from "../../deps.ts";
+import * as needle from "@needle-di/core";
 import { buildPagination, PaginationParams } from "../data/pagination.ts";
 import { RecipeService } from "../data/service/recipe.service.ts";
 import { TagService } from "../data/service/tag.service.ts";

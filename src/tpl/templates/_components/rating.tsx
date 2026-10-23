@@ -1,4 +1,4 @@
-import { classNames } from "../../../../deps.ts";
+import classNames from "classnames";
 import { Icon, IconName } from "./icon.tsx";
 
 export const Rating = (props: { name: string; value?: number; readonly?: boolean; small?: boolean }) => {

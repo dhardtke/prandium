@@ -1,4 +1,6 @@
-import { fs, log, path } from "../../../deps.ts";
+import { existsSync } from "node:fs";
+import path from "node:path";
+import { log } from "../../logging.ts";
 import { fetchCustom, FetchFn } from "./fetch.ts";
 
 export function getThumbnailDir(configDir: string): string {
@@ -9,7 +11,7 @@ export function getUniqueFilename(dir: string, origFilename: string): string {
     let candidate = origFilename;
     const parsed = path.parse(origFilename);
     let i = 0;
-    while (fs.existsSync(path.join(dir, candidate))) {
+    while (existsSync(path.join(dir, candidate))) {
         i++;
         candidate = `${parsed.base}-${i}${parsed.ext}`;
     }
@@ -32,9 +34,6 @@ export async function downloadThumbnail(
     );
     log.debug(() => `[Thumbnail] Downloading ${url} as ${filename}`);
     const response = await fetchFn(url, userAgent);
-    await Deno.writeFile(
-        path.join(thumbnailDir, filename),
-        new Uint8Array(await response.arrayBuffer()),
-    );
+    await Bun.write(path.join(thumbnailDir, filename), await response.arrayBuffer());
     return filename;
 }

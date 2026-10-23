@@ -1,11 +1,13 @@
-import { needle, path } from "../../deps.ts";
+import * as needle from "@needle-di/core";
+import { rm } from "node:fs/promises";
+import path from "node:path";
 import { Recipe } from "../data/model/recipe.ts";
 import { importRecipes } from "../data/parse/import/import-recipe.ts";
 import { RecipeService } from "../data/service/recipe.service.ts";
 import { type Settings } from "../data/settings.ts";
 import { getThumbnailDir, getUniqueFilename } from "../data/util/thumbnails.ts";
 import { CONFIG_DIR, SETTINGS } from "../di.ts";
-import { NotFoundError } from "../http/middleware/error.ts";
+import { NotFoundError } from "../shared/errors.ts";
 import { RecipeDeleteTemplate } from "../tpl/templates/recipe/recipe-delete.template.tsx";
 import { RecipeDetailTemplate } from "../tpl/templates/recipe/recipe-detail.template.tsx";
 import { RecipeEditTemplate } from "../tpl/templates/recipe/recipe-edit.template.tsx";
@@ -16,7 +18,7 @@ async function deleteThumbnail(recipe: Recipe, configDir: string) {
     if (recipe.thumbnail) {
         const thumbnailDir = getThumbnailDir(configDir);
         try {
-            await Deno.remove(path.join(thumbnailDir, recipe.thumbnail));
+            await rm(path.join(thumbnailDir, recipe.thumbnail));
         } catch {
             // ignore
         }
@@ -35,13 +37,7 @@ async function handleThumbnail(recipe: Recipe, configDir: string, thumbnail: Fil
             thumbnailDir,
             thumbnail.name,
         );
-        //Deno.writeFile(filePath, new Uint8Array(await value.arrayBuffer()));
-        await Deno.writeFile(path.join(thumbnailDir, filename), new Uint8Array(await thumbnail.arrayBuffer()));
-        /*await Deno.copyFile(
-            thumbnail.name,
-            path.join(thumbnailDir, filename),
-        );*/
-        //await Deno.remove(thumbnail.name);
+        await Bun.write(path.join(thumbnailDir, filename), thumbnail);
         await deleteThumbnail(recipe, configDir);
         recipe.thumbnail = filename;
     }

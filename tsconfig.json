@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "preserve",
+        "moduleResolution": "bundler",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "types": ["bun"],
+        "strict": true,
+        "experimentalDecorators": true,
+        "jsx": "react-jsx",
+        "jsxImportSource": "preact",
+        "allowJs": true,
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": false,
+        "skipLibCheck": true,
+        "noEmit": true
+    },
+    "include": ["src", "tests", "dev"],
+    "exclude": [
+        "node_modules",
+        "out",
+        "src/http/**",
+        "src/main.ts",
+        "tests/http/**",
+        "tests/main.test.ts",
+        "tests/_internal/mock-context.ts",
+        "dev/**",
+        "src/data/parse/ingredient/parser.js"
+    ]
+}

@@ -6,12 +6,11 @@ import { CONFIG_DIR, SETTINGS } from "./di.ts";
 import { spawnServer } from "./http/webserver.ts";
 import { consoleLogHandlerFactory, setupLogger } from "./logging.ts";
 import { Options, parseOptions } from "./options.ts";
+import { type ResultWithErrorCode } from "./shared/types.ts";
 import { IS_COMPILED } from "./shared/util.ts";
 import { shouldPrettifyTemplates } from "./tpl/util/render.ts";
 
 export const REQUIRED_DENO_VERSION_RANGE = "^2.0.0";
-
-export type ResultWithErrorCode<T> = T | 0 | 1;
 
 async function prepareConfigDir(options: Options) {
     await fs.ensureDir(options.configDir);

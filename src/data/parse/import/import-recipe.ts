@@ -1,4 +1,10 @@
-import { pooledMap, SchemaAggregateRating, SchemaNutritionInformation, SchemaRecipe, SchemaReview } from "../../../../deps.ts";
+import type {
+    AggregateRating as SchemaAggregateRating,
+    NutritionInformation as SchemaNutritionInformation,
+    Recipe as SchemaRecipe,
+    Review as SchemaReview,
+} from "schema-dts";
+import { pooledMap } from "../../../shared/pooled-map.ts";
 import { Recipe, Review } from "../../model/recipe.ts";
 import { Tag } from "../../model/tag.ts";
 import { fetchCustom, FetchFn } from "../../util/fetch.ts";
@@ -40,13 +46,13 @@ function parseKeywordsToTags(schemaRecipe: SchemaRecipe): Tag[] {
 
 function parseReviews(schemaRecipe: SchemaRecipe): Review[] {
     return ensureArray<SchemaReview>(schemaRecipe.review || schemaRecipe.reviews)
-        .filter((r) => Boolean(r.reviewBody))
         .map((review) =>
             new Review({
                 date: first<string | Date>(review.datePublished),
-                text: first<string>(review.reviewBody)!.trim(),
+                text: first<string>(review.reviewBody)?.trim() ?? "",
             })
-        );
+        )
+        .filter((review) => Boolean(review.text));
 }
 
 async function mapSchemaRecipe(schemaRecipe: SchemaRecipe, url: string, configDir: string, userAgent: string, fetchFn?: FetchFn): Promise<Recipe> {

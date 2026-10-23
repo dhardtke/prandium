@@ -1,25 +1,26 @@
-import { assertEquals } from "../../../deps-test.ts";
+import { expect, test } from "bun:test";
 import { downloadThumbnail } from "../../../src/data/util/thumbnails.ts";
 import { withTemp } from "../../_internal/with-temp.function.ts";
 
-Deno.test(`downloadThumbnail uses UTF8 filenames`, async () => {
-    const mockedFetchFn = (
-        _input: RequestInfo,
-        _userAgent: string,
-        _init?: RequestInit,
-    ): Promise<Response> =>
-        Promise.resolve(
-            { arrayBuffer: () => new ArrayBuffer(0) } as unknown as Response,
-        );
+test(
+    `downloadThumbnail uses UTF8 filenames`,
+    withTemp(async (tmpDir) => {
+        const mockedFetchFn = (
+            _input: RequestInfo,
+            _userAgent: string,
+            _init?: RequestInit,
+        ): Promise<Response> =>
+            Promise.resolve(
+                { arrayBuffer: () => new ArrayBuffer(0) } as unknown as Response,
+            );
 
-    await withTemp(async (tmpDir) => {
-        const expectedFilename = "Gemüsereis.jpg";
+        const expectedFilename = "Gemüsereis.jpg";
         const actualFilename = await downloadThumbnail(
             tmpDir,
             "",
             `https://example.org/${expectedFilename}`,
             mockedFetchFn,
         );
-        assertEquals(actualFilename, expectedFilename);
-    });
-});
+        expect(actualFilename).toEqual(expectedFilename);
+    }),
+);

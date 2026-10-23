@@ -1,8 +1,8 @@
-import { assertEquals, assertThrows } from "../../../deps-test.ts";
+import { describe, expect, test } from "bun:test";
 import { Duration, durationToMinutes, parseDuration } from "../../../src/data/parse/duration.ts";
 
-Deno.test("duration", async (t) => {
-    await t.step(`Parse duration datetime successful`, () => {
+describe("duration", () => {
+    test(`Parse duration datetime successful`, () => {
         const tests = new Map<string, Duration>([
             [
                 "P0003-06-04T12:30:05",
@@ -103,15 +103,11 @@ Deno.test("duration", async (t) => {
         ]);
         for (const [input, expected] of tests.entries()) {
             const actual = parseDuration(input);
-            assertEquals(
-                actual,
-                expected,
-                `parseDuration('${input}') should be equal to ${JSON.stringify(expected)} but was ${JSON.stringify(actual)}`,
-            );
+            expect(actual).toEqual(expected);
         }
     });
 
-    await t.step(`Parse duration unsuccessful`, () => {
+    test(`Parse duration unsuccessful`, () => {
         const tests = new Map<string, string>([
             ["", "Duration must start with 'P'"],
             ["P10", "Unexpected end of input"],
@@ -134,18 +130,12 @@ Deno.test("duration", async (t) => {
             ],
         ]);
         for (const [input, expected] of tests.entries()) {
-            assertThrows(
-                () => parseDuration(input),
-                Error,
-                expected,
-                `parseDuration('${input}') should throw`,
-            );
+            expect(() => parseDuration(input)).toThrow(expected);
         }
     });
 
-    await t.step(`durationToMinutes`, () => {
-        assertEquals(
-            durationToMinutes({
+    test(`durationToMinutes`, () => {
+        expect(durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -153,11 +143,8 @@ Deno.test("duration", async (t) => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            }),
-            0,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(0);
+        expect(durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -165,11 +152,8 @@ Deno.test("duration", async (t) => {
                 hours: 0,
                 minutes: 0,
                 seconds: 1,
-            }),
-            0,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(0);
+        expect(durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -177,11 +161,8 @@ Deno.test("duration", async (t) => {
                 hours: 0,
                 minutes: 1,
                 seconds: 0,
-            }),
-            1,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(1);
+        expect(durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -189,11 +170,8 @@ Deno.test("duration", async (t) => {
                 hours: 1,
                 minutes: 0,
                 seconds: 0,
-            }),
-            60,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(60);
+        expect(durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 0,
@@ -201,11 +179,8 @@ Deno.test("duration", async (t) => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            }),
-            24 * 60,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(24 * 60);
+        expect(durationToMinutes({
                 years: 0,
                 months: 0,
                 weeks: 1,
@@ -213,11 +188,8 @@ Deno.test("duration", async (t) => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            }),
-            7 * 24 * 60,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(7 * 24 * 60);
+        expect(durationToMinutes({
                 years: 0,
                 months: 1,
                 weeks: 0,
@@ -225,11 +197,8 @@ Deno.test("duration", async (t) => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            }),
-            31 * 24 * 60,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(31 * 24 * 60);
+        expect(durationToMinutes({
                 years: 1,
                 months: 0,
                 weeks: 0,
@@ -237,11 +206,8 @@ Deno.test("duration", async (t) => {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
-            }),
-            365 * 24 * 60,
-        );
-        assertEquals(
-            durationToMinutes({
+            })).toEqual(365 * 24 * 60);
+        expect(durationToMinutes({
                 years: 3,
                 months: 2,
                 weeks: 4,
@@ -249,8 +215,6 @@ Deno.test("duration", async (t) => {
                 hours: 10,
                 minutes: 47,
                 seconds: 36,
-            }),
-            (((365 * 3 + 2 * 31 + 4 * 7 + 5) * 24 + 10) * 60 + 47) + 1,
-        );
+            })).toEqual((((365 * 3 + 2 * 31 + 4 * 7 + 5) * 24 + 10) * 60 + 47) + 1);
     });
 });

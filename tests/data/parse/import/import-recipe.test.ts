@@ -1,12 +1,12 @@
-import { assertEquals, assertObjectMatch } from "../../../../deps-test.ts";
-import { SchemaRecipe } from "../../../../deps.ts";
+import { beforeEach, describe, expect, test } from "bun:test";
+import type { Recipe as SchemaRecipe } from "schema-dts";
 import { Recipe } from "../../../../src/data/model/recipe.ts";
 import { importRecipes } from "../../../../src/data/parse/import/import-recipe.ts";
 import { ParseHtmlToSchema } from "../../../../src/data/parse/schema-parser.ts";
 import { FetchFn } from "../../../../src/data/util/fetch.ts";
 import { withTemp } from "../../../_internal/with-temp.function.ts";
 
-Deno.test("importRecipes", async (t) => {
+describe("importRecipes", () => {
     let fetchCalls: { url: string; userAgent: string }[] = [];
     let fetchShouldReturn: { [url: string]: boolean } = {};
     let parsedRecipes: { [html: string]: SchemaRecipe | null } = {};
@@ -18,11 +18,11 @@ Deno.test("importRecipes", async (t) => {
         };
     };
 
-    function beforeEach() {
+    beforeEach(() => {
         fetchCalls = [];
         fetchShouldReturn = {};
         parsedRecipes = {};
-    }
+    });
 
     const mockedFetchFn: FetchFn = (input, userAgent): Promise<Response> => {
         const url = input as string;
@@ -41,41 +41,39 @@ Deno.test("importRecipes", async (t) => {
         }
     };
 
-    async function simpleTest(t: Deno.TestContext, given: unknown, then: unknown, schemaField: string, recipeField: string): Promise<void> {
-        beforeEach();
-        await t.step(
-            `Given ${JSON.stringify(given)} Then Recipe#${recipeField}=${JSON.stringify(then)}`,
-            withTemp(async (tmpDir) => {
-                // Given
-                parsedRecipes.url = {
-                    [schemaField]: given,
-                } as unknown as SchemaRecipe;
-                fetchShouldReturn.url = true;
+    /**
+     * Imports a single recipe whose schema has `schemaField` set to `given` and expects `Recipe#recipeField` to match `then`.
+     */
+    function simpleTest(given: unknown, then: unknown, schemaField: string, recipeField: string): () => Promise<void> {
+        return withTemp(async (tmpDir) => {
+            // Given
+            parsedRecipes.url = {
+                [schemaField]: given,
+            } as unknown as SchemaRecipe;
+            fetchShouldReturn.url = true;
 
-                // When
-                const result = await importRecipes({
-                    urls: ["url"],
-                    configDir: tmpDir,
-                    importConcurrency: 1,
-                    userAgent: "My User Agent",
-                    fetchFn: mockedFetchFn,
-                    parserFactory: parserFactory,
-                });
+            // When
+            const result = await importRecipes({
+                urls: ["url"],
+                configDir: tmpDir,
+                importConcurrency: 1,
+                userAgent: "My User Agent",
+                fetchFn: mockedFetchFn,
+                parserFactory: parserFactory,
+            });
 
-                // Then
-                const [imported] = result;
-                assertEquals(result.length, 1);
-                assertObjectMatch(imported, {
-                    recipe: {
-                        [recipeField]: then,
-                    },
-                });
-            }),
-        );
+            // Then
+            const [imported] = result;
+            expect(result.length).toEqual(1);
+            expect(imported).toMatchObject({
+                recipe: {
+                    [recipeField]: then,
+                },
+            });
+        });
     }
 
-    beforeEach();
-    await t.step(
+    test(
         "Given no urls Then the result is empty",
         withTemp(async (tmpDir) => {
             // Given & When
@@ -88,12 +86,11 @@ Deno.test("importRecipes", async (t) => {
             });
 
             // Then
-            assertEquals(importResult, []);
+            expect(importResult).toEqual([]);
         }),
     );
 
-    beforeEach();
-    await t.step(
+    test(
         "Given one URL Then fetch is called once with exactly that URL",
         withTemp(async (tmpDir) => {
             // Given & When
@@ -106,12 +103,11 @@ Deno.test("importRecipes", async (t) => {
             });
 
             // Then
-            assertEquals(fetchCalls, [{ url: "https://example.com", userAgent: "My User Agent" }]);
+            expect(fetchCalls).toEqual([{ url: "https://example.com", userAgent: "My User Agent" }]);
         }),
     );
 
-    beforeEach();
-    await t.step(
+    test(
         "Given url1 and url2 When fetching url1 returns an error Then url2 is still imported",
         withTemp(async (tmpDir) => {
             // Given
@@ -131,9 +127,9 @@ Deno.test("importRecipes", async (t) => {
 
             // Then
             const [recipe1, recipe2] = result;
-            assertEquals(result.length, 2);
-            assertEquals(recipe1, { url: "url1", success: false, error: "Can't fetch URL url1." });
-            assertObjectMatch(recipe2, {
+            expect(result.length).toEqual(2);
+            expect(recipe1).toEqual({ url: "url1", success: false, error: "Can't fetch URL url1." });
+            expect(recipe2).toMatchObject({
                 url: "url2",
                 success: true,
                 recipe: {
@@ -143,8 +139,7 @@ Deno.test("importRecipes", async (t) => {
         }),
     );
 
-    beforeEach();
-    await t.step(
+    test(
         "When no Recipe is detected in the HTML of the given URL Then the result contains the correct error",
         withTemp(async (tmpDir) => {
             // Given
@@ -162,14 +157,13 @@ Deno.test("importRecipes", async (t) => {
             });
 
             // Then
-            assertEquals(result, [
+            expect(result).toEqual([
                 { url: "url", success: false, error: "Recipe metadata not found in HTML." },
             ]);
         }),
     );
 
-    beforeEach();
-    await t.step(
+    test(
         "When every field of the Recipe in the HTML is unset Then the result does not contain any fields either",
         withTemp(async (tmpDir) => {
             // Given
@@ -188,8 +182,8 @@ Deno.test("importRecipes", async (t) => {
 
             // Then
             const [imported] = result;
-            assertEquals(result.length, 1);
-            assertObjectMatch(imported, {
+            expect(result.length).toEqual(1);
+            expect(imported).toMatchObject({
                 url: "url",
                 success: true,
                 recipe: {
@@ -199,98 +193,66 @@ Deno.test("importRecipes", async (t) => {
         }),
     );
 
-    await t.step("parsing instructions", async (t) => {
-        for (
-            const [given, then] of [
-                [["instruction1", "instruction2"], ["instruction1", "instruction2"]],
-                [["   instruction1   "], ["instruction1"]],
-                ["instruction1\ninstruction2\ninstruction3", ["instruction1", "instruction2", "instruction3"]],
+    describe("parsing instructions", () => {
+        test.each<[unknown, string[]]>([
+            [["instruction1", "instruction2"], ["instruction1", "instruction2"]],
+            [["   instruction1   "], ["instruction1"]],
+            ["instruction1\ninstruction2\ninstruction3", ["instruction1", "instruction2", "instruction3"]],
+            ["", []],
+        ])("Given %j Then Recipe#instructions=%j", (given, then) => simpleTest(given, then, "recipeInstructions", "instructions")());
+    });
+
+    describe("parsing tags", () => {
+        describe.each(["keywords", "recipeCategory"])("schema field is %s", (field) => {
+            test.each<[unknown, string[]]>([
+                [["tag1", "tag2"], ["tag1", "tag2"]],
+                [["   tag1   "], ["tag1"]],
+                ["tag1,tag2,tag3", ["tag1", "tag2", "tag3"]],
                 ["", []],
-            ]
-        ) {
-            beforeEach();
-            await simpleTest(t, given, then, "recipeInstructions", "instructions");
-        }
+                ["tag1, tag2, tag3", ["tag1", "tag2", "tag3"]],
+                [["tag1, tag2, tag3", "tag4"], ["tag1, tag2, tag3", "tag4"]],
+            ])("Given %j Then Recipe#tags have the titles %j", (given, then) => simpleTest(given, then.map((title) => ({ title })), field, "tags")());
+        });
     });
 
-    await t.step("parsing tags", async (t) => {
-        for (const field of ["keywords", "recipeCategory"]) {
-            await t.step(`schema field is ${field}`, async (t) => {
-                for (
-                    const [given, then] of [
-                        [["tag1", "tag2"], ["tag1", "tag2"]],
-                        [["   tag1   "], ["tag1"]],
-                        ["tag1,tag2,tag3", ["tag1", "tag2", "tag3"]],
-                        ["", []],
-                        ["tag1, tag2, tag3", ["tag1", "tag2", "tag3"]],
-                        [["tag1, tag2, tag3", "tag4"], ["tag1, tag2, tag3", "tag4"]],
-                    ]
-                ) {
-                    await simpleTest(
-                        t,
-                        given,
-                        (then as string[]).map((t) => ({
-                            title: t,
-                        })),
-                        field,
-                        "tags",
-                    );
-                }
-            });
-        }
+    describe("parsing reviews", () => {
+        describe.each(["reviews", "review"])("schema field is %s", (field) => {
+            test.each<[unknown, unknown[]]>([
+                [{ datePublished: "1970-01-01T00:00:00.000Z", reviewBody: "review" }, [{ date: new Date("1970-01-01T00:00:00.000Z"), text: "review" }]],
+                [
+                    { datePublished: "1970-01-01T00:00:00.000Z", reviewBody: "  review    " },
+                    [
+                        {
+                            date: new Date("1970-01-01T00:00:00.000Z"),
+                            text: "review",
+                        },
+                    ],
+                ],
+                [{ datePublished: "1970-01-01T00:00:00.000Z", reviewBody: "  " }, []],
+            ])("Given %j Then Recipe#reviews=%j", (given, then) => simpleTest(given, then, field, "reviews")());
+        });
     });
 
-    await t.step("parsing reviews", async (t) => {
-        for (const field of ["reviews", "review"]) {
-            await t.step(`schema field is ${field}`, async (t) => {
-                for (
-                    const [given, then] of [
-                        [{ datePublished: "1970-01-01T00:00:00.000Z", reviewBody: "review" }, [{ date: new Date("1970-01-01T00:00:00.000Z"), text: "review" }]],
-                        [
-                            { datePublished: "1970-01-01T00:00:00.000Z", reviewBody: "  review    " },
-                            [
-                                {
-                                    date: new Date("1970-01-01T00:00:00.000Z"),
-                                    text: "review",
-                                },
-                            ],
-                        ],
-                        [{ datePublished: "1970-01-01T00:00:00.000Z", reviewBody: "  " }, []],
-                    ]
-                ) {
-                    await simpleTest(t, given, then, field, "reviews");
-                }
-            });
-        }
+    describe("parsing nutritional values", () => {
+        test.each([
+            ["calories", "nutritionCalories"],
+            ["carbohydrateContent", "nutritionCarbohydrate"],
+            ["cholesterolContent", "nutritionCholesterol"],
+            ["fatContent", "nutritionFat"],
+            ["fiberContent", "nutritionFiber"],
+            ["proteinContent", "nutritionProtein"],
+            ["saturatedFatContent", "nutritionSaturatedFat"],
+            ["sodiumContent", "nutritionSodium"],
+            ["sugarContent", "nutritionSugar"],
+            ["transFatContent", "nutritionTransFat"],
+            ["unsaturatedFatContent", "nutritionUnsaturatedFat"],
+        ])("Given nutrition.%s Then Recipe#%s is set", (schemaField, recipeField) =>
+            simpleTest({ [schemaField]: "my nutritional value" }, "my nutritional value", "nutrition", recipeField)());
     });
 
-    await t.step("parsing nutritional values", async (t) => {
-        for (
-            const [schemaField, recipeField] of [
-                ["calories", "nutritionCalories"],
-                ["carbohydrateContent", "nutritionCarbohydrate"],
-                ["cholesterolContent", "nutritionCholesterol"],
-                ["fatContent", "nutritionFat"],
-                ["fiberContent", "nutritionFiber"],
-                ["proteinContent", "nutritionProtein"],
-                ["saturatedFatContent", "nutritionSaturatedFat"],
-                ["sodiumContent", "nutritionSodium"],
-                ["sugarContent", "nutritionSugar"],
-                ["transFatContent", "nutritionTransFat"],
-                ["unsaturatedFatContent", "nutritionUnsaturatedFat"],
-            ]
-        ) {
-            await simpleTest(t, { [schemaField]: "my nutritional value" }, "my nutritional value", "nutrition", recipeField);
-        }
-    });
+    test("parsing prepTime", simpleTest("PT20M", 20, "prepTime", "prepTime"));
 
-    await t.step("parsing prepTime", async (t) => {
-        await simpleTest(t, "PT20M", 20, "prepTime", "prepTime");
-    });
-
-    await t.step("parsing cookTime", async (t) => {
-        await simpleTest(t, "PT25M", 25, "cookTime", "cookTime");
-    });
+    test("parsing cookTime", simpleTest("PT25M", 25, "cookTime", "cookTime"));
 
     // TODO test yield
     // TODO test rating

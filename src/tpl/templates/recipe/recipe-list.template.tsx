@@ -1,4 +1,4 @@
-import { classNames } from "../../../../deps.ts";
+import classNames from "classnames";
 import { Recipe } from "../../../data/model/recipe.ts";
 import { Tag } from "../../../data/model/tag.ts";
 import { Pagination } from "../../../data/pagination.ts";

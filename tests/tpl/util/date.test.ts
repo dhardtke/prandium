@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps-test.ts";
+import { afterAll, describe, expect, test } from "bun:test";
 import { de } from "../../../src/i18n/de.ts";
 import { en } from "../../../src/i18n/en.ts";
 import { Language, setLanguage } from "../../../src/i18n/mod.ts";
@@ -11,14 +11,18 @@ interface Test<Options = unknown, Value = number> {
     expected: string;
 }
 
-Deno.test("format", async (t) => {
-    await t.step("number.format", async (t) => {
-        await t.step("When given undefined Then it returns an empty string", () => {
-            assertEquals(number.format(undefined), "");
+describe("format", () => {
+    afterAll(() => {
+        setLanguage(en);
+    });
+
+    describe("number.format", () => {
+        test("When given undefined Then it returns an empty string", () => {
+            expect(number.format(undefined)).toEqual("");
         });
     });
 
-    await t.step("date.format", async (t) => {
+    describe("date.format", () => {
         const tests: Test<Intl.DateTimeFormatOptions>[] = [
             { language: en, value: 0, options: undefined, expected: "1/1/1970" },
             {
@@ -47,28 +51,25 @@ Deno.test("format", async (t) => {
                 expected: "01. Januar 20",
             },
         ];
-        for (const test of tests) {
-            await t.step(
-                `When given ${test.value} with options=${
-                    JSON.stringify(test.options)
-                } and the language ${test.language.meta.id} Then it returns ${test.expected}`,
+        for (const testCase of tests) {
+            test(
+                `When given ${testCase.value} with options=${
+                    JSON.stringify(testCase.options)
+                } and the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`,
                 () => {
-                    setLanguage(test.language);
-                    assertEquals(
-                        date.format(new Date(test.value), test.options),
-                        test.expected,
-                    );
+                    setLanguage(testCase.language);
+                    expect(date.format(new Date(testCase.value), testCase.options)).toEqual(testCase.expected);
                 },
             );
         }
     });
 
-    await t.step("date.formatRelative", async (t) => {
-        await t.step("When given undefined Then it returns an empty string", () => {
-            assertEquals(date.formatRelative(undefined), "");
+    describe("date.formatRelative", () => {
+        test("When given undefined Then it returns an empty string", () => {
+            expect(date.formatRelative(undefined)).toEqual("");
         });
 
-        await t.step("date.formatRelative", async (t) => {
+        describe("date.formatRelative", () => {
             const tests: Test<unknown, [number, number?]>[] = [
                 { language: en, value: [new Date().getTime()], expected: "now" },
                 { language: en, value: [0, 0], expected: "now" },
@@ -111,30 +112,27 @@ Deno.test("format", async (t) => {
                     expected: "nächstes Jahr",
                 },
             ];
-            for (const test of tests) {
-                await t.step(
-                    `When given relative=${test.value[0]}, pivot=${test.value[1]} with the language ${test.language.meta.id} Then it returns ${test.expected}`,
+            for (const testCase of tests) {
+                test(
+                    `When given relative=${testCase.value[0]}, pivot=${testCase.value[1]} with the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`,
                     () => {
-                        setLanguage(test.language);
-                        assertEquals(
-                            date.formatRelative(
-                                new Date(test.value[0]),
-                                test.value[1] === undefined ? undefined : new Date(test.value[1]),
-                            ),
-                            test.expected,
-                        );
+                        setLanguage(testCase.language);
+                        expect(date.formatRelative(
+                                new Date(testCase.value[0]),
+                                testCase.value[1] === undefined ? undefined : new Date(testCase.value[1]),
+                            )).toEqual(testCase.expected);
                     },
                 );
             }
         });
     });
 
-    await t.step("date.relativeTimeFromElapsed", async (t) => {
-        await t.step("When given undefined Then it returns an empty string", () => {
-            assertEquals(date.relativeTimeFromElapsed(undefined), "");
+    describe("date.relativeTimeFromElapsed", () => {
+        test("When given undefined Then it returns an empty string", () => {
+            expect(date.relativeTimeFromElapsed(undefined)).toEqual("");
         });
 
-        await t.step("date.relativeTimeFromElapsed", () => {
+        test("date.relativeTimeFromElapsed", () => {
             const tests: Test[] = [
                 { language: en, value: 0, expected: "now" },
                 { language: en, value: 1000, expected: "in 1 second" },
@@ -154,19 +152,19 @@ Deno.test("format", async (t) => {
                     expected: "nächstes Jahr",
                 },
             ];
-            for (const test of tests) {
-                setLanguage(test.language);
-                assertEquals(date.relativeTimeFromElapsed(test.value), test.expected);
+            for (const testCase of tests) {
+                setLanguage(testCase.language);
+                expect(date.relativeTimeFromElapsed(testCase.value)).toEqual(testCase.expected);
             }
         });
     });
 
-    await t.step("date.formatMinutes", async (t) => {
-        await t.step("When given undefined Then it returns an empty string", () => {
-            assertEquals(date.formatMinutes(undefined), "");
+    describe("date.formatMinutes", () => {
+        test("When given undefined Then it returns an empty string", () => {
+            expect(date.formatMinutes(undefined)).toEqual("");
         });
 
-        await t.step("date.formatMinutes", async (t) => {
+        describe("date.formatMinutes", () => {
             const tests: Test[] = [
                 { language: en, value: 0, expected: "0 seconds" },
                 { language: en, value: 1, expected: "1 minute" },
@@ -180,16 +178,16 @@ Deno.test("format", async (t) => {
                 { language: de, value: 60 * 24, expected: "1 Tag" },
                 { language: de, value: 60 * 24 * 365, expected: "1 Jahr" },
             ];
-            for (const test of tests) {
-                await t.step(`When given ${test.value} with the language ${test.language.meta.id} Then it returns ${test.expected}`, () => {
-                    setLanguage(test.language);
-                    assertEquals(date.formatMinutes(test.value), test.expected);
+            for (const testCase of tests) {
+                test(`When given ${testCase.value} with the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`, () => {
+                    setLanguage(testCase.language);
+                    expect(date.formatMinutes(testCase.value)).toEqual(testCase.expected);
                 });
             }
         });
     });
 
-    await t.step("number.format", async (t) => {
+    describe("number.format", () => {
         const tests: Test<number>[] = [
             { language: en, value: 42, options: undefined, expected: "42.00" },
             { language: en, value: 42, options: 2, expected: "42.00" },
@@ -202,14 +200,14 @@ Deno.test("format", async (t) => {
 
             { language: de, value: 42, options: undefined, expected: "42,00" },
         ];
-        for (const test of tests) {
-            await t.step(
-                `When given num=${test.value}, decimals=${
-                    JSON.stringify(test.options)
-                } with the language ${test.language.meta.id} Then it returns ${test.expected}`,
+        for (const testCase of tests) {
+            test(
+                `When given num=${testCase.value}, decimals=${
+                    JSON.stringify(testCase.options)
+                } with the language ${testCase.language.meta.id} Then it returns ${testCase.expected}`,
                 () => {
-                    setLanguage(test.language);
-                    assertEquals(number.format(test.value, test.options), test.expected);
+                    setLanguage(testCase.language);
+                    expect(number.format(testCase.value, testCase.options)).toEqual(testCase.expected);
                 },
             );
         }

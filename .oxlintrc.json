@@ -1,0 +1,48 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "plugins": [
+        "typescript"
+    ],
+    "categories": {
+        "correctness": "error"
+    },
+    "rules": {
+        "default-param-last": "error",
+        "eqeqeq": "error",
+        "no-const-assign": "error",
+        "no-eval": "error",
+        "no-sparse-arrays": "error",
+        "no-throw-literal": "error",
+        "no-undef": "error",
+        "typescript/no-explicit-any": "error",
+        "typescript/no-non-null-asserted-optional-chain": "error",
+        "no-unused-vars": [
+            "error",
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }
+        ]
+    },
+    "env": {
+        "browser": true,
+        "builtin": true,
+        "es2024": true
+    },
+    "globals": {
+        "Bun": "readonly",
+        "process": "readonly",
+        "Buffer": "readonly"
+    },
+    "ignorePatterns": [
+        "src/data/parse/ingredient/parser.js",
+        "dev/generate-favicons.js",
+        "src/http/**",
+        "src/main.ts",
+        "tests/http/**",
+        "tests/main.test.ts",
+        "tests/_internal/mock-context.ts",
+        "dev/**"
+    ]
+}

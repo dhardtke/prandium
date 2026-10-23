@@ -1,4 +1,5 @@
-import { fs, log, path } from "../../deps.ts";
+import path from "node:path";
+import { log } from "../logging.ts";
 import { getCpuCores } from "../shared/util.ts";
 
 const DefaultUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0";
@@ -39,7 +40,7 @@ export const DefaultSettings: Settings = {
     pageSize: 24,
 };
 
-// deno-lint-ignore no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 function validate(settings: any): Settings {
     const validate: Record<keyof Settings, unknown> = Object.assign(
         {},
@@ -59,7 +60,7 @@ function validate(settings: any): Settings {
         pageSize: "number",
     };
     for (const [property, type] of Object.entries(types)) {
-        // deno-lint-ignore valid-typeof
+        // oxlint-disable-next-line valid-typeof
         if (typeof validate[property as keyof Settings] !== type) {
             throw new Error(`${property} must be of type ${type}`);
         }
@@ -74,8 +75,9 @@ function validate(settings: any): Settings {
 
 export async function readFromDisk(configDir: string): Promise<Settings> {
     const file = path.join(configDir, SettingsFilename);
-    if (await fs.exists(file)) {
-        const contents = await Deno.readTextFile(file);
+    const settingsFile = Bun.file(file);
+    if (await settingsFile.exists()) {
+        const contents = await settingsFile.text();
         try {
             return validate(JSON.parse(contents));
         } catch (e) {

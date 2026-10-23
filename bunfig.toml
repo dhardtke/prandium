@@ -1,0 +1,24 @@
+[fmt]
+tabWidth = 4
+useTabs = false
+printWidth = 160
+singleQuote = false
+proseWrap = "preserve"
+# only src/, tests/ and dev/ are formatted
+ignorePatterns = [
+    "src/data/parse/ingredient/parser.js",
+    "dev/generate-favicons.js",
+    "assets/**",
+    "docs/**",
+    ".agents/**",
+    ".github/**",
+    ".idea/**",
+    "*.md",
+    "*.json",
+    "*.toml",
+    "tests/**/*.html",
+]
+
+[test]
+coverageSkipTestFiles = true
+coveragePathIgnorePatterns = ["tests/**"]

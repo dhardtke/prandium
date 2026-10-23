@@ -1,4 +1,4 @@
-// deno-lint-ignore no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 type Class<S> = new (...args: any[]) => S;
 
 const registry: { [name: string]: Class<BaseComponent> } = {};

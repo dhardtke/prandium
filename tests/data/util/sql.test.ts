@@ -1,91 +1,61 @@
-import { assertEquals } from "../../../deps-test.ts";
+import { describe, expect, test } from "bun:test";
 import { buildFilters, buildOrderBySql, columns, EmptyFilter, EmptyOrderBy, placeholders } from "../../../src/data/util/sql.ts";
 
-Deno.test("sql", async (t) => {
-    await t.step(`buildFilters returns EMPTY_FILTER when no filter is active`, () => {
-        assertEquals(buildFilters(), EmptyFilter);
-        assertEquals(buildFilters({ active: false, sql: () => "" }), EmptyFilter);
+describe("sql", () => {
+    test(`buildFilters returns EMPTY_FILTER when no filter is active`, () => {
+        expect(buildFilters()).toEqual(EmptyFilter);
+        expect(buildFilters({ active: false, sql: () => "" })).toEqual(EmptyFilter);
     });
 
-    await t.step(`buildFilters complex example`, () => {
+    test(`buildFilters complex example`, () => {
         const filters = [
             { active: true, sql: () => "? = TRUE", bindings: () => ["TRUE"] },
             { active: false, sql: () => "? = FALSE", bindings: () => ["FALSE"] },
             { active: true, sql: () => "? < 42", bindings: () => ["41"] },
         ];
-        assertEquals(buildFilters(...filters), {
+        expect(buildFilters(...filters)).toEqual({
             sql: "? = TRUE AND ? < 42",
             bindings: ["TRUE", "41"],
         });
     });
 
-    await t.step(`buildOrderBySql returns EMPTY_ORDER_BY if arg is undefined`, () => {
-        assertEquals(buildOrderBySql(undefined, []), EmptyOrderBy);
+    test(`buildOrderBySql returns EMPTY_ORDER_BY if arg is undefined`, () => {
+        expect(buildOrderBySql(undefined, [])).toEqual(EmptyOrderBy);
     });
 
-    await t.step(`buildOrderBySql returns EMPTY_ORDER_BY if column is not allowed`, () => {
-        assertEquals(
-            buildOrderBySql({ column: "title" }, ["id", "updated_at"]),
-            EmptyOrderBy,
-        );
+    test(`buildOrderBySql returns EMPTY_ORDER_BY if column is not allowed`, () => {
+        expect(buildOrderBySql({ column: "title" }, ["id", "updated_at"])).toEqual(EmptyOrderBy);
     });
 
-    await t.step(`buildOrderBySql works with sane inputs`, () => {
+    test(`buildOrderBySql works with sane inputs`, () => {
         for (const order of [undefined, "asc", "desc"]) {
             const expected = `ORDER BY title${order && order !== "asc" ? ` ${order.toUpperCase()}` : ""}`;
-            assertEquals(
-                buildOrderBySql({ column: "title", order: order as "asc" }, ["title"]),
-                expected,
-            );
-            assertEquals(
-                buildOrderBySql(
+            expect(buildOrderBySql({ column: "title", order: order as "asc" }, ["title"])).toEqual(expected);
+            expect(buildOrderBySql(
                     { column: "title", order: order?.toUpperCase() as "asc" },
                     ["title"],
-                ),
-                expected,
-            );
+                )).toEqual(expected);
         }
     });
 
-    await t.step(`buildOrderBySql sanitizes invalid order identifiers`, () => {
-        assertEquals(
-            buildOrderBySql({ column: "title", order: "" as "asc" }, ["title"]),
-            "ORDER BY title",
-        );
-        assertEquals(
-            buildOrderBySql({ column: "title", order: "foo" as "asc" }, ["title"]),
-            "ORDER BY title",
-        );
-        assertEquals(
-            buildOrderBySql({ column: "title", order: "bar" as "asc" }, ["title"]),
-            "ORDER BY title",
-        );
-        assertEquals(
-            buildOrderBySql({ column: "foo", order: "asc" }, ["title"]),
-            "ORDER BY TRUE",
-        );
+    test(`buildOrderBySql sanitizes invalid order identifiers`, () => {
+        expect(buildOrderBySql({ column: "title", order: "" as "asc" }, ["title"])).toEqual("ORDER BY title");
+        expect(buildOrderBySql({ column: "title", order: "foo" as "asc" }, ["title"])).toEqual("ORDER BY title");
+        expect(buildOrderBySql({ column: "title", order: "bar" as "asc" }, ["title"])).toEqual("ORDER BY title");
+        expect(buildOrderBySql({ column: "foo", order: "asc" }, ["title"])).toEqual("ORDER BY TRUE");
     });
 
-    await t.step(`columns`, () => {
-        assertEquals(columns([]), "");
-        assertEquals(
-            columns([undefined, undefined, "id", undefined, "title"]),
-            "id, title",
-        );
-        assertEquals(columns(["id", "title"], "recipe."), "recipe.id, recipe.title");
-        assertEquals(
-            columns(["id", "title"], undefined, "r_"),
-            "id AS r_id, title AS r_title",
-        );
-        assertEquals(
-            columns(["id", "title"], "recipe.", "r_"),
-            "recipe.id AS r_id, recipe.title AS r_title",
-        );
+    test(`columns`, () => {
+        expect(columns([])).toEqual("");
+        expect(columns([undefined, undefined, "id", undefined, "title"])).toEqual("id, title");
+        expect(columns(["id", "title"], "recipe.")).toEqual("recipe.id, recipe.title");
+        expect(columns(["id", "title"], undefined, "r_")).toEqual("id AS r_id, title AS r_title");
+        expect(columns(["id", "title"], "recipe.", "r_")).toEqual("recipe.id AS r_id, recipe.title AS r_title");
     });
 
-    await t.step(`placeholders`, () => {
-        assertEquals(placeholders(undefined), "");
-        assertEquals(placeholders(3), "?, ?, ?");
-        assertEquals(placeholders([1, 2, 3, 4]), "?, ?, ?, ?");
+    test(`placeholders`, () => {
+        expect(placeholders(undefined)).toEqual("");
+        expect(placeholders(3)).toEqual("?, ?, ?");
+        expect(placeholders([1, 2, 3, 4])).toEqual("?, ?, ?, ?");
     });
 });

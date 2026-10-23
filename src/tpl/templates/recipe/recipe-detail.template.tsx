@@ -1,4 +1,4 @@
-import { classNames } from "../../../../deps.ts";
+import classNames from "classnames";
 import { Recipe } from "../../../data/model/recipe.ts";
 import { Ingredient, ingredient as ingredientHelper } from "../../../data/parse/ingredient/mod.ts";
 import { UrlGenerator } from "../../../http/util/url-generator.ts";

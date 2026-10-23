@@ -1,4 +1,5 @@
-import { needle, sqlite } from "../../../deps.ts";
+import * as needle from "@needle-di/core";
+import { type QueryParameter } from "../db.ts";
 import { Database } from "../db.ts";
 import { Recipe } from "../model/recipe.ts";
 import { Tag } from "../model/tag.ts";
@@ -44,7 +45,7 @@ function tagsWithSameRecipes(
 function recipeCountColumn(
     active?: boolean,
     tagIdsWithSameRecipes?: number[],
-): { column: string; bindings: sqlite.QueryParameter[] } {
+): { column: string; bindings: QueryParameter[] } {
     if (!active) {
         return {
             column: "",
@@ -69,7 +70,6 @@ export class TagService implements Service<Tag> {
     constructor(
         private readonly db: Database = needle.inject(Database),
     ) {
-        this.db = db;
     }
 
     // TODO filter arguments
@@ -165,7 +165,7 @@ export class TagService implements Service<Tag> {
         );
     }
 
-    // deno-lint-ignore no-unused-vars
+    // oxlint-disable-next-line no-unused-vars
     delete(tags: Tag[]): void {
         // TODO
     }

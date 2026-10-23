@@ -1,16 +1,17 @@
 // noinspection JSUnusedGlobalSymbols
 
-import { path } from "../../deps.ts";
+import os from "node:os";
+import path from "node:path";
 
 declare global {
-    // deno-lint-ignore no-var
-    var BUILD_INFO: string;
+    // oxlint-disable-next-line no-var
+    var BUILD_INFO: string | undefined;
 }
 
 /**
- * The build info that contains meta-information about when the server has been compiled. This value is set during compile-time (see dev/write-build-info.ts).
+ * The build info that contains meta-information about when the server has been compiled. This value is set during compile-time (see dev/build.ts).
  */
-export const BUILD_INFO = globalThis["BUILD_INFO"];
+export const BUILD_INFO = globalThis.BUILD_INFO;
 
 /**
  * Whether the application is running from a single JavaScript file that has been built before.
@@ -18,10 +19,7 @@ export const BUILD_INFO = globalThis["BUILD_INFO"];
 export const IS_COMPILED = typeof BUILD_INFO !== "undefined";
 
 export function getHome(): string | undefined {
-    if (Deno.build.os === "windows") {
-        return Deno.env.get("USERPROFILE");
-    }
-    return Deno.env.get("HOME");
+    return os.homedir() || undefined;
 }
 
 export const DefaultConfigDir = "~/.config/prandium";
@@ -34,15 +32,10 @@ export function defaultConfigDir(): string {
     return path.resolve(home, ".config", "prandium");
 }
 
-let RootDir: string = path.dirname(path.fromFileUrl(Deno.mainModule));
-if (!IS_COMPILED) {
-    if (Deno.mainModule.endsWith(".test.ts")) {
-        while (RootDir && path.basename(RootDir) !== "tests") {
-            RootDir = path.resolve(RootDir, "..");
-        }
-    }
-    RootDir = path.resolve(RootDir, "..");
-}
+/**
+ * The root directory of the application: the directory containing the server bundle when compiled, the repository root otherwise.
+ */
+const RootDir = IS_COMPILED ? import.meta.dir : path.resolve(import.meta.dir, "..", "..");
 
 export function root(...parts: string[]): string {
     return path.resolve(RootDir, ...parts);

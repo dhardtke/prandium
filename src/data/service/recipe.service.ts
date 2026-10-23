@@ -1,4 +1,4 @@
-import { needle } from "../../../deps.ts";
+import * as needle from "@needle-di/core";
 import { Database } from "../db.ts";
 import { Recipe, Review } from "../model/recipe.ts";
 import { toCamelCase, toDate } from "../util/convert.ts";
@@ -29,8 +29,6 @@ export class RecipeService implements Service<Recipe> {
         private readonly db: Database = needle.inject(Database),
         private readonly tagService: TagService = needle.inject(TagService),
     ) {
-        this.db = db;
-        this.tagService = tagService;
     }
 
     count(filters?: {

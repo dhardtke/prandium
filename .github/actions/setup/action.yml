@@ -1,34 +1,25 @@
 name: Setup
 description: Setup
 inputs:
-    denoVersion:
+    bunVersion:
         required: true
-        description: The version of Deno to use
+        description: The version of Bun to use
     cacheVersion:
         required: true
         description: The cache version to use (defined as a secret)
-    denoDir:
-        required: true
-        description: The path deno uses for caching
 runs:
     using: composite
     steps:
-        -   name: Clone repository
-            uses: actions/checkout@v4
+        -   name: Setup Bun
+            uses: oven-sh/setup-bun@v2
             with:
-                submodules: true
-                persist-credentials: false
-
-        -   name: Setup Deno
-            uses: denoland/setup-deno@main
-            with:
-                deno-version: "${{ inputs.denoVersion }}"
+                bun-version: "${{ inputs.bunVersion }}"
 
         -   name: Cache dependencies
             uses: actions/cache@v4
             with:
-                path: ${{ inputs.denoDir }}
-                key: ${{ inputs.cacheVersion }}-${{ hashFiles('deno.lock') }}
+                path: ~/.bun/install/cache
+                key: ${{ inputs.cacheVersion }}-bun-${{ hashFiles('bun.lock') }}
 
         -   shell: bash
-            run: deno cache deps.ts deps-test.ts
+            run: bun install --frozen-lockfile

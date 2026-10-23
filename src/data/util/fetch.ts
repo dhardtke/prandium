@@ -29,7 +29,7 @@ export const fetchCustom: FetchFn = (
  * @param target the target object
  * @param source the source object
  */
-// deno-lint-ignore no-explicit-any
+// oxlint-disable-next-line typescript/no-explicit-any
 const merge = (target: any, source: any) => {
     for (const key of Object.keys(source)) {
         if (source[key] instanceof Object) {

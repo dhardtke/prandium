@@ -1,4 +1,5 @@
-import { classNames, ComponentChildren } from "../../../../deps.ts";
+import classNames from "classnames";
+import type { ComponentChildren } from "preact";
 
 export type AlertType =
     | "primary"

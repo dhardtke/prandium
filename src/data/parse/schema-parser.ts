@@ -1,4 +1,5 @@
-import { log, SchemaRecipe } from "../../../deps.ts";
+import type { Recipe as SchemaRecipe } from "schema-dts";
+import { log } from "../../logging.ts";
 
 const LdJson = "application/ld+json";
 
@@ -12,10 +13,9 @@ export interface ParseHtmlToSchema {
 
 export class SchemaParser implements ParseHtmlToSchema {
     constructor(private readonly html: string) {
-        this.html = html;
     }
 
-    // deno-lint-ignore no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     private static getObjects(parsed: any): { [k: string]: unknown }[] {
         if (Array.isArray(parsed)) {
             return parsed;

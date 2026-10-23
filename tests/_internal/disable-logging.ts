@@ -1,29 +1,23 @@
-import { log } from "../../deps.ts";
+import { BaseHandler, disableLogger, LogRecord } from "../../src/logging.ts";
 
-export async function disableLogging() {
-    await log.setup({
-        loggers: {
-            default: {
-                handlers: [],
-            },
-        },
-    });
+export function disableLogging() {
+    disableLogger();
 }
 
-type PureLogRecord = Pick<log.LogRecord, "level" | "levelName" | "loggerName" | "msg">;
+type PureLogRecord = Pick<LogRecord, "level" | "levelName" | "loggerName" | "msg">;
 
-class CapturingLogHandler extends log.BaseHandler {
+class CapturingLogHandler extends BaseHandler {
     readonly records: PureLogRecord[] = [];
 
     constructor() {
         super("INFO");
     }
 
-    override handle(logRecord: log.LogRecord) {
+    override handle(logRecord: LogRecord) {
         this.records.push({ ...logRecord });
     }
 
-    log(): void {
+    override log(): void {
         // no-op
     }
 }

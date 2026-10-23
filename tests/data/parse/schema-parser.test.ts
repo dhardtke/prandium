@@ -1,23 +1,22 @@
 // noinspection HttpUrlsUsage
 
-import { type SchemaRecipe } from "../../../deps.ts";
-import { assertEquals } from "../../../deps-test.ts";
+import { describe, expect, test } from "bun:test";
+import type { Recipe as SchemaRecipe } from "schema-dts";
 import { SchemaParser } from "../../../src/data/parse/schema-parser.ts";
 
-Deno.test("SchemaParser", async (t) => {
-    // await t.step("Complex example", () => {
-    //     Deno.chdir(path.dirname(path.fromFileUrl(import.meta.url)));
-    //     const contents = Deno.readTextFileSync("complex.html");
-    //     const actual = findFirstRecipe(contents);
+describe("SchemaParser", () => {
+    // test("Complex example", async () => {
+    //     const contents = await Bun.file(root("tests/data/parse/complex.html")).text();
+    //     const actual = new SchemaParser(contents).findFirstRecipe();
     //     // TODO
-    //     assertNotEquals(actual, null);
+    //     expect(actual).not.toBeNull();
     // });
 
-    await t.step(`An Error is thrown if the HTML is not parseable`, () => {
+    test(`An Error is thrown if the HTML is not parseable`, () => {
         new SchemaParser("<'><!DOCTYPE xml>").findFirstRecipe();
     });
 
-    await t.step(`findFirstRecipe is empty if no Recipe can be found`, () => {
+    test(`findFirstRecipe is empty if no Recipe can be found`, () => {
         const tests = [
             ``,
             `<!DOCTYPE html>
@@ -47,11 +46,11 @@ Deno.test("SchemaParser", async (t) => {
     </html>`,
         ];
         for (const test of tests) {
-            assertEquals(new SchemaParser(test).findFirstRecipe(), null);
+            expect(new SchemaParser(test).findFirstRecipe()).toEqual(null);
         }
     });
 
-    await t.step(`findFirstRecipe works with different HTML variations`, () => {
+    test(`findFirstRecipe works with different HTML variations`, () => {
         const json = `{"@context": "http://schema.org", "@type": "Recipe", "recipeCategory": "K\u00e4se", "name": "My awesome recipe"}`;
         const tests = [
             `<script type=application/ld+json>${json}</script>`,
@@ -66,11 +65,11 @@ Deno.test("SchemaParser", async (t) => {
             name: "My awesome recipe",
         };
         for (const test of tests) {
-            assertEquals(new SchemaParser(test).findFirstRecipe(), expected);
+            expect(new SchemaParser(test).findFirstRecipe()).toEqual(expected);
         }
     });
 
-    await t.step(`findFirstRecipe extracts the Recipe from a @graph object`, () => {
+    test(`findFirstRecipe extracts the Recipe from a @graph object`, () => {
         const html = `<script type="application/ld+json" class="yoast-schema-graph">
     {
         "@context": "https://schema.org",
@@ -89,6 +88,6 @@ Deno.test("SchemaParser", async (t) => {
             "@type": "Recipe",
             "name": "My Recipe",
         };
-        assertEquals(new SchemaParser(html).findFirstRecipe(), expected);
+        expect(new SchemaParser(html).findFirstRecipe()).toEqual(expected);
     });
 });

@@ -1,4 +1,4 @@
-import { classNames } from "../../../../deps.ts";
+import classNames from "classnames";
 import { Pagination as _Pagination } from "../../../data/pagination.ts";
 import { l } from "../../../i18n/mod.ts";
 import { Icon } from "./icon.tsx";

@@ -1,11 +1,11 @@
-import { assertEquals } from "../../../deps-test.ts";
+import { describe, expect, test } from "bun:test";
 import { toCamelCase, toDate, toFloat, toInt } from "../../../src/data/util/convert.ts";
 
-Deno.test("convert", async (t) => {
-    await t.step("toInt", async (t) => {
+describe("convert", () => {
+    describe("toInt", () => {
         for (const str of ["", undefined, "undefined", "foo", "bar", "   ", "+"]) {
-            await t.step(`Given str="${str}" and default=-1 Then it returns the fallback value -1`, () => {
-                assertEquals(toInt(str, -1), -1);
+            test(`Given str="${str}" and default=-1 Then it returns the fallback value -1`, () => {
+                expect(toInt(str, -1)).toEqual(-1);
             });
         }
 
@@ -13,19 +13,20 @@ Deno.test("convert", async (t) => {
             const [str, expected] of [
                 ["42", 42],
                 ["0", 0],
+                // oxlint-disable-next-line no-loss-of-precision
                 ["102341998323241321", 102341998323241321],
-            ]
+            ] as [string, number][]
         ) {
-            await t.step(`Given str="${str}" and default=-1 Then it returns the parsed value ${expected}`, () => {
-                assertEquals(toInt(str as string, -1), expected);
+            test(`Given str="${str}" and default=-1 Then it returns the parsed value ${expected}`, () => {
+                expect(toInt(str as string, -1)).toEqual(expected);
             });
         }
     });
 
-    await t.step("toFloat", async (t) => {
+    describe("toFloat", () => {
         for (const str of ["", undefined, "undefined", "foo", "bar", "   ", "+"]) {
-            await t.step(`Given str="${str}" and default=-1 Then it returns the fallback value -1`, () => {
-                assertEquals(toFloat(str, -1), -1);
+            test(`Given str="${str}" and default=-1 Then it returns the fallback value -1`, () => {
+                expect(toFloat(str, -1)).toEqual(-1);
             });
         }
 
@@ -33,21 +34,23 @@ Deno.test("convert", async (t) => {
             const [str, expected] of [
                 ["42", 42],
                 ["0", 0],
+                // oxlint-disable-next-line no-loss-of-precision
                 ["102341998323241321", 102341998323241321],
+                // oxlint-disable-next-line no-loss-of-precision
                 ["432934294823942.20012", 432934294823942.20012],
-            ]
+            ] as [string, number][]
         ) {
-            await t.step(`Given str="${str}" and default=-1 Then it returns the parsed value ${expected}`, () => {
-                assertEquals(toFloat(str as string, -1), expected);
+            test(`Given str="${str}" and default=-1 Then it returns the parsed value ${expected}`, () => {
+                expect(toFloat(str as string, -1)).toEqual(expected);
             });
         }
     });
 
-    await t.step("toDate", async (t) => {
+    describe("toDate", () => {
         for (const str of ["", undefined, "abc"]) {
             const fallback = new Date(0);
-            await t.step(`Given str="${str}" and _default=${fallback} Then it returns the fallback value`, () => {
-                assertEquals(toDate(str, fallback), fallback);
+            test(`Given str="${str}" and _default=${fallback} Then it returns the fallback value`, () => {
+                expect(toDate(str, fallback)).toEqual(fallback);
             });
         }
 
@@ -56,24 +59,23 @@ Deno.test("convert", async (t) => {
                 ["0", new Date(0)],
                 ["1616804763", new Date(1616804763)],
                 ["2016-09-12T00:00:00.000Z", new Date("2016-09-12T00:00:00.000Z")],
-            ]
+            ] as [string, Date][]
         ) {
-            await t.step(`Given str="${str}" and _default=undefined Then it returns the parsed value ${expected}`, () => {
-                assertEquals(toDate(str as string, undefined), expected);
+            test(`Given str="${str}" and _default=undefined Then it returns the parsed value ${expected}`, () => {
+                expect(toDate(str as string, undefined)).toEqual(expected);
             });
         }
     });
 
-    await t.step("toCamelCase", () => {
-        assertEquals(toCamelCase({}), {});
-        assertEquals(toCamelCase({ hello_world: true }), { helloWorld: true });
-        assertEquals(toCamelCase({ bla: null }), { bla: null });
-        assertEquals(toCamelCase(["a", "b"]), ["a", "b"]);
-        assertEquals(toCamelCase({ arr: ["a", "b", { my_arr: ["d"] }] }), {
+    test("toCamelCase", () => {
+        expect(toCamelCase({})).toEqual({});
+        expect(toCamelCase({ hello_world: true })).toEqual({ helloWorld: true });
+        expect(toCamelCase({ bla: null })).toEqual({ bla: null });
+        expect(toCamelCase(["a", "b"])).toEqual(["a", "b"]);
+        expect(toCamelCase({ arr: ["a", "b", { my_arr: ["d"] }] })).toEqual({
             arr: ["a", "b", { myArr: ["d"] }],
         });
-        assertEquals(
-            toCamelCase({
+        expect(toCamelCase({
                 id: 42,
                 created_at: "yesterday",
                 updated_at: null,
@@ -84,8 +86,7 @@ Deno.test("convert", async (t) => {
                         arr: [42, 43],
                     },
                 },
-            }),
-            {
+            })).toEqual({
                 id: 42,
                 createdAt: "yesterday",
                 updatedAt: null,
@@ -96,7 +97,6 @@ Deno.test("convert", async (t) => {
                         arr: [42, 43],
                     },
                 },
-            },
-        );
+            });
     });
 });
