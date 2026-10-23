@@ -1,4 +1,4 @@
-import type { CreateRecipeDto, EditRecipeDto, RecipeDto, RecipePageDto } from '../../../shared/dto/recipe.ts';
+import type { CreateRecipeDto, EditRecipeDto, ImportRecipesDto, ImportResultDto, RecipeDto, RecipePageDto } from '../../../shared/dto/recipe.ts';
 import type { RecipeId } from '../../../shared/flavors.ts';
 import { RecipeApi, type RecipeListRequest } from './internal/recipe.api.ts';
 
@@ -11,6 +11,10 @@ export class RecipeFacade {
 
   list(request: RecipeListRequest): Promise<RecipePageDto> {
     return this.#api.list(request);
+  }
+
+  import(dto: ImportRecipesDto): Promise<ImportResultDto> {
+    return this.#api.import(dto);
   }
 
   get(id: RecipeId): Promise<RecipeDto> {

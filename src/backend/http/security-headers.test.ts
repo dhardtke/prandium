@@ -27,8 +27,14 @@ describe('security headers', () => {
   });
 
   test("keep a page's policy on a revalidation, whose headers replace the cached ones", async () => {
-    const page = await api('/');
-    const revalidated = await api('/', { headers: { 'If-None-Match': page.headers.get('etag') ?? '' } });
+    // Tests running in parallel write scratch modules into src/frontend/, which changes the page's tag between two requests.
+    let page = await api('/');
+    let revalidated = await api('/', { headers: { 'If-None-Match': page.headers.get('etag') ?? '' } });
+    for (let attempt = 0; attempt < 5 && revalidated.status !== 304; attempt++) {
+      await Bun.sleep(50);
+      page = await api('/');
+      revalidated = await api('/', { headers: { 'If-None-Match': page.headers.get('etag') ?? '' } });
+    }
     expect(revalidated.status).toBe(304);
     expect(revalidated.headers.get('content-security-policy')).toBe(page.headers.get('content-security-policy'));
   });

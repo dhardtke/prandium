@@ -143,3 +143,19 @@ export interface RecipeSortDto {
 
 /** Any subset of the editable fields; `history` and `tags` replace the stored lists when present. */
 export type EditRecipeDto = Partial<CreateRecipeDto>;
+
+export interface ImportRecipesDto {
+  /** http(s) URLs; blank entries are dropped. */
+  urls: string[];
+}
+
+export interface ImportResultItemDto {
+  url: string;
+  recipe: { id: RecipeId; title: string } | null;
+  error: string | null;
+}
+
+export interface ImportResultDto {
+  /** In the order of the request. */
+  results: ImportResultItemDto[];
+}

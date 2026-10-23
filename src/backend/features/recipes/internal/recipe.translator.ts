@@ -1,6 +1,17 @@
-import type { CreateRecipeDto, EditRecipeDto, NutritionDto, RecipeDto, RecipePageDto, RecipeSummaryDto, ReviewDto } from '../../../../shared/dto/recipe.ts';
+import type {
+  CreateRecipeDto,
+  EditRecipeDto,
+  ImportRecipesDto,
+  ImportResultDto,
+  NutritionDto,
+  RecipeDto,
+  RecipePageDto,
+  RecipeSummaryDto,
+  ReviewDto,
+} from '../../../../shared/dto/recipe.ts';
 import type { Iso8601DateTime } from '../../../../shared/flavors.ts';
 import type { RecipeDetails, RecipeRow, RecipeSummaryRow, ReviewRow } from '../ports/recipe.ts';
+import type { ImportedRecipe } from './import/import-recipe.ts';
 import { parseIngredients } from './ingredient/ingredient.ts';
 import type { CreateRecipe, EditRecipe } from './recipe.repository.ts';
 
@@ -45,6 +56,36 @@ export function translateDtoToCreateRecipe(dto: Required<CreateRecipeDto>, extra
     tags: dto.tags,
     reviews: extra.reviews,
   };
+}
+
+export function translateImportedToCreateRecipeDto(imported: ImportedRecipe): CreateRecipeDto {
+  return {
+    title: imported.title,
+    description: imported.description,
+    source: imported.source,
+    yield: imported.yield,
+    nutrition: imported.nutrition,
+    prepTime: imported.prepTime,
+    cookTime: imported.cookTime,
+    aggregateRating: imported.aggregateRating,
+    ingredients: imported.ingredients,
+    instructions: imported.instructions,
+    tags: imported.tags,
+  };
+}
+
+export function translateToImportResultDto(outcomes: { url: string; recipe: RecipeDetails | null; error: string | null }[]): ImportResultDto {
+  return {
+    results: outcomes.map((outcome) => ({
+      url: outcome.url,
+      recipe: outcome.recipe === null ? null : { id: outcome.recipe.recipe.id, title: outcome.recipe.recipe.title },
+      error: outcome.error,
+    })),
+  };
+}
+
+export function translateToImportRecipesDto(body: Record<string, unknown>): ImportRecipesDto {
+  return { urls: body.urls as string[] };
 }
 
 export function translateToEditRecipeDto(body: Record<string, unknown>): EditRecipeDto {

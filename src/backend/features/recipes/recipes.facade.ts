@@ -1,4 +1,12 @@
-import type { CreateRecipeDto, EditRecipeDto, NutritionDto, RecipeFilterDto, RecipeSortDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
+import type {
+  CreateRecipeDto,
+  EditRecipeDto,
+  ImportRecipesDto,
+  NutritionDto,
+  RecipeFilterDto,
+  RecipeSortDto,
+  RecipeSortKey,
+} from '../../../shared/dto/recipe.ts';
 import type { RecipeId } from '../../../shared/flavors.ts';
 import type { Config } from '../../config.ts';
 import type { DB } from '../../db/db.ts';
@@ -15,8 +23,9 @@ import {
 } from '../../shared/validate.ts';
 import { createTagFacade } from '../tags/tags.facade.ts';
 import { createThumbnailsFacade, type ThumbnailsFacade } from '../thumbnails/thumbnails.facade.ts';
+import { importRecipes } from './internal/import/import-recipe.ts';
 import { RecipeRepository } from './internal/recipe.repository.ts';
-import { translateDtoToCreateRecipe, translateDtoToEditRecipe } from './internal/recipe.translator.ts';
+import { translateDtoToCreateRecipe, translateDtoToEditRecipe, translateImportedToCreateRecipeDto } from './internal/recipe.translator.ts';
 import { RECIPE_SORT_KEYS as SORT_COLUMNS, type RecipeDetails, type RecipeSummaryRow, type ReviewRow } from './ports/recipe.ts';
 
 export const RECIPE_SORT_KEYS: readonly RecipeSortKey[] = SORT_COLUMNS satisfies readonly RecipeSortKey[];
@@ -53,13 +62,92 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+export const MAX_IMPORT_URLS = 50;
+
+export interface ImportOutcome {
+  url: string;
+  recipe: RecipeDetails | null;
+  error: string | null;
+  /** Something that went wrong without failing the import, such as an image that would not download. */
+  warning: string | null;
+}
+
+function message(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 export class RecipesFacade {
   readonly #recipes: RecipeRepository;
   readonly #thumbnails: ThumbnailsFacade;
+  readonly #importOptions: { importConcurrency: number; userAgent: string };
 
-  constructor(recipes: RecipeRepository, thumbnails: ThumbnailsFacade) {
+  constructor(recipes: RecipeRepository, thumbnails: ThumbnailsFacade, importOptions: { importConcurrency: number; userAgent: string }) {
     this.#recipes = recipes;
     this.#thumbnails = thumbnails;
+    this.#importOptions = importOptions;
+  }
+
+  /** Each URL is fetched, parsed and created on its own: one failing never stops the others. Results keep the input order. */
+  async import(dto: ImportRecipesDto): Promise<ImportOutcome[]> {
+    const urls = this.#validateUrls(dto);
+    const outcomes: ImportOutcome[] = [];
+    for (const result of await importRecipes(urls, this.#importOptions)) {
+      if (result.recipe === null) {
+        outcomes.push({ url: result.url, recipe: null, error: result.error, warning: null });
+        continue;
+      }
+      const imported = result.recipe;
+      let thumbnail: string | null = null;
+      let warning: string | null = null;
+      if (imported.thumbnailUrl !== null) {
+        try {
+          thumbnail = await this.#thumbnails.download(imported.thumbnailUrl);
+        } catch (error) {
+          warning = `No thumbnail: ${message(error)}`;
+        }
+      }
+      try {
+        const recipe = this.create(translateImportedToCreateRecipeDto(imported), { thumbnail, reviews: imported.reviews });
+        outcomes.push({ url: result.url, recipe, error: null, warning });
+      } catch (error) {
+        if (thumbnail !== null) {
+          await this.#thumbnails.remove(thumbnail);
+        }
+        outcomes.push({ url: result.url, recipe: null, error: message(error), warning: null });
+      }
+    }
+    return outcomes;
+  }
+
+  #validateUrls(dto: ImportRecipesDto): string[] {
+    const value: unknown = dto.urls;
+    if (!Array.isArray(value)) {
+      throw badRequest('"urls" must be a list of URLs');
+    }
+    const urls: string[] = [];
+    for (const item of value as unknown[]) {
+      if (typeof item !== 'string') {
+        throw badRequest('"urls" must hold only strings');
+      }
+      const trimmed = item.trim();
+      if (trimmed === '') {
+        continue;
+      }
+      let url: URL;
+      try {
+        url = new URL(trimmed);
+      } catch {
+        throw badRequest(`"${trimmed}" is no URL`);
+      }
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+        throw badRequest(`"${trimmed}" is no http(s) URL`);
+      }
+      urls.push(trimmed);
+    }
+    if (urls.length === 0 || urls.length > MAX_IMPORT_URLS) {
+      throw badRequest(`"urls" must hold 1 to ${MAX_IMPORT_URLS} URLs`);
+    }
+    return urls;
   }
 
   list(filter: RecipeFilterDto, sort: RecipeSortDto, limit: number, offset: number): RecipeSummaryRow[] {
@@ -215,5 +303,8 @@ export class RecipesFacade {
 }
 
 export function createRecipesFacade(db: DB, config: Config): RecipesFacade {
-  return new RecipesFacade(new RecipeRepository(db, createTagFacade(db)), createThumbnailsFacade(config));
+  return new RecipesFacade(new RecipeRepository(db, createTagFacade(db)), createThumbnailsFacade(config), {
+    importConcurrency: config.importConcurrency,
+    userAgent: config.userAgent,
+  });
 }

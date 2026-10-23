@@ -1,7 +1,8 @@
-import { describe, expect, test } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import type { Server } from 'bun';
 import { copyFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { CreateRecipeDto, EditRecipeDto, RecipeDto, RecipePageDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
+import type { CreateRecipeDto, EditRecipeDto, ImportResultDto, RecipeDto, RecipePageDto, RecipeSortKey } from '../../../shared/dto/recipe.ts';
 import type { TagDto } from '../../../shared/dto/tag.ts';
 import type { ErrorDto } from '../../../shared/dto/error.ts';
 import { at, body, useServer } from '../../testing.ts';
@@ -566,6 +567,95 @@ describe('DELETE /api/recipes/:id/thumbnail', () => {
   test('is harmless without an image', async () => {
     const { id } = await createRecipe(post);
     expect((await del(`/api/recipes/${id}/thumbnail`)).status).toBe(200);
+  });
+});
+
+describe('POST /api/recipes/import', () => {
+  let site: Server<undefined>;
+
+  beforeEach(() => {
+    site = Bun.serve({
+      port: 0,
+      routes: {
+        '/gemuesereis': new Response(Bun.file(join(import.meta.dir, 'internal/import/complex.html')), { headers: { 'Content-Type': 'text/html' } }),
+        '/image.png': new Response(Bun.file(join(import.meta.dir, '../thumbnails/1x1.png')), { headers: { 'Content-Type': 'image/png' } }),
+        '/about': new Response('<html><body>No recipe here.</body></html>', { headers: { 'Content-Type': 'text/html' } }),
+      },
+      fetch: () => new Response('gone', { status: 404 }),
+    });
+  });
+
+  afterEach(async () => {
+    await site.stop(true);
+  });
+
+  const siteUrl = (path: string): string => new URL(path, site.url).href;
+
+  test('creates the recipe with its tags, reviews and thumbnail, and links it in the result', async () => {
+    const res = await post('/api/recipes/import', { urls: [siteUrl('/gemuesereis')] });
+    expect(res.status).toBe(200);
+    const { results } = await body<ImportResultDto>(res);
+    expect(results.map((result) => [result.url, result.recipe?.title, result.error])).toEqual([[siteUrl('/gemuesereis'), 'Gemüsereis', null]]);
+    const recipe = await body<RecipeDto>(await api(`/api/recipes/${results[0]?.recipe?.id}`));
+    expect(recipe).toMatchObject({
+      title: 'Gemüsereis',
+      description: 'Schneller Reis mit Gemüse.',
+      source: siteUrl('/gemuesereis'),
+      yield: 4,
+      prepTime: 15,
+      cookTime: 25,
+      aggregateRating: { value: 4.6, count: 128 },
+      instructions: ['Zwiebel würfeln und in Öl anschwitzen.', 'Reis zugeben und garen.'],
+      reviews: [{ date: '2024-03-12T10:00:00.000Z', text: 'Sehr lecker!' }],
+    });
+    expect(recipe.nutrition).toMatchObject({ calories: '420 kcal', protein: '12 g' });
+    expect(recipe.ingredients.map((ingredient) => ingredient.raw)).toEqual(['250 g Reis', '1 Zwiebel', '2 EL Öl', 'Salz']);
+    expect(recipe.tags.map((tag) => tag.title)).toEqual(['Gemüse', 'Reis', 'Schnell']);
+    expect(recipe.thumbnail).toBe('/thumbnails/image.png');
+    expect((await api(recipe.thumbnail ?? '')).status).toBe(200);
+  });
+
+  test('reports a missing page and a page without a recipe, keeps the input order, and logs the failures', async () => {
+    const urls = [siteUrl('/missing'), siteUrl('/gemuesereis'), siteUrl('/about')];
+    const { results } = await body<ImportResultDto>(await post('/api/recipes/import', { urls }));
+    expect(results.map((result) => [result.url, result.recipe?.title ?? null, result.error])).toEqual([
+      [siteUrl('/missing'), null, 'The page answered 404'],
+      [siteUrl('/gemuesereis'), 'Gemüsereis', null],
+      [siteUrl('/about'), null, 'No schema.org recipe found'],
+    ]);
+    expect(logs()).toContainEqual({ level: 'warn', text: `import ${siteUrl('/missing')}: The page answered 404` });
+  });
+
+  test('imports a recipe whose image fails, without a thumbnail', async () => {
+    const page = (await Bun.file(join(import.meta.dir, 'internal/import/complex.html')).text()).replace('/image.png', '/no-image.png');
+    await site.stop(true);
+    site = Bun.serve({
+      port: 0,
+      routes: { '/page': new Response(page, { headers: { 'Content-Type': 'text/html' } }) },
+      fetch: () => new Response('', { status: 404 }),
+    });
+    const { results } = await body<ImportResultDto>(await post('/api/recipes/import', { urls: [siteUrl('/page')] }));
+    expect(results[0]?.error).toBeNull();
+    const recipe = await body<RecipeDto>(await api(`/api/recipes/${results[0]?.recipe?.id}`));
+    expect(recipe.thumbnail).toBeNull();
+    expect(logs()).toContainEqual({ level: 'warn', text: `import ${siteUrl('/page')}: No thumbnail: The image answered 404` });
+  });
+
+  test('drops blank lines', async () => {
+    const { results } = await body<ImportResultDto>(await post('/api/recipes/import', { urls: ['  ', siteUrl('/about'), ''] }));
+    expect(results).toHaveLength(1);
+  });
+
+  test.each<[string, unknown]>([
+    ['no list', 'https://example.com'],
+    ['an empty list', []],
+    ['only blank lines', [' ', '']],
+    ['more than 50 URLs', Array.from({ length: 51 }, (_, i) => `https://example.com/${i}`)],
+    ['a line that is no URL', ['example.com/recipe']],
+    ['a URL that is no http(s)', ['ftp://example.com/recipe']],
+    ['an entry that is no string', [42]],
+  ])('refuses %s', async (_name, urls) => {
+    expect((await post('/api/recipes/import', { urls })).status).toBe(400);
   });
 });
 

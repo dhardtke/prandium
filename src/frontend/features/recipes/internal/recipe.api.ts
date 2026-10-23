@@ -1,4 +1,13 @@
-import type { CreateRecipeDto, EditRecipeDto, RecipeDto, RecipeFilterDto, RecipePageDto, RecipeSortDto } from '../../../../shared/dto/recipe.ts';
+import type {
+  CreateRecipeDto,
+  EditRecipeDto,
+  ImportRecipesDto,
+  ImportResultDto,
+  RecipeDto,
+  RecipeFilterDto,
+  RecipePageDto,
+  RecipeSortDto,
+} from '../../../../shared/dto/recipe.ts';
 import type { RecipeId } from '../../../../shared/flavors.ts';
 import { get, patch, post, putBlob, remove, removeReturning } from '../../../http/http.ts';
 
@@ -20,6 +29,10 @@ export class RecipeApi {
       query.set('order', order);
     }
     return get(`/recipes?${query.toString()}`);
+  }
+
+  import(dto: ImportRecipesDto): Promise<ImportResultDto> {
+    return post('/recipes/import', dto);
   }
 
   get(id: RecipeId): Promise<RecipeDto> {

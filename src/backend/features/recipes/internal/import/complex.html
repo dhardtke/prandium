@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Gemüsereis – a recipe page for the import tests</title>
+    <script type="application/ld+json">
+      { "this is": broken JSON that the parser must skip }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          { "@type": "WebSite", "name": "Example Kitchen", "url": "https://kitchen.example" },
+          { "@type": "BreadcrumbList", "itemListElement": [] },
+          {
+            "@type": ["Recipe", "NewsArticle"],
+            "name": "Gemüsereis",
+            "description": "Schneller Reis mit Gemüse.",
+            "image": [{ "@type": "ImageObject", "url": "/image.png" }],
+            "recipeYield": ["4 Portionen", "4"],
+            "prepTime": "PT15M",
+            "cookTime": "PT0H25M",
+            "keywords": "Reis, Gemüse, Schnell",
+            "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4,6", "ratingCount": "128" },
+            "nutrition": { "@type": "NutritionInformation", "calories": "420 kcal", "proteinContent": "12 g" },
+            "recipeIngredient": ["250 g Reis", "1 Zwiebel", "2 EL Öl", "Salz"],
+            "recipeInstructions": [
+              { "@type": "HowToStep", "text": "Zwiebel würfeln und in Öl anschwitzen." },
+              { "@type": "HowToStep", "text": "Reis zugeben und garen." }
+            ],
+            "review": [{ "@type": "Review", "datePublished": "2024-03-12T10:00:00Z", "reviewBody": " Sehr lecker! " }]
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Gemüsereis</h1>
+  </body>
+</html>

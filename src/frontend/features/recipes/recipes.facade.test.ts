@@ -40,3 +40,8 @@ test('putThumbnail() sends the image as its own type, deleteThumbnail() removes 
     { method: 'DELETE', url: '/api/recipes/12/thumbnail' },
   ]);
 });
+
+test('import()', async () => {
+  await recipeFacade.import({ urls: ['https://example.com/a'] });
+  expect(fake.requests).toMatchObject([{ method: 'POST', url: '/api/recipes/import', body: { urls: ['https://example.com/a'] } }]);
+});

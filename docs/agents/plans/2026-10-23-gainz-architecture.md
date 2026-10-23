@@ -654,15 +654,15 @@ Import recipes from URLs through the API and the import page.
 
 **Tasks**:
 
-- [ ] DTOs `ImportRecipesDto { urls }`, `ImportResultDto`.
-- [ ] `RecipesFacade.import(urls)`: validate 1–50 trimmed http(s) URLs (empty lines dropped); `importRecipes` with `config.importConcurrency`,
+- [x] DTOs `ImportRecipesDto { urls }`, `ImportResultDto`.
+- [x] `RecipesFacade.import(urls)`: validate 1–50 trimmed http(s) URLs (empty lines dropped); `importRecipes` with `config.importConcurrency`,
       `config.userAgent` and `ThumbnailsFacade.download`; create each success through `create` (tags synced); results in input order; failures
       carry the parser's message and are logged on topic `import`.
-- [ ] Controller and route `POST /api/recipes/import`.
-- [ ] Frontend: `recipe.api.ts#import`, facade, route `/recipes/import` (`parents`: Recipes), `pr-recipe-import.component.{ts,css}` per the
+- [x] Controller and route `POST /api/recipes/import`.
+- [x] Frontend: `recipe.api.ts#import`, facade, route `/recipes/import` (`parents`: Recipes), `pr-recipe-import.component.{ts,css}` per the
       Import mockup.
-- [ ] i18n keys for the import page.
-- [ ] Tests: route test with a local `Bun.serve` fixture server serving `complex.html` and `1x1.png` (success creates recipe, tags and thumbnail;
+- [x] i18n keys for the import page.
+- [x] Tests: route test with a local `Bun.serve` fixture server serving `complex.html` and `1x1.png` (success creates recipe, tags and thumbnail;
       a 404 page and a non-recipe page fail with messages; mixed input keeps order; validation 400s); component test (sends lines, renders the
       table, links to `/recipes/:id`).
 
@@ -816,6 +816,18 @@ During implementation, document user feedback, problems, and decisions here.
   rating, so fractional values of old rows and imports pass browser validation.
 - A language change re-renders the form only while it is clean, so typed values are never lost.
 - A failed thumbnail upload after a create keeps the created id, so saving again PATCHes instead of creating a duplicate.
+
+### Phase 5
+
+- The facade downloads the image (`ThumbnailsFacade.download`) after `importRecipes` parsed the page; an image that fails is a warning,
+  and the recipe is created without a thumbnail (the old importer failed the whole recipe). The controller logs failures and warnings on
+  topic `import`, keeping logging out of the facade as gainz's rules ask.
+- `complex.html` beside the importer is a page written for the tests (broken JSON-LD first, then a `@graph` with a multi-type recipe,
+  an `ImageObject` and a German decimal comma in the rating).
+- The import page is a plain `PrElement` (nothing to load) and keeps the typed URLs across a language change. No i18n keys were added; the
+  old `recipe.import.*` strings cover it.
+- `security-headers.test.ts`'s revalidation case retries: parallel tests write scratch modules into `src/frontend/`, which changes the
+  page's tag between its two requests.
 
 ## References
 

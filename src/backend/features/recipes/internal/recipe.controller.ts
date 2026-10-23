@@ -15,7 +15,15 @@ import {
 import type { ParamRequest } from '../../../http/routing.ts';
 import type { RecipeId } from '../../../../shared/flavors.ts';
 import { MAX_SEARCH_LENGTH, RECIPE_SORT_KEYS, type RecipesFacade } from '../recipes.facade.ts';
-import { translateToCreateRecipeDto, translateToEditRecipeDto, translateToRecipeDto, translateToRecipePageDto } from './recipe.translator.ts';
+import { log } from '../../../shared/log.ts';
+import {
+  translateToCreateRecipeDto,
+  translateToEditRecipeDto,
+  translateToImportRecipesDto,
+  translateToImportResultDto,
+  translateToRecipeDto,
+  translateToRecipePageDto,
+} from './recipe.translator.ts';
 
 export const DEFAULT_PAGE_SIZE = 24;
 
@@ -41,6 +49,18 @@ export class RecipeController {
   async create(req: Request): Promise<Response> {
     const dto = translateToCreateRecipeDto(await readJsonObject(req));
     return json(translateToRecipeDto(this.#recipes.create(dto)), 201);
+  }
+
+  async import(req: Request): Promise<Response> {
+    const outcomes = await this.#recipes.import(translateToImportRecipesDto(await readJsonObject(req)));
+    for (const outcome of outcomes) {
+      if (outcome.error !== null) {
+        log.warn('import', `${outcome.url}: ${outcome.error}`);
+      } else if (outcome.warning !== null) {
+        log.warn('import', `${outcome.url}: ${outcome.warning}`);
+      }
+    }
+    return json(translateToImportResultDto(outcomes));
   }
 
   show(req: ParamRequest): Response {

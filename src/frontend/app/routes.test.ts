@@ -32,6 +32,10 @@ describe('routes', () => {
     expect(create?.route).not.toBe(matchRoute(ROUTES, '/recipes/12')?.route);
   });
 
+  test('/recipes/import is the import page', () => {
+    expect(matchRoute(ROUTES, '/recipes/import')?.route.title?.(en)).toBe('Import');
+  });
+
   test.each(['/nope', '/login/extra', '/recipes', '/recipes/abc', '/recipes/12/extra'])('%s matches nothing', (path) => {
     expect(matchRoute(ROUTES, path)).toBeNull();
   });

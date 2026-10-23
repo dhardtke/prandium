@@ -13,6 +13,10 @@ export function recipeRoutes(db: DB, config: Config): RouteTable {
       POST: (req) => controller.create(req),
     },
 
+    '/api/recipes/import': {
+      POST: (req) => controller.import(req),
+    },
+
     '/api/recipes/:id': {
       GET: (req) => controller.show(req),
       PATCH: (req) => controller.update(req),

@@ -22,6 +22,16 @@ export const recipesRoutes: RouteDef[] = [
     parents: [{ path: '/', label: (l) => l.recipes }],
   },
   {
+    pattern: /^\/recipes\/import\/?$/,
+    keys: [],
+    view: async () => {
+      const { PrRecipeImportComponent } = await import('./pr-recipe-import.component.ts');
+      return new PrRecipeImportComponent();
+    },
+    title: (l) => l.recipe.import.title,
+    parents: [{ path: '/', label: (l) => l.recipes }],
+  },
+  {
     pattern: /^\/recipes\/(\d+)\/edit\/?$/,
     keys: ['id'],
     view: async ({ id }) => {
