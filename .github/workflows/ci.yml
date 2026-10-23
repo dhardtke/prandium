@@ -47,7 +47,8 @@ jobs:
           retention-days: 7
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.check.outputs.deploy == 'true'
+    # Off until the self-hosted runner exists: set the repository variable DEPLOY_ENABLED to true (docs/deployment.md).
+    if: vars.DEPLOY_ENABLED == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.check.outputs.deploy == 'true'
     needs: check
     runs-on: [self-hosted, prandium-prod]
     environment: production
