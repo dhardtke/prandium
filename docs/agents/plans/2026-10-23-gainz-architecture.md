@@ -682,12 +682,12 @@ Exercise the auth feature ported in phase 1 against every data route and finish 
 
 **Tasks**:
 
-- [ ] `http/routes.ts`: confirm recipe, tag and thumbnail routes sit inside `auth.guard()`, and meta, auth, legacy redirects, dev and static
+- [x] `http/routes.ts`: confirm recipe, tag and thumbnail routes sit inside `auth.guard()`, and meta, auth, legacy redirects, dev and static
       outside; static embeds `#auth-status`.
-- [ ] `pr-login`: Prandium copy and German strings; `http.ts` 401 → `/login?next=…` reaches every recipe view (list, detail, edit, import).
-- [ ] `docs/deployment.md` stub section "Authentication" (completed in phase 7): `bun run hash-password`, `PRANDIUM_PASSWORD_HASH`, HTTPS proxy
+- [x] `pr-login`: Prandium copy and German strings; `http.ts` 401 → `/login?next=…` reaches every recipe view (list, detail, edit, import).
+- [x] `docs/deployment.md` stub section "Authentication" (completed in phase 7): `bun run hash-password`, `PRANDIUM_PASSWORD_HASH`, HTTPS proxy
       for the `Secure` cookie.
-- [ ] Tests: per guarded route family (`/api/recipes`, `/api/tags`, `/thumbnails/x.png`) 401 without the cookie and 200 with it; `/recipe/1/x`
+- [x] Tests: per guarded route family (`/api/recipes`, `/api/tags`, `/thumbnails/x.png`) 401 without the cookie and 200 with it; `/recipe/1/x`
       redirects and `/api/health` answers without it; each recipe view redirects to `/login?next=` on a 401 (component tests with `useFetch`).
 
 **Automated Verification**:

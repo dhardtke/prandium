@@ -275,3 +275,34 @@ describe('logout', () => {
     expect(res.headers.get('set-cookie')).toContain('Max-Age=0');
   });
 });
+
+describe('the guarded routes', () => {
+  test.each([
+    ['GET', '/api/recipes'],
+    ['POST', '/api/recipes'],
+    ['GET', '/api/recipes/1'],
+    ['PATCH', '/api/recipes/1'],
+    ['DELETE', '/api/recipes/1'],
+    ['PUT', '/api/recipes/1/thumbnail'],
+    ['POST', '/api/recipes/import'],
+    ['GET', '/api/tags'],
+    ['GET', '/thumbnails/x.png'],
+  ])('refuse %s %s without a cookie', async (method, path) => {
+    const res = await api(path, { method, headers: { 'Content-Type': 'application/json' }, body: method === 'GET' ? undefined : '{}' });
+    expect(res.status).toBe(401);
+  });
+
+  test('answer with a cookie', async () => {
+    const cookie = await loggedIn();
+    expect((await api('/api/recipes', { headers: { Cookie: cookie } })).status).toBe(200);
+    expect((await api('/api/tags', { headers: { Cookie: cookie } })).status).toBe(200);
+    expect((await api('/thumbnails/x.png', { headers: { Cookie: cookie } })).status).toBe(404);
+  });
+
+  test('leave the old URLs, health and the frontend public', async () => {
+    const redirect = await api('/recipe/1/x', { redirect: 'manual' });
+    expect(redirect.status).toBe(301);
+    expect((await api('/api/health')).status).toBe(200);
+    expect((await api('/recipes/1')).status).toBe(200);
+  });
+});

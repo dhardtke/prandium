@@ -1,5 +1,5 @@
 import { beforeAll, expect, test } from 'bun:test';
-import { embedAuthStatus, find, mount, settle, submit, testId, type, useDom, useFetch } from '../../testing.ts';
+import { embedAuthStatus, find, mount, settle, shadow, submit, testId, type, useDom, useFetch } from '../../testing.ts';
 
 useDom();
 const fake = useFetch();
@@ -68,4 +68,13 @@ test('without a login on the server, goes straight to next', () => {
 
   expect(location.pathname).toBe('/workouts/12');
   expect(fake.sent('POST /api/auth/login')).toEqual([]);
+});
+
+test('speaks German once the language changes', async () => {
+  const { setLanguage } = await import('../../ui/i18n.ts');
+  embedAuthStatus(true);
+  setLanguage('de');
+  const login = mount('pr-login');
+  expect(shadow(login).querySelector('h1')?.textContent).toBe('Anmelden');
+  expect(login.querySelector('button[type="submit"]')?.textContent).toBe('Anmelden');
 });
