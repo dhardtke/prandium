@@ -71,8 +71,6 @@ jobs:
     build:
         needs: [ lint, test ]
         runs-on: ubuntu-latest
-        # TODO re-enable once dev/build.ts exists (phase 3 of the Bun migration)
-        if: false
         steps:
             -   name: Clone repository
                 uses: actions/checkout@v4
@@ -113,11 +111,7 @@ jobs:
                     path: out/
 
             -   name: Remove non-minified files
-                run: |
-                    cd out/
-                    rm server.js
-                    cd ../assets/
-                    rm index.css* index.js
+                run: rm out/assets/index.css out/assets/index.js
 
             -   name: Create release zip
                 run: |

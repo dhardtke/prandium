@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "esnext",
         "module": "preserve",
+        "moduleDetection": "force",
         "moduleResolution": "bundler",
         "lib": ["dom", "dom.iterable", "esnext"],
         "types": ["bun"],
@@ -19,7 +20,7 @@
     "exclude": [
         "node_modules",
         "out",
-        "dev/**",
-        "src/data/parse/ingredient/parser.js"
+        "src/data/parse/ingredient/parser.js",
+        "dev/generate-favicons.js"
     ]
 }

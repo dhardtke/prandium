@@ -1,26 +1,13 @@
-import { callAndWait, isWindows } from "./internal/util.ts";
+import { callAndWait } from "./internal/util.ts";
 
-await callAndWait(
-    undefined,
-    `peggy${isWindows() ? ".cmd" : ""}`,
-    "--format",
-    "es",
-    "--output",
-    "src/data/parse/ingredient/parser.js",
-    "src/data/parse/ingredient/parser.pegjs",
-).run();
+const Grammar = "src/data/parse/ingredient/parser.pegjs";
+const Parser = "src/data/parse/ingredient/parser.js";
 
-await callAndWait(
-    undefined,
-    `terser${isWindows() ? ".cmd" : ""}`,
-    "-c",
-    "-m",
-    "-o",
-    "src/data/parse/ingredient/parser.js",
-    "--",
-    "src/data/parse/ingredient/parser.js",
-).run();
+// "bun x" runs the locally installed binaries of peggy and terser
+await callAndWait(undefined, process.execPath, "x", "peggy", "--format", "es", "--output", Parser, Grammar).run();
 
-const text = await Deno.readTextFile("src/data/parse/ingredient/parser.js");
-const preamble = `// deno-lint-ignore-file\n// deno-fmt-ignore-file`;
-await Deno.writeTextFile("src/data/parse/ingredient/parser.js", `${preamble}\n${text}`);
+await callAndWait(undefined, process.execPath, "x", "terser", "-c", "-m", "-o", Parser, "--", Parser).run();
+
+// the generated file is excluded from formatting in bunfig.toml
+const preamble = `/* oxlint-disable */`;
+await Bun.write(Parser, `${preamble}\n${await Bun.file(Parser).text()}`);

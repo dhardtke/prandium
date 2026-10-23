@@ -37,7 +37,6 @@
     },
     "ignorePatterns": [
         "src/data/parse/ingredient/parser.js",
-        "dev/generate-favicons.js",
-        "dev/**"
+        "dev/generate-favicons.js"
     ]
 }

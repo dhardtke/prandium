@@ -2,6 +2,7 @@ import { Database } from "../src/data/db.ts";
 import { Recipe, Review } from "../src/data/model/recipe.ts";
 import { Tag } from "../src/data/model/tag.ts";
 import { RecipeService } from "../src/data/service/recipe.service.ts";
+import { DefaultSettings } from "../src/data/settings.ts";
 import { TagService } from "../src/data/service/tag.service.ts";
 import { buildDbPath } from "../src/data/util/build-db-path.ts";
 import { downloadThumbnail } from "../src/data/util/thumbnails.ts";
@@ -14,6 +15,7 @@ const recipeService = new RecipeService(db, tagService);
 
 const thumbnail = await downloadThumbnail(
     configDir,
+    DefaultSettings.userAgent,
     "https://img.chefkoch-cdn.de/rezepte/2788721431008084/bilder/949592/crop-960x540/blaetterteig-mit-gyrosfuellung-und-feta-kaese.jpg",
 );
 
@@ -41,7 +43,7 @@ for (let i = 0; i < 50; i++) {
             ingredients: [
                 "400 g Schweineschnitzel",
                 "1 EL \u00d6l",
-                "1 Zehe\/n Knoblauch",
+                "1 Zehe/n Knoblauch",
                 "etwas Gyrosgew\u00fcrz",
                 "\u00bd TL Thymian , getrockneter",
                 "etwas Salz",

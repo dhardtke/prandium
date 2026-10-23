@@ -1,5 +1,4 @@
-// deno-lint-ignore-file
-// TODO execute using Deno
+// TODO add the "favicons" package and execute using Bun
 // noinspection NpmUsedModulesInstalled
 const favicons = require("favicons");
 const fs = require("fs");
