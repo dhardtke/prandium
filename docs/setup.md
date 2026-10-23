@@ -30,15 +30,15 @@ semodule -i prandium.pp
 (This is the result of executing e.g.
 ```shell
 audit2allow -M prandium << _EOF_
-type=AVC msg=audit(1616334281.833:2075): avc:  denied  { execute } for  pid=11871 comm="(deno)" name="deno" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
-type=AVC msg=audit(1616334850.629:2079): avc:  denied  { read open } for  pid=11926 comm="(deno)" path="/home/prandium/.deno/bin/deno" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
-type=AVC msg=audit(1616334918.697:2083): avc:  denied  { execute_no_trans } for  pid=11960 comm="(deno)" path="/home/prandium/.deno/bin/deno" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
-type=AVC msg=audit(1616335218.868:2087): avc:  denied  { map } for  pid=11996 comm="deno" path="/home/prandium/.deno/bin/deno" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
-type=AVC msg=audit(1616335278.409:2092): avc:  denied  { execmem } for  pid=12041 comm="deno" scontext=system_u:system_r:init_t:s0 tcontext=system_u:system_r:init_t:s0 tclass=process permissive=0
-type=AVC msg=audit(1616337025.899:2720): avc:  denied  { name_connect } for  pid=12536 comm="deno" dest=443 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:http_port_t:s0 tclass=tcp_socket permissive=0
-type=AVC msg=audit(1616337111.010:2726): avc:  denied  { create } for  pid=12536 comm="tokio-runtime-w" name="haehnchengeschnetzeltes.jpg-1.jpg" scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
-type=AVC msg=audit(1616337423.744:2732): avc:  denied  { write open } for  pid=12536 comm="tokio-runtime-w" path="/home/prandium/.config/prandium/thumbnails/haehnchengeschnetzeltes.jpg-3.jpg" dev="dm-1" ino=1384120849 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
-type=AVC msg=audit(1616337423.744:2732): avc:  denied  { setattr } for  pid=50379 comm="tokio-runtime-w" name="auflauf.jpg" dev="dm-1" ino=125832134 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616334281.833:2075): avc:  denied  { execute } for  pid=11871 comm="(bun)" name="bun" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616334850.629:2079): avc:  denied  { read open } for  pid=11926 comm="(bun)" path="/home/prandium/.bun/bin/bun" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616334918.697:2083): avc:  denied  { execute_no_trans } for  pid=11960 comm="(bun)" path="/home/prandium/.bun/bin/bun" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616335218.868:2087): avc:  denied  { map } for  pid=11996 comm="bun" path="/home/prandium/.bun/bin/bun" dev="dm-1" ino=654320288 scontext=system_u:system_r:init_t:s0 tcontext=unconfined_u:object_r:user_home_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616335278.409:2092): avc:  denied  { execmem } for  pid=12041 comm="bun" scontext=system_u:system_r:init_t:s0 tcontext=system_u:system_r:init_t:s0 tclass=process permissive=0
+type=AVC msg=audit(1616337025.899:2720): avc:  denied  { name_connect } for  pid=12536 comm="bun" dest=443 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:http_port_t:s0 tclass=tcp_socket permissive=0
+type=AVC msg=audit(1616337111.010:2726): avc:  denied  { create } for  pid=12536 comm="bun" name="haehnchengeschnetzeltes.jpg-1.jpg" scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616337423.744:2732): avc:  denied  { write open } for  pid=12536 comm="bun" path="/home/prandium/.config/prandium/thumbnails/haehnchengeschnetzeltes.jpg-3.jpg" dev="dm-1" ino=1384120849 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
+type=AVC msg=audit(1616337423.744:2732): avc:  denied  { setattr } for  pid=50379 comm="bun" name="auflauf.jpg" dev="dm-1" ino=125832134 scontext=system_u:system_r:init_t:s0 tcontext=system_u:object_r:httpd_sys_content_t:s0 tclass=file permissive=0
 _EOF_
 ```
 with the error messages from `/var/log/audit/audit.log`)
@@ -65,7 +65,7 @@ After=network.target
 Type=simple
 User=prandium
 WorkingDirectory=/home/prandium
-ExecStart=/home/prandium/.deno/bin/deno run --allow-net --allow-env --config=/home/prandium/repository/deno.jsonc --lock=/home/prandium/repository/deno.lock --allow-read=/home/prandium/.config/prandium,/home/prandium/repository,/tmp --allow-write=/home/prandium/.config/prandium,/tmp --unstable /home/prandium/repository/src/main.ts
+ExecStart=/home/prandium/.bun/bin/bun /home/prandium/repository/out/server.js
 Restart=on-failure
 RestartSec=5
 

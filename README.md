@@ -62,12 +62,11 @@ Please see [Development](docs/development.md) for information on how to set up y
 
 ## Acknowledgements
 
-* [Deno: A secure runtime for JavaScript and TypeScript](https://deno.land/)
+* [Bun: A fast all-in-one JavaScript runtime](https://bun.com/)
 * [TypeScript](https://www.typescriptlang.org/)
-* [tsyringe](https://github.com/microsoft/tsyringe)
-* [ESBuild](https://esbuild.github.io/)
-* [Oak](https://oakserver.github.io/oak/)
-* [deno-sqlite](https://github.com/dyedgreen/deno-sqlite)
+* [Preact](https://preactjs.com/)
+* [needle-di](https://github.com/needle-di/needle-di)
+* [Oxlint](https://oxc.rs/docs/guide/usage/linter)
 * [Peggy](https://github.com/peggyjs/peggy)
 * [IntelliJ](https://www.jetbrains.com/idea/)
 * [Nextcloud Cookbook](https://github.com/nextcloud/cookbook)
