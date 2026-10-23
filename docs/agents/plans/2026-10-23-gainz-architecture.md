@@ -735,7 +735,7 @@ Produce the deployable file, the seed and screenshot scripts, the deploy pipelin
 
 **Automated Verification**:
 
-- [ ] `bun run fmt:check && bun run lint && bun run typecheck && bun test --parallel` pass.
+- [x] `bun run fmt:check && bun run lint && bun run typecheck && bun test --parallel` pass.
 - [x] `bun run build` writes `dist/prandium.js`, `.map` and `bun-version`; `src/scripts/build.test.ts` starts it with a temp
       `PRANDIUM_CONFIG_DIR` and gets `/api/health`, `/`, `/main.ts` (bundle) and `/vendor/oat.css`.
 - [ ] The CI `check` job is green on GitHub for the phase-7 push.
