@@ -65,8 +65,8 @@ is skipped unless the push changed something the build reads: `src/` other than 
 `tsconfig.json` or `.bun-version`. A push whose previous head is unknown, such as a force push, always deploys. Pull requests get the
 `check` job only. Actions are pinned to commit SHAs, and CI's Bun comes from `.bun-version`.
 
-The runner's user, `gh-runner`, may run only `/usr/local/bin/prandium-deploy` as `prandium` (`deploy/gh-runner.sudoers`), and nothing as
-root. Prandium runs as a systemd user service of `prandium` (`deploy/prandium.service`), kept running by lingering.
+The runner's user, `prandium-gh-runner`, may run only `/usr/local/bin/prandium-deploy` as `prandium` (`deploy/prandium-gh-runner.sudoers`),
+and nothing as root. Prandium runs as a systemd user service of `prandium` (`deploy/prandium.service`), kept running by lingering.
 
 `deploy/prandium-deploy`:
 
@@ -107,7 +107,7 @@ sudo install -o prandium -g prandium -m 0644 deploy/prandium.service /home/prand
 sudo systemctl --user -M prandium@ daemon-reload
 sudo systemctl --user -M prandium@ enable prandium
 sudo install -m 0755 deploy/prandium-deploy /usr/local/bin/prandium-deploy
-sudo install -m 0440 deploy/gh-runner.sudoers /etc/sudoers.d/gh-runner
+sudo install -m 0440 deploy/prandium-gh-runner.sudoers /etc/sudoers.d/prandium-gh-runner
 ```
 
 Stop and disable the old system unit (`/lib/systemd/system/prandium.service`, which ran `out/server.js` from a checkout) before the first
@@ -119,14 +119,14 @@ and `restart prandium`.
 Then the runner, with a token from _Settings → Actions → Runners → New self-hosted runner_:
 
 ```sh
-sudo useradd --system --create-home --home-dir /var/lib/gh-runner --shell /sbin/nologin gh-runner
-sudo -u gh-runner mkdir /var/lib/gh-runner/actions-runner
-cd /var/lib/gh-runner/actions-runner
-sudo -u gh-runner sh -c 'curl -fsSL <runner tarball URL> | tar -xz'
+sudo useradd --system --create-home --home-dir /var/lib/prandium-gh-runner --shell /sbin/nologin prandium-gh-runner
+sudo -u prandium-gh-runner mkdir /var/lib/prandium-gh-runner/actions-runner
+cd /var/lib/prandium-gh-runner/actions-runner
+sudo -u prandium-gh-runner sh -c 'curl -fsSL <runner tarball URL> | tar -xz'
 sudo ./bin/installdependencies.sh
-sudo -u gh-runner ./config.sh --unattended --url https://github.com/dhardtke/prandium --token <token> \
+sudo -u prandium-gh-runner ./config.sh --unattended --url https://github.com/dhardtke/prandium --token <token> \
   --labels prandium-prod --name "$(hostname)"
-sudo ./svc.sh install gh-runner && sudo ./svc.sh start
+sudo ./svc.sh install prandium-gh-runner && sudo ./svc.sh start
 ```
 
 Finally, create the `production` environment (_Settings → Environments_) and restrict it to `main`.
@@ -138,8 +138,8 @@ Variables_). Until it is set, the `deploy` job is skipped, so a push without a r
 If the runner service fails with `203/EXEC`, SELinux is blocking `runsvc.sh`:
 
 ```sh
-sudo semanage fcontext -a -t bin_t '/var/lib/gh-runner/actions-runner/runsvc\.sh'
-sudo restorecon -v /var/lib/gh-runner/actions-runner/runsvc.sh
+sudo semanage fcontext -a -t bin_t '/var/lib/prandium-gh-runner/actions-runner/runsvc\.sh'
+sudo restorecon -v /var/lib/prandium-gh-runner/actions-runner/runsvc.sh
 ```
 
 The old setup labeled `/home/prandium/.config/prandium/thumbnails` `httpd_sys_content_t` for nginx and needed a policy module that let
