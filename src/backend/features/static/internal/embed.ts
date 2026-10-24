@@ -68,7 +68,7 @@ export async function embedWebRoot(): Promise<EmbeddedWeb> {
       continue;
     }
 
-    // Binary goes in as base64: `JSON.stringify` cannot carry raw bytes into prandium.js.
+    // Binary goes in as base64: `JSON.stringify` cannot carry raw bytes into cena.js.
     const file = Bun.file(resolve(FRONTEND_DIR, entry));
     pages[url] = isText(file.type) ? { body: await file.text(), type: file.type } : { body: (await file.bytes()).toBase64(), type: file.type, base64: true };
   }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="prandium.db" uuid="24303644-632b-4b5c-a363-85cebd372292">
+    <data-source source="LOCAL" name="cena.db" uuid="24303644-632b-4b5c-a363-85cebd372292">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/data/prandium.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/data/cena.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

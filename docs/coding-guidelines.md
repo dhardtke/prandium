@@ -18,7 +18,7 @@ The `bun` pull request also moves the exact `engines.bun`, and the server follow
 TypeScript and JavaScript use single quotes, CSS double; `bun run fmt` enforces both.
 
 A member that overrides one from its base class is marked `override`. `noImplicitOverride` makes
-`bun run typecheck` enforce it both ways, so a renamed or misspelled `PrElement` hook fails the
+`bun run typecheck` enforce it both ways, so a renamed or misspelled `CeElement` hook fails the
 check instead of silently never running.
 
 Private class members use `#` names, never TypeScript's `private` modifier. A `#` name is private

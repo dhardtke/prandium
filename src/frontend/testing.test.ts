@@ -83,17 +83,17 @@ describe('DOM helpers', () => {
   });
 
   test('mount() sets the attributes before connectedCallback sees them, and appends to the body', () => {
-    if (!customElements.get('pr-test-mount')) {
-      class PrTestMount extends HTMLElement {
+    if (!customElements.get('ce-test-mount')) {
+      class CeTestMount extends HTMLElement {
         labelOnConnect: string | null = null;
 
         connectedCallback(): void {
           this.labelOnConnect = this.getAttribute('label');
         }
       }
-      customElements.define('pr-test-mount', PrTestMount);
+      customElements.define('ce-test-mount', CeTestMount);
     }
-    const element = mount<HTMLElement & { labelOnConnect: string | null }>('pr-test-mount', { label: 'Squat' });
+    const element = mount<HTMLElement & { labelOnConnect: string | null }>('ce-test-mount', { label: 'Squat' });
     expect(element.labelOnConnect).toBe('Squat');
     expect(element.parentElement).toBe(document.body);
   });

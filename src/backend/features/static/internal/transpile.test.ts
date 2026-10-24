@@ -18,7 +18,7 @@ describe('typescript modules', () => {
   });
 
   test('leaves import specifiers alone, so a URL names a real file', async () => {
-    const body = await (await api('/ui/pagination/pr-pagination.component.ts')).text();
+    const body = await (await api('/ui/pagination/ce-pagination.component.ts')).text();
     expect(body).toContain('from "../i18n.ts"');
   });
 
@@ -29,18 +29,18 @@ describe('typescript modules', () => {
     const res = await api('/main.ts');
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toContain('text/javascript');
-    expect(await res.text()).toContain('./app/pr-app.component.ts');
+    expect(await res.text()).toContain('./app/ce-app.component.ts');
   });
 
   test('strips type-only imports, so src/shared/ is never fetched at runtime', async () => {
-    const body = await (await api('/features/auth/pr-login.component.ts')).text();
+    const body = await (await api('/features/auth/ce-login.component.ts')).text();
     // `src/shared/` is outside the web root: a surviving specifier would 404.
     expect(body).not.toContain('shared/dto');
   });
 
   test('keeps the load-bearing top-level await that pairs a module with its CSS', async () => {
-    const body = await (await api('/ui/pagination/pr-pagination.component.ts')).text();
-    expect(body).toContain('await define("pr-pagination"');
+    const body = await (await api('/ui/pagination/ce-pagination.component.ts')).text();
+    expect(body).toContain('await define("ce-pagination"');
   });
 
   test('reports a module that will not parse', async () => {

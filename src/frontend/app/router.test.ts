@@ -13,7 +13,7 @@ beforeEach(() => {
   pushes = 0;
   popStates = 0;
   events = new EventTarget();
-  const fakeLocation = { pathname: '/', search: '', origin: 'http://prandium.test' };
+  const fakeLocation = { pathname: '/', search: '', origin: 'http://cena.test' };
   stub('location', fakeLocation);
   stub('history', {
     pushState(_state: unknown, _title: string, url: string): void {
@@ -144,7 +144,7 @@ describe('navigate', () => {
 });
 
 describe('linkPath', () => {
-  const origin = 'http://prandium.test';
+  const origin = 'http://cena.test';
   const click: LinkClick = {
     button: 0,
     ctrlKey: false,

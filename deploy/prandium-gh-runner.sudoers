@@ -1,1 +1,0 @@
-prandium-gh-runner ALL=(prandium) NOPASSWD: /usr/local/bin/prandium-deploy

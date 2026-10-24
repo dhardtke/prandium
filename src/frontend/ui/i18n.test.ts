@@ -80,14 +80,14 @@ describe('at load', () => {
 
   test('a stored choice wins over the browser', async () => {
     browser('de-DE');
-    stored.set('prandium:language', 'en');
+    stored.set('cena:language', 'en');
 
     expect((await load()).language().meta.id).toBe('en');
   });
 
   test('an unknown stored value counts as no choice', async () => {
     browser('de');
-    stored.set('prandium:language', 'fr');
+    stored.set('cena:language', 'fr');
 
     expect((await load()).language().meta.id).toBe('de');
   });
@@ -111,7 +111,7 @@ describe('setLanguage', () => {
     i18n.setLanguage('de');
 
     expect(i18n.t().recipes).toBe('Rezepte');
-    expect(stored.get('prandium:language')).toBe('de');
+    expect(stored.get('cena:language')).toBe('de');
     expect(htmlLang).toBe('de');
     expect(heard).toBe(1);
   });
@@ -131,7 +131,7 @@ describe('setLanguage', () => {
 
     i18n.setLanguage('en');
 
-    expect(stored.has('prandium:language')).toBe(false);
+    expect(stored.has('cena:language')).toBe(false);
     expect(heard).toBe(0);
   });
 

@@ -203,7 +203,7 @@
       }
     },
     {
-      "files": ["src/frontend/features/**/pr-*.component.ts"],
+      "files": ["src/frontend/features/**/ce-*.component.ts"],
       "rules": {
         "no-restricted-imports": [
           "error",
@@ -251,7 +251,7 @@
       }
     },
     {
-      "files": ["src/frontend/app/**/pr-*.component.ts"],
+      "files": ["src/frontend/app/**/ce-*.component.ts"],
       "rules": {
         "no-restricted-imports": [
           "error",
@@ -283,7 +283,7 @@
       }
     },
     {
-      "files": ["src/frontend/ui/**/pr-*.component.ts"],
+      "files": ["src/frontend/ui/**/ce-*.component.ts"],
       "rules": {
         "no-restricted-imports": [
           "error",

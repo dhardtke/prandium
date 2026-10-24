@@ -30,15 +30,15 @@ describe('single-file build', () => {
   let stdout = '';
 
   beforeAll(async () => {
-    dir = mkdtempSync(join(tmpdir(), 'prandium-build-'));
+    dir = mkdtempSync(join(tmpdir(), 'cena-build-'));
     ({ embedded } = await build(join(dir, 'out')));
 
     const deploy = join(dir, 'deploy');
     mkdirSync(deploy);
-    copyFileSync(join(dir, 'out', 'prandium.js'), join(deploy, 'prandium.js'));
+    copyFileSync(join(dir, 'out', 'cena.js'), join(deploy, 'cena.js'));
 
     // Empty counts as unset, so the defaults apply even when the developer's shell sets these.
-    proc = spawnBuilt('prandium.js', deploy, { PRANDIUM_DB: '', PRANDIUM_THUMBNAIL_DIR: '', PRANDIUM_DEV: '1' });
+    proc = spawnBuilt('cena.js', deploy, { CENA_DB: '', CENA_THUMBNAIL_DIR: '', CENA_DEV: '1' });
     const started = await waitForUrl(proc.stdout, () => new Response(proc?.stderr).text());
     origin = new URL(started.url).origin;
     stdout = started.stdout;
@@ -50,7 +50,7 @@ describe('single-file build', () => {
     return fetch(`${origin}${path}`, init);
   }
 
-  test('serves the index page without the hot-reload client, whatever PRANDIUM_DEV says', async () => {
+  test('serves the index page without the hot-reload client, whatever CENA_DEV says', async () => {
     for (const path of ['/', '/recipes/3']) {
       const res = await get(path);
       expect(res.status).toBe(200);
@@ -64,7 +64,7 @@ describe('single-file build', () => {
   test('stamps the index page with the commit, the build time in UTC and any workflow run ID', async () => {
     const head = Bun.spawnSync(['git', 'rev-parse', 'HEAD']).stdout.toString().trim();
     const text = await (await get('/')).text();
-    const stamp = /^<!doctype html>\r?\n<!-- prandium ([0-9a-f]{40})(?:-dirty)?, built (\S+Z)(?:, run (\d+))? -->\r?\n/.exec(text);
+    const stamp = /^<!doctype html>\r?\n<!-- cena ([0-9a-f]{40})(?:-dirty)?, built (\S+Z)(?:, run (\d+))? -->\r?\n/.exec(text);
     expect(stamp?.[1]).toBe(head);
     expect(Math.abs(Date.now() - Date.parse(stamp?.[2] ?? ''))).toBeLessThan(120_000);
     expect(stamp?.[3]).toBe(Bun.env.GITHUB_RUN_ID);
@@ -82,12 +82,12 @@ describe('single-file build', () => {
     const bundle = await main.text();
     expect(bundle).toBe(embedded.pages['/main.ts']?.body ?? '');
     expect(bundle).toContain('customElements.define');
-    expect(bundle).toContain('"/features/recipes/internal/pr-rating.component.ts"');
+    expect(bundle).toContain('"/features/recipes/internal/ce-rating.component.ts"');
     expect(bundle).not.toContain(': string');
-    expect(bundle).not.toContain('PrDashboardComponent');
+    expect(bundle).not.toContain('CeDashboardComponent');
     expect(bundle).not.toContain('import.meta');
 
-    for (const url of ['/app/pr-app.component.ts', '/ui/format.ts', '/ui/inline-styles.ts', '/ui/chart/pr-chart.component.ts']) {
+    for (const url of ['/app/ce-app.component.ts', '/ui/format.ts', '/ui/inline-styles.ts', '/ui/chart/ce-chart.component.ts']) {
       expect({ url, status: (await get(url)).status }).toEqual({ url, status: 404 });
     }
   });
@@ -119,7 +119,7 @@ describe('single-file build', () => {
 
   test('serves no stylesheet or Oat file that the bundle and main.css already carry', async () => {
     const urls = ['/ui/app.css', '/ui/shared.css', '/vendor/oat.css', '/vendor/oat.js'];
-    for await (const entry of new Bun.Glob('**/pr-*.component.ts').scan({ cwd: FRONTEND })) {
+    for await (const entry of new Bun.Glob('**/ce-*.component.ts').scan({ cwd: FRONTEND })) {
       urls.push(`/${entry.replaceAll('\\', '/').replace(/\.ts$/, '.css')}`);
     }
     expect(urls.length).toBeGreaterThan(4);
@@ -146,7 +146,7 @@ describe('single-file build', () => {
       '/dev/hot.ts',
       '/testing.ts',
       '/ui/html.test.ts',
-      '/ui/pagination/pr-pagination.component.test.ts',
+      '/ui/pagination/ce-pagination.component.test.ts',
       '/features/recipes/recipes.fixtures.ts',
     ]) {
       expect({ url, status: (await get(url)).status }).toEqual({ url, status: 404 });
@@ -160,10 +160,10 @@ describe('single-file build', () => {
     }
   });
 
-  test('ran the embedded migrations into data/prandium.db by default, beside data/thumbnails/', async () => {
+  test('ran the embedded migrations into data/cena.db by default, beside data/thumbnails/', async () => {
     expect(await body<unknown>(await get('/api/health'))).toMatchObject({ status: 'ok' });
     expect((await get('/api/recipes')).status).toBe(200);
-    expect(existsSync(join(dir, 'deploy', 'data', 'prandium.db'))).toBe(true);
+    expect(existsSync(join(dir, 'deploy', 'data', 'cena.db'))).toBe(true);
     expect(existsSync(join(dir, 'deploy', 'data', 'thumbnails'))).toBe(true);
   });
 
@@ -178,8 +178,8 @@ describe('single-file build', () => {
   });
 
   test('links a source map that points back at the sources', async () => {
-    expect(readFileSync(join(dir, 'out', 'prandium.js'), 'utf8')).toContain('//# sourceMappingURL=prandium.js.map');
-    const map = await body<{ sources: string[] }>(new Response(Bun.file(join(dir, 'out', 'prandium.js.map'))));
+    expect(readFileSync(join(dir, 'out', 'cena.js'), 'utf8')).toContain('//# sourceMappingURL=cena.js.map');
+    const map = await body<{ sources: string[] }>(new Response(Bun.file(join(dir, 'out', 'cena.js.map'))));
     expect(map.sources.some((source) => source.replaceAll('\\', '/').endsWith('src/backend/main.ts'))).toBe(true);
   });
 
@@ -188,9 +188,9 @@ describe('single-file build', () => {
     const res = await get('/main.ts.map');
     expect(res.headers.get('content-type')).toStartWith('application/json');
     const map = await body<{ sources: string[]; sourcesContent: string[] }>(res);
-    const index = map.sources.findIndex((source) => source.endsWith('src/frontend/features/recipes/pr-recipe-list.component.ts'));
+    const index = map.sources.findIndex((source) => source.endsWith('src/frontend/features/recipes/ce-recipe-list.component.ts'));
     expect(index).not.toBe(-1);
-    expect(map.sourcesContent[index]).toContain('class PrRecipeListComponent');
+    expect(map.sourcesContent[index]).toContain('class CeRecipeListComponent');
   });
 
   test('names the Bun that built it, for the server to run it with', () => {
@@ -198,19 +198,19 @@ describe('single-file build', () => {
   });
 });
 
-describe('single-file build with PRANDIUM_PASSWORD_HASH set', () => {
+describe('single-file build with CENA_PASSWORD_HASH set', () => {
   let dir = '';
   let proc: Server | undefined;
   let origin = '';
 
   beforeAll(async () => {
-    dir = mkdtempSync(join(tmpdir(), 'prandium-build-auth-'));
+    dir = mkdtempSync(join(tmpdir(), 'cena-build-auth-'));
     await build(join(dir, 'out'));
     const hash = await Bun.password.hash('right', { algorithm: 'bcrypt', cost: 4 });
-    proc = spawnBuilt(join(dir, 'out', 'prandium.js'), dir, {
-      PRANDIUM_DB: join(dir, 'state', 'prandium.db'),
-      PRANDIUM_THUMBNAIL_DIR: join(dir, 'state', 'thumbnails'),
-      PRANDIUM_PASSWORD_HASH: hash,
+    proc = spawnBuilt(join(dir, 'out', 'cena.js'), dir, {
+      CENA_DB: join(dir, 'state', 'cena.db'),
+      CENA_THUMBNAIL_DIR: join(dir, 'state', 'thumbnails'),
+      CENA_PASSWORD_HASH: hash,
     });
     origin = new URL((await waitForUrl(proc.stdout, () => new Response(proc?.stderr).text())).url).origin;
   }, 60_000);

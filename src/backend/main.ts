@@ -7,8 +7,8 @@ import { startServer } from './http/server.ts';
 import { log } from './shared/log.ts';
 
 const RETIRED_SETTINGS = [
-  'importConcurrency → PRANDIUM_IMPORT_CONCURRENCY',
-  'userAgent → PRANDIUM_USER_AGENT',
+  'importConcurrency → CENA_IMPORT_CONCURRENCY',
+  'userAgent → CENA_USER_AGENT',
   'pageSize → fixed at 24',
   'addHistoryEntryWhenRating → always on',
 ].join(', ');
@@ -47,10 +47,10 @@ function main(): void {
       void shutdown('SIGTERM');
     });
 
-    log.info('server', `prandium is running on ${server.url}`);
+    log.info('server', `cena is running on ${server.url}`);
     log.info('server', `database: ${config.databasePath}`);
     log.info('server', `thumbnails: ${config.thumbnailsDir}`);
-    log.info('server', config.passwordHash === null ? 'auth: off (PRANDIUM_PASSWORD_HASH is not set)' : 'auth: on');
+    log.info('server', config.passwordHash === null ? 'auth: off (CENA_PASSWORD_HASH is not set)' : 'auth: on');
     if (DevFacade.enabled()) {
       log.info('server', 'hot reload: on');
     }

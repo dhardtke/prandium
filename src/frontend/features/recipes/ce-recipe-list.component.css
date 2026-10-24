@@ -1,0 +1,30 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  & .search {
+    flex: 2 1 16rem;
+    margin: 0;
+  }
+
+  & .sort {
+    flex: 1 1 14rem;
+    flex-wrap: nowrap;
+
+    & select {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
+}
+
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: var(--space-4);
+}
+
+ce-pagination {
+  justify-self: center;
+}

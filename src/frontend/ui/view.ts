@@ -1,5 +1,5 @@
 import { ApiError, errorMessage } from '../http/errors.ts';
-import { PrElement } from './base.ts';
+import { CeElement } from './base.ts';
 import { html } from './html.ts';
 import type { RawHtml } from './html.ts';
 import { t } from './i18n.ts';
@@ -9,7 +9,7 @@ export const PAGE_TITLE_EVENT = 'page-title';
 
 export type ViewState<Data> = { status: 'loading' } | { status: 'ready'; data: Data } | { status: 'error'; message: string };
 
-export abstract class PrView<Data> extends PrElement {
+export abstract class CeView<Data> extends CeElement {
   ready: Promise<void> = Promise.resolve();
 
   #state: ViewState<Data> = { status: 'loading' };
@@ -52,7 +52,7 @@ export abstract class PrView<Data> extends PrElement {
     this.ready = this.reload();
   }
 
-  // Never rejects: pr-app awaits `ready` before swapping views in.
+  // Never rejects: ce-app awaits `ready` before swapping views in.
   async reload(): Promise<void> {
     let data: Data;
     try {

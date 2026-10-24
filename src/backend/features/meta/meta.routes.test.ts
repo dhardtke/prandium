@@ -8,7 +8,7 @@ describe('health and routing', () => {
   test('health endpoint responds', async () => {
     const res = await api('/api/health');
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ status: 'ok', app: 'prandium', auth: false });
+    expect(await res.json()).toEqual({ status: 'ok', app: 'cena', auth: false });
   });
 
   test('unknown api endpoint returns a JSON 404', async () => {

@@ -16,7 +16,7 @@ export class DevFacade {
 
   /** Read per call so tests can flip it; a built file has no source tree, so always off. */
   static enabled(): boolean {
-    return EMBEDDED === null && process.env.PRANDIUM_DEV === '1';
+    return EMBEDDED === null && process.env.CENA_DEV === '1';
   }
 
   upgrade(req: Request, server: Server<undefined>): Response | undefined {

@@ -2,7 +2,7 @@ import { expect, test } from 'bun:test';
 import { APP_TITLE, tabTitle } from './tab-title.ts';
 
 test('names a page before the app', () => {
-  expect(tabTitle('Recipes')).toBe('Recipes · Prandium');
+  expect(tabTitle('Recipes')).toBe('Recipes · Cena');
 });
 
 test('falls back to the app title for no name', () => {

@@ -12,7 +12,7 @@ async function request<T>(method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', p
       body: body === undefined ? undefined : blob ? body : JSON.stringify(body),
     });
   } catch (cause) {
-    throw new ApiError('Could not reach the prandium server', 0, cause);
+    throw new ApiError('Could not reach the cena server', 0, cause);
   }
 
   const text = await response.text();

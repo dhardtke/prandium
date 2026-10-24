@@ -35,7 +35,7 @@ async function inlineStyles(): Promise<Record<string, string>> {
 }
 
 const frontend: BunPlugin = {
-  name: 'prandium-frontend',
+  name: 'cena-frontend',
   setup(build) {
     build.onLoad({ filter: /\.ts$/ }, async ({ path }) => {
       if (resolve(path) === INLINE_STYLES) {

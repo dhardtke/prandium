@@ -30,7 +30,7 @@ function stamp(web: EmbeddedWeb, builtAt: Date): void {
   }
   const runId = Bun.env.GITHUB_RUN_ID;
   const run = runId === undefined ? '' : `, run ${runId}`;
-  const comment = `<!-- prandium ${commit()}, built ${builtAt.toISOString()}${run} -->`;
+  const comment = `<!-- cena ${commit()}, built ${builtAt.toISOString()}${run} -->`;
   const doctype = /^<!doctype html>\r?\n/i.exec(index.body)?.[0];
   if (doctype === undefined) {
     throw new Error('src/frontend/index.html must start with <!doctype html>');
@@ -46,13 +46,13 @@ export async function build(outdir: string): Promise<BuildResult> {
     entrypoints: [resolve(SRC, 'backend/main.ts')],
     target: 'bun',
     outdir,
-    naming: 'prandium.js',
+    naming: 'cena.js',
     minify: true,
     sourcemap: 'linked',
     files: { [resolve(SRC, 'backend/shared/embedded.ts')]: `export const EMBEDDED = ${JSON.stringify(embedded)};` },
   });
   await Bun.write(resolve(outdir, 'bun-version'), `${Bun.version}\n`);
-  const outfile = resolve(outdir, 'prandium.js');
+  const outfile = resolve(outdir, 'cena.js');
   return { outfile, bytes: Bun.file(outfile).size, embedded };
 }
 

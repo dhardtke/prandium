@@ -2,20 +2,20 @@ import { beforeAll, expect, test } from 'bun:test';
 import { collect, mount, testId, text, useDom, useToasts } from '../testing.ts';
 import { ApiError } from '../http/errors.ts';
 import type { RawHtml } from './html.ts';
-import type { PrView } from './view.ts';
+import type { CeView } from './view.ts';
 
 useDom();
 const toasts = useToasts();
 
 let pending: PromiseWithResolvers<string>;
 
-type TestView = PrView<string>;
+type TestView = CeView<string>;
 
 beforeAll(async () => {
-  const { PrView } = await import('./view.ts');
+  const { CeView } = await import('./view.ts');
   const { html } = await import('./html.ts');
-  if (!customElements.get('pr-test-view')) {
-    class PrTestView extends PrView<string> {
+  if (!customElements.get('ce-test-view')) {
+    class CeTestView extends CeView<string> {
       override get loadingText(): string {
         return 'Loading test…';
       }
@@ -32,13 +32,13 @@ beforeAll(async () => {
         return data;
       }
     }
-    customElements.define('pr-test-view', PrTestView);
+    customElements.define('ce-test-view', CeTestView);
   }
 });
 
 function mountView(attributes: Record<string, string> = {}): TestView {
   pending = Promise.withResolvers<string>();
-  return mount<TestView>('pr-test-view', attributes);
+  return mount<TestView>('ce-test-view', attributes);
 }
 
 test('renders its loading text while loading', () => {
@@ -132,5 +132,5 @@ test('numericAttribute() reads a numeric attribute', () => {
 });
 
 test('numericAttribute() throws naming the tag and attribute when it is missing', () => {
-  expect(() => mountView().numericAttribute('workout-id')).toThrow('pr-test-view needs a workout-id attribute');
+  expect(() => mountView().numericAttribute('workout-id')).toThrow('ce-test-view needs a workout-id attribute');
 });

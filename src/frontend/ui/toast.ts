@@ -20,7 +20,7 @@ export function toast(message: string, kind: ToastKind = 'info'): void {
 }
 
 export function toastError(error: unknown): void {
-  // pr-app sends the user to the login page instead.
+  // ce-app sends the user to the login page instead.
   if (error instanceof ApiError && error.status === 401) {
     return;
   }

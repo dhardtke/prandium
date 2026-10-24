@@ -8,10 +8,10 @@ const toasts = useToasts();
 
 beforeAll(async () => {
   await Promise.all([
-    import('./pr-recipe-list.component.ts'),
-    import('./pr-recipe-detail.component.ts'),
-    import('./pr-recipe-edit.component.ts'),
-    import('./pr-recipe-import.component.ts'),
+    import('./ce-recipe-list.component.ts'),
+    import('./ce-recipe-detail.component.ts'),
+    import('./ce-recipe-edit.component.ts'),
+    import('./ce-recipe-import.component.ts'),
   ]);
 });
 
@@ -30,12 +30,12 @@ afterEach(() => {
   window.removeEventListener(UNAUTHORIZED_EVENT, count);
 });
 
-// pr-app answers the signal with /login?next=…, which pr-app.component.test.ts covers.
+// ce-app answers the signal with /login?next=…, which ce-app.component.test.ts covers.
 test.each([
-  ['the list', 'pr-recipe-list', {}],
-  ['the detail page', 'pr-recipe-detail', { 'recipe-id': '12' }],
-  ['the edit page', 'pr-recipe-edit', { 'recipe-id': '12' }],
-  ['the new-recipe page', 'pr-recipe-edit', {}],
+  ['the list', 'ce-recipe-list', {}],
+  ['the detail page', 'ce-recipe-detail', { 'recipe-id': '12' }],
+  ['the edit page', 'ce-recipe-edit', { 'recipe-id': '12' }],
+  ['the new-recipe page', 'ce-recipe-edit', {}],
 ])('%s sends a 401 to the login, without an error toast', async (_name, tag, attributes) => {
   mount(tag, attributes);
   await settle();
@@ -44,7 +44,7 @@ test.each([
 });
 
 test('the import page sends a 401 to the login, without an error toast', async () => {
-  const root = shadow(mount('pr-recipe-import'));
+  const root = shadow(mount('ce-recipe-import'));
   find<HTMLTextAreaElement>(root, testId('urls')).value = 'https://example.com/a';
   submit(find(root, testId('form')));
   await settle();

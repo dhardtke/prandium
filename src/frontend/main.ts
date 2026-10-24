@@ -1,1 +1,1 @@
-import './app/pr-app.component.ts';
+import './app/ce-app.component.ts';

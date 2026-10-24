@@ -3,13 +3,13 @@ import { changeFor } from './changes.ts';
 
 describe('changeFor', () => {
   test('a stylesheet swaps at its URL', () => {
-    expect(changeFor('features/recipes/internal/pr-rating.component.css')).toEqual({
-      swap: '/features/recipes/internal/pr-rating.component.css',
+    expect(changeFor('features/recipes/internal/ce-rating.component.css')).toEqual({
+      swap: '/features/recipes/internal/ce-rating.component.css',
     });
   });
 
   test('a Windows path is turned into a URL', () => {
-    expect(changeFor('ui\\pagination\\pr-pagination.component.css')).toEqual({ swap: '/ui/pagination/pr-pagination.component.css' });
+    expect(changeFor('ui\\pagination\\ce-pagination.component.css')).toEqual({ swap: '/ui/pagination/ce-pagination.component.css' });
   });
 
   test('a module and the index page reload', () => {
@@ -28,7 +28,7 @@ describe('changeFor', () => {
   });
 
   test('an unknown extension is ignored', () => {
-    expect(changeFor('ui\\pagination\\pr-pagination.component.css~')).toBeNull();
-    expect(changeFor('ui/pagination/.pr-pagination.component.css.swp')).toBeNull();
+    expect(changeFor('ui\\pagination\\ce-pagination.component.css~')).toBeNull();
+    expect(changeFor('ui/pagination/.ce-pagination.component.css.swp')).toBeNull();
   });
 });

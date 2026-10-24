@@ -29,7 +29,7 @@ async function apply(change: Change): Promise<void> {
     toastError(new Error(`Could not transpile ${change.reload}`));
     return;
   }
-  console.log(`prandium: reloading for ${change.reload}`);
+  console.log(`cena: reloading for ${change.reload}`);
   location.reload();
 }
 
@@ -38,11 +38,11 @@ async function swapCss(url: string): Promise<void> {
   const links = [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')].filter((link) => new URL(link.href).pathname === url);
   links.forEach(swapLink);
   if (!swapped && links.length === 0) {
-    console.log(`prandium: reloading for ${url}`);
+    console.log(`cena: reloading for ${url}`);
     location.reload();
     return;
   }
-  console.log(`prandium: swapped ${url}`);
+  console.log(`cena: swapped ${url}`);
 }
 
 // Reassigning a <link>'s href does not refetch it; the old one goes once the new one has loaded.
@@ -62,7 +62,7 @@ function connect(attempt: number): void {
 
   socket.addEventListener('open', () => {
     opened = true;
-    console.log('prandium: hot reload connected');
+    console.log('cena: hot reload connected');
   });
 
   socket.addEventListener('message', (event) => {

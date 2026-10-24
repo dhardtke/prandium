@@ -15,8 +15,8 @@ describe('the frontend bundle', () => {
   test("rewrites every import.meta.url to its module's own path", () => {
     // Not only `.url`: the rewrite is textual, so any `import.meta` left would be one it missed.
     expect(bundle).not.toContain('import.meta');
-    expect(bundle).toContain('"/app/pr-app.component.ts"');
-    expect(bundle).toContain('"/app/pr-header.component.ts"');
+    expect(bundle).toContain('"/app/ce-app.component.ts"');
+    expect(bundle).toContain('"/app/ce-header.component.ts"');
   });
 
   test('carries every component stylesheet and the base sheets', async () => {
@@ -24,7 +24,7 @@ describe('the frontend bundle', () => {
     for await (const entry of new Bun.Glob('**/*.component.css').scan({ cwd: FRONTEND_DIR })) {
       urls.push(`/${entry.replaceAll('\\', '/')}`);
     }
-    expect(urls).toContain('/ui/pagination/pr-pagination.component.css');
+    expect(urls).toContain('/ui/pagination/ce-pagination.component.css');
     for (const url of urls) {
       expect({ url, carried: bundle.includes(`"${url}"`) }).toEqual({ url, carried: true });
     }
@@ -33,7 +33,7 @@ describe('the frontend bundle', () => {
   test("carries Oat's script ahead of the shell", () => {
     const oat = bundle.indexOf('"ot-dropdown"');
     expect(oat).toBeGreaterThan(-1);
-    expect(oat).toBeLessThan(bundle.indexOf('"pr-app"'));
+    expect(oat).toBeLessThan(bundle.indexOf('"ce-app"'));
   });
 });
 

@@ -23,13 +23,13 @@ async function idle(): Promise<void> {
   throw new Error('the hot-reload watcher never went idle');
 }
 
-/** Not `useServer()`: PRANDIUM_DEV must be set before routes are built and must not leak. */
+/** Not `useServer()`: CENA_DEV must be set before routes are built and must not leak. */
 async function withDev(enabled: boolean, fn: (origin: string) => Promise<void>): Promise<void> {
-  const previous = process.env.PRANDIUM_DEV;
+  const previous = process.env.CENA_DEV;
   if (enabled) {
-    process.env.PRANDIUM_DEV = '1';
+    process.env.CENA_DEV = '1';
   } else {
-    delete process.env.PRANDIUM_DEV;
+    delete process.env.CENA_DEV;
   }
   const db = openDatabase(':memory:');
   const server = startServer(db, testConfig(dir()));
@@ -39,9 +39,9 @@ async function withDev(enabled: boolean, fn: (origin: string) => Promise<void>):
     await server.stop(true);
     db.close();
     if (previous === undefined) {
-      delete process.env.PRANDIUM_DEV;
+      delete process.env.CENA_DEV;
     } else {
-      process.env.PRANDIUM_DEV = previous;
+      process.env.CENA_DEV = previous;
     }
   }
 }

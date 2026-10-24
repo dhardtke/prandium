@@ -19,7 +19,7 @@ function versioned(href: string): string {
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion -- written by the server's page.ts
       importMap = (JSON.parse(script?.textContent ?? '{}') as { imports?: Record<string, string> }).imports ?? {};
     } catch (cause) {
-      console.error('prandium: could not read the import map', cause);
+      console.error('cena: could not read the import map', cause);
     }
   }
   return importMap[href] ?? href;
@@ -45,7 +45,7 @@ async function load(href: string, refill = false): Promise<void> {
     await sheet.replace(await response.text());
   } catch (cause) {
     // An unstyled component is easier to diagnose than a blank page.
-    console.error(`prandium: could not load stylesheet ${href}`, cause);
+    console.error(`cena: could not load stylesheet ${href}`, cause);
     await sheet.replace('');
   }
 }

@@ -1,8 +1,8 @@
 export type Theme = 'light' | 'dark';
 
 // Also in index.html's no-flash script.
-const STORAGE_KEY = 'prandium:theme';
-const EVENT = 'pr-theme-change';
+const STORAGE_KEY = 'cena:theme';
+const EVENT = 'ce-theme-change';
 
 export const THEMES: readonly Theme[] = ['light', 'dark'];
 

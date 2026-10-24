@@ -3,7 +3,7 @@ import type { RawHtml } from './html.ts';
 import { onLanguageChange } from './i18n.ts';
 import { loadStyles, stylesFor } from './styles.ts';
 
-export class PrElement extends HTMLElement {
+export class CeElement extends HTMLElement {
   readonly root: ShadowRoot;
   #stopLanguageSync: (() => void) | null = null;
 

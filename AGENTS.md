@@ -7,12 +7,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```sh
 bun install              # deps (Oat + dev types/tooling)
 bun start                # serve API + frontend on PORT (default 8000)
-bun run start:dev        # same, with --watch and hot reload (PRANDIUM_DEV=1)
+bun run start:dev        # same, with --watch and hot reload (CENA_DEV=1)
 bun run seed             # empty the database and thumbnails/ and refill them with sample recipes
 bun run migrate          # apply pending schema migrations, then exit
-bun run hash-password    # prompt for a password, print its hash for PRANDIUM_PASSWORD_HASH
-bun run screenshots      # retake the README's screenshots (needs Chrome or Edge, or PRANDIUM_BROWSER)
-bun run build            # one-file deployment build: dist/prandium.js (+ .map, + bun-version)
+bun run hash-password    # prompt for a password, print its hash for CENA_PASSWORD_HASH
+bun run screenshots      # retake the README's screenshots (needs Chrome or Edge, or CENA_BROWSER)
+bun run build            # one-file deployment build: dist/cena.js (+ .map, + bun-version)
 bun run build:ingredient-parser # regenerate the ingredient parser from its Peggy grammar
 bun test --parallel      # the test suite against in-memory SQLite
 bun test --parallel src/backend/features/recipes/recipe.routes.test.ts # one file
@@ -24,19 +24,19 @@ bun run fmt              # format (fmt:check for CI)
 
 Configuration is environment variables only:
 
-| Variable                      | Default                 | Meaning                           |
-| ----------------------------- | ----------------------- | --------------------------------- |
-| `PORT`                        | `8000`                  | Port to listen on                 |
-| `HOST`                        | `127.0.0.1`             | Address to listen on              |
-| `PRANDIUM_DB`                 | `data/prandium.db`      | The SQLite database file          |
-| `PRANDIUM_THUMBNAIL_DIR`      | `data/thumbnails`       | Holds the thumbnail images        |
-| `PRANDIUM_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password` |
-| `PRANDIUM_DEV`                | unset                   | `1` turns on hot reload           |
-| `PRANDIUM_IMPORT_CONCURRENCY` | the number of CPU cores | Recipes imported at once          |
-| `PRANDIUM_USER_AGENT`         | a Firefox 86 user agent | Sent when importing               |
+| Variable                  | Default                 | Meaning                           |
+| ------------------------- | ----------------------- | --------------------------------- |
+| `PORT`                    | `8000`                  | Port to listen on                 |
+| `HOST`                    | `127.0.0.1`             | Address to listen on              |
+| `CENA_DB`                 | `data/cena.db`          | The SQLite database file          |
+| `CENA_THUMBNAIL_DIR`      | `data/thumbnails`       | Holds the thumbnail images        |
+| `CENA_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password` |
+| `CENA_DEV`                | unset                   | `1` turns on hot reload           |
+| `CENA_IMPORT_CONCURRENCY` | the number of CPU cores | Recipes imported at once          |
+| `CENA_USER_AGENT`         | a Firefox 86 user agent | Sent when importing               |
 
 Relative paths resolve against the working directory, so a checkout keeps its database and thumbnails in the git-ignored `data/`; both are
-created on first run. `seed` empties what `PRANDIUM_DB` and `PRANDIUM_THUMBNAIL_DIR` name, so point them at scratch paths to keep `data/`.
+created on first run. `seed` empties what `CENA_DB` and `CENA_THUMBNAIL_DIR` name, so point them at scratch paths to keep `data/`.
 `screenshots` uses a temp dir of its own. The tests use `:memory:` and temp dirs.
 
 Always put plans inside the project directory.

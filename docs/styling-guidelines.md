@@ -3,7 +3,7 @@
 - **Oat first.** [Oat](https://oat.ink) provides typography, colors, form controls, tables and both
   themes. Hand-written CSS is a thin layer built from Oat's unprefixed tokens (`--primary`,
   `--muted-foreground`, `--border`, `--space-*`, `--radius-medium`, …), so it follows the active
-  theme. Prandium's palette is a set of token values in `ui/app.css` — blue as the brand, the contrast
+  theme. Cena's palette is a set of token values in `ui/app.css` — blue as the brand, the contrast
   tokens retuned — and `ui/contrast.test.ts` holds every text pair to WCAG AA (4.5:1) and the
   control borders to 3:1 in both themes. Before writing a box of your own, check whether Oat already draws it: **a card is `.card`**,
   a dropdown is `<ot-dropdown>`, a loading state is `aria-busy="true"`, layout is
@@ -35,7 +35,7 @@
 - **No stylesheet declares a font size.** Body text is Oat's `1rem` everywhere, headings come from
   Oat's fluid scale, and emphasis is weight and color. A heading that would be too loud is a lower
   level instead (the detail page's small cards are `h3`s), never a smaller font. Oat sets no root or
-  `:host` font size, so nothing has to be pinned. `pr-rating` sizes its stars with `--star-size`,
+  `:host` font size, so nothing has to be pinned. `ce-rating` sizes its stars with `--star-size`,
   a width and height, not a font size.
 - **Color buttons only with Oat's variants** — `data-variant="secondary|danger"`, `.outline`,
   `.ghost`, `.icon` — never with custom CSS or token overrides on the button. No exceptions remain:

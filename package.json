@@ -1,5 +1,5 @@
 {
-  "name": "prandium",
+  "name": "cena",
   "version": "0.1.0",
   "private": true,
   "description": "A self-hosted recipe manager: import, organize, rate and cook recipes.",
@@ -18,7 +18,7 @@
     "screenshots": "bun run src/scripts/screenshots.ts",
     "seed": "bun run src/scripts/seed.ts",
     "start": "bun run src/backend/main.ts",
-    "start:dev": "PRANDIUM_DEV=1 bun --watch src/backend/main.ts",
+    "start:dev": "CENA_DEV=1 bun --watch src/backend/main.ts",
     "test": "bun test --parallel",
     "typecheck": "bun check"
   },

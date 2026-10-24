@@ -40,7 +40,7 @@ describe('SchemaParser', () => {
       Hello
       <p>World</p>
       <script type="application/ld+json">
-      {"@context": "http://schema.org","@type": "WebSite","name": "Prandium","url": "https://example.com","publisher": {"@type": "Organization","name": "Prandium"}}
+      {"@context": "http://schema.org","@type": "WebSite","name": "Cena","url": "https://example.com","publisher": {"@type": "Organization","name": "Cena"}}
     </script>
     </body>
     </html>`,

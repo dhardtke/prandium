@@ -1,6 +1,6 @@
-import { PrElement } from './base.ts';
+import { CeElement } from './base.ts';
 
-export abstract class PrModal<Answer> extends PrElement {
+export abstract class CeModal<Answer> extends CeElement {
   #resolve: ((answer: Answer) => void) | null = null;
 
   abstract answer(dialog: HTMLDialogElement): Answer;

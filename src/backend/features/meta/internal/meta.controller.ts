@@ -11,7 +11,7 @@ export class MetaController {
   }
 
   health(): Response {
-    const body: HealthDto = { status: 'ok', app: 'prandium', auth: this.#auth.enabled() };
+    const body: HealthDto = { status: 'ok', app: 'cena', auth: this.#auth.enabled() };
     return json(body);
   }
 

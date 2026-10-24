@@ -3,8 +3,8 @@ import { en } from '../i18n/en.ts';
 import type { Language, LanguageId } from '../i18n/language.ts';
 
 // Also in index.html's pre-paint script.
-const STORAGE_KEY = 'prandium:language';
-export const LANGUAGE_CHANGE_EVENT = 'pr-language-change';
+const STORAGE_KEY = 'cena:language';
+export const LANGUAGE_CHANGE_EVENT = 'ce-language-change';
 
 export const LANGUAGES: Readonly<Record<LanguageId, Language>> = { en, de };
 export const LANGUAGE_IDS: readonly LanguageId[] = ['en', 'de'];

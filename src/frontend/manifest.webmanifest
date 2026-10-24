@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Prandium",
-  "short_name": "Prandium",
-  "description": "Prandium — a self-hosted recipe manager.",
+  "name": "Cena",
+  "short_name": "Cena",
+  "description": "Cena — a self-hosted recipe manager.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

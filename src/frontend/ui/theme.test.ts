@@ -82,14 +82,14 @@ describe('at load', () => {
 
   test('a stored choice wins over the system', async () => {
     systemDark = true;
-    stored.set('prandium:theme', 'light');
+    stored.set('cena:theme', 'light');
 
     expect((await load()).currentTheme()).toBe('light');
   });
 
   test('the "system" an earlier version stored counts as no choice', async () => {
     systemDark = true;
-    stored.set('prandium:theme', 'system');
+    stored.set('cena:theme', 'system');
 
     expect((await load()).currentTheme()).toBe('dark');
   });
@@ -119,7 +119,7 @@ describe('setTheme', () => {
     theme.setTheme('dark');
 
     expect(theme.currentTheme()).toBe('dark');
-    expect(stored.get('prandium:theme')).toBe('dark');
+    expect(stored.get('cena:theme')).toBe('dark');
     expect(htmlTheme()).toBe('dark');
     expect(heard).toBe(1);
   });
@@ -140,7 +140,7 @@ describe('setTheme', () => {
 
     theme.setTheme('light');
 
-    expect(stored.has('prandium:theme')).toBe(false);
+    expect(stored.has('cena:theme')).toBe(false);
     expect(heard).toBe(0);
   });
 
@@ -179,7 +179,7 @@ describe('toggleTheme', () => {
     theme.toggleTheme();
 
     expect(theme.currentTheme()).toBe('dark');
-    expect(stored.get('prandium:theme')).toBe('dark');
+    expect(stored.get('cena:theme')).toBe('dark');
     expect(htmlTheme()).toBe('dark');
     expect(heard).toBe(1);
   });
@@ -191,7 +191,7 @@ describe('toggleTheme', () => {
     theme.toggleTheme();
 
     expect(theme.currentTheme()).toBe('light');
-    expect(stored.get('prandium:theme')).toBe('light');
+    expect(stored.get('cena:theme')).toBe('light');
     expect(htmlTheme()).toBe('light');
   });
 });
@@ -206,7 +206,7 @@ describe('theme-color', () => {
     expect(themeColor()).toBe(theme.THEME_COLORS.dark);
 
     systemDark = false;
-    stored.set('prandium:theme', 'dark');
+    stored.set('cena:theme', 'dark');
     await load();
     expect(themeColor()).toBe(theme.THEME_COLORS.dark);
   });

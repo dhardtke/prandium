@@ -99,7 +99,7 @@ describe('failures', () => {
 
     const error = await rejection(get('/workouts'));
 
-    expect(error.message).toBe('Could not reach the prandium server');
+    expect(error.message).toBe('Could not reach the cena server');
     expect(error.status).toBe(0);
     expect(error.details).toBe(cause);
   });

@@ -11,11 +11,11 @@ describe('main', () => {
   function spawn(env: Record<string, string> = {}): Bun.Subprocess<'ignore', 'pipe', 'pipe'> {
     const base: Record<string, string | undefined> = { ...process.env };
     delete base.JOURNAL_STREAM;
-    delete base.PRANDIUM_PASSWORD_HASH;
-    delete base.PRANDIUM_DEV;
-    delete base.PRANDIUM_IMPORT_CONCURRENCY;
+    delete base.CENA_PASSWORD_HASH;
+    delete base.CENA_DEV;
+    delete base.CENA_IMPORT_CONCURRENCY;
     return Bun.spawn([process.execPath, 'src/backend/main.ts'], {
-      env: { ...base, PORT: '0', PRANDIUM_DB: join(dir(), 'data.db'), PRANDIUM_THUMBNAIL_DIR: join(dir(), 'thumbnails'), ...env },
+      env: { ...base, PORT: '0', CENA_DB: join(dir(), 'data.db'), CENA_THUMBNAIL_DIR: join(dir(), 'thumbnails'), ...env },
       stdin: 'ignore',
       stdout: 'pipe',
       stderr: 'pipe',
@@ -59,30 +59,30 @@ describe('main', () => {
 
   test('prints the banner in the terminal format', async () => {
     const stdout = await started();
-    expect(stdout).toMatch(/^\d\d:\d\d:\d\d server prandium is running on /m);
+    expect(stdout).toMatch(/^\d\d:\d\d:\d\d server cena is running on /m);
     expect(stdout).toContain(`server database: ${join(dir(), 'data.db')}`);
     expect(stdout).toContain(`server thumbnails: ${join(dir(), 'thumbnails')}`);
-    expect(stdout).toContain('server auth: off (PRANDIUM_PASSWORD_HASH is not set)');
+    expect(stdout).toContain('server auth: off (CENA_PASSWORD_HASH is not set)');
     expect(stdout).toContain('db applied 005-remove-tag-description');
   });
 
   test('answers the health check and the frontend', async () => {
     await started({}, async (url) => {
-      expect(await body<HealthDto>(await fetch(new URL('/api/health', url)))).toEqual({ status: 'ok', app: 'prandium', auth: false });
-      expect(await (await fetch(url)).text()).toContain('<pr-app>');
+      expect(await body<HealthDto>(await fetch(new URL('/api/health', url)))).toEqual({ status: 'ok', app: 'cena', auth: false });
+      expect(await (await fetch(url)).text()).toContain('<ce-app>');
     });
   });
 
   test('warns about a leftover settings.json beside the database, naming what replaced each key', async () => {
     writeFileSync(join(dir(), 'settings.json'), '{}');
     expect(await started()).toContain(
-      'WARN server settings.json is ignored: importConcurrency → PRANDIUM_IMPORT_CONCURRENCY, userAgent → PRANDIUM_USER_AGENT, pageSize → fixed at 24, addHistoryEntryWhenRating → always on',
+      'WARN server settings.json is ignored: importConcurrency → CENA_IMPORT_CONCURRENCY, userAgent → CENA_USER_AGENT, pageSize → fixed at 24, addHistoryEntryWhenRating → always on',
     );
   });
 
   test.each([
     [{ PORT: 'eighty' }, 'PORT must be an integer from 0 to 65535'],
-    [{ PRANDIUM_IMPORT_CONCURRENCY: '0' }, 'PRANDIUM_IMPORT_CONCURRENCY must be an integer from 1 to'],
+    [{ CENA_IMPORT_CONCURRENCY: '0' }, 'CENA_IMPORT_CONCURRENCY must be an integer from 1 to'],
   ])('refuses invalid env %p', async (env, message) => {
     const { code, stderr } = await exitsWith(env);
     expect(code).toBe(1);
@@ -91,14 +91,14 @@ describe('main', () => {
 
   test('keeps the terminal format when JOURNAL_STREAM names another file', async () => {
     const stdout = await started({ JOURNAL_STREAM: '8:1234' });
-    expect(stdout).toMatch(/^\d\d:\d\d:\d\d server prandium is running on /m);
+    expect(stdout).toMatch(/^\d\d:\d\d:\d\d server cena is running on /m);
     expect(stdout).not.toContain('<6>');
   });
 
-  test('refuses a PRANDIUM_PASSWORD_HASH that is no hash', async () => {
-    const { code, stderr } = await exitsWith({ PRANDIUM_PASSWORD_HASH: 'nope' });
+  test('refuses a CENA_PASSWORD_HASH that is no hash', async () => {
+    const { code, stderr } = await exitsWith({ CENA_PASSWORD_HASH: 'nope' });
     expect(code).toBe(1);
-    expect(stderr).toContain('ERROR server PRANDIUM_PASSWORD_HASH is not an argon2 or bcrypt hash');
+    expect(stderr).toContain('ERROR server CENA_PASSWORD_HASH is not an argon2 or bcrypt hash');
   });
 
   test('logs a startup failure with its error and exits with 1', async () => {

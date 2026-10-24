@@ -10,7 +10,7 @@
   --border: light-dark(#8b8b94, #71717a);
   --input: light-dark(#8b8b94, #71717a);
 
-  /* pr-header's fixed height, border included; sticky page chrome sits below it. */
+  /* ce-header's fixed height, border included; sticky page chrome sits below it. */
   --header-height: calc(3.75rem + 1px);
 
   /* Keeps the layout from shifting when a page grows tall enough to scroll. */
@@ -30,7 +30,7 @@ body {
   margin: 0;
 }
 
-pr-app {
+ce-app {
   display: block;
   min-height: 100vh;
 

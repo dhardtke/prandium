@@ -1,0 +1,16 @@
+[Unit]
+Description=cena
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/app
+# CENA_DB, CENA_THUMBNAIL_DIR, HOST, PORT and CENA_PASSWORD_HASH. No "-" prefix on purpose: without the file the service must not start, rather
+# than come up without a password.
+EnvironmentFile=%h/app/cena.env
+ExecStart=%h/app/current/bun run %h/app/current/cena.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

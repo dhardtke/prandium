@@ -5,8 +5,8 @@ export const recipesRoutes: RouteDef[] = [
     pattern: /^\/$/,
     keys: [],
     view: async () => {
-      const { PrRecipeListComponent } = await import('./pr-recipe-list.component.ts');
-      return new PrRecipeListComponent();
+      const { CeRecipeListComponent } = await import('./ce-recipe-list.component.ts');
+      return new CeRecipeListComponent();
     },
     title: (l) => l.recipes,
     nav: { path: '/', label: (l) => l.recipes },
@@ -15,8 +15,8 @@ export const recipesRoutes: RouteDef[] = [
     pattern: /^\/recipes\/new\/?$/,
     keys: [],
     view: async () => {
-      const { PrRecipeEditComponent } = await import('./pr-recipe-edit.component.ts');
-      return new PrRecipeEditComponent();
+      const { CeRecipeEditComponent } = await import('./ce-recipe-edit.component.ts');
+      return new CeRecipeEditComponent();
     },
     title: (l) => l.recipe.newRecipe,
     parents: [{ path: '/', label: (l) => l.recipes }],
@@ -25,8 +25,8 @@ export const recipesRoutes: RouteDef[] = [
     pattern: /^\/recipes\/import\/?$/,
     keys: [],
     view: async () => {
-      const { PrRecipeImportComponent } = await import('./pr-recipe-import.component.ts');
-      return new PrRecipeImportComponent();
+      const { CeRecipeImportComponent } = await import('./ce-recipe-import.component.ts');
+      return new CeRecipeImportComponent();
     },
     title: (l) => l.recipe.import.title,
     parents: [{ path: '/', label: (l) => l.recipes }],
@@ -35,8 +35,8 @@ export const recipesRoutes: RouteDef[] = [
     pattern: /^\/recipes\/(\d+)\/edit\/?$/,
     keys: ['id'],
     view: async ({ id }) => {
-      const { PrRecipeEditComponent } = await import('./pr-recipe-edit.component.ts');
-      const view = new PrRecipeEditComponent();
+      const { CeRecipeEditComponent } = await import('./ce-recipe-edit.component.ts');
+      const view = new CeRecipeEditComponent();
       view.setAttribute('recipe-id', id ?? '');
       return view;
     },
@@ -48,8 +48,8 @@ export const recipesRoutes: RouteDef[] = [
     pattern: /^\/recipes\/(\d+)\/?$/,
     keys: ['id'],
     view: async ({ id }) => {
-      const { PrRecipeDetailComponent } = await import('./pr-recipe-detail.component.ts');
-      const view = new PrRecipeDetailComponent();
+      const { CeRecipeDetailComponent } = await import('./ce-recipe-detail.component.ts');
+      const view = new CeRecipeDetailComponent();
       view.setAttribute('recipe-id', id ?? '');
       return view;
     },

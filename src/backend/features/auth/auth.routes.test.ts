@@ -29,7 +29,7 @@ function login(password: string, client = CLIENT): Promise<Response> {
 
 function cookieOf(res: Response): string {
   const header = res.headers.get('set-cookie') ?? '';
-  expect(header).toStartWith('prandium_session=');
+  expect(header).toStartWith('cena_session=');
   return header.split(';', 1)[0] ?? '';
 }
 
@@ -105,8 +105,8 @@ describe('the guard', () => {
   test('refuses a tampered or malformed cookie', async () => {
     const cookie = await loggedIn();
     const last = cookie.at(-1) === 'A' ? 'B' : 'A';
-    const [expiresAt = '', signature = ''] = cookie.slice('prandium_session='.length).split('.');
-    for (const bad of [`${cookie.slice(0, -1)}${last}`, `prandium_session=${expiresAt}${signature}`, `prandium_session=soon.${signature}`]) {
+    const [expiresAt = '', signature = ''] = cookie.slice('cena_session='.length).split('.');
+    for (const bad of [`${cookie.slice(0, -1)}${last}`, `cena_session=${expiresAt}${signature}`, `cena_session=soon.${signature}`]) {
       expect({ bad, status: (await data(bad)).status }).toEqual({ bad, status: 401 });
     }
   });
@@ -136,7 +136,7 @@ describe('login', () => {
     const res = await login('right');
     expect(res.status).toBe(204);
     const header = res.headers.get('set-cookie') ?? '';
-    for (const part of ['prandium_session=', 'Max-Age=7776000', 'HttpOnly', 'Secure', 'SameSite=Lax', 'Path=/']) {
+    for (const part of ['cena_session=', 'Max-Age=7776000', 'HttpOnly', 'Secure', 'SameSite=Lax', 'Path=/']) {
       expect(header).toContain(part);
     }
   });

@@ -1,5 +1,5 @@
 // Stateless: the key is the password hash, so changing the password invalidates every cookie.
-export const COOKIE_NAME = 'prandium_session';
+export const COOKIE_NAME = 'cena_session';
 export const SESSION_MS = 90 * 24 * 60 * 60 * 1000;
 export const RENEW_AFTER_MS = 24 * 60 * 60 * 1000;
 

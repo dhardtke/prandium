@@ -13,7 +13,7 @@ const OUT_DIR = 'docs/screenshots';
 const THEMES = ['light', 'dark'] as const;
 
 const BROWSERS = [
-  process.env.PRANDIUM_BROWSER,
+  process.env.CENA_BROWSER,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
@@ -100,7 +100,7 @@ class Cdp {
 function findBrowser(): string {
   const found = BROWSERS.find((path): path is string => path != null && path !== '' && existsSync(path));
   if (found === undefined) {
-    console.error('no Chrome or Edge found; point PRANDIUM_BROWSER at one');
+    console.error('no Chrome or Edge found; point CENA_BROWSER at one');
     process.exit(1);
   }
   return found;
@@ -158,7 +158,7 @@ async function shoot(cdp: Cdp, origin: string, shots: readonly Shot[]): Promise<
   await cdp.send('Page.enable');
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: EN_US_SHIM });
   // English whatever the OS says; the pre-paint script and ui/i18n.ts read this key.
-  await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: "try { localStorage.setItem('prandium:language', 'en'); } catch {}" });
+  await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: "try { localStorage.setItem('cena:language', 'en'); } catch {}" });
   await cdp.send('Emulation.setScrollbarsHidden', { hidden: true });
   await mkdir(OUT_DIR, { recursive: true });
 
@@ -190,11 +190,11 @@ async function shoot(cdp: Cdp, origin: string, shots: readonly Shot[]): Promise<
 
 async function main(): Promise<void> {
   const browserPath = findBrowser();
-  const dir = await mkdtemp(join(tmpdir(), 'prandium-screenshots-'));
+  const dir = await mkdtemp(join(tmpdir(), 'cena-screenshots-'));
   const config: Config = {
     host: '127.0.0.1',
     port: 0,
-    databasePath: join(dir, 'prandium.db'),
+    databasePath: join(dir, 'cena.db'),
     thumbnailsDir: join(dir, 'thumbnails'),
     passwordHash: null,
     dev: false,

@@ -1,0 +1,145 @@
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  block-size: var(--header-height);
+  background-color: var(--card);
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-2);
+}
+
+.links {
+  display: flex;
+  gap: var(--space-4);
+  margin-block: 0;
+  margin-inline-start: auto;
+
+  & li {
+    margin: 0;
+  }
+}
+
+.links a {
+  color: var(--muted-foreground);
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &[aria-current="page"] {
+    color: var(--foreground);
+    font-weight: 600;
+  }
+}
+
+.menu {
+  display: none;
+  margin-inline-start: auto;
+}
+
+ce-theme-toggle {
+  border-inline-start: 1px solid var(--border);
+  padding-inline-start: var(--space-2);
+}
+
+@media (max-width: 560px) {
+  .links {
+    display: none;
+  }
+
+  /* Flex, not block, so no descender space pushes the button off-center. */
+  .menu {
+    display: flex;
+    order: 1;
+    margin-inline-start: 0;
+    border-inline-start: 1px solid var(--border);
+    padding-inline-start: var(--space-2);
+  }
+
+  ce-language-switch {
+    margin-inline-start: auto;
+  }
+
+  ce-theme-toggle {
+    border-inline-start: none;
+    padding-inline-start: 0;
+  }
+}
+
+.menu button svg {
+  width: auto;
+  height: 1.125rem;
+}
+
+/* Oat's focus background alone barely sets the current page off from the menu's. */
+menu[popover] a[role="menuitem"] {
+  color: var(--muted-foreground);
+
+  &[aria-current="page"] {
+    color: var(--foreground);
+    font-weight: 600;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+
+  color: var(--primary);
+
+  & img {
+    height: 1.75em;
+    width: auto;
+    transition: transform 150ms ease-out;
+  }
+
+  & strong {
+    letter-spacing: -0.02em;
+  }
+
+  &:hover {
+    & strong {
+      text-decoration: underline;
+    }
+
+    & img {
+      transform: scale(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    & img {
+      transition: none;
+    }
+  }
+}
+
+nav:not(.auth) .logout {
+  display: none;
+}
+
+nav.login {
+  & .links,
+  & .menu {
+    display: none;
+  }
+
+  & ce-language-switch {
+    margin-inline-start: auto;
+  }
+
+  & ce-theme-toggle {
+    border-inline-start: none;
+    padding-inline-start: 0;
+  }
+}

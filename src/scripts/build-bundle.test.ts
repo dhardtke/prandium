@@ -16,7 +16,7 @@ describe('the built frontend bundle', () => {
   let report: ProbeReport;
 
   beforeAll(async () => {
-    dir = mkdtempSync(join(tmpdir(), 'prandium-bundle-'));
+    dir = mkdtempSync(join(tmpdir(), 'cena-bundle-'));
     const bundle = join(dir, 'main.js');
     const { pages } = await createStaticFacade().embed();
     await Bun.write(bundle, pages['/main.ts']?.body ?? '');
@@ -35,7 +35,7 @@ describe('the built frontend bundle', () => {
   });
 
   test('defines the shell, each component with its stylesheets from the bundle', () => {
-    for (const tag of ['pr-app', 'pr-header', 'pr-theme-toggle', 'pr-language-switch', 'pr-breadcrumbs']) {
+    for (const tag of ['ce-app', 'ce-header', 'ce-theme-toggle', 'ce-language-switch', 'ce-breadcrumbs']) {
       expect(report.beforeMount.defined).toContain(tag);
     }
     expect(sheets(report.beforeMount.requested)).toEqual([]);
@@ -43,8 +43,8 @@ describe('the built frontend bundle', () => {
   });
 
   test('runs a lazily imported view only when its route opens, still fetching no sheet', () => {
-    expect(report.beforeMount.defined).not.toContain('pr-recipe-list');
-    expect(report.afterMount.defined).toContain('pr-recipe-list');
+    expect(report.beforeMount.defined).not.toContain('ce-recipe-list');
+    expect(report.afterMount.defined).toContain('ce-recipe-list');
     expect(sheets(report.afterMount.requested)).toEqual([]);
   });
 });

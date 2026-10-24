@@ -25,7 +25,7 @@ describe('styles under an import map', () => {
       imports: {
         '/vendor/oat.css': '/vendor/oat.css?v=oat',
         '/ui/shared.css': '/ui/shared.css?v=shared',
-        '/features/x/pr-x.component.css': '/features/x/pr-x.component.css?v=x',
+        '/features/x/ce-x.component.css': '/features/x/ce-x.component.css?v=x',
       },
     });
     document.head.append(map);
@@ -48,17 +48,17 @@ describe('styles under an import map', () => {
   });
 
   test("fetches a component's own sheet by its version, whatever version its module was loaded at", async () => {
-    await styles.loadStyles('pr-x', 'http://localhost/features/x/pr-x.component.ts?v=module');
-    expect(requests.at(-1)).toEqual({ url: '/features/x/pr-x.component.css?v=x', cache: undefined });
+    await styles.loadStyles('ce-x', 'http://localhost/features/x/ce-x.component.ts?v=module');
+    expect(requests.at(-1)).toEqual({ url: '/features/x/ce-x.component.css?v=x', cache: undefined });
   });
 
   test('a sheet the map does not name is fetched at its plain URL', async () => {
-    await styles.loadStyles('pr-y', 'http://localhost/features/y/pr-y.component.ts');
-    expect(requests.at(-1)).toEqual({ url: '/features/y/pr-y.component.css', cache: undefined });
+    await styles.loadStyles('ce-y', 'http://localhost/features/y/ce-y.component.ts');
+    expect(requests.at(-1)).toEqual({ url: '/features/y/ce-y.component.css', cache: undefined });
   });
 
   test('a hot reload revalidates, since the version may be cached for good though the file changed', async () => {
-    expect(await styles.reloadSheet('/features/x/pr-x.component.css')).toBe(true);
-    expect(requests.at(-1)).toEqual({ url: '/features/x/pr-x.component.css?v=x', cache: 'no-cache' });
+    expect(await styles.reloadSheet('/features/x/ce-x.component.css')).toBe(true);
+    expect(requests.at(-1)).toEqual({ url: '/features/x/ce-x.component.css?v=x', cache: 'no-cache' });
   });
 });

@@ -38,8 +38,8 @@ A new data feature also spreads its routes into `src/backend/http/routes.ts`, in
 
 ## A component
 
-1. Create `pr-<name>.component.ts` and `pr-<name>.component.css` side by side, the module ending
-   in `await define('pr-<name>', TheClass, import.meta.url)` ("Components" in `docs/frontend.md`).
+1. Create `ce-<name>.component.ts` and `ce-<name>.component.css` side by side, the module ending
+   in `await define('ce-<name>', TheClass, import.meta.url)` ("Components" in `docs/frontend.md`).
 2. Put it in `internal/` unless another feature renders it, and export the class only when another
    module needs it.
 3. Import it statically from the view that renders it ("Import boundaries").
@@ -55,7 +55,7 @@ A new data feature also spreads its routes into `src/backend/http/routes.ts`, in
    `import()`s the view, and a `title`, plus `parents` for a detail page or `nav` for a header
    link ("Routing").
 2. A new feature's route list is spread into `src/frontend/app/routes.ts`, in header order.
-3. Extend `PrView` unless the page must render visibly at once, as the login page does.
+3. Extend `CeView` unless the page must render visibly at once, as the login page does.
 
 ## Before committing
 

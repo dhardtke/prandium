@@ -28,7 +28,7 @@ export interface Machine {
 
 export const DEFAULT_PORT = 8000;
 export const DEFAULT_HOST = '127.0.0.1';
-export const DEFAULT_DATABASE_PATH = join('data', 'prandium.db');
+export const DEFAULT_DATABASE_PATH = join('data', 'cena.db');
 export const DEFAULT_THUMBNAILS_DIR = join('data', 'thumbnails');
 export const DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0';
 
@@ -53,22 +53,22 @@ export function readConfig(env: Record<string, string | undefined>, machine: Mac
 
   const port = integer('PORT', DEFAULT_PORT, 0, 65535);
   const cpuCores = Math.max(1, machine.cpuCores);
-  const importConcurrency = integer('PRANDIUM_IMPORT_CONCURRENCY', cpuCores, 1, cpuCores);
+  const importConcurrency = integer('CENA_IMPORT_CONCURRENCY', cpuCores, 1, cpuCores);
 
-  const passwordHash = value('PRANDIUM_PASSWORD_HASH') ?? null;
+  const passwordHash = value('CENA_PASSWORD_HASH') ?? null;
   if (passwordHash !== null && !isPasswordHash(passwordHash)) {
-    errors.push('PRANDIUM_PASSWORD_HASH is not an argon2 or bcrypt hash; create one with `bun run hash-password`');
+    errors.push('CENA_PASSWORD_HASH is not an argon2 or bcrypt hash; create one with `bun run hash-password`');
   }
 
   const config: Config = {
     host: value('HOST') ?? DEFAULT_HOST,
     port,
-    databasePath: expandHome(value('PRANDIUM_DB') ?? DEFAULT_DATABASE_PATH, machine.home),
-    thumbnailsDir: expandHome(value('PRANDIUM_THUMBNAIL_DIR') ?? DEFAULT_THUMBNAILS_DIR, machine.home),
+    databasePath: expandHome(value('CENA_DB') ?? DEFAULT_DATABASE_PATH, machine.home),
+    thumbnailsDir: expandHome(value('CENA_THUMBNAIL_DIR') ?? DEFAULT_THUMBNAILS_DIR, machine.home),
     passwordHash,
-    dev: value('PRANDIUM_DEV') === '1',
+    dev: value('CENA_DEV') === '1',
     importConcurrency,
-    userAgent: value('PRANDIUM_USER_AGENT') ?? DEFAULT_USER_AGENT,
+    userAgent: value('CENA_USER_AGENT') ?? DEFAULT_USER_AGENT,
   };
   return errors.length > 0 ? { errors } : config;
 }

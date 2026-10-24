@@ -12,7 +12,7 @@ describe('static files', () => {
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toContain('text/html');
     const page = await res.text();
-    expect(page).toContain('prandium');
+    expect(page).toContain('cena');
     expect(page).not.toContain('/dev/hot.ts');
   });
 
@@ -22,7 +22,7 @@ describe('static files', () => {
   });
 
   test('serves the app stylesheets', async () => {
-    for (const path of ['/ui/app.css', '/ui/shared.css', '/app/pr-app.component.css']) {
+    for (const path of ['/ui/app.css', '/ui/shared.css', '/app/ce-app.component.css']) {
       const res = await api(path);
       expect(res.status).toBe(200);
       expect(res.headers.get('content-type')).toContain('text/css');
@@ -30,7 +30,7 @@ describe('static files', () => {
   });
 
   test('serves a stylesheet beside every component module', async () => {
-    const modules = await Array.fromAsync(new Bun.Glob('**/pr-*.component.ts').scan(FRONTEND_DIR));
+    const modules = await Array.fromAsync(new Bun.Glob('**/ce-*.component.ts').scan(FRONTEND_DIR));
     expect(modules.length).toBeGreaterThanOrEqual(8);
     for (const file of modules) {
       // scan() yields backslashes on Windows.
@@ -217,7 +217,7 @@ describe('versions', () => {
 
   test('the import map names every module, stylesheet and vendor file by its current tag', async () => {
     const imports = importMap(await (await api('/')).text());
-    for (const url of ['/main.ts', '/ui/app.css', '/vendor/oat.css', '/vendor/oat.js', '/ui/pagination/pr-pagination.component.css']) {
+    for (const url of ['/main.ts', '/ui/app.css', '/vendor/oat.css', '/vendor/oat.js', '/ui/pagination/ce-pagination.component.css']) {
       expect(imports).toHaveProperty([url]);
     }
     expect(Object.keys(imports).filter((url) => url.endsWith('.test.ts') || url.startsWith('/dev/') || url === '/testing.ts')).toEqual([]);

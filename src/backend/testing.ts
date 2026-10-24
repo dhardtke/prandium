@@ -91,12 +91,12 @@ export function useServer(options: { auth?: AuthOptions } = {}): TestServer {
   return { api, post, patch, put, del, logs, thumbnailsDir: () => config.thumbnailsDir, db: () => db };
 }
 
-/** Names `prandium.db` and `thumbnails/` inside `dir` without creating either. */
+/** Names `cena.db` and `thumbnails/` inside `dir` without creating either. */
 export function testConfig(dir: string, overrides: Partial<Config> = {}): Config {
   return {
     host: '127.0.0.1',
     port: 0,
-    databasePath: join(dir, 'prandium.db'),
+    databasePath: join(dir, 'cena.db'),
     thumbnailsDir: join(dir, 'thumbnails'),
     passwordHash: null,
     dev: false,
@@ -110,7 +110,7 @@ export function useTempDir(): () => string {
   let dir = '';
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'prandium-'));
+    dir = mkdtempSync(join(tmpdir(), 'cena-'));
   });
 
   afterEach(() => {
@@ -175,7 +175,7 @@ export async function waitForUrl(stream: ReadableStream<Uint8Array>, stderr: () 
   let stdout = '';
   const read = async (): Promise<string> => {
     for (;;) {
-      const url = /prandium is running on (\S+)/.exec(stdout)?.[1];
+      const url = /cena is running on (\S+)/.exec(stdout)?.[1];
       if (url !== undefined) {
         return url;
       }

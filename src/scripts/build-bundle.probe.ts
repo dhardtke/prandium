@@ -14,16 +14,16 @@ export interface ProbeReport {
 }
 
 const TAGS = [
-  'pr-app',
-  'pr-header',
-  'pr-theme-toggle',
-  'pr-language-switch',
-  'pr-breadcrumbs',
-  'pr-recipe-list',
-  'pr-recipe-detail',
-  'pr-recipe-edit',
-  'pr-recipe-import',
-  'pr-login',
+  'ce-app',
+  'ce-header',
+  'ce-theme-toggle',
+  'ce-language-switch',
+  'ce-breadcrumbs',
+  'ce-recipe-list',
+  'ce-recipe-detail',
+  'ce-recipe-edit',
+  'ce-recipe-import',
+  'ce-login',
 ];
 
 const NOT_INSTALLED = new Set<PropertyKey>(['constructor', 'global', 'globalThis', 'undefined', 'NaN']);
@@ -65,7 +65,7 @@ Object.defineProperty(globalThis, 'fetch', {
 });
 
 function state(): ProbeState {
-  const sheets = document.createElement('pr-app').shadowRoot?.adoptedStyleSheets ?? [];
+  const sheets = document.createElement('ce-app').shadowRoot?.adoptedStyleSheets ?? [];
   return {
     defined: TAGS.filter((tag) => customElements.get(tag) !== undefined),
     requested: [...requested],
@@ -76,8 +76,8 @@ function state(): ProbeState {
 await import(pathToFileURL(bundle).href);
 const beforeMount = state();
 
-document.body.append(document.createElement('pr-app'));
-await Promise.race([customElements.whenDefined('pr-recipe-list'), Bun.sleep(5_000)]);
+document.body.append(document.createElement('ce-app'));
+await Promise.race([customElements.whenDefined('ce-recipe-list'), Bun.sleep(5_000)]);
 const afterMount = state();
 
 const report: ProbeReport = { beforeMount, afterMount };

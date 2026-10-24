@@ -84,7 +84,7 @@ let format: Omit<FormatOptions, 'now'> | undefined;
 const defaultSink: LogSink = (entry) => {
   if (format === undefined) {
     const journald = isJournalStream(process.env.JOURNAL_STREAM, 1);
-    format = { journald, colors: !journald && process.env.PRANDIUM_DEV === '1' && Bun.enableANSIColors };
+    format = { journald, colors: !journald && process.env.CENA_DEV === '1' && Bun.enableANSIColors };
   }
   const out = format.journald || entry.level === 'info' ? process.stdout : process.stderr;
   out.write(`${formatEntry(entry, { ...format, now: new Date() })}\n`);

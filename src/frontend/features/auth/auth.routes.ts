@@ -5,8 +5,8 @@ export const authRoutes: RouteDef[] = [
     pattern: /^\/login\/?$/,
     keys: [],
     view: async () => {
-      const { PrLoginComponent } = await import('./pr-login.component.ts');
-      return new PrLoginComponent();
+      const { CeLoginComponent } = await import('./ce-login.component.ts');
+      return new CeLoginComponent();
     },
     title: (l) => l.login.title,
   },

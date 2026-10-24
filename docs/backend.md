@@ -7,9 +7,9 @@ The rules every change follows, then the domain rules and gotchas the code does 
 Organized by feature, not by layer: `features/` holds `recipes/`, `tags/`, `thumbnails/`, `auth/`, `meta/`, `static/` and `dev/`.
 Outside `features/` sits only what belongs to no feature:
 
-- `config.ts` — `readConfig(env, { cpuCores, home })` reads `PORT`, `HOST` and the `PRANDIUM_*` variables into a `Config` or a list of
-  errors; `loadConfig()` logs them and exits; `databasePath` (`PRANDIUM_DB`) and `thumbnailsDir` (`PRANDIUM_THUMBNAIL_DIR`) default to
-  `data/prandium.db` and `data/thumbnails` under the working directory
+- `config.ts` — `readConfig(env, { cpuCores, home })` reads `PORT`, `HOST` and the `CENA_*` variables into a `Config` or a list of
+  errors; `loadConfig()` logs them and exits; `databasePath` (`CENA_DB`) and `thumbnailsDir` (`CENA_THUMBNAIL_DIR`) default to
+  `data/cena.db` and `data/thumbnails` under the working directory
 - `db/` — `db.ts` (connection, PRAGMAs, `clearDatabase`), `migrations.ts` and `migrations/`, and `sql.ts` with the table-agnostic helpers
   `buildUpdate`, `buildFilters`, `buildOrderBySql`, `placeholders`, `likePattern`, `isUniqueViolation`, `isForeignKeyViolation`
 - `http/` — `routing.ts` (`RouteTable`, `ParamRequest`, `wrapHandlers`), `routes.ts` (the registry, no handler code), `http.ts` (request
@@ -145,7 +145,7 @@ second time.
 
 | Method + path                                                      | Answer                                                   |
 | ------------------------------------------------------------------ | -------------------------------------------------------- |
-| `GET /api/health`                                                  | `{ status, app: 'prandium', auth }` (public)             |
+| `GET /api/health`                                                  | `{ status, app: 'cena', auth }` (public)                 |
 | `POST /api/auth/login`, `POST /api/auth/logout`                    | 204 with or clearing the cookie (public)                 |
 | `GET /api/recipes?search&tag…&sort&order&limit&offset`             | `RecipePageDto`                                          |
 | `POST /api/recipes`                                                | 201 `RecipeDto`                                          |
@@ -159,14 +159,14 @@ second time.
 
 ## Thumbnails (`features/thumbnails/`)
 
-Plain files in `PRANDIUM_THUMBNAIL_DIR`; the row stores the name. `ThumbnailStore` picks a free, path-safe name (`a.jpg`, `a-1.jpg`),
+Plain files in `CENA_THUMBNAIL_DIR`; the row stores the name. `ThumbnailStore` picks a free, path-safe name (`a.jpg`, `a-1.jpg`),
 writes, downloads (with the configured user agent) and removes; `resolve()` refuses a name that leaves the directory. An upload is named
 after the recipe's title and replaces the previous file. `/thumbnails/*` is behind the auth guard and answers with the API's locked-down
 CSP, so an uploaded SVG cannot run scripts.
 
 ## Import (`recipes/internal/import/`)
 
-`importRecipes(urls, { importConcurrency, userAgent })` fetches each page with at most `PRANDIUM_IMPORT_CONCURRENCY` at once, finds the
+`importRecipes(urls, { importConcurrency, userAgent })` fetches each page with at most `CENA_IMPORT_CONCURRENCY` at once, finds the
 first schema.org `Recipe` in its JSON-LD (`SchemaParser`, skipping broken scripts, reading `@graph`s and multi-type objects) and maps it
 (`mapSchemaRecipe`) into an `ImportedRecipe`, reading the untyped JSON through the helpers in `util.ts`. `RecipesFacade.import` then
 downloads the image (a failure is a warning, the recipe is created without one) and creates each recipe through `create`, so tags are
@@ -192,9 +192,9 @@ never in a repository or data facade. The access log logs every `/api` request a
 
 ## Authentication (`features/auth/`)
 
-- `PRANDIUM_PASSWORD_HASH` (from `bun run hash-password`) enables auth; unset means auth off. `readConfig()` refuses a value that isn't an
+- `CENA_PASSWORD_HASH` (from `bun run hash-password`) enables auth; unset means auth off. `readConfig()` refuses a value that isn't an
   argon2/bcrypt hash.
-- The session cookie `prandium_session=<expiresAt>.<hmac>` is signed with the password hash itself (no sessions table); changing the
+- The session cookie `cena_session=<expiresAt>.<hmac>` is signed with the password hash itself (no sessions table); changing the
   password logs out everywhere. It lives 90 days and slides at most once a day.
 - `AuthFacade.guard(table)` wraps the recipe, tag and thumbnail routes in `allRoutes()`. Public: `/api/health`, `/api` 404s,
   login/logout, the legacy redirects, `/dev/ws`, the frontend.
@@ -205,12 +205,12 @@ never in a repository or data facade. The access log logs every `/api` request a
 
 ## Hot reload (`features/dev/`)
 
-Only with `PRANDIUM_DEV=1` (`bun run start:dev`), never in a built file. `internal/hub.ts` watches the web root while a browser is
+Only with `CENA_DEV=1` (`bun run start:dev`), never in a built file. `internal/hub.ts` watches the web root while a browser is
 connected; `internal/changes.ts` maps a saved `.css` to a swap and `.ts`/`.html`/manifest/icons to a reload.
 
 ## Single-file build (`src/scripts/build.ts`)
 
-`bun run build` writes `dist/prandium.js` (+ map, + `bun-version`). `src/backend/shared/embedded.ts` is a committed stub (`EMBEDDED = null`
+`bun run build` writes `dist/cena.js` (+ map, + `bun-version`). `src/backend/shared/embedded.ts` is a committed stub (`EMBEDDED = null`
 = read from disk); the build replaces it with the embedded web root and migrations. All frontend modules are bundled into `/main.ts` and all
 stylesheets into `/main.css` plus `ui/inline-styles.ts`. The built server answers any other `.ts` with 404, and `index.html` is stamped with
 the commit and build time.

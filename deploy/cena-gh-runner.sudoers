@@ -1,0 +1,1 @@
+cena-gh-runner ALL=(cena) NOPASSWD: /usr/local/bin/cena-deploy

@@ -1,7 +1,7 @@
 import type { Language } from './language.ts';
 
 export const en: Language = {
-  appName: 'Prandium',
+  appName: 'Cena',
   cancel: 'Cancel',
   confirmation: 'Confirmation',
   create: 'Create',
