@@ -10,10 +10,9 @@ set -euo pipefail
 
 readonly APP=/home/prandium/app
 readonly BUNS=$APP/bun
-# Must match PORT and PRANDIUM_CONFIG_DIR in $APP/prandium.env; the thumbnails stay beside the database and are not snapshotted.
+# Must match PORT and PRANDIUM_DB in $APP/prandium.env; the thumbnails (PRANDIUM_THUMBNAIL_DIR) are not snapshotted.
 readonly PORT=8000
-readonly CONFIG_DIR=/home/prandium/.config/prandium
-readonly PRANDIUM_DB=$CONFIG_DIR/data.db
+readonly PRANDIUM_DB=/home/prandium/data/prandium.db
 readonly RELEASES=$APP/releases
 readonly CURRENT=$APP/current
 readonly BACKUPS=$APP/backups

@@ -3,12 +3,12 @@ import { copyFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { useServer } from '../../testing.ts';
 
-const { api, configDir } = useServer();
+const { api, thumbnailsDir } = useServer();
 
 const PNG = join(import.meta.dir, '1x1.png');
 
 function place(name: string): void {
-  copyFileSync(PNG, join(configDir(), 'thumbnails', name));
+  copyFileSync(PNG, join(thumbnailsDir(), name));
 }
 
 describe('GET /thumbnails/*', () => {

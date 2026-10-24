@@ -1,4 +1,4 @@
-import { type Config, thumbnailsDir } from '../../config.ts';
+import type { Config } from '../../config.ts';
 import { ThumbnailStore } from './internal/thumbnail.store.ts';
 
 export class ThumbnailsFacade {
@@ -30,5 +30,5 @@ export class ThumbnailsFacade {
 }
 
 export function createThumbnailsFacade(config: Config): ThumbnailsFacade {
-  return new ThumbnailsFacade(new ThumbnailStore(thumbnailsDir(config)), config.userAgent);
+  return new ThumbnailsFacade(new ThumbnailStore(config.thumbnailsDir), config.userAgent);
 }

@@ -4,7 +4,7 @@ import type { Database } from 'bun:sqlite';
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { type Config, DEFAULT_USER_AGENT, thumbnailsDir } from './config.ts';
+import { type Config, DEFAULT_USER_AGENT } from './config.ts';
 import { openDatabase } from './db/db.ts';
 import type { AuthOptions } from './features/auth/auth.facade.ts';
 import { HttpError } from './http/errors.ts';
@@ -18,8 +18,8 @@ export interface TestServer {
   put: (path: string, body: unknown) => Promise<Response>;
   del: (path: string) => Promise<Response>;
   logs: () => LogLine[];
-  /** The server's config dir, with an empty `thumbnails/`. */
-  configDir: () => string;
+  /** The server's thumbnail directory, empty at the start of each test. */
+  thumbnailsDir: () => string;
   /** For rows the API cannot write, such as an old app's. */
   db: () => Database;
 }
@@ -52,12 +52,13 @@ export function useServer(options: { auth?: AuthOptions } = {}): TestServer {
   let db: Database;
   let server: Server<undefined>;
   let base = '';
-  const configDir = useTempDir();
+  const dir = useTempDir();
+  let config: Config;
 
   beforeEach(() => {
     db = openDatabase(':memory:');
-    const config = testConfig(configDir(), { passwordHash: options.auth?.passwordHash ?? null });
-    mkdirSync(thumbnailsDir(config));
+    config = testConfig(dir(), { passwordHash: options.auth?.passwordHash ?? null });
+    mkdirSync(config.thumbnailsDir);
     server = startServer(db, config, options.auth?.now);
     base = server.url.origin;
   });
@@ -87,14 +88,16 @@ export function useServer(options: { auth?: AuthOptions } = {}): TestServer {
   const put = (path: string, body: unknown): Promise<Response> => send('PUT', path, body);
   const del = (path: string): Promise<Response> => api(path, { method: 'DELETE' });
 
-  return { api, post, patch, put, del, logs, configDir, db: () => db };
+  return { api, post, patch, put, del, logs, thumbnailsDir: () => config.thumbnailsDir, db: () => db };
 }
 
-export function testConfig(configDir: string, overrides: Partial<Config> = {}): Config {
+/** Names `prandium.db` and `thumbnails/` inside `dir` without creating either. */
+export function testConfig(dir: string, overrides: Partial<Config> = {}): Config {
   return {
     host: '127.0.0.1',
     port: 0,
-    configDir,
+    databasePath: join(dir, 'prandium.db'),
+    thumbnailsDir: join(dir, 'thumbnails'),
     passwordHash: null,
     dev: false,
     importConcurrency: 2,

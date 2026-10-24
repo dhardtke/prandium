@@ -37,7 +37,8 @@ describe('single-file build', () => {
     mkdirSync(deploy);
     copyFileSync(join(dir, 'out', 'prandium.js'), join(deploy, 'prandium.js'));
 
-    proc = spawnBuilt('prandium.js', deploy, { PRANDIUM_CONFIG_DIR: join(deploy, 'config'), PRANDIUM_DEV: '1' });
+    // Empty counts as unset, so the defaults apply even when the developer's shell sets these.
+    proc = spawnBuilt('prandium.js', deploy, { PRANDIUM_DB: '', PRANDIUM_THUMBNAIL_DIR: '', PRANDIUM_DEV: '1' });
     const started = await waitForUrl(proc.stdout, () => new Response(proc?.stderr).text());
     origin = new URL(started.url).origin;
     stdout = started.stdout;
@@ -159,11 +160,11 @@ describe('single-file build', () => {
     }
   });
 
-  test('ran the embedded migrations into data.db in PRANDIUM_CONFIG_DIR, beside thumbnails/', async () => {
+  test('ran the embedded migrations into data/prandium.db by default, beside data/thumbnails/', async () => {
     expect(await body<unknown>(await get('/api/health'))).toMatchObject({ status: 'ok' });
     expect((await get('/api/recipes')).status).toBe(200);
-    expect(existsSync(join(dir, 'deploy', 'config', 'data.db'))).toBe(true);
-    expect(existsSync(join(dir, 'deploy', 'config', 'thumbnails'))).toBe(true);
+    expect(existsSync(join(dir, 'deploy', 'data', 'prandium.db'))).toBe(true);
+    expect(existsSync(join(dir, 'deploy', 'data', 'thumbnails'))).toBe(true);
   });
 
   test('answers a revalidation with 304', async () => {
@@ -206,7 +207,11 @@ describe('single-file build with PRANDIUM_PASSWORD_HASH set', () => {
     dir = mkdtempSync(join(tmpdir(), 'prandium-build-auth-'));
     await build(join(dir, 'out'));
     const hash = await Bun.password.hash('right', { algorithm: 'bcrypt', cost: 4 });
-    proc = spawnBuilt(join(dir, 'out', 'prandium.js'), dir, { PRANDIUM_CONFIG_DIR: join(dir, 'config'), PRANDIUM_PASSWORD_HASH: hash });
+    proc = spawnBuilt(join(dir, 'out', 'prandium.js'), dir, {
+      PRANDIUM_DB: join(dir, 'state', 'prandium.db'),
+      PRANDIUM_THUMBNAIL_DIR: join(dir, 'state', 'thumbnails'),
+      PRANDIUM_PASSWORD_HASH: hash,
+    });
     origin = new URL((await waitForUrl(proc.stdout, () => new Response(proc?.stderr).text())).url).origin;
   }, 60_000);
 

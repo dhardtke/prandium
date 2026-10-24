@@ -28,14 +28,16 @@ Configuration is environment variables only:
 | ----------------------------- | ----------------------- | --------------------------------- |
 | `PORT`                        | `8000`                  | Port to listen on                 |
 | `HOST`                        | `127.0.0.1`             | Address to listen on              |
-| `PRANDIUM_CONFIG_DIR`         | `~/.config/prandium`    | Holds `data.db` and `thumbnails/` |
+| `PRANDIUM_DB`                 | `data/prandium.db`      | The SQLite database file          |
+| `PRANDIUM_THUMBNAIL_DIR`      | `data/thumbnails`       | Holds the thumbnail images        |
 | `PRANDIUM_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password` |
 | `PRANDIUM_DEV`                | unset                   | `1` turns on hot reload           |
 | `PRANDIUM_IMPORT_CONCURRENCY` | the number of CPU cores | Recipes imported at once          |
 | `PRANDIUM_USER_AGENT`         | a Firefox 86 user agent | Sent when importing               |
 
-The database is `<PRANDIUM_CONFIG_DIR>/data.db`, created on first run; `seed` and `screenshots` overwrite or use what that names, so
-point `PRANDIUM_CONFIG_DIR` at a scratch directory when trying them. The tests use `:memory:` and temp dirs.
+Relative paths resolve against the working directory, so a checkout keeps its database and thumbnails in the git-ignored `data/`; both are
+created on first run. `seed` empties what `PRANDIUM_DB` and `PRANDIUM_THUMBNAIL_DIR` name, so point them at scratch paths to keep `data/`.
+`screenshots` uses a temp dir of its own. The tests use `:memory:` and temp dirs.
 
 Always put plans inside the project directory.
 

@@ -8,7 +8,8 @@ Organized by feature, not by layer: `features/` holds `recipes/`, `tags/`, `thum
 Outside `features/` sits only what belongs to no feature:
 
 - `config.ts` — `readConfig(env, { cpuCores, home })` reads `PORT`, `HOST` and the `PRANDIUM_*` variables into a `Config` or a list of
-  errors; `loadConfig()` logs them and exits; `databasePath()` and `thumbnailsDir()` name the files under the config dir
+  errors; `loadConfig()` logs them and exits; `databasePath` (`PRANDIUM_DB`) and `thumbnailsDir` (`PRANDIUM_THUMBNAIL_DIR`) default to
+  `data/prandium.db` and `data/thumbnails` under the working directory
 - `db/` — `db.ts` (connection, PRAGMAs, `clearDatabase`), `migrations.ts` and `migrations/`, and `sql.ts` with the table-agnostic helpers
   `buildUpdate`, `buildFilters`, `buildOrderBySql`, `placeholders`, `likePattern`, `isUniqueViolation`, `isForeignKeyViolation`
 - `http/` — `routing.ts` (`RouteTable`, `ParamRequest`, `wrapHandlers`), `routes.ts` (the registry, no handler code), `http.ts` (request
@@ -100,7 +101,7 @@ second time.
 ## Tests
 
 - End-to-end over HTTP. `useServer({ auth? })` from `src/backend/testing.ts` starts a server on port 0 with an in-memory database and a
-  temp config dir (with `thumbnails/`) per test, and returns `api`, `post`, `patch`, `put`, `del`, `logs`, `configDir` and `db` (for rows
+  temp thumbnail directory per test, and returns `api`, `post`, `patch`, `put`, `del`, `logs`, `thumbnailsDir` and `db` (for rows
   the API cannot write, such as an old app's). Auth is off unless the file passes a password hash (and optionally a clock).
 - Route tests live beside the routes file that declares the route. Fixtures (`createRecipe`) live in `<feature>.fixtures.ts` and take
   `post` first.
@@ -158,7 +159,7 @@ second time.
 
 ## Thumbnails (`features/thumbnails/`)
 
-Plain files in `<configDir>/thumbnails`; the row stores the name. `ThumbnailStore` picks a free, path-safe name (`a.jpg`, `a-1.jpg`),
+Plain files in `PRANDIUM_THUMBNAIL_DIR`; the row stores the name. `ThumbnailStore` picks a free, path-safe name (`a.jpg`, `a-1.jpg`),
 writes, downloads (with the configured user agent) and removes; `resolve()` refuses a name that leaves the directory. An upload is named
 after the recipe's title and replaces the previous file. `/thumbnails/*` is behind the auth guard and answers with the API's locked-down
 CSP, so an uploaded SVG cannot run scripts.

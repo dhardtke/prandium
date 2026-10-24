@@ -64,15 +64,16 @@ bun install          # Oat, plus TypeScript types for development
 bun start            # http://127.0.0.1:8000
 ```
 
-The database and the thumbnails live in `~/.config/prandium` (override with `PRANDIUM_CONFIG_DIR`), created and migrated on first run. A
-config dir of an earlier Prandium opens as it is. To try Prandium with sample recipes, point it at a scratch directory first:
-`PRANDIUM_CONFIG_DIR=/tmp/prandium bun run seed && PRANDIUM_CONFIG_DIR=/tmp/prandium bun start`.
+The database and the thumbnails live in `data/` under the working directory (override with `PRANDIUM_DB` and `PRANDIUM_THUMBNAIL_DIR`),
+created and migrated on first run. The database of an earlier Prandium opens as it is. To try Prandium with sample recipes,
+`bun run seed && bun start`; seeding replaces whatever `data/` held.
 
 | Variable                      | Default                 | Meaning                           |
 | ----------------------------- | ----------------------- | --------------------------------- |
 | `PORT`                        | `8000`                  | Port to listen on                 |
 | `HOST`                        | `127.0.0.1`             | Address to listen on              |
-| `PRANDIUM_CONFIG_DIR`         | `~/.config/prandium`    | Holds `data.db` and `thumbnails/` |
+| `PRANDIUM_DB`                 | `data/prandium.db`      | The SQLite database file          |
+| `PRANDIUM_THUMBNAIL_DIR`      | `data/thumbnails`       | Holds the thumbnail images        |
 | `PRANDIUM_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password` |
 | `PRANDIUM_DEV`                | unset                   | `1` turns on hot reload           |
 | `PRANDIUM_IMPORT_CONCURRENCY` | the number of CPU cores | Recipes imported at once          |

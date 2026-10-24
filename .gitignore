@@ -1,6 +1,15 @@
 # build output
 dist/
 
+# the development database and thumbnails
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+data/*.db
+data/*.db-shm
+data/*.db-wal
+data/thumbnails/
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
 # Logs

@@ -1,14 +1,14 @@
 import { mkdirSync } from 'node:fs';
-import { basename } from 'node:path';
-import { databasePath, loadConfig } from '../backend/config.ts';
+import { basename, dirname } from 'node:path';
+import { loadConfig } from '../backend/config.ts';
 import { openDatabase } from '../backend/db/db.ts';
 import { schemaVersion } from '../backend/db/migrations.ts';
 
 function main(): void {
   const config = loadConfig();
-  const path = databasePath(config);
+  const path = config.databasePath;
   console.log(`database: ${path}`);
-  mkdirSync(config.configDir, { recursive: true });
+  mkdirSync(dirname(path), { recursive: true });
 
   let applied = 0;
   const db = openDatabase(path, {

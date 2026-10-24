@@ -23,7 +23,8 @@ describe('readConfig', () => {
     expect(config({})).toEqual({
       host: '127.0.0.1',
       port: 8000,
-      configDir: join(MACHINE.home, '.config', 'prandium'),
+      databasePath: resolve('data', 'prandium.db'),
+      thumbnailsDir: resolve('data', 'thumbnails'),
       passwordHash: null,
       dev: false,
       importConcurrency: 4,
@@ -36,7 +37,8 @@ describe('readConfig', () => {
       config({
         HOST: '0.0.0.0',
         PORT: '3000',
-        PRANDIUM_CONFIG_DIR: resolve('/srv/prandium'),
+        PRANDIUM_DB: resolve('/srv/prandium/prandium.db'),
+        PRANDIUM_THUMBNAIL_DIR: resolve('/srv/prandium/thumbnails'),
         PRANDIUM_PASSWORD_HASH: HASH,
         PRANDIUM_DEV: '1',
         PRANDIUM_IMPORT_CONCURRENCY: '2',
@@ -45,7 +47,8 @@ describe('readConfig', () => {
     ).toEqual({
       host: '0.0.0.0',
       port: 3000,
-      configDir: resolve('/srv/prandium'),
+      databasePath: resolve('/srv/prandium/prandium.db'),
+      thumbnailsDir: resolve('/srv/prandium/thumbnails'),
       passwordHash: HASH,
       dev: true,
       importConcurrency: 2,
@@ -91,11 +94,14 @@ describe('readConfig', () => {
     ['~', MACHINE.home],
     ['~/recipes', join(MACHINE.home, 'recipes')],
     ['~\\recipes', join(MACHINE.home, 'recipes')],
-  ])('expands %p in PRANDIUM_CONFIG_DIR', (dir, expanded) => {
-    expect(config({ PRANDIUM_CONFIG_DIR: dir }).configDir).toBe(expanded);
+  ])('expands %p in PRANDIUM_DB and PRANDIUM_THUMBNAIL_DIR', (path, expanded) => {
+    expect(config({ PRANDIUM_DB: path, PRANDIUM_THUMBNAIL_DIR: path })).toMatchObject({ databasePath: expanded, thumbnailsDir: expanded });
   });
 
-  test('resolves a relative PRANDIUM_CONFIG_DIR against the working directory', () => {
-    expect(config({ PRANDIUM_CONFIG_DIR: 'data' }).configDir).toBe(resolve('data'));
+  test('resolves a relative PRANDIUM_DB and PRANDIUM_THUMBNAIL_DIR against the working directory', () => {
+    expect(config({ PRANDIUM_DB: 'recipes.db', PRANDIUM_THUMBNAIL_DIR: 'images' })).toMatchObject({
+      databasePath: resolve('recipes.db'),
+      thumbnailsDir: resolve('images'),
+    });
   });
 });

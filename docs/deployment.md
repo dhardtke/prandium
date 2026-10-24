@@ -6,20 +6,23 @@
 bun run build                 # dist/prandium.js + dist/prandium.js.map + dist/bun-version
 scp dist/prandium.js* server:/opt/prandium/
 bun run hash-password         # prompts twice, prints an argon2id hash
-PORT=8000 PRANDIUM_CONFIG_DIR=/var/lib/prandium PRANDIUM_PASSWORD_HASH='<hash>' bun /opt/prandium/prandium.js
+PORT=8000 PRANDIUM_DB=/var/lib/prandium/prandium.db PRANDIUM_THUMBNAIL_DIR=/var/lib/prandium/thumbnails \
+  PRANDIUM_PASSWORD_HASH='<hash>' bun /opt/prandium/prandium.js
 ```
 
 The target needs only Bun 1.4 or newer. The build carries the frontend and the migrations; migrations apply on start, and `PRANDIUM_DEV`
-is ignored. `PRANDIUM_CONFIG_DIR` holds `data.db` and `thumbnails/`, and both are created on the first start. An existing config dir of the
-old Prandium opens as it is: its `PRAGMA user_version` is adopted into the migration ledger (see "Migrations" in `docs/backend.md`). A
-leftover `settings.json` is ignored with a warning; its keys became `PRANDIUM_IMPORT_CONCURRENCY`, `PRANDIUM_USER_AGENT`, a fixed page size
-of 24, and an always-on history entry for the first rating.
+is ignored. The database file (`PRANDIUM_DB`) and the thumbnail directory (`PRANDIUM_THUMBNAIL_DIR`), and their parents, are created on
+the first start; left unset, they land in `data/` under the working directory. An existing `data.db` of the old Prandium opens as it is:
+its `PRAGMA user_version` is adopted into the migration ledger (see "Migrations" in `docs/backend.md`). A leftover `settings.json` beside
+the database is ignored with a warning; its keys became `PRANDIUM_IMPORT_CONCURRENCY`, `PRANDIUM_USER_AGENT`, a fixed page size of 24, and
+an always-on history entry for the first rating.
 
 | Variable                      | Default                 | Meaning                                            |
 | ----------------------------- | ----------------------- | -------------------------------------------------- |
 | `PORT`                        | `8000`                  | Port to listen on                                  |
 | `HOST`                        | `127.0.0.1`             | Address to listen on                               |
-| `PRANDIUM_CONFIG_DIR`         | `~/.config/prandium`    | Holds `data.db` and `thumbnails/`                  |
+| `PRANDIUM_DB`                 | `data/prandium.db`      | The SQLite database file                           |
+| `PRANDIUM_THUMBNAIL_DIR`      | `data/thumbnails`       | Holds the thumbnail images                         |
 | `PRANDIUM_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password`                  |
 | `PRANDIUM_DEV`                | unset                   | `1` turns on hot reload (source checkout only)     |
 | `PRANDIUM_IMPORT_CONCURRENCY` | the number of CPU cores | Recipes imported at once, 1 to the number of cores |
@@ -70,28 +73,32 @@ root. Prandium runs as a systemd user service of `prandium` (`deploy/prandium.se
 1. unpacks the build into `/home/prandium/app/releases/<sha>`
 2. installs the Bun named in `bun-version` into `/home/prandium/app/bun/<version>`, verified against the release's `SHASUMS256.txt`, and
    links it as the release's `bun`
-3. stops the service and snapshots `data.db` with `VACUUM INTO` into `/home/prandium/app/backups`; the thumbnails stay in the config dir
-   and are not snapshotted
+3. stops the service and snapshots `/home/prandium/data/prandium.db` with `VACUUM INTO` into `/home/prandium/app/backups`; the thumbnails
+   are not snapshotted
 4. points `/home/prandium/app/current` at the release and starts the service
 5. rolls back release, Bun and database if `/api/health` does not answer `"auth":true` within 30 seconds
 6. keeps five releases and ten snapshots
 
-Each release runs on the Bun that built it, so upgrading Bun is just the pull request that bumps `.bun-version`. The paths, the config dir
+Each release runs on the Bun that built it, so upgrading Bun is just the pull request that bumps `.bun-version`. The paths, the database
 and port 8000 are constants at the top of the script and must match `prandium.env`.
 
 ## Server setup
 
-Once, on the Fedora server, with the repository's `deploy/` directory copied over. The `prandium` user and its
-`/home/prandium/.config/prandium` with `data.db` and `thumbnails/` exist from the old setup and are kept:
+Once, on the Fedora server, with the repository's `deploy/` directory copied over. The `prandium` user exists from the old setup, and its
+`data.db` and `thumbnails/` move from `/home/prandium/.config/prandium` to `/home/prandium/data` (with the old service stopped):
 
 ```sh
 sudo dnf install -y curl unzip tar util-linux
 # Only on a new server:
 # sudo useradd --system --create-home --home-dir /home/prandium --shell /sbin/nologin prandium
 sudo loginctl enable-linger prandium
-sudo -u prandium mkdir -p /home/prandium/app /home/prandium/.config/systemd/user
+sudo -u prandium mkdir -p /home/prandium/app /home/prandium/data /home/prandium/.config/systemd/user
+# Only when moving from the config dir:
+# sudo -u prandium mv /home/prandium/.config/prandium/data.db /home/prandium/data/prandium.db
+# sudo -u prandium mv /home/prandium/.config/prandium/thumbnails /home/prandium/data/thumbnails
 sudo -u prandium sh -c 'umask 077 && cat > /home/prandium/app/prandium.env' <<'EOF'
-PRANDIUM_CONFIG_DIR=/home/prandium/.config/prandium
+PRANDIUM_DB=/home/prandium/data/prandium.db
+PRANDIUM_THUMBNAIL_DIR=/home/prandium/data/thumbnails
 HOST=127.0.0.1
 PORT=8000
 PRANDIUM_PASSWORD_HASH='<hash>'
@@ -135,16 +142,17 @@ sudo semanage fcontext -a -t bin_t '/var/lib/gh-runner/actions-runner/runsvc\.sh
 sudo restorecon -v /var/lib/gh-runner/actions-runner/runsvc.sh
 ```
 
-The old setup labeled `PRANDIUM_CONFIG_DIR/thumbnails` `httpd_sys_content_t` for nginx and needed a policy module that let the system
-unit execute Bun from the home directory and write those thumbnails. Prandium now serves the thumbnails itself from a user service, so
-neither label is needed; if the user service is denied executing `/home/prandium/app/bun/*/bun` or writing `thumbnails/`, check
-`/var/log/audit/audit.log` and label the Bun directory `bin_t` and the config dir `user_home_t`:
+The old setup labeled `/home/prandium/.config/prandium/thumbnails` `httpd_sys_content_t` for nginx and needed a policy module that let
+the system unit execute Bun from the home directory and write those thumbnails. Prandium now serves the thumbnails itself from a user
+service, so neither label is needed; if the user service is denied executing `/home/prandium/app/bun/*/bun` or writing `thumbnails/`, check
+`/var/log/audit/audit.log` and label the Bun directory `bin_t` and the data dir `user_home_t`; `mv` keeps the old label, so relabel after
+moving:
 
 ```sh
 sudo semanage fcontext -a -t bin_t '/home/prandium/app/bun(/.*)?'
 sudo restorecon -Rv /home/prandium/app/bun
 sudo semanage fcontext -d '/home/prandium/.config/prandium/thumbnails(/.*)?' 2>/dev/null || true
-sudo restorecon -Rv /home/prandium/.config/prandium
+sudo restorecon -Rv /home/prandium/data
 ```
 
 ## Retiring the poller

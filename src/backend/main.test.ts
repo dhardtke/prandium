@@ -15,7 +15,7 @@ describe('main', () => {
     delete base.PRANDIUM_DEV;
     delete base.PRANDIUM_IMPORT_CONCURRENCY;
     return Bun.spawn([process.execPath, 'src/backend/main.ts'], {
-      env: { ...base, PORT: '0', PRANDIUM_CONFIG_DIR: dir(), ...env },
+      env: { ...base, PORT: '0', PRANDIUM_DB: join(dir(), 'data.db'), PRANDIUM_THUMBNAIL_DIR: join(dir(), 'thumbnails'), ...env },
       stdin: 'ignore',
       stdout: 'pipe',
       stderr: 'pipe',
@@ -60,7 +60,8 @@ describe('main', () => {
   test('prints the banner in the terminal format', async () => {
     const stdout = await started();
     expect(stdout).toMatch(/^\d\d:\d\d:\d\d server prandium is running on /m);
-    expect(stdout).toContain(`server config dir: ${dir()}`);
+    expect(stdout).toContain(`server database: ${join(dir(), 'data.db')}`);
+    expect(stdout).toContain(`server thumbnails: ${join(dir(), 'thumbnails')}`);
     expect(stdout).toContain('server auth: off (PRANDIUM_PASSWORD_HASH is not set)');
     expect(stdout).toContain('db applied 005-remove-tag-description');
   });
@@ -72,7 +73,7 @@ describe('main', () => {
     });
   });
 
-  test('warns about a leftover settings.json, naming what replaced each key', async () => {
+  test('warns about a leftover settings.json beside the database, naming what replaced each key', async () => {
     writeFileSync(join(dir(), 'settings.json'), '{}');
     expect(await started()).toContain(
       'WARN server settings.json is ignored: importConcurrency → PRANDIUM_IMPORT_CONCURRENCY, userAgent → PRANDIUM_USER_AGENT, pageSize → fixed at 24, addHistoryEntryWhenRating → always on',

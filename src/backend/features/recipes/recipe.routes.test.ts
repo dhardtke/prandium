@@ -9,7 +9,7 @@ import { at, body, useServer } from '../../testing.ts';
 import { RECIPE_SORT_KEYS } from './recipes.facade.ts';
 import { createRecipe } from './recipes.fixtures.ts';
 
-const { api, post, patch, del, db, configDir, logs } = useServer();
+const { api, post, patch, del, db, thumbnailsDir, logs } = useServer();
 
 async function page(query = ''): Promise<RecipePageDto> {
   const res = await api(`/api/recipes${query}`);
@@ -432,13 +432,13 @@ describe('DELETE /api/recipes/:id', () => {
   test('deletes the recipe, its thumbnail file and the tags left without recipes', async () => {
     const keep = await createRecipe(post, { title: 'Lasagna', tags: ['Pasta'] });
     const gone = await createRecipe(post, { tags: ['Pasta', 'Quick'] });
-    copyFileSync(join(import.meta.dir, '../thumbnails/1x1.png'), join(configDir(), 'thumbnails', 'carbonara.png'));
+    copyFileSync(join(import.meta.dir, '../thumbnails/1x1.png'), join(thumbnailsDir(), 'carbonara.png'));
     db().run("UPDATE recipe SET thumbnail = 'carbonara.png' WHERE id = ?", [gone.id]);
 
     expect((await del(`/api/recipes/${gone.id}`)).status).toBe(204);
 
     expect((await api(`/api/recipes/${gone.id}`)).status).toBe(404);
-    expect(existsSync(join(configDir(), 'thumbnails', 'carbonara.png'))).toBe(false);
+    expect(existsSync(join(thumbnailsDir(), 'carbonara.png'))).toBe(false);
     expect((await body<TagDto[]>(await api('/api/tags'))).map((tag) => tag.title)).toEqual(['Pasta']);
     expect((await api(`/api/recipes/${keep.id}`)).status).toBe(200);
   });
@@ -520,8 +520,8 @@ describe('PUT /api/recipes/:id/thumbnail', () => {
     await upload(id, await png(), 'image/png');
     const second = await body<RecipeDto>(await upload(id, await png(), 'image/jpeg'));
     expect(second.thumbnail).toBe('/thumbnails/ramen.jpg');
-    expect(existsSync(join(configDir(), 'thumbnails', 'ramen.png'))).toBe(false);
-    expect(existsSync(join(configDir(), 'thumbnails', 'ramen.jpg'))).toBe(true);
+    expect(existsSync(join(thumbnailsDir(), 'ramen.png'))).toBe(false);
+    expect(existsSync(join(thumbnailsDir(), 'ramen.jpg'))).toBe(true);
   });
 
   test.each([
@@ -561,7 +561,7 @@ describe('DELETE /api/recipes/:id/thumbnail', () => {
     const res = await del(`/api/recipes/${id}/thumbnail`);
     expect(res.status).toBe(200);
     expect((await body<RecipeDto>(res)).thumbnail).toBeNull();
-    expect(existsSync(join(configDir(), 'thumbnails', 'ramen.png'))).toBe(false);
+    expect(existsSync(join(thumbnailsDir(), 'ramen.png'))).toBe(false);
   });
 
   test('is harmless without an image', async () => {

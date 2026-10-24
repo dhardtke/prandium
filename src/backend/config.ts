@@ -6,8 +6,10 @@ import { log } from './shared/log.ts';
 export interface Config {
   host: string;
   port: number;
-  /** Holds `data.db` and `thumbnails/`. */
-  configDir: string;
+  /** The SQLite file, created on first run. */
+  databasePath: string;
+  /** Holds the thumbnail images. */
+  thumbnailsDir: string;
   /** null turns authentication off. */
   passwordHash: string | null;
   dev: boolean;
@@ -26,6 +28,8 @@ export interface Machine {
 
 export const DEFAULT_PORT = 8000;
 export const DEFAULT_HOST = '127.0.0.1';
+export const DEFAULT_DATABASE_PATH = join('data', 'prandium.db');
+export const DEFAULT_THUMBNAILS_DIR = join('data', 'thumbnails');
 export const DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0';
 
 export function readConfig(env: Record<string, string | undefined>, machine: Machine): Config | ConfigErrors {
@@ -59,7 +63,8 @@ export function readConfig(env: Record<string, string | undefined>, machine: Mac
   const config: Config = {
     host: value('HOST') ?? DEFAULT_HOST,
     port,
-    configDir: expandHome(value('PRANDIUM_CONFIG_DIR') ?? join('~', '.config', 'prandium'), machine.home),
+    databasePath: expandHome(value('PRANDIUM_DB') ?? DEFAULT_DATABASE_PATH, machine.home),
+    thumbnailsDir: expandHome(value('PRANDIUM_THUMBNAIL_DIR') ?? DEFAULT_THUMBNAILS_DIR, machine.home),
     passwordHash,
     dev: value('PRANDIUM_DEV') === '1',
     importConcurrency,
@@ -82,14 +87,6 @@ export function loadConfig(): Config {
     process.exit(1);
   }
   return config;
-}
-
-export function databasePath(config: Pick<Config, 'configDir'>): string {
-  return join(config.configDir, 'data.db');
-}
-
-export function thumbnailsDir(config: Pick<Config, 'configDir'>): string {
-  return join(config.configDir, 'thumbnails');
 }
 
 function expandHome(path: string, home: string): string {

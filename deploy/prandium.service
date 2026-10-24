@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=%h/app
-# PRANDIUM_CONFIG_DIR, HOST, PORT and PRANDIUM_PASSWORD_HASH. No "-" prefix on purpose: without the file the service must not start, rather
+# PRANDIUM_DB, PRANDIUM_THUMBNAIL_DIR, HOST, PORT and PRANDIUM_PASSWORD_HASH. No "-" prefix on purpose: without the file the service must not start, rather
 # than come up without a password.
 EnvironmentFile=%h/app/prandium.env
 ExecStart=%h/app/current/bun run %h/app/current/prandium.js

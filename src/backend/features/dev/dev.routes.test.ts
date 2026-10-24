@@ -10,7 +10,7 @@ import { devRoutes } from './dev.routes.ts';
 const CLIENT = '/dev/hot.ts';
 
 const logs = useLogs();
-const configDir = useTempDir();
+const dir = useTempDir();
 
 /** `detach()` logs idle a tick after the last close; wait so it cannot escape the sink. */
 async function idle(): Promise<void> {
@@ -32,7 +32,7 @@ async function withDev(enabled: boolean, fn: (origin: string) => Promise<void>):
     delete process.env.PRANDIUM_DEV;
   }
   const db = openDatabase(':memory:');
-  const server = startServer(db, testConfig(configDir()));
+  const server = startServer(db, testConfig(dir()));
   try {
     await fn(server.url.origin);
   } finally {

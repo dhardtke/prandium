@@ -1,6 +1,6 @@
 import { mkdirSync, readdirSync, rmSync } from 'node:fs';
-import { join } from 'node:path';
-import { type Config, databasePath, loadConfig, thumbnailsDir } from '../backend/config.ts';
+import { dirname, join } from 'node:path';
+import { type Config, loadConfig } from '../backend/config.ts';
 import { clearDatabase, type DB, openDatabase } from '../backend/db/db.ts';
 import { createRecipesFacade } from '../backend/features/recipes/recipes.facade.ts';
 import type { CreateRecipeDto } from '../shared/dto/recipe.ts';
@@ -367,7 +367,7 @@ function sampleDto(sample: Sample, index: number, now: number): CreateRecipeDto 
 /** Empties the database and the thumbnail directory, then fills both with the samples through the facades, so they pass validation. */
 export async function seed(db: DB, config: Config): Promise<number> {
   clearDatabase(db);
-  const dir = thumbnailsDir(config);
+  const dir = config.thumbnailsDir;
   mkdirSync(dir, { recursive: true });
   for (const file of readdirSync(dir)) {
     rmSync(join(dir, file), { force: true, recursive: true });
@@ -385,7 +385,8 @@ export async function seed(db: DB, config: Config): Promise<number> {
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  const path = databasePath(config);
+  const path = config.databasePath;
+  mkdirSync(dirname(path), { recursive: true });
   const db = openDatabase(path);
   const count = await seed(db, config);
   db.close();

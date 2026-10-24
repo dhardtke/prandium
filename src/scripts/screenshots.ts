@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { type Config, DEFAULT_USER_AGENT, databasePath } from '../backend/config.ts';
+import { type Config, DEFAULT_USER_AGENT } from '../backend/config.ts';
 import { openDatabase } from '../backend/db/db.ts';
 import type { DB } from '../backend/db/db.ts';
 import { createRecipesFacade } from '../backend/features/recipes/recipes.facade.ts';
@@ -194,7 +194,8 @@ async function main(): Promise<void> {
   const config: Config = {
     host: '127.0.0.1',
     port: 0,
-    configDir: join(dir, 'config'),
+    databasePath: join(dir, 'prandium.db'),
+    thumbnailsDir: join(dir, 'thumbnails'),
     passwordHash: null,
     dev: false,
     importConcurrency: 1,
@@ -202,8 +203,7 @@ async function main(): Promise<void> {
   };
   const profile = join(dir, 'profile');
 
-  await mkdir(config.configDir, { recursive: true });
-  const db = openDatabase(databasePath(config));
+  const db = openDatabase(config.databasePath);
   await seed(db, config);
   const shots = stage(db, config);
   const server = startServer(db, config);

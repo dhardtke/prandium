@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync } from 'node:fs';
-import { basename, join } from 'node:path';
-import { databasePath, loadConfig, thumbnailsDir } from './config.ts';
+import { basename, dirname, join } from 'node:path';
+import { loadConfig } from './config.ts';
 import { openDatabase } from './db/db.ts';
 import { DevFacade } from './features/dev/dev.facade.ts';
 import { startServer } from './http/server.ts';
@@ -16,12 +16,13 @@ const RETIRED_SETTINGS = [
 function main(): void {
   try {
     const config = loadConfig();
-    mkdirSync(thumbnailsDir(config), { recursive: true });
-    if (existsSync(join(config.configDir, 'settings.json'))) {
+    mkdirSync(dirname(config.databasePath), { recursive: true });
+    mkdirSync(config.thumbnailsDir, { recursive: true });
+    if (existsSync(join(dirname(config.databasePath), 'settings.json'))) {
       log.warn('server', `settings.json is ignored: ${RETIRED_SETTINGS}`);
     }
 
-    const db = openDatabase(databasePath(config), {
+    const db = openDatabase(config.databasePath, {
       onMigration: (migration) => {
         log.info('db', `applied ${basename(migration.file, '.sql')}`);
       },
@@ -47,7 +48,8 @@ function main(): void {
     });
 
     log.info('server', `prandium is running on ${server.url}`);
-    log.info('server', `config dir: ${config.configDir}`);
+    log.info('server', `database: ${config.databasePath}`);
+    log.info('server', `thumbnails: ${config.thumbnailsDir}`);
     log.info('server', config.passwordHash === null ? 'auth: off (PRANDIUM_PASSWORD_HASH is not set)' : 'auth: on');
     if (DevFacade.enabled()) {
       log.info('server', 'hot reload: on');
