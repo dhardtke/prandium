@@ -26,6 +26,7 @@ class PrLanguageSwitchComponent extends PrElement {
               html`<button
                 type="button"
                 role="menuitem"
+                class="ghost"
                 lang="${id}"
                 ${id === current.meta.id ? html`aria-current="true"` : ''}
                 data-action="language"

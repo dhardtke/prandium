@@ -1,3 +1,9 @@
-menu[popover] button[aria-current="true"] {
-  font-weight: 600;
+/* Matches the header's nav menu: muted entries, the current one in full color. */
+menu[popover] button[role="menuitem"] {
+  color: var(--muted-foreground);
+
+  &[aria-current="true"] {
+    color: var(--foreground);
+    font-weight: 600;
+  }
 }

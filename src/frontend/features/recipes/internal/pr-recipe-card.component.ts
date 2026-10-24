@@ -67,7 +67,7 @@ export class PrRecipeCardComponent extends PrElement {
               </button>
               <menu popover id="menu" data-testid="menu">
                 <a role="menuitem" href="/recipes/${recipe.id}/edit" data-testid="edit">${l.edit}</a>
-                <button type="button" role="menuitem" class="danger" data-action="delete" data-testid="delete">${l.delete}</button>
+                <button type="button" role="menuitem" class="ghost" data-variant="danger" data-action="delete" data-testid="delete">${l.delete}</button>
               </menu>
             </ot-dropdown>
           </div>

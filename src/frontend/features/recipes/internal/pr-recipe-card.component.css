@@ -57,7 +57,3 @@ article.open-card {
     height: 1.125rem;
   }
 }
-
-menu[popover] .danger {
-  color: var(--danger);
-}
