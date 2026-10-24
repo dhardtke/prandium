@@ -23,7 +23,7 @@ describe('readConfig', () => {
     expect(config({})).toEqual({
       host: '127.0.0.1',
       port: 8000,
-      databasePath: resolve('data', 'cena.db'),
+      databasePath: resolve('data', 'cena.sqlite'),
       thumbnailsDir: resolve('data', 'thumbnails'),
       passwordHash: null,
       dev: false,
@@ -37,7 +37,7 @@ describe('readConfig', () => {
       config({
         HOST: '0.0.0.0',
         PORT: '3000',
-        CENA_DB: resolve('/srv/cena/cena.db'),
+        CENA_DB: resolve('/srv/cena/cena.sqlite'),
         CENA_THUMBNAIL_DIR: resolve('/srv/cena/thumbnails'),
         CENA_PASSWORD_HASH: HASH,
         CENA_DEV: '1',
@@ -47,7 +47,7 @@ describe('readConfig', () => {
     ).toEqual({
       host: '0.0.0.0',
       port: 3000,
-      databasePath: resolve('/srv/cena/cena.db'),
+      databasePath: resolve('/srv/cena/cena.sqlite'),
       thumbnailsDir: resolve('/srv/cena/thumbnails'),
       passwordHash: HASH,
       dev: true,

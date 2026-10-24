@@ -28,7 +28,7 @@ export interface Machine {
 
 export const DEFAULT_PORT = 8000;
 export const DEFAULT_HOST = '127.0.0.1';
-export const DEFAULT_DATABASE_PATH = join('data', 'cena.db');
+export const DEFAULT_DATABASE_PATH = join('data', 'cena.sqlite');
 export const DEFAULT_THUMBNAILS_DIR = join('data', 'thumbnails');
 export const DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:86.0) Gecko/20100101 Firefox/86.0';
 

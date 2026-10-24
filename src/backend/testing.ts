@@ -91,12 +91,12 @@ export function useServer(options: { auth?: AuthOptions } = {}): TestServer {
   return { api, post, patch, put, del, logs, thumbnailsDir: () => config.thumbnailsDir, db: () => db };
 }
 
-/** Names `cena.db` and `thumbnails/` inside `dir` without creating either. */
+/** Names `cena.sqlite` and `thumbnails/` inside `dir` without creating either. */
 export function testConfig(dir: string, overrides: Partial<Config> = {}): Config {
   return {
     host: '127.0.0.1',
     port: 0,
-    databasePath: join(dir, 'cena.db'),
+    databasePath: join(dir, 'cena.sqlite'),
     thumbnailsDir: join(dir, 'thumbnails'),
     passwordHash: null,
     dev: false,

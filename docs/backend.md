@@ -9,7 +9,7 @@ Outside `features/` sits only what belongs to no feature:
 
 - `config.ts` — `readConfig(env, { cpuCores, home })` reads `PORT`, `HOST` and the `CENA_*` variables into a `Config` or a list of
   errors; `loadConfig()` logs them and exits; `databasePath` (`CENA_DB`) and `thumbnailsDir` (`CENA_THUMBNAIL_DIR`) default to
-  `data/cena.db` and `data/thumbnails` under the working directory
+  `data/cena.sqlite` and `data/thumbnails` under the working directory
 - `db/` — `db.ts` (connection, PRAGMAs, `clearDatabase`), `migrations.ts` and `migrations/`, and `sql.ts` with the table-agnostic helpers
   `buildUpdate`, `buildFilters`, `buildOrderBySql`, `placeholders`, `likePattern`, `isUniqueViolation`, `isForeignKeyViolation`
 - `http/` — `routing.ts` (`RouteTable`, `ParamRequest`, `wrapHandlers`), `routes.ts` (the registry, no handler code), `http.ts` (request

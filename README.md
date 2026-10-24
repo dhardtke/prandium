@@ -66,13 +66,13 @@ bun start            # http://127.0.0.1:8000
 
 The database and the thumbnails live in `data/` under the working directory (override with `CENA_DB` and `CENA_THUMBNAIL_DIR`),
 created and migrated on first run. The database of the old Prandium opens as it is; point `CENA_DB` at it, since the default is
-now `data/cena.db`. To try Cena with sample recipes, `bun run seed && bun start`; seeding replaces whatever `data/` held.
+now `data/cena.sqlite`. To try Cena with sample recipes, `bun run seed && bun start`; seeding replaces whatever `data/` held.
 
 | Variable                  | Default                 | Meaning                           |
 | ------------------------- | ----------------------- | --------------------------------- |
 | `PORT`                    | `8000`                  | Port to listen on                 |
 | `HOST`                    | `127.0.0.1`             | Address to listen on              |
-| `CENA_DB`                 | `data/cena.db`          | The SQLite database file          |
+| `CENA_DB`                 | `data/cena.sqlite`      | The SQLite database file          |
 | `CENA_THUMBNAIL_DIR`      | `data/thumbnails`       | Holds the thumbnail images        |
 | `CENA_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password` |
 | `CENA_DEV`                | unset                   | `1` turns on hot reload           |

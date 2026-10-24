@@ -21,7 +21,7 @@ an always-on history entry for the first rating.
 | ------------------------- | ----------------------- | -------------------------------------------------- |
 | `PORT`                    | `8000`                  | Port to listen on                                  |
 | `HOST`                    | `127.0.0.1`             | Address to listen on                               |
-| `CENA_DB`                 | `data/cena.db`          | The SQLite database file                           |
+| `CENA_DB`                 | `data/cena.sqlite`      | The SQLite database file                           |
 | `CENA_THUMBNAIL_DIR`      | `data/thumbnails`       | Holds the thumbnail images                         |
 | `CENA_PASSWORD_HASH`      | unset (no login)        | Hash from `bun run hash-password`                  |
 | `CENA_DEV`                | unset                   | `1` turns on hot reload (source checkout only)     |

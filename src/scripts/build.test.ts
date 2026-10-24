@@ -160,10 +160,10 @@ describe('single-file build', () => {
     }
   });
 
-  test('ran the embedded migrations into data/cena.db by default, beside data/thumbnails/', async () => {
+  test('ran the embedded migrations into data/cena.sqlite by default, beside data/thumbnails/', async () => {
     expect(await body<unknown>(await get('/api/health'))).toMatchObject({ status: 'ok' });
     expect((await get('/api/recipes')).status).toBe(200);
-    expect(existsSync(join(dir, 'deploy', 'data', 'cena.db'))).toBe(true);
+    expect(existsSync(join(dir, 'deploy', 'data', 'cena.sqlite'))).toBe(true);
     expect(existsSync(join(dir, 'deploy', 'data', 'thumbnails'))).toBe(true);
   });
 
@@ -208,7 +208,7 @@ describe('single-file build with CENA_PASSWORD_HASH set', () => {
     await build(join(dir, 'out'));
     const hash = await Bun.password.hash('right', { algorithm: 'bcrypt', cost: 4 });
     proc = spawnBuilt(join(dir, 'out', 'cena.js'), dir, {
-      CENA_DB: join(dir, 'state', 'cena.db'),
+      CENA_DB: join(dir, 'state', 'cena.sqlite'),
       CENA_THUMBNAIL_DIR: join(dir, 'state', 'thumbnails'),
       CENA_PASSWORD_HASH: hash,
     });

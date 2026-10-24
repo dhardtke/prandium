@@ -195,7 +195,7 @@ async function main(): Promise<void> {
   const config: Config = {
     host: '127.0.0.1',
     port: 0,
-    databasePath: join(dir, 'cena.db'),
+    databasePath: join(dir, 'cena.sqlite'),
     thumbnailsDir: join(dir, 'thumbnails'),
     passwordHash: null,
     dev: false,
