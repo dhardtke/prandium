@@ -130,8 +130,6 @@ sudo ./svc.sh install prandium-gh-runner && sudo ./svc.sh start
 ```
 
 Finally, create the `production` environment (_Settings → Environments_) and restrict it to `main`.
-Then turn deploys on: set the repository variable `DEPLOY_ENABLED` to `true` (_Settings → Secrets and variables → Actions →
-Variables_). Until it is set, the `deploy` job is skipped, so a push without a runner does not leave a job queued.
 
 ### SELinux
 
