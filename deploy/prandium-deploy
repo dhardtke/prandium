@@ -12,7 +12,7 @@ readonly APP=/home/prandium/app
 readonly BUNS=$APP/bun
 # Must match PORT and PRANDIUM_DB in $APP/prandium.env; the thumbnails (PRANDIUM_THUMBNAIL_DIR) are not snapshotted.
 readonly PORT=8000
-readonly PRANDIUM_DB=/home/prandium/data/prandium.db
+readonly PRANDIUM_DB=/home/prandium/data/prandium.sqlite
 readonly RELEASES=$APP/releases
 readonly CURRENT=$APP/current
 readonly BACKUPS=$APP/backups

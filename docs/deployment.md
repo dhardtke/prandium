@@ -6,7 +6,7 @@
 bun run build                 # dist/prandium.js + dist/prandium.js.map + dist/bun-version
 scp dist/prandium.js* server:/opt/prandium/
 bun run hash-password         # prompts twice, prints an argon2id hash
-PORT=8000 PRANDIUM_DB=/var/lib/prandium/prandium.db PRANDIUM_THUMBNAIL_DIR=/var/lib/prandium/thumbnails \
+PORT=8000 PRANDIUM_DB=/var/lib/prandium/prandium.sqlite PRANDIUM_THUMBNAIL_DIR=/var/lib/prandium/thumbnails \
   PRANDIUM_PASSWORD_HASH='<hash>' bun /opt/prandium/prandium.js
 ```
 
@@ -73,8 +73,8 @@ root. Prandium runs as a systemd user service of `prandium` (`deploy/prandium.se
 1. unpacks the build into `/home/prandium/app/releases/<sha>`
 2. installs the Bun named in `bun-version` into `/home/prandium/app/bun/<version>`, verified against the release's `SHASUMS256.txt`, and
    links it as the release's `bun`
-3. stops the service and snapshots `/home/prandium/data/prandium.db` with `VACUUM INTO` into `/home/prandium/app/backups`; the thumbnails
-   are not snapshotted
+3. stops the service and snapshots `/home/prandium/data/prandium.sqlite` with `VACUUM INTO` into `/home/prandium/app/backups`; the
+   thumbnails are not snapshotted
 4. points `/home/prandium/app/current` at the release and starts the service
 5. rolls back release, Bun and database if `/api/health` does not answer `"auth":true` within 30 seconds
 6. keeps five releases and ten snapshots
@@ -94,10 +94,10 @@ sudo dnf install -y curl unzip tar util-linux
 sudo loginctl enable-linger prandium
 sudo -u prandium mkdir -p /home/prandium/app /home/prandium/data /home/prandium/.config/systemd/user
 # Only when moving from the config dir:
-# sudo -u prandium mv /home/prandium/.config/prandium/data.db /home/prandium/data/prandium.db
+# sudo -u prandium mv /home/prandium/.config/prandium/data.db /home/prandium/data/prandium.sqlite
 # sudo -u prandium mv /home/prandium/.config/prandium/thumbnails /home/prandium/data/thumbnails
 sudo -u prandium sh -c 'umask 077 && cat > /home/prandium/app/prandium.env' <<'EOF'
-PRANDIUM_DB=/home/prandium/data/prandium.db
+PRANDIUM_DB=/home/prandium/data/prandium.sqlite
 PRANDIUM_THUMBNAIL_DIR=/home/prandium/data/thumbnails
 HOST=127.0.0.1
 PORT=8000
