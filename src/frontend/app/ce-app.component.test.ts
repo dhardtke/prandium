@@ -1,4 +1,5 @@
 import { beforeAll, beforeEach, expect, test } from 'bun:test';
+import { UNAUTHORIZED_EVENT } from '../http/errors.ts';
 import { find, mount, openDialog, settle, shadow, testId, useDom, useFetch } from '../testing.ts';
 import type * as I18n from '../ui/i18n.ts';
 import type * as LeaveGuard from '../ui/leave-guard.ts';
@@ -133,7 +134,7 @@ test('stops listening once removed, and renders the current path when mounted ag
 test('sends a 401 to the login page, remembering where it came from', async () => {
   const app = await mountApp();
   history.replaceState(null, '', '/recipes?page=2');
-  window.dispatchEvent(new Event('pr:unauthorized'));
+  window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
   expect(location.pathname + location.search).toBe('/login?next=%2Frecipes%3Fpage%3D2');
   // The login module and auth status must land before the DOM is torn down.
   for (let i = 0; i < 50 && !app.querySelector(':scope > ce-login'); i++) {
@@ -147,7 +148,7 @@ test('sends a 401 to the login page, remembering where it came from', async () =
 test('ignores a 401 on the login page itself', async () => {
   const app = await mountApp();
   history.replaceState(null, '', '/login?next=%2Fx');
-  window.dispatchEvent(new Event('pr:unauthorized'));
+  window.dispatchEvent(new Event(UNAUTHORIZED_EVENT));
   await settle(0);
   expect(notFound(app)).toBe('Nothing lives at /nowhere.');
   expect(location.pathname + location.search).toBe('/login?next=%2Fx');

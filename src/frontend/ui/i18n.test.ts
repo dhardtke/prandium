@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test } from 'bun:test';
 import { useGlobals } from '../testing.ts';
+import { LANGUAGE_STORAGE_KEY } from './storage-keys.ts';
 import type * as I18nModule from './i18n.ts';
 
 const stub = useGlobals();
@@ -80,14 +81,14 @@ describe('at load', () => {
 
   test('a stored choice wins over the browser', async () => {
     browser('de-DE');
-    stored.set('cena:language', 'en');
+    stored.set(LANGUAGE_STORAGE_KEY, 'en');
 
     expect((await load()).language().meta.id).toBe('en');
   });
 
   test('an unknown stored value counts as no choice', async () => {
     browser('de');
-    stored.set('cena:language', 'fr');
+    stored.set(LANGUAGE_STORAGE_KEY, 'fr');
 
     expect((await load()).language().meta.id).toBe('de');
   });
@@ -111,7 +112,7 @@ describe('setLanguage', () => {
     i18n.setLanguage('de');
 
     expect(i18n.t().recipes).toBe('Rezepte');
-    expect(stored.get('cena:language')).toBe('de');
+    expect(stored.get(LANGUAGE_STORAGE_KEY)).toBe('de');
     expect(htmlLang).toBe('de');
     expect(heard).toBe(1);
   });
@@ -131,7 +132,7 @@ describe('setLanguage', () => {
 
     i18n.setLanguage('en');
 
-    expect(stored.has('cena:language')).toBe(false);
+    expect(stored.has(LANGUAGE_STORAGE_KEY)).toBe(false);
     expect(heard).toBe(0);
   });
 

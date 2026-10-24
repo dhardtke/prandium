@@ -7,6 +7,7 @@ import { openDatabase } from '../backend/db/db.ts';
 import type { DB } from '../backend/db/db.ts';
 import { createRecipesFacade } from '../backend/features/recipes/recipes.facade.ts';
 import { startServer } from '../backend/http/server.ts';
+import { LANGUAGE_STORAGE_KEY } from '../frontend/ui/storage-keys.ts';
 import { seed } from './seed.ts';
 
 const OUT_DIR = 'docs/screenshots';
@@ -158,7 +159,7 @@ async function shoot(cdp: Cdp, origin: string, shots: readonly Shot[]): Promise<
   await cdp.send('Page.enable');
   await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: EN_US_SHIM });
   // English whatever the OS says; the pre-paint script and ui/i18n.ts read this key.
-  await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: "try { localStorage.setItem('cena:language', 'en'); } catch {}" });
+  await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: `try { localStorage.setItem('${LANGUAGE_STORAGE_KEY}', 'en'); } catch {}` });
   await cdp.send('Emulation.setScrollbarsHidden', { hidden: true });
   await mkdir(OUT_DIR, { recursive: true });
 

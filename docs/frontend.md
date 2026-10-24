@@ -81,7 +81,7 @@ while clean, and the list and history fields carry their values across.
 - A module under `features/<a>/` may not import `features/<b>/internal/`.
 - Nothing under `app/`, `ui/`, `http/` or `main.ts` may import any `internal/`.
 - No component may import an `*.api.ts` or `http/http.ts`.
-- `ui/` and `http/` may not import `features/` or `app/` (so `http.ts` signals 401 with the `pr:unauthorized` event instead of navigating).
+- `ui/` and `http/` may not import `features/` or `app/` (so `http.ts` signals 401 with the `ce-unauthorized` event instead of navigating).
 - A `*.routes.ts` may not import `internal/`, `*.api.ts`, `*.facade.ts`, `http/` or `ui/`.
 
 **Only route views are dynamically imported. A component a view renders must be a static import in that view's module** — otherwise

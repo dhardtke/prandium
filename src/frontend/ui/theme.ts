@@ -1,7 +1,7 @@
+import { THEME_STORAGE_KEY } from './storage-keys.ts';
+
 export type Theme = 'light' | 'dark';
 
-// Also in index.html's no-flash script.
-const STORAGE_KEY = 'cena:theme';
 const EVENT = 'ce-theme-change';
 
 export const THEMES: readonly Theme[] = ['light', 'dark'];
@@ -23,7 +23,7 @@ function systemTheme(): Theme {
 
 function readStoredTheme(): Theme {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
     if (isTheme(stored)) {
       return stored;
     }
@@ -49,7 +49,7 @@ export function setTheme(theme: Theme): void {
   current = theme;
 
   try {
-    localStorage.setItem(STORAGE_KEY, theme);
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
   } catch {}
 
   applyTheme();

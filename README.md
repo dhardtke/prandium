@@ -65,8 +65,8 @@ bun start            # http://127.0.0.1:8000
 ```
 
 The database and the thumbnails live in `data/` under the working directory (override with `CENA_DB` and `CENA_THUMBNAIL_DIR`),
-created and migrated on first run. The database of an earlier Cena opens as it is. To try Cena with sample recipes,
-`bun run seed && bun start`; seeding replaces whatever `data/` held.
+created and migrated on first run. The database of the old Prandium opens as it is; point `CENA_DB` at it, since the default is
+now `data/cena.db`. To try Cena with sample recipes, `bun run seed && bun start`; seeding replaces whatever `data/` held.
 
 | Variable                  | Default                 | Meaning                           |
 | ------------------------- | ----------------------- | --------------------------------- |

@@ -84,8 +84,10 @@ and port 8000 are constants at the top of the script and must match `cena.env`.
 
 ## Server setup
 
-Once, on the Fedora server, with the repository's `deploy/` directory copied over. The `cena` user exists from the old setup, and its
-`data.db` and `thumbnails/` move from `/home/cena/.config/prandium` to `/home/cena/data` (with the old service stopped):
+Once, on the Fedora server, with the repository's `deploy/` directory copied over. The user exists from the old setup, where it is
+still called `prandium`: with the old service stopped, first rename it with the `usermod` and `groupmod` line for `prandium` from
+"Renaming from Prandium" below, which also moves its home to `/home/cena`. Its `data.db` and `thumbnails/` then move from
+`/home/cena/.config/prandium` to `/home/cena/data`:
 
 ```sh
 sudo dnf install -y curl unzip tar util-linux
@@ -184,10 +186,14 @@ sudo -u cena sh -c 'cd /home/cena/app && for l in current releases/*/bun; do
 # Releases built before the rename hold prandium.js and read PRANDIUM_*; keep them startable for a rollback.
 sudo -u cena sh -c 'for r in /home/cena/app/releases/*/; do [ -e "$r/cena.js" ] || ln -s prandium.js "$r/cena.js"; done'
 
-# Rename the database and the env file, and add a CENA_* copy of each PRANDIUM_* line.
+# Rename the database and the env file, and add a CENA_* copy of each PRANDIUM_* line, indented ones too. The grep skips the
+# sed on a rerun, once the file has CENA_* lines; the last line warns if the login would come up off.
 sudo -u cena mv /home/cena/data/prandium.sqlite /home/cena/data/cena.sqlite
 sudo -u cena mv /home/cena/app/prandium.env /home/cena/app/cena.env
-sudo -u cena sed -i -e 's|/home/prandium/|/home/cena/|g' -e 's/prandium\.sqlite/cena.sqlite/' -e 's/^PRANDIUM_\(.*\)$/CENA_\1\n&/' /home/cena/app/cena.env
+sudo -u cena grep -q '^[[:space:]]*CENA_' /home/cena/app/cena.env ||
+  sudo -u cena sed -i -e 's|/home/prandium/|/home/cena/|g' -e 's/prandium\.sqlite/cena.sqlite/' \
+    -e 's/^\([[:space:]]*\)PRANDIUM_\(.*\)$/\1CENA_\2\n&/' /home/cena/app/cena.env
+sudo -u cena grep -q '^[[:space:]]*CENA_PASSWORD_HASH=' /home/cena/app/cena.env || echo 'cena.env lacks CENA_PASSWORD_HASH' >&2
 
 # Swap the unit, the deploy script and the sudoers rule.
 sudo rm /home/cena/.config/systemd/user/prandium.service /usr/local/bin/prandium-deploy /etc/sudoers.d/prandium-gh-runner

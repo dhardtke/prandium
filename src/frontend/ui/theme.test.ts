@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test } from 'bun:test';
 import { useGlobals } from '../testing.ts';
+import { THEME_STORAGE_KEY } from './storage-keys.ts';
 import type * as ThemeModule from './theme.ts';
 
 const stub = useGlobals();
@@ -82,14 +83,14 @@ describe('at load', () => {
 
   test('a stored choice wins over the system', async () => {
     systemDark = true;
-    stored.set('cena:theme', 'light');
+    stored.set(THEME_STORAGE_KEY, 'light');
 
     expect((await load()).currentTheme()).toBe('light');
   });
 
   test('the "system" an earlier version stored counts as no choice', async () => {
     systemDark = true;
-    stored.set('cena:theme', 'system');
+    stored.set(THEME_STORAGE_KEY, 'system');
 
     expect((await load()).currentTheme()).toBe('dark');
   });
@@ -119,7 +120,7 @@ describe('setTheme', () => {
     theme.setTheme('dark');
 
     expect(theme.currentTheme()).toBe('dark');
-    expect(stored.get('cena:theme')).toBe('dark');
+    expect(stored.get(THEME_STORAGE_KEY)).toBe('dark');
     expect(htmlTheme()).toBe('dark');
     expect(heard).toBe(1);
   });
@@ -140,7 +141,7 @@ describe('setTheme', () => {
 
     theme.setTheme('light');
 
-    expect(stored.has('cena:theme')).toBe(false);
+    expect(stored.has(THEME_STORAGE_KEY)).toBe(false);
     expect(heard).toBe(0);
   });
 
@@ -179,7 +180,7 @@ describe('toggleTheme', () => {
     theme.toggleTheme();
 
     expect(theme.currentTheme()).toBe('dark');
-    expect(stored.get('cena:theme')).toBe('dark');
+    expect(stored.get(THEME_STORAGE_KEY)).toBe('dark');
     expect(htmlTheme()).toBe('dark');
     expect(heard).toBe(1);
   });
@@ -191,7 +192,7 @@ describe('toggleTheme', () => {
     theme.toggleTheme();
 
     expect(theme.currentTheme()).toBe('light');
-    expect(stored.get('cena:theme')).toBe('light');
+    expect(stored.get(THEME_STORAGE_KEY)).toBe('light');
     expect(htmlTheme()).toBe('light');
   });
 });
@@ -206,7 +207,7 @@ describe('theme-color', () => {
     expect(themeColor()).toBe(theme.THEME_COLORS.dark);
 
     systemDark = false;
-    stored.set('cena:theme', 'dark');
+    stored.set(THEME_STORAGE_KEY, 'dark');
     await load();
     expect(themeColor()).toBe(theme.THEME_COLORS.dark);
   });

@@ -1,9 +1,8 @@
 import { de } from '../i18n/de.ts';
 import { en } from '../i18n/en.ts';
 import type { Language, LanguageId } from '../i18n/language.ts';
+import { LANGUAGE_STORAGE_KEY } from './storage-keys.ts';
 
-// Also in index.html's pre-paint script.
-const STORAGE_KEY = 'cena:language';
 export const LANGUAGE_CHANGE_EVENT = 'ce-language-change';
 
 export const LANGUAGES: Readonly<Record<LanguageId, Language>> = { en, de };
@@ -28,7 +27,7 @@ function browserLanguage(): LanguageId {
 
 function readStoredLanguage(): LanguageId {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (isLanguageId(stored)) {
       return stored;
     }
@@ -50,7 +49,7 @@ export function setLanguage(id: LanguageId): void {
   }
   current = id;
   try {
-    localStorage.setItem(STORAGE_KEY, id);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, id);
   } catch {}
   applyLanguage();
   window.dispatchEvent(new CustomEvent(LANGUAGE_CHANGE_EVENT, { detail: { language: id } }));

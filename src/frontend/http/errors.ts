@@ -16,4 +16,4 @@ export function errorMessage(error: unknown): string {
 }
 
 // An event, not a call: `http/` may not import the router in `app/`.
-export const UNAUTHORIZED_EVENT = 'pr:unauthorized';
+export const UNAUTHORIZED_EVENT = 'ce-unauthorized';
